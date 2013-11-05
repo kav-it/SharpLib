@@ -1,0 +1,52 @@
+﻿<CodeSnippet Format="1.0.0" xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <Header>
+        <Title>'Шапка' файла</Title>
+        <Author>Крыцкий А.В.</Author>
+        <Shortcut>he</Shortcut>
+        <Description>Добавляет 'шапку' файла кода C#</Description>
+        <SnippetTypes>
+            <SnippetType>Expansion</SnippetType>
+            <SnippetType>SurroundsWith</SnippetType>
+        </SnippetTypes>
+    </Header>
+    <Snippet>
+			<Declarations>
+				<Literal>
+					<ID>filename</ID>
+					<ToolTip>Имя файла</ToolTip>
+					<Default>File</Default>
+				</Literal>
+				<Literal>
+					<ID>filedesc</ID>
+					<ToolTip>Краткое описание файла</ToolTip>
+					<Default>Это файл предназначен для ...</Default>
+				</Literal>
+				<Literal>
+					<ID>author</ID>
+					<ToolTip>Ф.И.О. автора</ToolTip>
+					<Default>Крыцкий А.В.</Default>
+				</Literal>
+				<Literal>
+					<ID>mail</ID>
+					<ToolTip>Электронный адрес автора</ToolTip>
+					<Default>kav.it@mail.ru</Default>
+				</Literal>
+				<Literal>
+					<ID>datetime</ID>
+					<ToolTip>Дата создания файла</ToolTip>
+					<Default>20/06/2012</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp"><![CDATA[// ****************************************************************************
+//
+// Имя файла    : '$filename$.cs'
+// Заголовок    : $filedesc$
+// Автор        : $author$
+// Контакты     : $mail$
+// Дата         : $datetime$
+//
+// ****************************************************************************
+			]]>
+			</Code>
+    </Snippet>
+</CodeSnippet>

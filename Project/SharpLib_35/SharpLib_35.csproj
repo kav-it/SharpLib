@@ -1,0 +1,323 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0F7FEDD4-52B0-4C03-8B83-C1C25A478D7D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SharpLib</RootNamespace>
+    <AssemblyName>SharpLib</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Build\35\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\Build\35\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Source\Controls\BusyIndicator.Control.xaml.cs">
+      <Link>Source\Controls\BusyIndicator.Control.xaml.cs</Link>
+      <DependentUpon>BusyIndicator.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\CheckButton.Control.xaml.cs">
+      <Link>Source\Controls\CheckButton.Control.xaml.cs</Link>
+      <DependentUpon>CheckButton.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\ExpanderEx.Control.xaml.cs">
+      <Link>Source\Controls\ExpanderEx.Control.xaml.cs</Link>
+      <DependentUpon>ExpanderEx.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\FormPanel.Control.xaml.cs">
+      <Link>Source\Controls\FormPanel.Control.xaml.cs</Link>
+      <DependentUpon>FormPanel.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\HexView.Control.xaml.cs">
+      <Link>Source\Controls\HexView.Control.xaml.cs</Link>
+      <DependentUpon>HexView.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\ListViewEx.Control.xaml.cs">
+      <Link>Source\Controls\ListViewEx.Control.xaml.cs</Link>
+      <DependentUpon>ListViewEx.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\Memo.Control.xaml.cs">
+      <Link>Source\Controls\Memo.Control.xaml.cs</Link>
+      <DependentUpon>Memo.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\OkCancel.Control.xaml.cs">
+      <Link>Source\Controls\OkCancel.Control.xaml.cs</Link>
+      <DependentUpon>OkCancel.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\SearchText.Control.xaml.cs">
+      <Link>Source\Controls\SearchText.Control.xaml.cs</Link>
+      <DependentUpon>SearchText.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\Stopwatch.Control.xaml.cs">
+      <Link>Source\Controls\Stopwatch.Control.xaml.cs</Link>
+      <DependentUpon>Stopwatch.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\TabEx.Control.xaml.cs">
+      <Link>Source\Controls\TabEx.Control.xaml.cs</Link>
+      <DependentUpon>TabEx.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\TextEdit.Control.xaml.cs">
+      <Link>Source\Controls\TextEdit.Control.xaml.cs</Link>
+      <DependentUpon>TextEdit.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\TextLabel.Control.xaml.cs">
+      <Link>Source\Controls\TextLabel.Control.xaml.cs</Link>
+      <DependentUpon>TextLabel.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\TextLink.Control.xaml.cs">
+      <Link>Source\Controls\TextLink.Control.xaml.cs</Link>
+      <DependentUpon>TextLink.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\TextUpDown.Control.xaml.cs">
+      <Link>Source\Controls\TextUpDown.Control.xaml.cs</Link>
+      <DependentUpon>TextUpDown.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\TreeView.Control.xaml.cs">
+      <Link>Source\Controls\TreeView.Control.xaml.cs</Link>
+      <DependentUpon>TreeView.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\WaitIndicator.Control.xaml.cs">
+      <Link>Source\Controls\WaitIndicator.Control.xaml.cs</Link>
+      <DependentUpon>WaitIndicator.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\XmlViewer.Control.xaml.cs">
+      <Link>Source\Controls\XmlViewer.Control.xaml.cs</Link>
+      <DependentUpon>XmlViewer.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Types.cs">
+      <Link>Source\Types.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\Async.cs">
+      <Link>Source\Utils\Async.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\Attributes.cs">
+      <Link>Source\Utils\Attributes.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\Console.cs">
+      <Link>Source\Utils\Console.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\Conv.cs">
+      <Link>Source\Utils\Conv.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\ConvWpf.cs">
+      <Link>Source\Utils\ConvWpf.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\Crypto.cs">
+      <Link>Source\Utils\Crypto.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\Dialogs.cs">
+      <Link>Source\Utils\Dialogs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\Files.cs">
+      <Link>Source\Utils\Files.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\Gui.cs">
+      <Link>Source\Utils\Gui.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\Hardware.cs">
+      <Link>Source\Utils\Hardware.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\Input.cs">
+      <Link>Source\Utils\Input.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\IntelHex.cs">
+      <Link>Source\Utils\IntelHex.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\Logger.cs">
+      <Link>Source\Utils\Logger.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\Mailer.cs">
+      <Link>Source\Utils\Mailer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\Math.cs">
+      <Link>Source\Utils\Math.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\Reger.cs">
+      <Link>Source\Utils\Reger.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\Resources.cs">
+      <Link>Source\Utils\Resources.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\WinApi.cs">
+      <Link>Source\Utils\WinApi.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\Xmler.cs">
+      <Link>Source\Utils\Xmler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Utils\Zip.cs">
+      <Link>Source\Utils\Zip.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Windows\Window.MessageBox.xaml.cs">
+      <Link>Source\Windows\Window.MessageBox.xaml.cs</Link>
+      <DependentUpon>Window.MessageBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Windows\Window.Process.xaml.cs">
+      <Link>Source\Windows\Window.Process.xaml.cs</Link>
+      <DependentUpon>Window.Process.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Windows\Window.Promt.xaml.cs">
+      <Link>Source\Windows\Window.Promt.xaml.cs</Link>
+      <DependentUpon>Window.Promt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Windows\Window.Wait.xaml.cs">
+      <Link>Source\Windows\Window.Wait.xaml.cs</Link>
+      <DependentUpon>Window.Wait.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Page Include="..\..\Source\Controls\BusyIndicator.Control.xaml">
+      <Link>Source\Controls\BusyIndicator.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\CheckButton.Control.xaml">
+      <Link>Source\Controls\CheckButton.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\ExpanderEx.Control.xaml">
+      <Link>Source\Controls\ExpanderEx.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\FormPanel.Control.xaml">
+      <Link>Source\Controls\FormPanel.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\HexView.Control.xaml">
+      <Link>Source\Controls\HexView.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\ListViewEx.Control.xaml">
+      <Link>Source\Controls\ListViewEx.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\Memo.Control.xaml">
+      <Link>Source\Controls\Memo.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\OkCancel.Control.xaml">
+      <Link>Source\Controls\OkCancel.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\SearchText.Control.xaml">
+      <Link>Source\Controls\SearchText.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\Stopwatch.Control.xaml">
+      <Link>Source\Controls\Stopwatch.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\TabEx.Control.xaml">
+      <Link>Source\Controls\TabEx.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\TextEdit.Control.xaml">
+      <Link>Source\Controls\TextEdit.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\TextLabel.Control.xaml">
+      <Link>Source\Controls\TextLabel.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\TextLink.Control.xaml">
+      <Link>Source\Controls\TextLink.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\TextUpDown.Control.xaml">
+      <Link>Source\Controls\TextUpDown.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\TreeView.Control.xaml">
+      <Link>Source\Controls\TreeView.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\WaitIndicator.Control.xaml">
+      <Link>Source\Controls\WaitIndicator.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\XmlViewer.Control.xaml">
+      <Link>Source\Controls\XmlViewer.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Windows\Window.MessageBox.xaml">
+      <Link>Source\Windows\Window.MessageBox.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Windows\Window.Process.xaml">
+      <Link>Source\Windows\Window.Process.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Windows\Window.Promt.xaml">
+      <Link>Source\Windows\Window.Promt.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Windows\Window.Wait.xaml">
+      <Link>Source\Windows\Window.Wait.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

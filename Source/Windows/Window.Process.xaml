@@ -1,0 +1,62 @@
+﻿<Window x:Class="SharpLib.WindowProcess"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:lib="clr-namespace:SharpLib"
+        Title="Процесс выполнения..." 
+        Width="600" Height="500" 
+        ShowInTaskbar="False"
+        Loaded="WindowLoaded" Closed="WindowClosed"
+        WindowStartupLocation="CenterScreen"
+        >
+
+    <!--Ресурсы-->
+    <Window.Resources>
+        <lib:WindowProcessMessageTypConverter x:Key="messageTypConverter" />
+    </Window.Resources>
+
+    <!--Основная разметка-->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--Компонент ListView-->
+        <lib:ListViewEx x:Name="PART_listView">
+            <lib:ListViewEx.Columns>
+                <lib:ListViewExColumn Header="" Width="28">
+                    <DataTemplate>
+                        <Image Source="{Binding Path=Typ, Converter={StaticResource messageTypConverter}}" 
+                               Stretch="Fill" 
+                               Width="16" Height="16"/>
+                    </DataTemplate>
+                </lib:ListViewExColumn>
+                <!--Колонка "Время"-->
+                <lib:ListViewExColumn Header="Время" Width="78">
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Path=Stamp, StringFormat=HH:mm:ss.fff}" HorizontalAlignment="Center"/>
+                    </DataTemplate>
+                </lib:ListViewExColumn>
+                <!--Колонка "Текст"-->
+                <lib:ListViewExColumn Header="Текст" Width="200">
+                    <DataTemplate >
+                        <TextBlock Text="{Binding Path=Text}" />
+                    </DataTemplate>
+                </lib:ListViewExColumn>
+                <!--Колонка "Описание"-->
+                <lib:ListViewExColumn Header="Описание" Width="300">
+                    <DataTemplate >
+                        <TextBlock Text="{Binding Path=Desc}" />
+                    </DataTemplate>
+                </lib:ListViewExColumn>
+            </lib:ListViewEx.Columns>
+        </lib:ListViewEx>
+        <!--Компонент Ок/Отмена-->
+        <Button Name="PART_buttonFinish" Grid.Row="1" 
+                Content="Отмена"
+                HorizontalAlignment="Right"
+                Height="25" Width="80" Margin="10"
+                Click="ButtonFinishClick"
+                />
+    </Grid>
+</Window>

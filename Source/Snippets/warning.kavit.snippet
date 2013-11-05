@@ -1,0 +1,23 @@
+﻿<CodeSnippet Format="1.0.0" xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <Header>
+        <Title>warning</Title>
+        <Author>Крыцкий А.В.</Author>
+        <Shortcut>warn</Shortcut>
+        <Description>Добавляет заметку (warning). Не забыть</Description>
+        <SnippetTypes>
+            <SnippetType>Expansion</SnippetType>
+            <SnippetType>SurroundsWith</SnippetType>
+        </SnippetTypes>
+    </Header>
+    <Snippet>
+			<Declarations>
+				<Literal>
+					<ID>message</ID>
+					<ToolTip>Текст сообщения</ToolTip>
+					<Default>Убрать</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp"><![CDATA[#warning $message$]]>
+			</Code>
+    </Snippet>
+</CodeSnippet>

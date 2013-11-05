@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="SharpLib.TreeViewControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:lib="clr-namespace:SharpLib"
+    >
+    <UserControl.Resources>
+        <LinearGradientBrush x:Key="brushSelected" EndPoint="0,1" StartPoint="0,0">
+            <GradientStop Color="#FFD9F4FF" Offset="0"/>
+            <GradientStop Color="#FF9BDDFB" Offset="1"/>
+        </LinearGradientBrush>
+    </UserControl.Resources>
+    <Grid>
+        <TreeView Name="PART_treeView">
+            <TreeView.Resources>
+                <Style TargetType="{x:Type lib:TreeViewItemEx}">
+                    <Setter Property="BorderThickness" Value="1.5"/>
+                    <!--Событие "RightButtonDown"-->
+                    <EventSetter Event="TreeViewItem.PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown"/>
+                </Style>
+            </TreeView.Resources>
+        </TreeView>
+    </Grid>
+</UserControl>
+

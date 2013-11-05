@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib_35", "SharpLib_35\SharpLib_35.csproj", "{0F7FEDD4-52B0-4C03-8B83-C1C25A478D7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib_40", "SharpLib_40\SharpLib_40.csproj", "{166C4ADA-A8FB-4978-B6B1-4307C3C1BEC2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F7FEDD4-52B0-4C03-8B83-C1C25A478D7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F7FEDD4-52B0-4C03-8B83-C1C25A478D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F7FEDD4-52B0-4C03-8B83-C1C25A478D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F7FEDD4-52B0-4C03-8B83-C1C25A478D7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{166C4ADA-A8FB-4978-B6B1-4307C3C1BEC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{166C4ADA-A8FB-4978-B6B1-4307C3C1BEC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{166C4ADA-A8FB-4978-B6B1-4307C3C1BEC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{166C4ADA-A8FB-4978-B6B1-4307C3C1BEC2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

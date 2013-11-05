@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Library xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <Sign>SharpLib</Sign>
+    <!-- 3.0 - добавлена поддержка Dock -->
+    <!-- 4.0 - добавлена поддержка локализации -->
+    <!-- 5.0 - реорганизация при переносе в github -->
+    <Version>5.0</Version>
+</Library>
