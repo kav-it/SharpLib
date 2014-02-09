@@ -1,0 +1,23 @@
+<CodeSnippet Format="1.0.0" xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <Header>
+        <Title>Исключение 'Не реализовано'</Title>
+        <Author>Крыцкий А.В.</Author>
+        <Shortcut>нере</Shortcut>
+        <Description>Добавкляет код генерации исключения с текстом 'Не реализовано'</Description>
+        <SnippetTypes>
+            <SnippetType>Expansion</SnippetType>
+            <SnippetType>SurroundsWith</SnippetType>
+        </SnippetTypes>
+    </Header>
+    <Snippet>
+			<Declarations>
+				<Literal>
+					<ID>message</ID>
+					<ToolTip>Текст исключения</ToolTip>
+					<Default>Не реализовано</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp"><![CDATA[throw new Exception("$message$");]]>
+			</Code>
+    </Snippet>
+</CodeSnippet>

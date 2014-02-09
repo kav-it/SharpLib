@@ -1,0 +1,12 @@
+﻿<Window x:Class="SharpLib.WindowHistory"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="История версий" Height="446" Width="769"
+        ShowInTaskbar="False" ResizeMode="CanResize" WindowStartupLocation="CenterScreen">
+    <Grid ShowGridLines="false">
+        <Button Content="Кнопка для Esc-формы" Height="23" HorizontalAlignment="Left" Margin="12,30,0,0" Name="button1"
+                VerticalAlignment="Top" Width="270" IsCancel="True" />
+        <TextBox Name="textBox1" IsReadOnly="True" HorizontalScrollBarVisibility="Auto"
+                 VerticalScrollBarVisibility="Auto" FontFamily="Courier New" FontSize="12" Text="История версий" />
+    </Grid>
+</Window>

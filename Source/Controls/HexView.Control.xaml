@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="SharpLib.HexViewControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lib="clr-namespace:SharpLib"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,5">
+            <TextBlock VerticalAlignment="Center" Width="100" Text="Ширина (байты)" />
+            <lib:CheckButton View="Normal" Content="16" Width="25" Margin="2" Group="1" Checked="CheckButton_Checked"
+                             IsChecked="True" />
+            <lib:CheckButton View="Normal" Content="32" Width="25" Margin="2" Group="1" Checked="CheckButton_Checked" />
+        </StackPanel>
+
+        <TextBox Name="PART_TextBox" Grid.Row="1"
+                 FontFamily="Consolas"
+                 AcceptsReturn="True"
+                 IsReadOnly="True" Text="" />
+    </Grid>
+</UserControl>
