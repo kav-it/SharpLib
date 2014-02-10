@@ -17,7 +17,7 @@ using System.Windows;
 // 
 
 [assembly: AssemblyProduct("Библиотека SharpLib")]
-[assembly: AssemblyFileVersion("5.0.0.9")]
+[assembly: AssemblyFileVersion("5.0.0.1")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyCopyright("2014")]
 

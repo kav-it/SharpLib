@@ -1,0 +1,29 @@
+<Project DefaultTargets="Rebuild" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
+
+  <Target Name="IncVersion">    
+    <Message Text="===============================================================" Importance="high" />
+    <Message Text="Task    : IncVersion" />
+    <Message Text="Version : $(Version1).$(Version2).$(Version3).$(Version4)"/>
+    <Message Text="===============================================================" />
+
+    <FileUpdate Files='..\Project\Version\Version.cs'
+      Regex='AssemblyFileVersion\("(.+)"\)'
+      ReplacementText='AssemblyFileVersion("$(Version1).$(Version2).$(Version3).$(Version4)")' />
+
+    <Message Text="===============================================================" />
+  </Target>
+
+  <Target Name="DeleteFiles">
+
+    <Message Text="===============================================================" />
+    <Message Text="Task    : DeleteFiles" />
+    <Message Text="===============================================================" />
+
+    <RemoveDir Directories="35" />
+    <RemoveDir Directories="40" />
+    <RemoveDir Directories="45" />
+  </Target>
+
+</Project>
