@@ -292,6 +292,22 @@ namespace SharpLib
             }
         }
 
+        public static Object StringToObject(String value, Type typ)
+        {
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typ);
+                MemoryStream memStream = new MemoryStream(Encoding.UTF8.GetBytes(value));
+                Object obj = serializer.Deserialize(memStream);
+
+                return obj;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public static Object LoadResource(String absolutPath, Type typ, Assembly asm = null)
         {
             try

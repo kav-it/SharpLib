@@ -36,6 +36,18 @@ namespace SharpLib
 
         public Boolean AutoScroll { get; set; }
 
+        public String Text
+        {
+            get { return GetText(); }
+            set { SetText(value); }
+        }
+
+        public Boolean IsReadOnly
+        {
+            get { return PART_richTextBox.IsReadOnly; }
+            set { PART_richTextBox.IsReadOnly = value; }
+        }
+
         #endregion
 
         #region Конструктор
@@ -83,6 +95,12 @@ namespace SharpLib
             String text = new TextRange(PART_flowDoc.ContentStart, PART_flowDoc.ContentEnd).Text;
 
             return text;
+        }
+
+        private void SetText(String value)
+        {
+            PART_flowDoc.Blocks.Clear();
+            PART_flowDoc.Blocks.Add(new Paragraph(new Run(value)));
         }
 
         private String AddTimeStamp(String text)
@@ -154,11 +172,7 @@ namespace SharpLib
             text = AddTimeStamp(text);
 
             if (Application.Current != null)
-            {
-                Application.Current.Dispatcher.BeginInvoke(
-                                                           (Action)(() => { AddLineSafety(text, color); })
-                    );
-            }
+                Application.Current.Dispatcher.BeginInvoke((Action)(() => { AddLineSafety(text, color); }));
         }
 
         public new void AddText(String text)
@@ -174,11 +188,7 @@ namespace SharpLib
         public void AddText(String text, Brush color)
         {
             if (Application.Current != null)
-            {
-                Application.Current.Dispatcher.BeginInvoke(
-                                                           (Action)(() => { AddTextSafety(text, color); })
-                    );
-            }
+                Application.Current.Dispatcher.BeginInvoke((Action)(() => { AddTextSafety(text, color); }));
         }
 
         #endregion Основные методы

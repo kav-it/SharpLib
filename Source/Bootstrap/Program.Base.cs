@@ -270,11 +270,13 @@ namespace SharpLib
             Config = localConfig;
         }
 
-        private static void SaveConfig(AppConfigBase config)
+        public static void SaveConfig(AppConfigBase config)
         {
             if (config == null) return;
 
             Xmler.SaveSerialize(ConfigFileName, config);
+
+            Config = config;
         }
 
         public static void SaveConfig()
