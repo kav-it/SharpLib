@@ -9,7 +9,6 @@
 // ****************************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 using System.Windows;
@@ -18,6 +17,7 @@ using SharpLib.Log;
 
 namespace SharpLib
 {
+
     #region Класс ModuleBase
 
     /// <summary>
@@ -159,7 +159,7 @@ namespace SharpLib
         protected virtual void RaiseCallbackAsync(object sender, ModuleEventArgs args)
         {
             if (ModCallback != null)
-                Application.Current.Dispatcher.Invoke(new Action(() => ModCallback(sender, args)));
+                Application.Current.Dispatcher.Invoke(() => ModCallback(sender, args));
         }
 
         #endregion Генерация событий
@@ -184,14 +184,23 @@ namespace SharpLib
         public static DateTime StartTime { get; set; }
 
         /// <summary>
+        /// Время работы приложения
+        /// </summary>
+        public static TimeSpan WorkTime
+        {
+            get
+            {
+                TimeSpan span = DateTime.Now - StartTime;
+
+                return span;
+            }
+        }
+
+
+        /// <summary>
         /// Версия приложения
         /// </summary>
         public static ModuleVersion Version { get; private set; }
-
-        /// <summary>
-        /// Конфигурация приложения
-        /// </summary>
-        protected static AppConfigBase Config { get; set; }
 
         /// <summary>
         /// Текстовое название приложения
@@ -207,19 +216,24 @@ namespace SharpLib
         /// </summary>
         public static FileLocation Location { get; private set; }
 
+        /// <summary>
+        /// Имя файла конфигурации приложения
+        /// </summary>
         public static String ConfigFileName
         {
-            get
-            {
-                return Location.ExePathWithoutExt + ".xml";                 
-            }
+            get { return Location.ExePathWithoutExt + ".xml"; }
         }
+
+        /// <summary>
+        /// Конфигурация приложения
+        /// </summary>
+        public static AppConfigBase Config { get; private set; }
 
         #endregion
 
         #region Начальная инициализация
 
-        protected static void Init(Type typConfig, String threadName)
+        protected static void Init(AppConfigBase config, String threadName)
         {
             Location = new FileLocation(Assembly.GetEntryAssembly().Location);
 
@@ -229,12 +243,11 @@ namespace SharpLib
             InitFields(threadName);
 
             // Инициализация конфигурации
-            LoadConfig(typConfig);
-        }
+            LoadConfig(config);
 
-        protected static void Uninit()
-        {
-            SaveConfig();
+            Logger.Info("===============================================================================");
+            Logger.Info("Запуск приложения {0} (v{1}) {2}", Location.ExeName, Version, Version.DateTimeText);
+            Logger.Info("===============================================================================");
         }
 
         private static void InitLogger()
@@ -254,38 +267,45 @@ namespace SharpLib
             Thread.CurrentThread.Name = threadName;
         }
 
-        private static void LoadConfig(Type typConfig)
+        protected static void Uninit()
         {
-            var localConfig = (AppConfigBase)Xmler.LoadSerialize(ConfigFileName, typConfig);
+            SaveConfig();
+
+            Logger.Info("===============================================================================");
+            Logger.Info("Завершение приложения (время работы {0})", WorkTime.ToStringEx());
+            Logger.Info("===============================================================================");
+        }
+
+        private static void LoadConfig(AppConfigBase config)
+        {
+            var localConfig = (AppConfigBase)Xmler.LoadSerialize(ConfigFileName, config.GetType());
 
             if (localConfig == null)
             {
-                localConfig = (AppConfigBase)Reflector.CreateObject(typConfig);
+                // Создание объекта конфигурации
+                localConfig = (AppConfigBase)Reflector.CreateObject(config.GetType());
                 localConfig.Init();
+                // Копирование полей
+                Reflector.DeepCopy(config, localConfig);
                 // Сохранение новой конфигурации
-                SaveConfig(localConfig);
+                config.Save();
+            }
+            else
+            {
+                // Копирование полей
+                Reflector.DeepCopy(config, localConfig);
             }
 
-            // Сохранение объекта
-            Config = localConfig;
-        }
-
-        public static void SaveConfig(AppConfigBase config)
-        {
-            if (config == null) return;
-
-            Xmler.SaveSerialize(ConfigFileName, config);
-
+            // Сохранение ссылки на объект конфигурации
             Config = config;
         }
 
         public static void SaveConfig()
         {
-            SaveConfig(Config);
+            Config.Save();
         }
 
         #endregion Начальная инициализация
-
     }
 
     #endregion Класс Program
@@ -294,10 +314,25 @@ namespace SharpLib
 
     public class AppConfigBase
     {
+        #region Методы
+
         public virtual void Init()
         {
-            
         }
+
+        public void Save()
+        {
+            Xmler.SaveSerialize(ProgramBase.ConfigFileName, this);
+        }
+
+        public void Load()
+        {
+            var localConfig = (AppConfigBase)Xmler.LoadSerialize(ProgramBase.ConfigFileName, GetType());
+
+            Reflector.DeepCopy(this, localConfig);
+        }
+
+        #endregion
     }
 
     #endregion Интерфейс AppConfigBase

@@ -274,13 +274,13 @@ namespace SharpLib.Log
         {
             StringBuilder builder = new StringBuilder();
 
-            builder.AppendFormat("[{0}] [{1}] {2}{3} {4}",
+            builder.AppendFormat("[{0}] [{1}] {2}{3} ",
                                  FormatTime(TimeStamp),
                                  FormatLevel(Level),
                                  FormatModuleName(ModuleName),
-                                 FormatIndex(ModuleIndex),
-                                 Message
-                );
+                                 FormatIndex(ModuleIndex));
+
+            builder.AppendFormat(Message, Parameters);
 
             String result = builder.ToString();
 

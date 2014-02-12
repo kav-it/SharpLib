@@ -20,21 +20,13 @@ namespace SharpLib
     {
         #region Начальная инициализация
 
-        public static AppConfigBase Init(Type typConfig)
+        public static void Init(AppConfigBase config)
         {
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnDomainUnhandledException);
+            AppDomain.CurrentDomain.UnhandledException += OnDomainUnhandledException;
 
-            Init(typConfig, "App.Console");
+            Init(config, "App.Console");
 
             Consoler.Logger = Logger;
- 
-            Consoler.Print("===============================================================================");
-            Consoler.Print("Приложение : " + Title);
-            Consoler.Print("Версия     : " + Version);
-            Consoler.Print("Время      : " + Version.DateTimeText);
-            Consoler.Print("===============================================================================");
-
-            return Config;
         }
 
         #endregion Начальная инициализация

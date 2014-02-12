@@ -1690,6 +1690,22 @@ namespace SharpLib
 
     #endregion Класс ExtensionEncoding
 
+    #region Класс ExtensionTimeSpan
+    public static class ExtensionTimeSpan
+    {
+        public static String ToStringEx(this TimeSpan value)
+        {
+            String text = String.Format("{0:00}:{1:00}:{2:00}", value.Hours, value.Minutes, value.Seconds);
+
+            int days = (int)value.TotalDays;
+            if (days > 0)
+                text = String.Format("{0}д {1}", days, text);
+
+            return text;    
+        }
+    }
+    #endregion Класс ExtensionTimeSpan
+
     #region Работа с данными "Блоки данных/памяти"
 
     public static class Mem
@@ -2153,9 +2169,7 @@ namespace SharpLib
 
         public static TimeSpan StrToTimeSpan(String value)
         {
-            TimeSpan result;
-
-            result = TimeSpan.Parse(value);
+            TimeSpan result = TimeSpan.Parse(value);
 
             return result;
         }

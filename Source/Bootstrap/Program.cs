@@ -106,7 +106,7 @@ namespace SharpLib
 
         #region Начальная инициализация
 
-        public static AppConfigBase Init(Type typConfig)
+        public static void Init(AppConfigBase config)
         {
 #if !__DEBUG__
             Application.Current.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(OnAppDispatcherUnhandledException);
@@ -114,20 +114,13 @@ namespace SharpLib
 #endif
 
             // Инициализация базового класса
-            Init(typConfig, "App.Gui");
+            Init(config, "App.Gui");
 
             InitCommand();
             InitLang();
 
             Application.Current.Activated += OnActivated;
             Application.Current.Exit += OnExit;
-
-            Logger.Info("===============================================================================");
-            String message = String.Format("Запуск приложения {0} (v{1}) {2}", Location.ExeName, Version, Version.DateTimeText);
-            Logger.Info(message);
-            Logger.Info("===============================================================================");
-
-            return Config;
         }
 
         private static void OnActivated(object sender, EventArgs e)
@@ -148,10 +141,6 @@ namespace SharpLib
 
         private static void OnExit(object sender, ExitEventArgs e)
         {
-            Logger.Info("===============================================================================");
-            Logger.Info("Завершение приложения");
-            Logger.Info("===============================================================================");
-
             Uninit();
         }
 

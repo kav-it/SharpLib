@@ -29,36 +29,80 @@ namespace SharpLib
             return result;
         }
 
-        public static void DeepCopy(Object target, Object source)
+        private static Boolean IsSimplyTyp(Type typ)
         {
+            Boolean result = typ.IsValueType || typ.IsEnum || typ == typeof(String);
+
+            return result;
+        }
+
+        public static void DeepCopy(Object dest, Object source)
+        {
+            Type destType = source.GetType();
             Type sourceType = source.GetType();
 
-            PropertyInfo[] properties = sourceType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (destType != sourceType) return;
+
+            PropertyInfo[] properties = sourceType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
             foreach (PropertyInfo property in properties)
             {
                 if (!property.CanWrite) continue;
 
-                if (property.PropertyType.IsValueType || property.PropertyType.IsEnum || property.PropertyType == typeof(String))
+                Object propertyValue = property.GetValueEx(source);
+
+                // Проверка, что тип является:
+                //  + значимым типом
+                //  + перечисление (тоже значимый тип, но отдельная обработка)
+                //  + строка (отдельная обработка)
+                //  + значение свойства == null
+                if (IsSimplyTyp(property.PropertyType) || propertyValue == null)
                 {
-                    property.SetValueEx(target, property.GetValueEx(source));
+                    // Установка свойства объекта "Dest"
+                    property.SetValueEx(dest, propertyValue);
                 }
                 else
                 {
-                    Object propertyValue = property.GetValueEx(source);
+                    IList list = propertyValue as IList;
 
-                    if (propertyValue == null)
+                    if (list != null)
                     {
-                        property.SetValueEx(target, null);
+                        // Создание объекта по типу
+                        var value = Reflector.CreateObject(propertyValue.GetType());
+
+                        foreach (Object listItem in list)
+                        {
+                            Type listItemTyp = listItem.GetType();
+                            Object destItem;
+
+                            // Прямое копирование значимых типов и строк
+                            if (IsSimplyTyp(listItemTyp))
+                            {
+                                // Прямое копирование
+                                destItem = listItem;
+                            }
+                            else
+                            {
+                                // Создание элемента списка по типу
+                                destItem = Reflector.CreateObject(listItemTyp);
+                                // Копирование данных объекта (через рефлексию)
+                                DeepCopy(destItem, listItem);
+                            }
+                            // Добавление нового свойства в список
+                            ((IList)value).Add(destItem);
+                        }
+
+                        // Установка свойства объекта "Dest"
+                        property.SetValueEx(dest, value);
                     }
                     else
                     {
                         // Создание объекта по типу
-                        var value = CreateObject(propertyValue.GetType());
+                        var value = Reflector.CreateObject(propertyValue.GetType());
                         // Копирование данных объекта
                         DeepCopy(value, propertyValue);
-                        // Инициализация свойства созданным значением
-                        property.SetValueEx(target, value);
+                        // Установка свойства объекта "Dest"
+                        property.SetValueEx(dest, value);
                     }
                 }
             }

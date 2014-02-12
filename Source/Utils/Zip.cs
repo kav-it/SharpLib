@@ -14979,7 +14979,7 @@ namespace SharpLib.Zip
 
         internal ZipCompressionStrategy compressionStrategy; // favor or force Huffman coding
 
-        private Config config;
+        private ZipConfig config;
 
         internal SByte data_type; // UNKNOWN, BINARY or ASCII
 
@@ -15094,7 +15094,7 @@ namespace SharpLib.Zip
             Array.Clear(head, 0, hash_size);
             //for (int i = 0; i < hash_size; i++) head[i] = 0;
 
-            config = Config.Lookup(compressionLevel);
+            config = ZipConfig.Lookup(compressionLevel);
             SetDeflater();
 
             strstart = 0;
@@ -16246,7 +16246,7 @@ namespace SharpLib.Zip
 
             if (compressionLevel != level)
             {
-                Config newConfig = Config.Lookup(level);
+                ZipConfig newConfig = ZipConfig.Lookup(level);
 
                 // change in the deflate flavor (Fast vs slow vs none)?
                 if (newConfig.Flavor != config.Flavor && _codec.TotalBytesIn != 0)
@@ -16470,13 +16470,13 @@ namespace SharpLib.Zip
 
         #endregion
 
-        #region Класс Config
+        #region Класс ZipConfig
 
-        internal class Config
+        internal class ZipConfig
         {
             #region Поля
 
-            private static readonly Config[] Table;
+            private static readonly ZipConfig[] Table;
 
             internal ZipDeflateFlavor Flavor;
 
@@ -16492,24 +16492,24 @@ namespace SharpLib.Zip
 
             #region Конструктор
 
-            static Config()
+            static ZipConfig()
             {
                 Table = new[]
                     {
-                        new Config(0, 0, 0, 0, ZipDeflateFlavor.Store),
-                        new Config(4, 4, 8, 4, ZipDeflateFlavor.Fast),
-                        new Config(4, 5, 16, 8, ZipDeflateFlavor.Fast),
-                        new Config(4, 6, 32, 32, ZipDeflateFlavor.Fast),
-                        new Config(4, 4, 16, 16, ZipDeflateFlavor.Slow),
-                        new Config(8, 16, 32, 32, ZipDeflateFlavor.Slow),
-                        new Config(8, 16, 128, 128, ZipDeflateFlavor.Slow),
-                        new Config(8, 32, 128, 256, ZipDeflateFlavor.Slow),
-                        new Config(32, 128, 258, 1024, ZipDeflateFlavor.Slow),
-                        new Config(32, 258, 258, 4096, ZipDeflateFlavor.Slow),
+                        new ZipConfig(0, 0, 0, 0, ZipDeflateFlavor.Store),
+                        new ZipConfig(4, 4, 8, 4, ZipDeflateFlavor.Fast),
+                        new ZipConfig(4, 5, 16, 8, ZipDeflateFlavor.Fast),
+                        new ZipConfig(4, 6, 32, 32, ZipDeflateFlavor.Fast),
+                        new ZipConfig(4, 4, 16, 16, ZipDeflateFlavor.Slow),
+                        new ZipConfig(8, 16, 32, 32, ZipDeflateFlavor.Slow),
+                        new ZipConfig(8, 16, 128, 128, ZipDeflateFlavor.Slow),
+                        new ZipConfig(8, 32, 128, 256, ZipDeflateFlavor.Slow),
+                        new ZipConfig(32, 128, 258, 1024, ZipDeflateFlavor.Slow),
+                        new ZipConfig(32, 258, 258, 4096, ZipDeflateFlavor.Slow),
                     };
             }
 
-            private Config(int goodLength, int maxLazy, int niceLength, int maxChainLength, ZipDeflateFlavor flavor)
+            private ZipConfig(int goodLength, int maxLazy, int niceLength, int maxChainLength, ZipDeflateFlavor flavor)
             {
                 GoodLength = goodLength;
                 MaxLazy = maxLazy;
@@ -16522,7 +16522,7 @@ namespace SharpLib.Zip
 
             #region Методы
 
-            public static Config Lookup(ZipCompressionLevel level)
+            public static ZipConfig Lookup(ZipCompressionLevel level)
             {
                 return Table[(int)level];
             }
@@ -16530,7 +16530,7 @@ namespace SharpLib.Zip
             #endregion
         }
 
-        #endregion Класс Config
+        #endregion Класс ZipConfig
     }
 
     #endregion Класс ZipDeflateManager
