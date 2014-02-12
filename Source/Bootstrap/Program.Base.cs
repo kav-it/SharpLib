@@ -320,6 +320,11 @@ namespace SharpLib
         {
         }
 
+        public void Fill(Object source)
+        {
+            Reflector.DeepCopy(this, source);
+        }
+
         public void Save()
         {
             Xmler.SaveSerialize(ProgramBase.ConfigFileName, this);
