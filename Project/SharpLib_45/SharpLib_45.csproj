@@ -125,6 +125,10 @@
       <Link>Source\Controls\WaitIndicator.Control.xaml.cs</Link>
       <DependentUpon>WaitIndicator.Control.xaml</DependentUpon>
     </Compile>
+    <Compile Include="..\..\Source\Controls\XmlViewer.Control.xaml.cs">
+      <Link>Source\Controls\XmlViewer.Control.xaml.cs</Link>
+      <DependentUpon>XmlViewer.Control.xaml</DependentUpon>
+    </Compile>
     <Compile Include="..\..\Source\Domains\Domain.cs">
       <Link>Source\Domains\Domain.cs</Link>
     </Compile>
