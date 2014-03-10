@@ -25,12 +25,6 @@ namespace SharpLib
     /// </summary>
     public class ModuleBase
     {
-        #region Константы
-
-        private const int DUMP_BYTES_IN_LINE_MAX = 16;
-
-        #endregion
-
         #region Переменные
 
         protected LogLevel _modDebug;
@@ -159,7 +153,7 @@ namespace SharpLib
         protected virtual void RaiseCallbackAsync(object sender, ModuleEventArgs args)
         {
             if (ModCallback != null)
-                Application.Current.Dispatcher.Invoke(() => ModCallback(sender, args));
+                Application.Current.Dispatcher.Invoke(new Action(() => ModCallback(sender, args)));
         }
 
         #endregion Генерация событий

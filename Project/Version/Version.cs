@@ -11,10 +11,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
-
-//
-// Поля, обязательные к заполнению
-// 
+using System.Windows.Markup;
 
 [assembly: AssemblyProduct("Библиотека SharpLib")]
 [assembly: AssemblyFileVersion("5.0.0.1")]
@@ -30,3 +27,10 @@ using System.Windows;
     ResourceDictionaryLocation.None,
     ResourceDictionaryLocation.SourceAssembly
 )]
+
+[assembly: XmlnsPrefix("http://codeofrussia.ru/sharplib", "sharplib")]
+[assembly: XmlnsPrefix("http://codeofrussia.ru/sharplib/controls", "sharplibControls")]
+
+[assembly: XmlnsDefinition("http://codeofrussia.ru/sharplib", "SharpLib")]
+[assembly: XmlnsDefinition("http://codeofrussia.ru/sharplib/controls", "SharpLib.Controls")]
+
