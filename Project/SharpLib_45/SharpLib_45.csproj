@@ -117,6 +117,15 @@
       <Link>Source\Controls\TextUpDown.Control.xaml.cs</Link>
       <DependentUpon>TextUpDown.Control.xaml</DependentUpon>
     </Compile>
+    <Compile Include="..\..\Source\Controls\TreeList\TreeList.Common.cs">
+      <Link>Source\Controls\TreeList\TreeList.Common.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\TreeList\TreeList.cs">
+      <Link>Source\Controls\TreeList\TreeList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\TreeList\TreeList.Node.cs">
+      <Link>Source\Controls\TreeList\TreeList.Node.cs</Link>
+    </Compile>
     <Compile Include="..\..\Source\Controls\TreeView.Control.xaml.cs">
       <Link>Source\Controls\TreeView.Control.xaml.cs</Link>
       <DependentUpon>TreeView.Control.xaml</DependentUpon>
@@ -360,6 +369,16 @@
     </Page>
     <Page Include="..\..\Source\Controls\TextUpDown.Control.xaml">
       <Link>Source\Controls\TextUpDown.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\Themes\Generic.xaml">
+      <Link>Themes\Generic.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\TreeList\TreeList.Theme.xaml">
+      <Link>Source\Controls\TreeList\TreeList.Theme.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
