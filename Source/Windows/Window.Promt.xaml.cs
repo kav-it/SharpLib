@@ -73,6 +73,18 @@ namespace SharpLib
                 DialogResult = true;
         }
 
+        public static String Show(String title, String text = "")
+        {
+            WindowPromt window = new WindowPromt(title);
+
+            window.Text = text;
+
+            if (window.ShowDialog() == false)
+                return null;
+
+            return window.Text;
+        }
+
         #endregion Обработка нажатий
     }
 }
