@@ -248,6 +248,9 @@
     <Compile Include="..\..\Source\Utils\WinApi.cs">
       <Link>Source\Utils\WinApi.cs</Link>
     </Compile>
+    <Compile Include="..\..\Source\Utils\WinVars.cs">
+      <Link>Source\Utils\WinVars.cs</Link>
+    </Compile>
     <Compile Include="..\..\Source\Utils\Xmler.cs">
       <Link>Source\Utils\Xmler.cs</Link>
     </Compile>
