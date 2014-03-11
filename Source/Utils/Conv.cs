@@ -1716,7 +1716,11 @@ namespace SharpLib
 
         public static String JoinEx(this IEnumerable<String> values, String separator)
         {
+            #if __NET35__
+            return String.Join(separator, values.ToArray());
+            #else
             return String.Join(separator, values);
+            #endif
         }
 
         public static String JoinEx(this IEnumerable<String> values, Char separator)

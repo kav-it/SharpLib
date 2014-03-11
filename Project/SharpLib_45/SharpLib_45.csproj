@@ -48,9 +48,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\..\SharpLib\Source\Utils\WinVars.cs">
-      <Link>Source\Utils\WinVars.cs</Link>
-    </Compile>
     <Compile Include="..\..\Source\Bootstrap\Program.Base.cs">
       <Link>Source\Bootstrap\Program.Base.cs</Link>
     </Compile>
