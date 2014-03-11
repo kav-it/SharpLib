@@ -43,11 +43,11 @@ namespace SharpLib.Controls
 
         public static readonly DependencyProperty RootProperty = DependencyProperty.Register("Root", typeof(TreeListNode), typeof(TreeList));
 
-        public static readonly DependencyProperty ShowAlternationProperty = DependencyProperty.RegisterAttached("ShowAlternation", typeof(bool), typeof(TreeList), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.Inherits));
+        public static readonly DependencyProperty ShowAlternationProperty = DependencyProperty.RegisterAttached("ShowAlternation", typeof(bool), typeof(TreeList), new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.Inherits));
 
         public static readonly DependencyProperty ShowLinesProperty = DependencyProperty.Register("ShowLines", typeof(bool), typeof(TreeList), new FrameworkPropertyMetadata(true));
 
-        public static readonly DependencyProperty ShowRootExpanderProperty = DependencyProperty.Register("ShowRootExpander", typeof(bool), typeof(TreeList), new FrameworkPropertyMetadata(false));
+        public static readonly DependencyProperty ShowRootExpanderProperty = DependencyProperty.Register("ShowRootExpander", typeof(bool), typeof(TreeList), new FrameworkPropertyMetadata(true));
 
         public static readonly DependencyProperty ShowRootProperty = DependencyProperty.Register("ShowRoot", typeof(bool), typeof(TreeList), new FrameworkPropertyMetadata(true));
 

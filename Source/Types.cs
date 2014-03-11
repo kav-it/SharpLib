@@ -1484,6 +1484,11 @@ namespace SharpLib
             Items.Add(new Separator());
         }
 
+        public void Show()
+        {
+            IsOpen = true;
+        }
+
         #endregion
     }
 

@@ -519,6 +519,11 @@ namespace SharpLib.Controls
             return false;
         }
 
+        public void Delete(TreeListNode node)
+        {
+            Children.Remove(node);
+        }
+
         public virtual bool CanDelete(TreeListNode[] listNodes)
         {
             return false;

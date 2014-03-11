@@ -285,9 +285,9 @@ namespace SharpLib
         public static Char ByteToChar(Byte value)
         {
             Byte[] buffer =
-                {
-                    1
-                };
+            {
+                1
+            };
             buffer[0] = value;
 
             System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
@@ -310,9 +310,9 @@ namespace SharpLib
         public static String FileSizeToString(Int64 size, int divider = 1000)
         {
             String[] sizeSuffixes =
-                {
-                    "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"
-                };
+            {
+                "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"
+            };
             const String formatTemplate = "{0}{1:0.#} {2}";
 
             String text;
@@ -329,9 +329,9 @@ namespace SharpLib
 
                 text = String.Format(
                                      formatTemplate,
-                                     (size < 0) ? "-" : null,
-                                     normSize,
-                                     sizeSuffixes[iUnit]);
+                    (size < 0) ? "-" : null,
+                    normSize,
+                    sizeSuffixes[iUnit]);
             }
 
             text = text.Replace(',', '.');
@@ -433,17 +433,17 @@ namespace SharpLib
             if (endian == Endianess.Little)
             {
                 value = (UInt16)
-                        (
-                            (buf[offset + 0] << 0) +
-                            (buf[offset + 1] << 8)
+                    (
+                        (buf[offset + 0] << 0) +
+                        (buf[offset + 1] << 8)
                         );
             }
             else
             {
                 value = (UInt16)
-                        (
-                            (buf[offset + 0] << 8) +
-                            (buf[offset + 1] << 0)
+                    (
+                        (buf[offset + 0] << 8) +
+                        (buf[offset + 1] << 0)
                         );
             }
 
@@ -457,20 +457,20 @@ namespace SharpLib
             if (endian == Endianess.Little)
             {
                 value = (
-                            ((UInt32)buf[offset + 0] << 0) +
-                            ((UInt32)buf[offset + 1] << 8) +
-                            ((UInt32)buf[offset + 2] << 16) +
-                            ((UInt32)buf[offset + 3] << 24)
-                        );
+                    ((UInt32)buf[offset + 0] << 0) +
+                    ((UInt32)buf[offset + 1] << 8) +
+                    ((UInt32)buf[offset + 2] << 16) +
+                    ((UInt32)buf[offset + 3] << 24)
+                    );
             }
             else
             {
                 value = (
-                            ((UInt32)buf[offset + 0] << 24) +
-                            ((UInt32)buf[offset + 1] << 16) +
-                            ((UInt32)buf[offset + 2] << 8) +
-                            ((UInt32)buf[offset + 3] << 0)
-                        );
+                    ((UInt32)buf[offset + 0] << 24) +
+                    ((UInt32)buf[offset + 1] << 16) +
+                    ((UInt32)buf[offset + 2] << 8) +
+                    ((UInt32)buf[offset + 3] << 0)
+                    );
             }
             return value;
         }
@@ -482,28 +482,28 @@ namespace SharpLib
             if (endian == Endianess.Little)
             {
                 value = (
-                            ((UInt64)buf[offset + 0] << 0) +
-                            ((UInt64)buf[offset + 1] << 8) +
-                            ((UInt64)buf[offset + 2] << 16) +
-                            ((UInt64)buf[offset + 3] << 24) +
-                            ((UInt64)buf[offset + 4] << 32) +
-                            ((UInt64)buf[offset + 5] << 40) +
-                            ((UInt64)buf[offset + 6] << 48) +
-                            ((UInt64)buf[offset + 7] << 56)
-                        );
+                    ((UInt64)buf[offset + 0] << 0) +
+                    ((UInt64)buf[offset + 1] << 8) +
+                    ((UInt64)buf[offset + 2] << 16) +
+                    ((UInt64)buf[offset + 3] << 24) +
+                    ((UInt64)buf[offset + 4] << 32) +
+                    ((UInt64)buf[offset + 5] << 40) +
+                    ((UInt64)buf[offset + 6] << 48) +
+                    ((UInt64)buf[offset + 7] << 56)
+                    );
             }
             else
             {
                 value = (
-                            ((UInt64)buf[offset + 0] << 56) +
-                            ((UInt64)buf[offset + 1] << 48) +
-                            ((UInt64)buf[offset + 2] << 40) +
-                            ((UInt64)buf[offset + 3] << 32) +
-                            ((UInt64)buf[offset + 4] << 24) +
-                            ((UInt64)buf[offset + 5] << 16) +
-                            ((UInt64)buf[offset + 6] << 8) +
-                            ((UInt64)buf[offset + 7] << 0)
-                        );
+                    ((UInt64)buf[offset + 0] << 56) +
+                    ((UInt64)buf[offset + 1] << 48) +
+                    ((UInt64)buf[offset + 2] << 40) +
+                    ((UInt64)buf[offset + 3] << 32) +
+                    ((UInt64)buf[offset + 4] << 24) +
+                    ((UInt64)buf[offset + 5] << 16) +
+                    ((UInt64)buf[offset + 6] << 8) +
+                    ((UInt64)buf[offset + 7] << 0)
+                    );
             }
             return value;
         }
@@ -860,9 +860,9 @@ namespace SharpLib
         public static Byte[] ToBufferEx(this Byte value)
         {
             Byte[] buffer = new[]
-                {
-                    value
-                };
+            {
+                value
+            };
 
             return buffer;
         }
@@ -1311,11 +1311,7 @@ namespace SharpLib
 
         public static String[] SplitEx(this String value, String delimeter)
         {
-            String[] result = value.Split(
-                                          new[]
-                                              {
-                                                  delimeter
-                                              }, StringSplitOptions.RemoveEmptyEntries);
+            String[] result = value.Split(new[] {delimeter}, StringSplitOptions.RemoveEmptyEntries);
 
             return result;
         }
@@ -1691,8 +1687,11 @@ namespace SharpLib
     #endregion Класс ExtensionEncoding
 
     #region Класс ExtensionTimeSpan
+
     public static class ExtensionTimeSpan
     {
+        #region Методы
+
         public static String ToStringEx(this TimeSpan value)
         {
             String text = String.Format("{0:00}:{1:00}:{2:00}", value.Hours, value.Minutes, value.Seconds);
@@ -1701,10 +1700,34 @@ namespace SharpLib
             if (days > 0)
                 text = String.Format("{0}д {1}", days, text);
 
-            return text;    
+            return text;
         }
+
+        #endregion
     }
+
     #endregion Класс ExtensionTimeSpan
+
+    #region Класс ExtensionEnumerable
+
+    public static class ExtensionEnumerable
+    {
+        #region Методы
+
+        public static String JoinEx(this IEnumerable<String> values, String separator)
+        {
+            return String.Join(separator, values);
+        }
+
+        public static String JoinEx(this IEnumerable<String> values, Char separator)
+        {
+            return values.JoinEx(separator.ToString());
+        }
+
+        #endregion
+    }
+
+    #endregion Класс ExtensionEnumerable
 
     #region Работа с данными "Блоки данных/памяти"
 
@@ -2228,7 +2251,7 @@ namespace SharpLib
     {
         #region Поля
 
-        private List<Byte> _list;
+        private readonly List<Byte> _list;
 
         #endregion
 
@@ -2478,7 +2501,8 @@ namespace SharpLib
                 {
                     if (_list[offset++] == 0)
                     {
-                        includeNullCh = true; break;
+                        includeNullCh = true;
+                        break;
                     }
 
                     size++;

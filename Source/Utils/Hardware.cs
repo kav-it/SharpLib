@@ -9,8 +9,10 @@
 // ****************************************************************************
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -80,8 +82,6 @@ namespace SharpLib
         private const int PRODUCT_HOME_PREMIUM_N = 0x0000001A;
 
         private const int PRODUCT_HOME_PREMIUM_SERVER = 0x00000022;
-
-        private const int PRODUCT_HOME_SERVER = 0x00000013;
 
         private const int PRODUCT_HYPERV = 0x0000002A;
 
@@ -169,10 +169,6 @@ namespace SharpLib
 
         private const int PRODUCT_WEB_SERVER_CORE = 0x0000001D;
 
-        // private const int PRODUCT_UNLICENSED                     = 0xABCDABCD;
-
-        private const int VER_NT_DOMAIN_CONTROLLER = 2;
-
         private const int VER_NT_SERVER = 3;
 
         private const int VER_NT_WORKSTATION = 1;
@@ -184,12 +180,6 @@ namespace SharpLib
         private const int VER_SUITE_ENTERPRISE = 2;
 
         private const int VER_SUITE_PERSONAL = 512;
-
-        private const int VER_SUITE_SINGLEUSERTS = 256;
-
-        private const int VER_SUITE_SMALLBUSINESS = 1;
-
-        private const int VER_SUITE_TERMINAL = 16;
 
         #endregion
 
@@ -221,10 +211,7 @@ namespace SharpLib
                         bool result = ((DoesWin32MethodExist("kernel32.dll", "IsWow64Process") &&
                                         NativeMethods.IsWow64Process(NativeMethods.GetCurrentProcess(), out flag)) && flag);
 
-                        if (result)
-                            _bits = 64;
-                        else
-                            _bits = 32;
+                        _bits = result ? 64 : 32;
                     }
                 }
 
@@ -239,24 +226,12 @@ namespace SharpLib
 
         public String Name
         {
-            get
-            {
-                if (_name == null)
-                    _name = GetNameWindows();
-
-                return _name;
-            }
+            get { return _name ?? (_name = GetNameWindows()); }
         }
 
         public String Edition
         {
-            get
-            {
-                if (_edition == null)
-                    _edition = GetEditionWindows();
-
-                return _edition;
-            }
+            get { return _edition ?? (_edition = GetEditionWindows()); }
         }
 
         public String ServicePack
@@ -340,10 +315,7 @@ namespace SharpLib
                                         break;
                                     case 10:
                                         {
-                                            if (csdVersion == "A")
-                                                name = "Windows 98 Second Edition";
-                                            else
-                                                name = "Windows 98";
+                                            name = csdVersion == "A" ? "Windows 98 Second Edition" : "Windows 98";
                                         }
                                         break;
                                     case 90:
@@ -469,10 +441,7 @@ namespace SharpLib
                         else
                         {
                             // 86 == SM_TABLETPC
-                            if (NativeMethods.GetSystemMetrics(86) == 0)
-                                edition = "Professional";
-                            else
-                                edition = "Tablet Edition";
+                            edition = NativeMethods.GetSystemMetrics(86) == 0 ? "Professional" : "Tablet Edition";
                         }
                     }
                     else if (productType == VER_NT_SERVER)
@@ -831,19 +800,19 @@ namespace SharpLib
 
         #region Поля
 
+        private readonly FrameworkVersionInfo _v11;
+
+        private readonly FrameworkVersionInfo _v20;
+
+        private readonly FrameworkVersionInfo _v30;
+
+        private readonly FrameworkVersionInfo _v35;
+
+        private readonly FrameworkVersionInfo _v40Client;
+
+        private readonly FrameworkVersionInfo _v40Full;
+
         private String _installPath;
-
-        private FrameworkVersionInfo _v11;
-
-        private FrameworkVersionInfo _v20;
-
-        private FrameworkVersionInfo _v30;
-
-        private FrameworkVersionInfo _v35;
-
-        private FrameworkVersionInfo _v40Client;
-
-        private FrameworkVersionInfo _v40Full;
 
         #endregion
 
@@ -889,12 +858,12 @@ namespace SharpLib
             get
             {
                 String info = String.Format("{0}\r\n{1}\r\n{2}\r\n{3}\r\n{4}\r\n{5}",
-                                            V11.InstalledString,
-                                            V20.InstalledString,
-                                            V30.InstalledString,
-                                            V35.InstalledString,
-                                            V40Client.InstalledString,
-                                            V40Full.InstalledString);
+                    V11.InstalledString,
+                    V20.InstalledString,
+                    V30.InstalledString,
+                    V35.InstalledString,
+                    V40Client.InstalledString,
+                    V40Full.InstalledString);
 
                 return info;
             }
@@ -950,7 +919,7 @@ namespace SharpLib
                             }
                         }
                     }
-                    catch
+                    catch (Exception)
                     {
                     }
                 }
@@ -964,7 +933,7 @@ namespace SharpLib
             String installPath;
 
             if (GetRegistryValue(NET_INSTALL_ROOT_REG_KEY_NAME, NET_INSTALL_ROOT_REG_VALUE_NAME,
-                                 RegistryValueKind.String, out installPath) == false)
+                RegistryValueKind.String, out installPath) == false)
                 installPath = "";
 
             _installPath = installPath;
@@ -1008,9 +977,14 @@ namespace SharpLib
                 RegistryKey rkey = Registry.LocalMachine;
                 rkey = rkey.OpenSubKey("HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0");
 
-                String text = (String)rkey.GetValue("ProcessorNameString");
+                if (rkey != null)
+                {
+                    String text = (String)rkey.GetValue("ProcessorNameString");
 
-                return text;
+                    return text;
+                }
+
+                return "";
             }
         }
 
@@ -1025,7 +999,7 @@ namespace SharpLib
     {
         #region Поля
 
-        private NativeMethods.MemoryStatusEx _memoryStatus;
+        private readonly NativeMethods.MemoryStatusEx _memoryStatus;
 
         #endregion
 
@@ -1057,9 +1031,9 @@ namespace SharpLib
     {
         #region Поля
 
-        private int _height;
+        private readonly int _height;
 
-        private int _width;
+        private readonly int _width;
 
         #endregion
 
@@ -1288,12 +1262,12 @@ namespace SharpLib
             {
                 IntPtr handle = NativeMethods.CreateFile(
                                                          name,
-                                                         NativeMethods.GENERIC_READ | NativeMethods.GENERIC_WRITE,
-                                                         0,
-                                                         (IntPtr)0,
-                                                         NativeMethods.OPEN_EXISTING,
-                                                         NativeMethods.FILE_ATTRIBUTE_NORMAL | NativeMethods.FILE_FLAG_OVERLAPPED,
-                                                         null);
+                    NativeMethods.GENERIC_READ | NativeMethods.GENERIC_WRITE,
+                    0,
+                    (IntPtr)0,
+                    NativeMethods.OPEN_EXISTING,
+                    NativeMethods.FILE_ATTRIBUTE_NORMAL | NativeMethods.FILE_FLAG_OVERLAPPED,
+                    null);
 
                 NativeMethods.Check(handle);
 
