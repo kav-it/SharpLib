@@ -11,6 +11,7 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace SharpLib
@@ -91,8 +92,11 @@ namespace SharpLib
         {
             InitializeComponent();
 
+            // Установка родительского окна
+            var helper = new WindowInteropHelper(this);
+            helper.Owner = NativeMethods.GetActiveWindow();
+
             // Настройка внешнего вида окна
-            Owner = Program.CurrentWindow;
             ShowInTaskbar = false;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             ResizeMode = ResizeMode.NoResize;
@@ -239,36 +243,52 @@ namespace SharpLib
 
                     result = window.ShowCustom(caption, message, buttons, image, defaultResult);
                 })
-                    );
+                );
+            }
+            else
+            {
+                WindowMessageBox window = new WindowMessageBox();
+
+                result = window.ShowCustom(caption, message, buttons, image, defaultResult);
             }
 
             return result;
         }
 
-        public static MessageBoxResult ShowWarning(String message)
+        public static MessageBoxResult ShowWarning(String message, params object[] args)
         {
+            message = string.Format(message, args);
+
             return Show("Внимание", message, MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
         }
 
-        public static MessageBoxResult ShowError(String message)
+        public static MessageBoxResult ShowError(String message, params object[] args)
         {
+            message = string.Format(message, args);
+
             return Show("Ошибка", message, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
         }
 
-        public static Boolean ShowQuestion(String message)
+        public static Boolean ShowQuestion(String message, params object[] args)
         {
+            message = string.Format(message, args);
+
             MessageBoxResult result = Show("Вопрос", message, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
 
             return (result == MessageBoxResult.Yes);
         }
 
-        public static MessageBoxResult ShowInformation(String message)
+        public static MessageBoxResult ShowInformation(String message, params object[] args)
         {
+            message = string.Format(message, args);
+
             return Show("Информация", message, MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK);
         }
 
-        public static MessageBoxResult ShowBlank(String caption, String message)
+        public static MessageBoxResult ShowBlank(String caption, String message, params object[] args)
         {
+            message = string.Format(message, args);
+
             return Show(caption, message, MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.OK);
         }
 

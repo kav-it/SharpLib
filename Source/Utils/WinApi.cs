@@ -1929,6 +1929,13 @@ namespace SharpLib
 
         #endregion Работа с блокировками
 
+        #region Работа с окнами
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetActiveWindow();
+
+        #endregion Работа с окнами
+
         #region Вложенный класс: SpDeviInfoData
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]

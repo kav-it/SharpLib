@@ -885,6 +885,40 @@ namespace SharpLib
             return result;
         }
 
+        /// <summary>
+        /// Создание временной директории в %TEMP%
+        /// </summary>
+        public static String GetTempDirectory(Boolean isCreate = true)
+        {
+            String path = Path.GetTempPath();
+
+            if (isCreate)
+                CreateDir(path);
+
+            return path;
+        }
+
+        /// <summary>
+        /// Генерация имени временного файла в %TEMP%
+        /// </summary>
+        public static String GetTempFilename()
+        {
+            String path = Path.GetTempFileName();
+
+            return path;
+        }
+
+        /// <summary>
+        /// Генерация случайного имени файла
+        /// </summary>
+        /// <returns></returns>
+        public static String GetRandFilename()
+        {
+            String path = Path.GetRandomFileName();
+
+            return path;
+        }
+
         #endregion
     }
 
