@@ -127,6 +127,8 @@ namespace SharpLib
 
         public static void SetValueEx(this PropertyInfo property, Object obj, Object value)
         {
+            value = Convert.ChangeType(value, property.PropertyType);
+
             #if __NET35__ || __NET40__
             property.SetValue(obj, value, null);    
             #else

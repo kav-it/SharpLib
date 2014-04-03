@@ -266,7 +266,7 @@ namespace SharpLib
 
         public static UInt16 UseEnglishLangId
         {
-            get { return ResourcesWin.MakeLangId(NativeMethods.LANG_ENGLISH, NativeMethods.SUBLANG_ENGLISH_US); }
+            get { return MakeLangId(NativeMethods.LANG_ENGLISH, NativeMethods.SUBLANG_ENGLISH_US); }
         }
 
         #endregion

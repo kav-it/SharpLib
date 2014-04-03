@@ -141,6 +141,9 @@
     <Compile Include="..\..\Source\Domains\Domain.cs">
       <Link>Source\Domains\Domain.cs</Link>
     </Compile>
+    <Compile Include="..\..\Source\Files\File.Csv.cs">
+      <Link>Source\Files\File.Csv.cs</Link>
+    </Compile>
     <Compile Include="..\..\Source\Files\File.IntelHex.cs">
       <Link>Source\Files\File.IntelHex.cs</Link>
     </Compile>
