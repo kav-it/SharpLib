@@ -424,7 +424,7 @@ namespace SharpLib
         {
             String ext = Path.GetExtension(filename);
 
-            filename = filename.TrimEnd(ext);
+            filename = filename.TrimEndEx(ext);
 
             return filename;
         }
@@ -839,8 +839,8 @@ namespace SharpLib
         internal static Boolean IsRun(String processName)
         {
             processName = processName.ToLower();
-            processName = processName.TrimEnd(".exe");
-            processName = processName.TrimEnd(".dll");
+            processName = processName.TrimEndEx(".exe");
+            processName = processName.TrimEndEx(".dll");
 
             Process[] processes = Process.GetProcesses();
 

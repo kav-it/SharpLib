@@ -1144,7 +1144,7 @@ namespace SharpLib
         public static int SearchEx(this String value, String substring, int offset)
         {
             int result = -1;
-            int index = value.IndexOf(substring, offset);
+            int index = value.IndexOf(substring, offset, StringComparison.Ordinal);
 
             if (index >= 0)
                 result = index + substring.Length;
@@ -1357,7 +1357,15 @@ namespace SharpLib
             return text;
         }
 
-        public static String TrimStart(this String text, String subString)
+        public static String TrimEx(this String text, String subString)
+        {
+            text = text.TrimStartEx(subString);
+            text = text.TrimEndEx(subString);
+
+            return text;
+        }
+
+        public static String TrimStartEx(this String text, String subString)
         {
             if (text.StartsWith(subString))
                 text = text.Remove(0, subString.Length);
@@ -1365,7 +1373,7 @@ namespace SharpLib
             return text;
         }
 
-        public static String TrimEnd(this String text, String subString)
+        public static String TrimEndEx(this String text, String subString)
         {
             if (text.EndsWith(subString))
                 text = text.Remove(text.Length - subString.Length);

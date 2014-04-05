@@ -175,7 +175,7 @@ namespace SharpLib
 
             foreach (DialogFileTyp typ in types)
                 filter += GetFilter(typ) + "|";
-            filter = filter.TrimEnd("|");
+            filter = filter.TrimEndEx("|");
 
             OpenFileDialog dialog = new OpenFileDialog();
 

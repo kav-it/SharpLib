@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace SharpLib.Cvs
 {
@@ -19,13 +20,17 @@ namespace SharpLib.Cvs
 
     public class FileCsv
     {
+        private const string InternalDelimetr = "\u0001";
+
+        private const string InternalNewLine = "\u0002";
+
         #region Constructors
 
         public FileCsv()
         {
             Config = new CsvConfig();
             Header = null;
-            Records = new List<CvsRecord>();
+            Records = new List<CsvRecord>();
         }
 
         #endregion
@@ -36,24 +41,161 @@ namespace SharpLib.Cvs
 
         public List<string> Header { get; set; }
 
-        public List<CvsRecord> Records { get; set; }
+        public List<CsvRecord> Records { get; set; }
 
         #endregion
 
         #region Methods
 
+        private string ReplaceMasked(string text, out string delimetrLine, out string delimetrBlock)
+        {
+            // По спецификации rfc4180 блоки, содержащие 
+            //  + символы разделителей колонок (например ; или ,)
+            //  + символы разделителей строк (пример <CR><LF> или <LF>)
+            // должны обрамляться символами <"> (двойные кавычки)
+            // 
+            // "aaa","bbb","ccc ; , "" "
+            // "ddd","eee","fff"
+
+            string quote = Config.Quote;
+            string doubleQuote = Config.Quote + Config.Quote;
+
+            delimetrBlock = Config.Delimiter;
+            delimetrLine = Config.NewLine;
+
+            if (text.Contains(quote) == false)
+                return text;
+
+            var builder = new StringBuilder(text.Length * 2);
+
+            int indexStart = 0;
+
+            while (true)
+            {
+                int indexQuote = text.SearchEx(Config.Quote, indexStart);
+                string block;
+                string blockQuotes = null;
+
+                if (indexQuote == -1)
+                {
+                    // Не найдено 
+                    block = text.SubstringEx(indexStart, text.Length);
+                }
+                else
+                {
+                    block = text.SubstringEx(indexStart, indexQuote - 1);
+
+                    // Найден разделитель, обрамляющий запись, поиск закрывающей кавычки
+                    // Пример: ...,".......""......","..............."<CR><LF>
+                    //             |<-- элемент -->| |<-- элемент -->|
+
+                    // Поиск завершающей последовательности
+                    bool maybeEnd = false;
+                    int indexEnd = -1;
+
+                    for (int index = indexQuote; index < text.Length; index++)
+                    {
+                        char ch = text[index];
+
+                        if (ch == Config.Quote[0])
+                        {
+                            maybeEnd = !maybeEnd;
+                        }
+                        else
+                        {
+                            // Найден символ после символа <">
+                            if (maybeEnd)
+                            {
+                                indexEnd = index;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (indexEnd == -1)
+                    {
+                        // Не найдено корректного окончания. Берется вся строка до конца
+                        indexEnd = text.Length;
+                    }
+
+                    // После поиска индексы указывают на позицию после искомой, поэтому нужно сдвинуть на -1
+                    indexStart = indexEnd;
+
+                    blockQuotes = text.SubstringEx(indexQuote - 1, indexEnd);
+                    blockQuotes = blockQuotes.Replace(doubleQuote, quote).TrimEx(quote);
+                }
+
+                if (block.IsValid())
+                {
+                    block = block
+                        .Replace(Config.NewLine, InternalNewLine)
+                        .Replace(Config.Delimiter, InternalDelimetr);
+
+                    builder.Append(block);
+
+                    delimetrBlock = InternalDelimetr;
+                    delimetrLine = InternalNewLine;
+                }
+
+                if (blockQuotes.IsValid())
+                {
+                    builder.Append(blockQuotes);
+                }
+
+                // Выход из цикла
+                if (blockQuotes.IsNotValid())
+                    break;
+            }
+
+            return builder.ToString();
+        }
+
+        private string GenerateBlock(string block)
+        {
+                // Если текст содержит встроенные символы, обрамление строки в Qutes
+            if (block.Contains(Config.Delimiter) ||
+                block.Contains(Config.NewLine))
+            {
+                block = block.Replace(Config.Delimiter, Config.Delimiter + Config.Delimiter);
+
+                block = string.Format("{0}{1}{2}", Config.Delimiter, block, Config.Delimiter);
+            }
+
+            return block;
+        }
+
+        private void GenerateLine(StringBuilder builder, List<string> blocks)
+        {
+            int count = blocks.Count;
+
+            for (int i = 0; i < count; i++)
+            {
+                string block = GenerateBlock(blocks[i]);
+
+                builder.Append(block);
+
+                if ((i + 1) != count)
+                    builder.Append(Config.Delimiter);
+            }
+        }
+
         public void ParseText(string text)
         {
-            Records = new List<CvsRecord>();
+            Records = new List<CsvRecord>();
             Header = null;
 
-            // Разделение на строки
-            var lines = text.SplitEx(Config.NewLine);
+            // Замена в тексте экранированных блоков ""
+            string delimetrBlock;
+            string delimetrLine;
+            text = ReplaceMasked(text, out delimetrLine, out delimetrBlock);
+
+            // Разделение на строки (используется встроенный разделитель)
+            var lines = text.SplitEx(delimetrLine);
 
             foreach (var line in lines)
             {
                 // Разделение строк на элементы
-                var values = line.SplitEx(Config.Delimiter).ToList();
+                var values = line.SplitEx(delimetrBlock).ToList();
 
                 // Заполнение записи данными
                 if (Config.IsHasHeader && Header == null)
@@ -62,7 +204,7 @@ namespace SharpLib.Cvs
                 }
                 else
                 {
-                    var record = new CvsRecord(Header)
+                    var record = new CsvRecord(Header)
                     {
                         Values = values
                     };
@@ -77,6 +219,32 @@ namespace SharpLib.Cvs
             string text = Files.ReadText(filename);
 
             ParseText(text);
+        }
+
+        public string SaveText()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            if (Header != null)
+            {
+                GenerateLine(builder, Header);
+                builder.Append(Config.NewLine);
+            }
+
+            foreach (var record in Records)
+            {
+                GenerateLine(builder, record.Values);
+                builder.Append(Config.NewLine);
+            }
+
+            return builder.ToString();
+        }
+
+        public void SaveFile(string filename)
+        {
+            string text = SaveText();
+
+            Files.WriteText(filename, text);
         }
 
         #endregion
@@ -112,7 +280,6 @@ namespace SharpLib.Cvs
             // Составление списка имен
             var typeClass = typeof (T);
             var properties = typeClass.GetProperties();
-            // var names = properties.Select(prop => prop.Name).ToList();
 
             foreach (var record in csv.Records)
             {
@@ -126,7 +293,13 @@ namespace SharpLib.Cvs
                     // Установка значения свойства
                     if (value != null)
                     {
-                        prop.SetValueEx(objectClass, value);
+                        try
+                        {
+                            prop.SetValueEx(objectClass, value);
+                        }
+                        catch (Exception)
+                        {
+                        }
                     }
                 }
 
@@ -137,10 +310,40 @@ namespace SharpLib.Cvs
             return result;
         }
 
+        private List<CsvRecord> PerformRecords(IEnumerable<T> records)
+        {
+            List<CsvRecord> result = new List<CsvRecord>();
+
+            // Составление списка имен
+            var typeClass = typeof(T);
+            var properties = typeClass.GetProperties();
+
+            List<string> header = properties.Select(x => x.Name).ToList();
+
+            foreach (var record in records)
+            {
+                var csvRecord = new CsvRecord(header);
+
+                foreach (var prop in properties)
+                {
+                    var value = prop.GetValueEx(record);
+
+                    csvRecord[prop.Name] = value.ToString();
+                }
+
+                // Добавление объекта в список
+                result.Add(csvRecord);
+            }
+
+            return result;
+        }
+
         public List<T> ParseTextInstance(string text, string delimetr = null)
         {
             if (delimetr != null)
+            {
                 Config.Delimiter = delimetr;
+            }
 
             // Создание класса
             FileCsv csv = new FileCsv { Config = Config };
@@ -159,6 +362,25 @@ namespace SharpLib.Cvs
             return ParseTextInstance(text, delimetr);
         }
 
+        public string SaveTextInstance(List<T> values, string delimetr = null)
+        {
+            if (delimetr != null)
+            {
+                Config.Delimiter = delimetr;
+            }
+
+            // Создание класса
+            FileCsv csv = new FileCsv
+            {
+                Config = Config
+            };
+
+            csv.Records = PerformRecords(values);
+            csv.Header = csv.Records.Count > 0 ? csv.Records[0].Header : null;
+
+            return csv.SaveText();
+        }
+
         public static List<T> ParseFile(string filename, string delimetr = null)
         {
             var csv = new FileCsv<T>();
@@ -173,6 +395,20 @@ namespace SharpLib.Cvs
             return csv.ParseTextInstance(text, delimetr);
         }
 
+        public static string SaveText(List<T> values, string delimetr = null)
+        {
+            var csv = new FileCsv<T>();
+
+            return csv.SaveTextInstance(values, delimetr);
+        }
+
+        public static void SaveFile(string filename, List<T> values, string delimetr = null)
+        {
+            string result = SaveText(values, delimetr);
+
+            Files.WriteText(filename, result);
+        }
+
         #endregion
     }
 
@@ -182,14 +418,24 @@ namespace SharpLib.Cvs
 
     public class CsvConfig
     {
+        #region Constants
+
+        private const string CommentDefault = "#";
+
+        private const string DelimetrDefault = ",";
+
+        private const string QuoteDefault = "\"";
+
+        #endregion
+
         #region Constructors
 
         public CsvConfig()
         {
             NewLine = Environment.NewLine;
-            Delimiter = ",";
-            Quote = "\"";
-            Comment = "#";
+            Delimiter = DelimetrDefault;
+            Quote = QuoteDefault;
+            Comment = CommentDefault;
             IsHasHeader = true;
         }
 
@@ -212,13 +458,13 @@ namespace SharpLib.Cvs
 
     #endregion Класс CsvConfig
 
-    #region Класс CvsRecord
+    #region Класс CsvRecord
 
-    public class CvsRecord
+    public class CsvRecord
     {
         #region Constructors
 
-        public CvsRecord(List<string> header)
+        public CsvRecord(List<string> header)
         {
             Header = header;
             Values = new List<string>();
@@ -245,10 +491,32 @@ namespace SharpLib.Cvs
 
                 return null;
             }
+            set
+            {
+                if (value == null)
+                {
+                    value = string.Empty;
+                }
+
+                int index = Header.IndexOf(indexer);
+
+                if (index == -1)
+                    return;
+                
+                if (Values.Count <= index)
+                {
+                    for (int i = Values.Count; i <= index; i++)
+                    {
+                        Values.Add(string.Empty);
+                    }
+                }
+
+                Values[index] = value;
+            }
         }
 
         #endregion
     }
 
-    #endregion Класс CvsRecord
+    #endregion Класс CsvRecord
 }

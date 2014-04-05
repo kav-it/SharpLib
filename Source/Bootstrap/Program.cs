@@ -232,7 +232,7 @@ namespace SharpLib
                 ex = ex.InnerException;
             } while (ex != null);
 
-            text = text.TrimEnd("\r\n");
+            text = text.TrimEndEx("\r\n");
 
             return text;
         }
@@ -247,7 +247,7 @@ namespace SharpLib
                 ex = ex.InnerException;
             } while (ex != null);
 
-            text = text.TrimEnd("\r\n");
+            text = text.TrimEndEx("\r\n");
 
             return text;
         }
