@@ -221,7 +221,9 @@ namespace SharpLib
             var stream = LoadStreamResource(absolutPath, asm);
 
             var bitmap = new System.Windows.Media.Imaging.BitmapImage();
+            bitmap.BeginInit();
             bitmap.StreamSource = stream.Stream;
+            bitmap.EndInit();
 
             Image image = new Image();
             image.Source = bitmap;
