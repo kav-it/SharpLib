@@ -39,6 +39,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -146,6 +147,9 @@
     </Compile>
     <Compile Include="..\..\Source\Files\File.IntelHex.cs">
       <Link>Source\Files\File.IntelHex.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Source\Files\File.Resx.cs">
+      <Link>Source\Files\File.Resx.cs</Link>
     </Compile>
     <Compile Include="..\..\Source\Logger\Logger.Config.cs">
       <Link>Source\Logger\Logger.Config.cs</Link>

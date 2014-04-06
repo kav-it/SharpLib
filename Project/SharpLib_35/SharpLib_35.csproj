@@ -146,6 +146,9 @@
     <Compile Include="..\..\Source\Files\File.IntelHex.cs">
       <Link>Source\Files\File.IntelHex.cs</Link>
     </Compile>
+    <Compile Include="..\..\Source\Files\File.Resx.cs">
+      <Link>Source\Files\File.Resx.cs</Link>
+    </Compile>
     <Compile Include="..\..\Source\Logger\Logger.Config.cs">
       <Link>Source\Logger\Logger.Config.cs</Link>
     </Compile>

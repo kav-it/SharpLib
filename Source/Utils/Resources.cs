@@ -104,18 +104,25 @@ namespace SharpLib
             }
         }
 
-        public static StreamResourceInfo LoadStreamResource(String absolutPath, Assembly assembly)
+        private static Uri GetFullUri(String absolutPath, Assembly assembly)
         {
             // Регистрация схемы "pack" для определения путей к ресурсам (без создания Application (WPF))
             if (System.IO.Packaging.PackUriHelper.UriSchemePack == null)
                 throw new NotImplementedException();
 
             if (assembly == null)
-                assembly = Assembly.GetCallingAssembly();
+                assembly = Assembly.GetEntryAssembly();
 
             absolutPath = absolutPath.TrimStart('/');
             String uriPath = String.Format(@"pack://application:,,,/{0};component/{1}", assembly.GetName().Name, absolutPath);
             Uri uri = new Uri(uriPath, UriKind.Absolute);
+
+            return uri;
+        }
+
+        public static StreamResourceInfo LoadStreamResource(String absolutPath, Assembly assembly)
+        {
+            var uri = GetFullUri(absolutPath, assembly);
 
             StreamResourceInfo streamResource = Application.GetResourceStream(uri);
 
@@ -160,7 +167,8 @@ namespace SharpLib
         public static Boolean CopyContent(String absolutPath, Boolean rewrite = false, String destPath = "")
         {
             // Получение потока нужного ресурса
-            Uri uri = new Uri(@"pack://application:,,,/" + absolutPath, UriKind.Absolute);
+            Uri uri = GetFullUri(absolutPath, null);
+
             StreamResourceInfo streamResource;
 
             try
@@ -200,29 +208,23 @@ namespace SharpLib
         /// <summary>
         /// Загрузка изображения из ресурсов в формате BitmapSource
         /// </summary>
-        public static ImageSource LoadImageSource(String absolutPath)
+        public static ImageSource LoadImageSource(String absolutPath, Assembly asm = null)
         {
-            String path = "pack://application:,,/" + absolutPath;
-
-            ImageSourceConverter conv = new ImageSourceConverter();
-            ImageSource source = conv.ConvertFromString(path) as ImageSource;
-
-            return source;
+            return LoadImage(absolutPath, asm).Source;
         }
 
         /// <summary>
         /// Загрузка изображения из ресурсов в формате Image
         /// </summary>
-        /// <param name="absolutPath"></param>
-        /// <returns></returns>
-        public static Image LoadImage(String absolutPath)
+        public static Image LoadImage(String absolutPath, Assembly asm = null)
         {
-            ImageSource imageSource = LoadImageSource(absolutPath);
+            var stream = LoadStreamResource(absolutPath, asm);
+
+            var bitmap = new System.Windows.Media.Imaging.BitmapImage();
+            bitmap.StreamSource = stream.Stream;
 
             Image image = new Image();
-            image.Source = imageSource;
-            image.Height = imageSource.Height;
-            image.Width = imageSource.Width;
+            image.Source = bitmap;
 
             return image;
         }

@@ -20,9 +20,13 @@ namespace SharpLib.Cvs
 
     public class FileCsv
     {
+        #region Constants
+
         private const string InternalDelimetr = "\u0001";
 
         private const string InternalNewLine = "\u0002";
+
+        #endregion
 
         #region Constructors
 
@@ -64,7 +68,9 @@ namespace SharpLib.Cvs
             delimetrLine = Config.NewLine;
 
             if (text.Contains(quote) == false)
+            {
                 return text;
+            }
 
             var builder = new StringBuilder(text.Length * 2);
 
@@ -144,7 +150,9 @@ namespace SharpLib.Cvs
 
                 // Выход из цикла
                 if (blockQuotes.IsNotValid())
+                {
                     break;
+                }
             }
 
             return builder.ToString();
@@ -152,7 +160,7 @@ namespace SharpLib.Cvs
 
         private string GenerateBlock(string block)
         {
-                // Если текст содержит встроенные символы, обрамление строки в Qutes
+            // Если текст содержит встроенные символы, обрамление строки в Qutes
             if (block.Contains(Config.Delimiter) ||
                 block.Contains(Config.NewLine))
             {
@@ -175,7 +183,9 @@ namespace SharpLib.Cvs
                 builder.Append(block);
 
                 if ((i + 1) != count)
+                {
                     builder.Append(Config.Delimiter);
+                }
             }
         }
 
@@ -315,7 +325,7 @@ namespace SharpLib.Cvs
             List<CsvRecord> result = new List<CsvRecord>();
 
             // Составление списка имен
-            var typeClass = typeof(T);
+            var typeClass = typeof (T);
             var properties = typeClass.GetProperties();
 
             List<string> header = properties.Select(x => x.Name).ToList();
@@ -501,8 +511,10 @@ namespace SharpLib.Cvs
                 int index = Header.IndexOf(indexer);
 
                 if (index == -1)
+                {
                     return;
-                
+                }
+
                 if (Values.Count <= index)
                 {
                     for (int i = Values.Count; i <= index; i++)

@@ -700,6 +700,21 @@ namespace SharpLib
             return true;
         }
 
+        /// <summary>
+        /// Смена имени файла
+        /// </summary>
+        public static string ChangeFilenameAndExt(string oldFilename, string newFilename)
+        {
+            string result =
+                Path.GetDirectoryName(oldFilename) +
+                newFilename;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Запуск исполняемого файла
+        /// </summary>
         public static void RunExe(String exeName, String param)
         {
             Process process = new Process();
@@ -712,7 +727,7 @@ namespace SharpLib
         /// <summary>
         /// Запуск файла на выполнение
         /// </summary>
-        public static Boolean RunBat(String exeName, String param, ProcessBatExecute callback)
+        public static ProcessExecResult RunBat(String exeName, String param, ProcessBatExecute callback = null)
         {
             ProcessStartInfo processInfo = new ProcessStartInfo(exeName, param);
 
@@ -726,24 +741,36 @@ namespace SharpLib
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
 
+            ProcessExecResult result = new ProcessExecResult();
+
             process.OutputDataReceived += (sender, e) =>
             {
-                if (callback != null && e.Data.IsValid())
-                    callback(Stdout.Output, e.Data);
+                if (e.Data.IsValid())
+                {
+                    result.Items.Add(new StdoutMessage(Stdout.Output, e.Data));
+
+                    if (callback != null)
+                        callback(Stdout.Output, e.Data);    
+                }
             };
             process.ErrorDataReceived += (sender, e) =>
             {
-                if (callback != null && e.Data.IsValid())
-                    callback(Stdout.Error, e.Data);
+                if (e.Data.IsValid())
+                {
+                    result.Items.Add(new StdoutMessage(Stdout.Error, e.Data));
+
+                    if (callback != null)
+                        callback(Stdout.Error, e.Data);
+                }
             };
 
             process.WaitForExit();
 
-            int exitCode = process.ExitCode;
+            result.ExitCode = process.ExitCode;
 
             process.Close();
 
-            return (exitCode == 0);
+            return result;
         }
 
         /// <summary>
@@ -901,9 +928,15 @@ namespace SharpLib
         /// <summary>
         /// Генерация имени временного файла в %TEMP%
         /// </summary>
-        public static String GetTempFilename()
+        public static String GetTempFilename(string startPart = null)
         {
             String path = Path.GetTempFileName();
+
+            if (startPart.IsValid())
+            {
+                path = Path.Combine(Path.GetDirectoryName(path), 
+                    Path.GetFileName(startPart) + Path.GetFileName(path));
+            }
 
             return path;
         }
@@ -994,4 +1027,75 @@ namespace SharpLib
     }
 
     #endregion Класс FileLocation
+
+    #region StdoutMessage
+
+    public class StdoutMessage
+    {
+        public StdoutMessage(Stdout stdout, string message)
+        {
+            Stdout = stdout;
+            Message = message;
+        }
+
+        public Stdout Stdout { get; set; }
+
+        public string Message { get; set; }
+    }
+
+    #endregion StdoutMessage
+
+    #region Класс ProcessExecResult
+
+    public class ProcessExecResult
+    {
+        #region Fields
+
+        public List<StdoutMessage> Items { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        public ProcessExecResult()
+        {
+            Items = new List<StdoutMessage>();
+        }
+
+        #endregion
+
+        #region Properties
+
+        public List<string> Errors
+        {
+            get
+            {
+                return Items
+                    .Where(msg => msg.Stdout == Stdout.Error)
+                    .Select(msg => msg.Message)
+                    .ToList();
+            }
+        }
+
+        public List<string> Messages
+        {
+            get
+            {
+                return Items
+                    .Select(msg => msg.Message)
+                    .ToList();
+            }
+        }
+
+        public int ExitCode { get; set; }
+
+        public bool IsError
+        {
+            get { return (ExitCode != 0 || Errors.Any()); }
+        }
+
+        #endregion
+    }
+
+    #endregion Класс ProcessExecResult
 }
