@@ -1073,6 +1073,8 @@ namespace SharpLib
             get { return (_v3 != 0); }
         }
 
+        public string Location { get; set; }
+
         #endregion
 
         #region Конструктор
@@ -1135,6 +1137,11 @@ namespace SharpLib
             }
         }
 
+        public ModuleVersion(Assembly assembly): this()
+        {
+            UpdateFromAssembly(assembly);
+        }
+
         #endregion
 
         #region Методы
@@ -1167,6 +1174,8 @@ namespace SharpLib
 
             FileInfo fileInfo = new FileInfo(assembly.Location);
             DateTime = fileInfo.LastWriteTime;
+
+            Location = assembly.Location;
         }
 
         /// <summary>

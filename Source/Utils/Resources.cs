@@ -226,6 +226,7 @@ namespace SharpLib
             bitmap.EndInit();
 
             Image image = new Image();
+
             image.Source = bitmap;
             image.Width = bitmap.PixelWidth;
             image.Height = bitmap.PixelHeight;
