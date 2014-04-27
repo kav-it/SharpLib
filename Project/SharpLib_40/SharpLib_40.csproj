@@ -216,6 +216,9 @@
     <Compile Include="..\..\Source\Utils\Crypto.cs">
       <Link>Source\Utils\Crypto.cs</Link>
     </Compile>
+    <Compile Include="..\..\Source\Utils\Diag.cs">
+      <Link>Source\Utils\Diag.cs</Link>
+    </Compile>
     <Compile Include="..\..\Source\Utils\Dialogs.cs">
       <Link>Source\Utils\Dialogs.cs</Link>
     </Compile>
