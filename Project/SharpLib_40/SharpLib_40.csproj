@@ -90,6 +90,10 @@
       <Link>Source\Controls\OkCancel.Control.xaml.cs</Link>
       <DependentUpon>OkCancel.Control.xaml</DependentUpon>
     </Compile>
+    <Compile Include="..\..\Source\Controls\RadioGroup.Control.xaml.cs">
+      <Link>Source\Controls\RadioGroup.Control.xaml.cs</Link>
+      <DependentUpon>RadioGroup.Control.xaml</DependentUpon>
+    </Compile>
     <Compile Include="..\..\Source\Controls\SearchText.Control.xaml.cs">
       <Link>Source\Controls\SearchText.Control.xaml.cs</Link>
       <DependentUpon>SearchText.Control.xaml</DependentUpon>
@@ -134,6 +138,10 @@
     <Compile Include="..\..\Source\Controls\WaitIndicator.Control.xaml.cs">
       <Link>Source\Controls\WaitIndicator.Control.xaml.cs</Link>
       <DependentUpon>WaitIndicator.Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\Source\Controls\XmlViewer.Control.xaml.cs">
+      <Link>Source\Controls\XmlViewer.Control.xaml.cs</Link>
+      <DependentUpon>XmlViewer.Control.xaml</DependentUpon>
     </Compile>
     <Compile Include="..\..\Source\Domains\Domain.cs">
       <Link>Source\Domains\Domain.cs</Link>
@@ -347,6 +355,11 @@
     </Page>
     <Page Include="..\..\Source\Controls\OkCancel.Control.xaml">
       <Link>Source\Controls\OkCancel.Control.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="..\..\Source\Controls\RadioGroup.Control.xaml">
+      <Link>Source\Controls\RadioGroup.Control.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

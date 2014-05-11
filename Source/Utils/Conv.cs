@@ -23,6 +23,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace SharpLib
 {
@@ -953,6 +954,14 @@ namespace SharpLib
             Byte[] buffer = BitConverter.GetBytes(value);
 
             return buffer;
+        }
+
+        public static string ToStringEx(this double value, int digits = 3)
+        {
+            var format = "0." + "0".PadRight(digits, '0');
+            var result = value.ToString(format).Replace(',', '.');
+
+            return result;
         }
 
         #endregion

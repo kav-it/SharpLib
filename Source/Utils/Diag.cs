@@ -10,6 +10,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace SharpLib
@@ -21,9 +22,16 @@ namespace SharpLib
     {
         #region Methods
 
-        public static DiagTimer GetTimer()
+        /// <summary>
+        /// Создание таймера измерения времени с автозапуском
+        /// </summary>
+        public static DiagTimer StartTimer()
         {
-            return new DiagTimer();
+            var timer = new DiagTimer();
+
+            timer.Start();
+
+            return timer;
         }
 
         #endregion
@@ -65,11 +73,17 @@ namespace SharpLib
             }
         }
 
+        /// <summary>
+        /// Значение длительности в 100 нс интервалах
+        /// </summary>
         public double Duration
         {
             get { return DiffTime(_startTime, Ticks); }
         }
 
+        /// <summary>
+        /// Текстовое представление длительности
+        /// </summary>
         public string DurationText
         {
             get
@@ -130,15 +144,17 @@ namespace SharpLib
                 }
             }
 
-            string result = value + dimension;
+            string result = value.ToStringEx() + dimension;
 
             return result;
         }
 
-        public void Print()
+        public void Print(string format, params object[] args)
         {
+            string text = string.Format(format, args) + Environment.NewLine;
+
             // Вывод времени
-            PrintText(DurationText + Environment.NewLine);
+            PrintText(text);
             // Перезапуск измерения (для удобства)
             Start();
         }
@@ -147,13 +163,6 @@ namespace SharpLib
         {
             Debug.Write(value);
         }
-
-        //public void PrintWithTime(string value)
-        //{
-        //    DateTime now = DateTime.Now;
-        //    string time = now.ToStringEx();
-        //    Print(time + value + Environment.NewLine);
-        //}
 
         #endregion
     }
