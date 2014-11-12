@@ -62,7 +62,7 @@ namespace SharpLib
 
         #region Поля
 
-        private static Byte[] _keybordKeys;
+        private static readonly Byte[] _keybordKeys;
 
         #endregion
 
@@ -88,6 +88,16 @@ namespace SharpLib
             }
         }
 
+        public static Boolean IsAlt
+        {
+            get
+            {
+                Boolean result = Keyboard.IsKeyDown(Key.LeftAlt) | Keyboard.IsKeyDown(Key.RightAlt);
+
+                return result;
+            }
+        }
+
         public static Boolean IsNumLock
         {
             get { return Console.NumberLock; }
@@ -101,6 +111,11 @@ namespace SharpLib
         public static Boolean IsInsert
         {
             get { return GetKeyState(VK_INSERT); }
+        }
+
+        public static Boolean IsWin
+        {
+            get { return Keyboard.IsKeyDown(Key.LWin) | Keyboard.IsKeyDown(Key.RWin); }
         }
 
         #endregion
@@ -121,6 +136,18 @@ namespace SharpLib
             NativeMethods.GetKeyboardState(_keybordKeys);
 
             Boolean result = (_keybordKeys[keyCode] & 1) == 1;
+
+            return result;
+        }
+
+        public static ModifierKeys GetKeyModifies()
+        {
+            var result = ModifierKeys.None;
+
+            if (IsControl) result |= ModifierKeys.Control;
+            if (IsShift) result |= ModifierKeys.Shift;
+            if (IsAlt) result |= ModifierKeys.Alt;
+            if (IsWin) result |= ModifierKeys.Windows;
 
             return result;
         }

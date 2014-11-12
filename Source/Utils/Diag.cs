@@ -34,6 +34,17 @@ namespace SharpLib
             return timer;
         }
 
+        /// <summary>
+        /// Вывод в отладку Debug, но с добавление штампа времени
+        /// </summary>
+        public static void WriteLine(string format, params object[] args)
+        {
+            var text = string.Format(format, args);
+            text = string.Format("[{0}] {1}", DateTime.Now.ToStringEx(), text);
+
+            Debug.WriteLine(text);
+        }
+
         #endregion
     }
 
