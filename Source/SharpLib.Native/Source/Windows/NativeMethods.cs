@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 
-namespace SharpLib.Winapi
+namespace SharpLib.Native.Windows
 {
     [SuppressUnmanagedCodeSecurity]
     public sealed partial class NativeMethods
@@ -26,21 +26,7 @@ namespace SharpLib.Winapi
         #endregion
 
         #region Константы
-
-        private const string DLLNAME_KERNEL32 = "kernel32.dll";
-
-        private const string DLLNAME_MAPI32 = "mapi32.dll";
-
-        private const string DLLNAME_NTDLL = "ntdll.dll";
-
-        private const string DLLNAME_SETUPAPI = "setupapi.dll";
-
-        private const string DLLNAME_SHELL32 = "shell32.dll";
-
-        private const string DLLNAME_USER32 = "user32.dll";
-
-        private const string DLLNAME_GDI32 = "gdi32.dll";
-
+        
         #endregion
 
         #region Поля

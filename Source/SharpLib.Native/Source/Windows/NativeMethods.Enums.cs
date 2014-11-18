@@ -11,7 +11,7 @@
 using System;
 using System.Security;
 
-namespace SharpLib.Winapi
+namespace SharpLib.Native.Windows
 {
     [SuppressUnmanagedCodeSecurity]
     public sealed partial class NativeMethods
@@ -122,61 +122,7 @@ namespace SharpLib.Winapi
             BrowseShares = 0x8000
         }
 
-        public enum MapType : uint
-        {
-            MAPVK_VK_TO_VSC = 0x0,
 
-            MAPVK_VSC_TO_VK = 0x1,
-
-            MAPVK_VK_TO_CHAR = 0x2,
-
-            MAPVK_VSC_TO_VK_EX = 0x3,
-        }
-
-        [Flags]
-        public enum NotifyIconFlags
-        {
-            /// <summary>
-            /// The hIcon member is valid.
-            /// </summary>
-            Icon = 2,
-
-            /// <summary>
-            /// The uCallbackMessage member is valid.
-            /// </summary>
-            Message = 1,
-
-            /// <summary>
-            /// The szTip member is valid.
-            /// </summary>
-            ToolTip = 4,
-
-            /// <summary>
-            /// The dwState and dwStateMask members are valid.
-            /// </summary>
-            State = 8,
-
-            /// <summary>
-            /// Use a balloon ToolTip instead of a standard ToolTip. The szInfo, uTimeout, szInfoTitle, and dwInfoFlags members are
-            /// valid.
-            /// </summary>
-            Balloon = 0x10,
-        }
-
-        public enum NotifyIconMessage
-        {
-            BalloonShow = 0x402,
-
-            BalloonHide = 0x403,
-
-            BalloonTimeout = 0x404,
-
-            BalloonUserClick = 0x405,
-
-            PopupOpen = 0x406,
-
-            PopupClose = 0x407,
-        }
 
         public enum RegPropertyType
         {
@@ -364,18 +310,6 @@ namespace SharpLib.Winapi
             RT_MANIFEST = 24,
         }
 
-        public enum SystemMenu
-        {
-            Size = 0xF000,
-
-            Close = 0xF060,
-
-            Restore = 0xF120,
-
-            Minimize = 0xF020,
-
-            Maximize = 0xF030,
-        }
 
         [Flags]
         public enum WindowExStyles

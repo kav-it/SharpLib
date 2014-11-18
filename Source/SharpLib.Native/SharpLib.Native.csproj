@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4976118A-DDF9-4C23-AC93-6B99F7C3C246}</ProjectGuid>
+    <ProjectGuid>{E9A3F6E0-D63A-4297-A59B-7E1357B443CC}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SharpLibWpf</RootNamespace>
-    <AssemblyName>SharpLib.Wpf</AssemblyName>
+    <RootNamespace>SharpLib.Native</RootNamespace>
+    <AssemblyName>SharpLib.Native</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,52 +32,39 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharpLib.Version.cs">
       <Link>Source\SharpLib.Version.cs</Link>
     </Compile>
     <Compile Include="Source\AssemblyInfo.cs" />
-    <Compile Include="Source\Controls\FlipPanel.cs" />
-    <Compile Include="Source\Controls\TextBoxEx.cs" />
-    <Compile Include="Source\Converters\Converter.BoolToVisibility.cs" />
-    <Compile Include="Source\Converters\Converter.StringToBool.cs" />
-    <Compile Include="Source\Extensions\Extension.WinForms.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Source\Controls\TextBoxEx.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Source\Controls\FlipPanel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SharpLib.Native\SharpLib.Native.csproj">
-      <Project>{e9a3f6e0-d63a-4297-a59b-7e1357b443cc}</Project>
-      <Name>SharpLib.Native</Name>
-    </ProjectReference>
+    <Compile Include="Source\Windows\Gdi\Gdi.Classes.cs" />
+    <Compile Include="Source\Windows\Gdi\Gdi.Const.cs" />
+    <Compile Include="Source\Windows\Gdi\Gdi.cs" />
+    <Compile Include="Source\Windows\Kernel\Kernel.Classes.cs" />
+    <Compile Include="Source\Windows\Kernel\Kernel.cs" />
+    <Compile Include="Source\Windows\Mapi\Mapi.Classes.cs" />
+    <Compile Include="Source\Windows\Mapi\Mapi.cs" />
+    <Compile Include="Source\Windows\NativeMethods.Enums.cs" />
+    <Compile Include="Source\Windows\NativeMethods.Classes.cs" />
+    <Compile Include="Source\Windows\NativeMethods.Constants.cs" />
+    <Compile Include="Source\Windows\NativeMethods.cs" />
+    <Compile Include="Source\Windows\Ntdll\Ntdll.Classes.cs" />
+    <Compile Include="Source\Windows\Ntdll\Ntdll.cs" />
+    <Compile Include="Source\Windows\SetupApi\SetupApi.Classes.cs" />
+    <Compile Include="Source\Windows\SetupApi\SetupApi.cs" />
+    <Compile Include="Source\Windows\Shell\Shell.Classes.cs" />
+    <Compile Include="Source\Windows\Shell\Shell.cs" />
+    <Compile Include="Source\Windows\User\User.Classes.cs" />
+    <Compile Include="Source\Windows\User\User.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,24 +1,20 @@
-﻿// ****************************************************************************
-//
-// Имя файла    : 'NativeMethods.cs'
-// Заголовок    : Реализация работы с WinApi-функциями
-// Автор        : Крыцкий А.В./Тихомиров В.С.
-// Контакты     : kav.it@mail.ru
-// Дата         : 17/05/2012
-//
-// ****************************************************************************
-
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 using System.Threading;
 
-namespace SharpLib.Winapi
+namespace SharpLib.Native.Windows
 {
     [SuppressUnmanagedCodeSecurity]
-    public sealed unsafe partial class NativeMethods
+    public unsafe partial class NativeMethods
     {
+        #region Константы
+
+        private const string DLLNAME_KERNEL32 = "kernel32.dll";
+
+        #endregion
+
         #region Методы
 
         [SecurityCritical]
@@ -189,6 +185,8 @@ namespace SharpLib.Winapi
         [DllImport(DLLNAME_KERNEL32, EntryPoint = "ReleaseSRWLockShared")]
         public static extern void ReleaseSrwLockShared(ref IntPtr srw);
 
+        [DllImport(DLLNAME_KERNEL32, CallingConvention = CallingConvention.StdCall, SetLastError = true)]
+        public static extern bool SetProcessWorkingSetSize(IntPtr process, int minimumWorkingSetSize, int maximumWorkingSetSize);
 
         #endregion
     }

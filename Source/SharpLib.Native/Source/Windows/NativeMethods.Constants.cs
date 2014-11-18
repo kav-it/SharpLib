@@ -11,7 +11,7 @@
 using System;
 using System.Security;
 
-namespace SharpLib.Winapi
+namespace SharpLib.Native.Windows
 {
     [SuppressUnmanagedCodeSecurity]
     public sealed partial class NativeMethods

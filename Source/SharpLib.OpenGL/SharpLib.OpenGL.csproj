@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E9A3F6E0-D63A-4297-A59B-7E1357B443CC}</ProjectGuid>
+    <ProjectGuid>{E671AB96-3FDD-40AB-B86C-FBB48A4A46C2}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SharpLib.Winapi</RootNamespace>
-    <AssemblyName>SharpLib.Winapi</AssemblyName>
+    <RootNamespace>SharpLib.OpenGL</RootNamespace>
+    <AssemblyName>SharpLib.OpenGL</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
@@ -23,7 +23,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,13 +31,14 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -46,17 +46,22 @@
       <Link>Source\SharpLib.Version.cs</Link>
     </Compile>
     <Compile Include="Source\AssemblyInfo.cs" />
-    <Compile Include="Source\NativeMethods\NativeMethods.Dll.Gdi32.cs" />
-    <Compile Include="Source\NativeMethods\NativeMethods.Enums.cs" />
-    <Compile Include="Source\NativeMethods\NativeMethods.Classes.cs" />
-    <Compile Include="Source\NativeMethods\NativeMethods.Dll.Mapi32.cs" />
-    <Compile Include="Source\NativeMethods\NativeMethods.Dll.Shell32.cs" />
-    <Compile Include="Source\NativeMethods\NativeMethods.Dll.User32.cs" />
-    <Compile Include="Source\NativeMethods\NativeMethods.Dll.SetupApi.cs" />
-    <Compile Include="Source\NativeMethods\NativeMethods.Dll.Kernel32.cs" />
-    <Compile Include="Source\NativeMethods\NativeMethods.Dll.Ntdll.cs" />
-    <Compile Include="Source\NativeMethods\NativeMethods.Constants.cs" />
-    <Compile Include="Source\NativeMethods\NativeMethods.cs" />
+    <Compile Include="Source\Control\Gl.Control.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\Core\Gl.Windows.cs" />
+    <Compile Include="Source\Core\Gl.Const.cs" />
+    <Compile Include="Source\Core\Gl.cs" />
+    <Compile Include="Source\Core\Glut.cs" />
+    <Compile Include="Source\Types\PointFloat.cs" />
+    <Compile Include="Source\Types\GlyphMetricsFloat.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpLib.Native\SharpLib.Native.csproj">
+      <Project>{e9a3f6e0-d63a-4297-a59b-7e1357b443cc}</Project>
+      <Name>SharpLib.Native</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

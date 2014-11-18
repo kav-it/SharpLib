@@ -1,22 +1,18 @@
-﻿// ****************************************************************************
-//
-// Имя файла    : 'NativeMethods.cs'
-// Заголовок    : Реализация работы с WinApi-функциями
-// Автор        : Крыцкий А.В./Тихомиров В.С.
-// Контакты     : kav.it@mail.ru
-// Дата         : 17/05/2012
-//
-// ****************************************************************************
-
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace SharpLib.Winapi
+namespace SharpLib.Native.Windows
 {
     [SuppressUnmanagedCodeSecurity]
-    public sealed partial class NativeMethods
+    public partial class NativeMethods
     {
+        #region Константы
+
+        private const string DLLNAME_NTDLL = "ntdll.dll";
+
+        #endregion
+
         #region Методы
 
         [DllImport(DLLNAME_NTDLL)]

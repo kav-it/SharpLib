@@ -1,23 +1,15 @@
-﻿// ****************************************************************************
-//
-// Имя файла    : 'NativeMethods.cs'
-// Заголовок    : Реализация работы с WinApi-функциями
-// Автор        : Крыцкий А.В./Тихомиров В.С.
-// Контакты     : kav.it@mail.ru
-// Дата         : 17/05/2012
-//
-// ****************************************************************************
-
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 
-namespace SharpLib.Winapi
+namespace SharpLib.Native.Windows
 {
     [SuppressUnmanagedCodeSecurity]
-    public sealed partial class NativeMethods
+    public partial class NativeMethods
     {
+        private const string DLLNAME_USER32 = "user32.dll";
+
         #region Методы
 
         [SecurityCritical]
@@ -106,9 +98,14 @@ namespace SharpLib.Winapi
             int cchBuff,
             uint wFlags);
 
-
         [DllImport(DLLNAME_USER32)]
         public static extern IntPtr GetActiveWindow();
+
+        [DllImport(DLLNAME_USER32, CallingConvention = CallingConvention.StdCall, SetLastError = true), SuppressUnmanagedCodeSecurity]
+        public static extern IntPtr GetDC(IntPtr windowHandle);
+
+        [DllImport(DLLNAME_USER32, CallingConvention = CallingConvention.StdCall, SetLastError = true), SuppressUnmanagedCodeSecurity]
+        public static extern bool ReleaseDC(IntPtr windowHandle, IntPtr deviceContext);
 
         #endregion
     }
