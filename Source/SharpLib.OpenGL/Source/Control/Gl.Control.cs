@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using SharpLib.Native.Windows;
+using SharpLib.WinForms;
 
 namespace SharpLib.OpenGL
 {
@@ -46,25 +47,35 @@ namespace SharpLib.OpenGL
         #region Свойства
 
         [Category("OpenGL"), Description("Accumulation buffer depth in bits.")]
-        public byte AccumBits { get; set; }
+        [DefaultValue(0)]
+        public int AccumBits { get; set; }
 
         [Category("OpenGL"), Description("Color buffer depth in bits.")]
-        public byte ColorBits { get; set; }
+        [DefaultValue(32)]
+        public int ColorBits { get; set; }
 
         [Category("OpenGL"), Description("Depth buffer (Z-buffer) depth in bits.")]
-        public byte DepthBits { get; set; }
+        [DefaultValue(16)]
+        public int DepthBits { get; set; }
+
         [Category("OpenGL"), Description("Stencil buffer depth in bits.")]
-        public byte StencilBits { get; set; }
+        [DefaultValue(0)]
+        public int StencilBits { get; set; }
+
         [Category("OpenGL"), Description("Automatically send a glGetError command after drawing?")]
+        [DefaultValue(false)]
         public bool AutoCheckErrors { get; set; }
 
         [Category("OpenGL"), Description("Automatically send a glFinish command after drawing?")]
+        [DefaultValue(false)]
         public bool AutoFinish { get; set; }
 
         [Category("OpenGL"), Description("Automatically make the rendering context current before drawing?")]
+        [DefaultValue(true)]
         public bool AutoMakeCurrent { get; set; }
 
         [Category("OpenGL"), Description("Automatically send a SwapBuffers command after drawing?")]
+        [DefaultValue(true)]
         public bool AutoSwapBuffers { get; set; }
 
         protected override CreateParams CreateParams
@@ -123,11 +134,9 @@ namespace SharpLib.OpenGL
 
         private void InitializeComponent()
         {
-            SuspendLayout();
+            _components = new Container();
             BackColor = Color.Black;
-            Name = "GlControl";
-            Size = new Size(260, 167);
-            ResumeLayout(false);
+            Size = new Size(50, 50);
         }
 
         private void InitializeStyles()
@@ -189,7 +198,7 @@ namespace SharpLib.OpenGL
                           NativeMethods.PFD_SUPPORT_OPENGL | // Format must support OpenGL
                           NativeMethods.PFD_DOUBLEBUFFER; // Must support double buffering
             pfd.iPixelType = NativeMethods.PFD_TYPE_RGBA; // Request an RGBA format
-            pfd.cColorBits = ColorBits; // Select our color depth
+            pfd.cColorBits = (byte)ColorBits; // Select our color depth
             pfd.cRedBits = 0; // Individual color bits ignored
             pfd.cRedShift = 0;
             pfd.cGreenBits = 0;
@@ -198,13 +207,13 @@ namespace SharpLib.OpenGL
             pfd.cBlueShift = 0;
             pfd.cAlphaBits = 0; // No alpha buffer
             pfd.cAlphaShift = 0; // Alpha shift bit ignored
-            pfd.cAccumBits = AccumBits; // Accumulation buffer
+            pfd.cAccumBits = (byte)AccumBits; // Accumulation buffer
             pfd.cAccumRedBits = 0; // Individual accumulation bits ignored
             pfd.cAccumGreenBits = 0;
             pfd.cAccumBlueBits = 0;
             pfd.cAccumAlphaBits = 0;
-            pfd.cDepthBits = DepthBits; // Z-buffer (depth buffer)
-            pfd.cStencilBits = StencilBits; // No stencil buffer
+            pfd.cDepthBits = (byte)DepthBits; // Z-buffer (depth buffer)
+            pfd.cStencilBits = (byte)StencilBits; // No stencil buffer
             pfd.cAuxBuffers = 0; // No auxiliary buffer
             pfd.iLayerType = NativeMethods.PFD_MAIN_PLANE; // Main drawing layer
             pfd.bReserved = 0; // Reserved
@@ -279,7 +288,7 @@ namespace SharpLib.OpenGL
         /// <param name="e">The paint event arguments.</param>
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (DesignMode)
+            if (DesignHelper.IsDesigntime)
             {
                 e.Graphics.Clear(BackColor);
                 if (BackgroundImage != null)
@@ -292,7 +301,8 @@ namespace SharpLib.OpenGL
 
             if (_deviceContext == IntPtr.Zero || _renderingContext == IntPtr.Zero)
             {
-                MessageBox.Show("No device or rendering context available!");
+                MessageBox.Show("Не назначен контекст элементу " + Name);
+
                 return;
             }
 
@@ -305,12 +315,12 @@ namespace SharpLib.OpenGL
 
             if (AutoFinish)
             {
-                Gl.glFinish();
+                Gl.Finish();
             }
 
             if (AutoCheckErrors)
             {
-                _errorCode = Gl.glGetError();
+                _errorCode = Gl.GetError();
                 if (_errorCode != Gl.GL_NO_ERROR)
                 {
                     switch (_errorCode)

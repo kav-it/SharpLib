@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,6 +50,7 @@
     <Compile Include="Source\Control\Gl.Control.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Source\Core\Glu.cs" />
     <Compile Include="Source\Core\Gl.Windows.cs" />
     <Compile Include="Source\Core\Gl.Const.cs" />
     <Compile Include="Source\Core\Gl.cs" />
@@ -61,7 +63,15 @@
       <Project>{e9a3f6e0-d63a-4297-a59b-7e1357b443cc}</Project>
       <Name>SharpLib.Native</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SharpLib.WinForms\SharpLib.WinForms.csproj">
+      <Project>{342f03e6-7c91-4058-b749-0bf82821da48}</Project>
+      <Name>SharpLib.WinForms</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
 </Project>

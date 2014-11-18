@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9CDEC0B8-2232-45D1-815C-90880E1F8595}</ProjectGuid>
+    <ProjectGuid>{342F03E6-7C91-4058-B749-0BF82821DA48}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SharpLib</RootNamespace>
-    <AssemblyName>SharpLib</AssemblyName>
+    <RootNamespace>SharpLib.WinForms</RootNamespace>
+    <AssemblyName>SharpLib.WinForms</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
@@ -34,30 +35,14 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharpLib.Version.cs">
       <Link>Source\SharpLib.Version.cs</Link>
     </Compile>
+    <Compile Include="Source\Helpers\DesignHelper.cs" />
     <Compile Include="Source\AssemblyInfo.cs" />
-    <Compile Include="Source\Constants\Constants.TimeStamp.cs" />
-    <Compile Include="Source\Enums\Endianess.cs" />
-    <Compile Include="Source\Events\EventArgs{T}.Cancel.cs" />
-    <Compile Include="Source\Events\EventArgs{T}.Changing.cs" />
-    <Compile Include="Source\Events\EventArgs{T}.cs" />
-    <Compile Include="Source\Extensions\Extension.Double.cs" />
-    <Compile Include="Source\Extensions\Extension.DateTIme.cs" />
-    <Compile Include="Source\Extensions\Extension.Buffer.cs" />
-    <Compile Include="Source\Extensions\Extension.Char.cs" />
-    <Compile Include="Source\Extensions\Extension.Enum.cs" />
-    <Compile Include="Source\Extensions\Extension.Stream.cs" />
-    <Compile Include="Source\Extensions\Extension.String.cs" />
-    <Compile Include="Source\Extensions\Extension.StringArray.cs" />
-    <Compile Include="Source\Helpers\Mem.cs" />
-    <Compile Include="Source\Helpers\PathEx.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

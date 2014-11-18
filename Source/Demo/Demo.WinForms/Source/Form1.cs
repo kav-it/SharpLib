@@ -15,6 +15,13 @@ namespace Demo.Winforms
         public Form1()
         {
             InitializeComponent();
+
+            InitOpenGL();
+        }
+
+        private void InitOpenGL()
+        {
+            
         }
     }
 }

@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.OpenGL", "SharpLib
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.WinForms", "Demo\Demo.WinForms\Demo.WinForms.csproj", "{7EA447A7-B526-4BBA-A025-B68B7F6A5579}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.WinForms", "SharpLib.WinForms\SharpLib.WinForms.csproj", "{342F03E6-7C91-4058-B749-0BF82821DA48}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{7EA447A7-B526-4BBA-A025-B68B7F6A5579}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EA447A7-B526-4BBA-A025-B68B7F6A5579}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EA447A7-B526-4BBA-A025-B68B7F6A5579}.Release|Any CPU.Build.0 = Release|Any CPU
+		{342F03E6-7C91-4058-B749-0BF82821DA48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{342F03E6-7C91-4058-B749-0BF82821DA48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{342F03E6-7C91-4058-B749-0BF82821DA48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{342F03E6-7C91-4058-B749-0BF82821DA48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
