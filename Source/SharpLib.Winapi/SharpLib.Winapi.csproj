@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E9A3F6E0-D63A-4297-A59B-7E1357B443CC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>SharpLib.Winapi</RootNamespace>
+    <AssemblyName>SharpLib.Winapi</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\SharpLib.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>False</DelaySign>
+    <AssemblyOriginatorKeyMode>File</AssemblyOriginatorKeyMode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\SharpLib.Version.cs">
+      <Link>Source\SharpLib.Version.cs</Link>
+    </Compile>
+    <Compile Include="Source\AssemblyInfo.cs" />
+    <Compile Include="Source\NativeMethods\NativeMethods.Dll.Gdi32.cs" />
+    <Compile Include="Source\NativeMethods\NativeMethods.Enums.cs" />
+    <Compile Include="Source\NativeMethods\NativeMethods.Classes.cs" />
+    <Compile Include="Source\NativeMethods\NativeMethods.Dll.Mapi32.cs" />
+    <Compile Include="Source\NativeMethods\NativeMethods.Dll.Shell32.cs" />
+    <Compile Include="Source\NativeMethods\NativeMethods.Dll.User32.cs" />
+    <Compile Include="Source\NativeMethods\NativeMethods.Dll.SetupApi.cs" />
+    <Compile Include="Source\NativeMethods\NativeMethods.Dll.Kernel32.cs" />
+    <Compile Include="Source\NativeMethods\NativeMethods.Dll.Ntdll.cs" />
+    <Compile Include="Source\NativeMethods\NativeMethods.Constants.cs" />
+    <Compile Include="Source\NativeMethods\NativeMethods.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

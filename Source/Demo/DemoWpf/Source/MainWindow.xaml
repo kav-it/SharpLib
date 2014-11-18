@@ -1,0 +1,46 @@
+﻿<Window x:Class="DemoWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:SharpLibWpf.Controls;assembly=SharpLib.Wpf"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Button Content="Show Window" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="140" Click="Button_Click"/>
+
+        <controls:FlipPanel BorderBrush="DarkOrange"
+                            BorderThickness="3" CornerRadius="4" Margin="44,63,54.4,40.8">
+            <controls:FlipPanel.FrontContent>
+                <StackPanel Margin="6">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Padding" Value="5"></Setter>
+                            <Setter Property="Margin" Value="5,5,5,0"></Setter>
+                        </Style>
+                    </StackPanel.Resources>
+                    <TextBlock TextWrapping="Wrap" FontSize="16" Foreground="DarkOrange">
+                            Это передняя сторона элемента FlipPanel
+                    </TextBlock>
+                    <Button>Первая кнопка</Button>
+                    <Button>Вторая кнопка</Button>
+                    <Button>Третья кнопка</Button>
+                    <Button>Четвертая кнопка</Button>
+                </StackPanel>
+            </controls:FlipPanel.FrontContent>
+            <controls:FlipPanel.BackContent>
+                <Grid Margin="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock TextWrapping="Wrap" FontSize="16" Foreground="DarkOrange">
+                            Это обратная сторона элемента управления FlipPanel
+                    </TextBlock>
+                    <Button Grid.Row="1" Margin="3" Padding="10" Content="Перевернуть назад?"
+                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Click="Button_Click"></Button>
+                </Grid>
+            </controls:FlipPanel.BackContent>
+
+        </controls:FlipPanel>
+
+    </Grid>
+</Window>
