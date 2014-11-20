@@ -9,13 +9,8 @@
     <Grid>
         <controls:TextBlockEx HorizontalAlignment="Left" Margin="26,20,0,0" VerticalAlignment="Top" Width="162" Height="28"/>
         <controls:TextBoxEx HorizontalAlignment="Left" Margin="26,61,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="162" Height="32" WatermarkText="TextBoxEx"/>
-        <controls:MemoEx HorizontalAlignment="Left" 
-                         Margin="236,111,0,0" VerticalAlignment="Top" Width="162" Height="86" Text="MemoEx"/>
         <controls:RichTextBoxEx 
-            HorizontalAlignment="Left" 
-            Height="86" 
-            Margin="26,111,0,0" VerticalAlignment="Top" Width="162"
-            Text="RichTextBoxEx">
-        </controls:RichTextBoxEx>
+            Margin="26,111,18,0"
+            Text="RichTextBoxEx" Height="86" VerticalAlignment="Top"/>
     </Grid>
 </UserControl>

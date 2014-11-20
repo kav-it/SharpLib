@@ -52,7 +52,8 @@
       <Link>Source\SharpLib.Version.cs</Link>
     </Compile>
     <Compile Include="Source\AssemblyInfo.cs" />
-    <Compile Include="Source\Controls\Classes\MemoEx\MemoEx.cs" />
+    <Compile Include="Source\Controls\Classes\CheckBoxEx.cs" />
+    <Compile Include="Source\Controls\Classes\ButtonEx.cs" />
     <Compile Include="Source\Controls\Classes\RichTextBoxEx.cs" />
     <Compile Include="Source\Controls\Classes\TextBlockEx.cs" />
     <Compile Include="Source\Controls\Classes\TextBoxEx.cs" />
@@ -66,7 +67,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Source\Controls\Styles\CheckBoxEx.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Source\Controls\Styles\RichTextBoxEx.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Controls\Styles\ButtonEx.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -74,11 +83,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Source\Controls\Styles\MemoEx.xaml">
+    <Page Include="Source\Controls\Styles\TextBoxEx.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Source\Controls\Styles\TextBoxEx.xaml">
+    <Page Include="Source\Controls\Colors.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -6,5 +6,17 @@
              xmlns:controls="http://codeofrussia.ru/sharplib/wpf/controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="505.97">
-    <Grid/>
+    <Grid>
+        <controls:ButtonEx Content="Enable" 
+                           HorizontalAlignment="Left" Margin="26,30,0,0" VerticalAlignment="Top"
+                           />
+
+        <controls:ButtonEx Content="Disable" IsEnabled="False"
+                           HorizontalAlignment="Left" Margin="26,68,0,0" VerticalAlignment="Top"
+                           />
+
+        <controls:CheckBoxEx Content="Checked" HorizontalAlignment="Left" Margin="140,32,0,0" VerticalAlignment="Top" Height="17" Width="82"/>
+        <controls:CheckBoxEx Content="Disable" IsEnabled="False" HorizontalAlignment="Left" Margin="140,70,0,0" VerticalAlignment="Top" Height="17" Width="73"/>
+        <controls:CheckBoxEx Content="Three" IsThreeState="True" IsChecked="{x:Null}" HorizontalAlignment="Left" Margin="140,108,0,0" VerticalAlignment="Top" Height="25" Width="133"/>
+    </Grid>
 </UserControl>

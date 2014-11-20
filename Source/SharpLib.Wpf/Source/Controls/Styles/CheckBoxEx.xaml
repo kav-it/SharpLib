@@ -1,0 +1,71 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:SharpLib.Wpf.Controls">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Colors.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    
+    <Style TargetType="{x:Type controls:CheckBoxEx}" BasedOn="{StaticResource {x:Type CheckBox}}">
+        <Setter Property="Background" Value="{StaticResource BrushWhite}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushControlBorder}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <Grid x:Name="PART_templateRoot" Background="Transparent" SnapsToDevicePixels="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Border x:Name="PART_checkBoxBorder" Margin="1"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <Grid x:Name="PART_markGrid">
+                                <Path x:Name="PART_optionMark" Margin="1" Opacity="0" Stretch="None" 
+                                      Data="F1 M 9.97498,1.22334L 4.6983,9.09834L 4.52164,9.09834L 0,5.19331L 1.27664,3.52165L 4.255,6.08833L 8.33331,1.52588e-005L 9.97498,1.22334 Z "
+                                      Fill="{StaticResource BrushMouseOverBorder}" 
+                                      />
+                                <Rectangle x:Name="PART_indeterminateMark" Margin="2" Opacity="0" 
+                                           Fill="{StaticResource BrushMouseOverBorder}"
+                                           />
+                            </Grid>
+                        </Border>
+                        <ContentPresenter x:Name="PART_contentPresenter" Grid.Column="1" Focusable="False" RecognizesAccessKey="True"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}" 
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasContent" Value="true">
+                            <Setter Property="Padding" Value="4,-1,0,0" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="BorderBrush" TargetName="PART_checkBoxBorder" Value="{StaticResource BrushBlack}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{StaticResource BrushControlDisabled}" />
+                            <Setter Property="Background" TargetName="PART_checkBoxBorder" Value="{StaticResource BrushDisabledBackground}" />
+                            <Setter Property="BorderBrush" TargetName="PART_checkBoxBorder" Value="{StaticResource BrushDisabledBorder}" />
+                            <Setter Property="Fill" TargetName="PART_optionMark" Value="{StaticResource BrushDisabledBorder}" />
+                            <Setter Property="Fill" TargetName="PART_indeterminateMark" Value="{StaticResource BrushDisabledBorder}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter Property="Opacity" TargetName="PART_optionMark" Value="1" />
+                            <Setter Property="Opacity" TargetName="PART_indeterminateMark" Value="0" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter Property="Opacity" TargetName="PART_optionMark" Value="0" />
+                            <Setter Property="Opacity" TargetName="PART_indeterminateMark" Value="1" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
