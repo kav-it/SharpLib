@@ -55,6 +55,12 @@
                             <Setter Property="TextElement.Foreground" TargetName="Header" Value="{StaticResource BrushControlDisabled}"/>
                             <Setter Property="BorderBrush" Value="{StaticResource BrushControlDisabled}"/>
                         </Trigger>
+                        <Trigger Property="Header" Value="{x:Null}">
+                            <Setter TargetName="Header" Property="Padding" Value="0" />
+                        </Trigger>
+                        <Trigger Property="Header" Value="">
+                            <Setter TargetName="Header" Property="Padding" Value="0" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

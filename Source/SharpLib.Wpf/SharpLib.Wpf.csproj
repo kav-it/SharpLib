@@ -52,6 +52,7 @@
       <Link>Source\SharpLib.Version.cs</Link>
     </Compile>
     <Compile Include="Source\AssemblyInfo.cs" />
+    <Compile Include="Source\Controls\Classes\RadioGroupEx.cs" />
     <Compile Include="Source\Controls\Classes\GroupBoxEx.cs" />
     <Compile Include="Source\Controls\Classes\RadioButtonEx.cs" />
     <Compile Include="Source\Controls\Classes\CheckBoxEx.cs" />
@@ -66,6 +67,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Source\Controls\FlipPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Controls\Styles\RadioGroupEx.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

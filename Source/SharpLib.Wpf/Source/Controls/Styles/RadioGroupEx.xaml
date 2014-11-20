@@ -1,0 +1,38 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:SharpLib.Wpf.Controls">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Colors.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="{x:Type controls:RadioGroupEx}">
+        <!--Общий вид элемента-->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:RadioGroupEx}">
+                    <controls:GroupBoxEx Header="{TemplateBinding Header}">
+                        <ItemsPresenter />
+                    </controls:GroupBoxEx>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <!--Шаблон размещения Items-->
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical" 
+                                VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type controls:RadioGroupEx}}}"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <!--Шаблон оформления каждогоо элемента-->
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style>
+                    <Setter Property="FrameworkElement.Margin" Value="3"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

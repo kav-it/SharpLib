@@ -6,50 +6,6 @@
              xmlns:controls="http://codeofrussia.ru/sharplib/wpf/controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="505.97">
-    <UserControl.Resources>
-        <BorderGapMaskConverter x:Key="BorderGapMaskConverter"/>
-        <Style x:Key="GroupBoxStyle1" TargetType="{x:Type GroupBox}">
-            <Setter Property="BorderBrush" Value="#D5DFE5"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type GroupBox}">
-                        <Grid SnapsToDevicePixels="true">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="6"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="6"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="6"/>
-                            </Grid.RowDefinitions>
-                            <Border BorderBrush="Transparent" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.ColumnSpan="4" Grid.Column="0" CornerRadius="4" Grid.Row="1" Grid.RowSpan="3"/>
-                            <Border BorderBrush="Red" BorderThickness="{TemplateBinding BorderThickness}" Grid.ColumnSpan="4" CornerRadius="4" Grid.Row="1" Grid.RowSpan="3">
-                                <Border.OpacityMask>
-                                    <MultiBinding ConverterParameter="7" Converter="{StaticResource BorderGapMaskConverter}">
-                                        <Binding ElementName="Header" Path="ActualWidth"/>
-                                        <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}"/>
-                                        <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}"/>
-                                    </MultiBinding>
-                                </Border.OpacityMask>
-                                <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3">
-                                    <Border BorderBrush="White" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2"/>
-                                </Border>
-                            </Border>
-                            <Border x:Name="Header" Grid.Column="1" Padding="3,1,3,0" Grid.Row="0" Grid.RowSpan="2">
-                                <ContentPresenter ContentSource="Header" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                            </Border>
-                            <ContentPresenter Grid.ColumnSpan="2" Grid.Column="1" Margin="{TemplateBinding Padding}" Grid.Row="2" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </UserControl.Resources>
     <Grid>
         <controls:ButtonEx Content="Enable" 
                            HorizontalAlignment="Left" Margin="26,30,0,0" VerticalAlignment="Top"
@@ -62,9 +18,11 @@
         <controls:CheckBoxEx Content="Checked" HorizontalAlignment="Left" Margin="140,32,0,0" VerticalAlignment="Top" Height="17" Width="82"/>
         <controls:CheckBoxEx Content="Disable" IsEnabled="False" HorizontalAlignment="Left" Margin="140,70,0,0" VerticalAlignment="Top" Height="17" Width="73"/>
         <controls:CheckBoxEx Content="Three" IsThreeState="True" IsChecked="{x:Null}" HorizontalAlignment="Left" Margin="140,108,0,0" VerticalAlignment="Top" Height="25" Width="133"/>
-        <controls:RadioButtonEx Content="Enable" HorizontalAlignment="Left" Height="29" Margin="267,26,0,0" VerticalAlignment="Top" Width="121"/>
+        <controls:RadioButtonEx Content="Enable" 
+                                HorizontalAlignment="Left" Height="29" Margin="267,26,0,0" VerticalAlignment="Top" Width="121"/>
         <controls:RadioButtonEx Content="Disable" IsEnabled="False" IsChecked="True" HorizontalAlignment="Left" Height="29" Margin="267,64,0,0" VerticalAlignment="Top" Width="121"/>
-        <controls:GroupBoxEx Header="Enable" HorizontalAlignment="Left" Height="72" Margin="26,153,0,0" VerticalAlignment="Top" Width="114"/>
+        <controls:GroupBoxEx  Header="Enable" HorizontalAlignment="Left" Height="72" Margin="26,153,0,0" VerticalAlignment="Top" Width="114"/>
         <controls:GroupBoxEx Header="Disable" IsEnabled="False" HorizontalAlignment="Left" Height="72" Margin="145,153,0,0" VerticalAlignment="Top" Width="114"/>
+        <GroupBox HorizontalAlignment="Left" Margin="344,133,0,0" VerticalAlignment="Top" Height="92" Width="100"/>
     </Grid>
 </UserControl>
