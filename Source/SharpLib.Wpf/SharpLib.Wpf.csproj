@@ -52,6 +52,8 @@
       <Link>Source\SharpLib.Version.cs</Link>
     </Compile>
     <Compile Include="Source\AssemblyInfo.cs" />
+    <Compile Include="Source\Controls\Classes\MemoEx\MemoEx.cs" />
+    <Compile Include="Source\Controls\Classes\RichTextBoxEx.cs" />
     <Compile Include="Source\Controls\Classes\TextBlockEx.cs" />
     <Compile Include="Source\Controls\Classes\TextBoxEx.cs" />
     <Compile Include="Source\Controls\FlipPanel.cs" />
@@ -64,7 +66,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Source\Controls\Styles\RichTextBoxEx.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Source\Controls\Styles\TextBlockEx.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Controls\Styles\MemoEx.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -5,10 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="http://codeofrussia.ru/sharplib/wpf/controls"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="247.802" d:DesignWidth="764.272">
     <Grid>
         <controls:TextBlockEx HorizontalAlignment="Left" Margin="26,20,0,0" VerticalAlignment="Top" Width="162" Height="28"/>
-        <controls:TextBoxEx HorizontalAlignment="Left" Margin="26,61,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="162" Height="32" WatermarkText="Подсказка"/>
-
+        <controls:TextBoxEx HorizontalAlignment="Left" Margin="26,61,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="162" Height="32" WatermarkText="TextBoxEx"/>
+        <controls:MemoEx HorizontalAlignment="Left" 
+                         Margin="236,111,0,0" VerticalAlignment="Top" Width="162" Height="86" Text="MemoEx"/>
+        <controls:RichTextBoxEx 
+            HorizontalAlignment="Left" 
+            Height="86" 
+            Margin="26,111,0,0" VerticalAlignment="Top" Width="162"
+            Text="RichTextBoxEx">
+        </controls:RichTextBoxEx>
     </Grid>
 </UserControl>

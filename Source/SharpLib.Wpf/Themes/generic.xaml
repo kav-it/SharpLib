@@ -4,5 +4,7 @@
         <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/FlipPanel.xaml" />
         <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/TextBoxEx.xaml"/>
         <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/TextBlockEx.xaml"/>
+        <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/RichTextBoxEx.xaml"/>
+        <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/MemoEx.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

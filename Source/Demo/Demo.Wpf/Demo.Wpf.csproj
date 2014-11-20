@@ -59,12 +59,19 @@
     <Compile Include="Source\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Source\Tabs\TabButton.xaml.cs">
+      <DependentUpon>TabButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Source\Tabs\TabText.xaml.cs">
       <DependentUpon>TabText.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Source\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Tabs\TabButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
