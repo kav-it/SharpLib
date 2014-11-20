@@ -52,22 +52,27 @@
       <Link>Source\SharpLib.Version.cs</Link>
     </Compile>
     <Compile Include="Source\AssemblyInfo.cs" />
+    <Compile Include="Source\Controls\Classes\TextBlockEx.cs" />
+    <Compile Include="Source\Controls\Classes\TextBoxEx.cs" />
     <Compile Include="Source\Controls\FlipPanel.cs" />
-    <Compile Include="Source\Controls\TextBoxEx.cs" />
     <Compile Include="Source\Converters\Converter.BoolToVisibility.cs" />
     <Compile Include="Source\Converters\Converter.StringToBool.cs" />
     <Compile Include="Source\Extensions\Extension.WinForms.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Source\Controls\TextBoxEx.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Source\Controls\FlipPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\generic.xaml">
+    <Page Include="Source\Controls\Styles\TextBlockEx.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Controls\Styles\TextBoxEx.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

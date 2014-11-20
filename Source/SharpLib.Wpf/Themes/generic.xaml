@@ -1,6 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/SharpLib.Wpf;component/Source/Controls/FlipPanel.xaml" />
+        <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/FlipPanel.xaml" />
+        <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/TextBoxEx.xaml"/>
+        <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/TextBlockEx.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

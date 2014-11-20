@@ -1,11 +1,10 @@
-﻿
-namespace DemoWpf
+﻿namespace DemoWpf
 {
-    public partial class MainWindow
+    public partial class TabText
     {
         #region Конструктор
 
-        public MainWindow()
+        public TabText()
         {
             InitializeComponent();
         }

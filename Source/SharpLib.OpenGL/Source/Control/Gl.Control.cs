@@ -10,71 +10,53 @@ using SharpLib.WinForms;
 
 namespace SharpLib.OpenGL
 {
-    /// <summary>
-    /// Provides a simple OpenGL control allowing quick development of Windows Forms-based OpenGL applications.
-    /// </summary>
-    public class GlControl : UserControl
+    public class GlControl : UserControl, ISupportInitialize
     {
         #region Поля
 
-        /// <summary>
-        /// Required for designer support
-        /// </summary>
         private IContainer _components;
 
-        /// <summary>
-        /// GDI device context
-        /// </summary>
         private IntPtr _deviceContext;
 
-        /// <summary>
-        /// The GL error code
-        /// </summary>
         private int _errorCode;
 
-        /// <summary>
-        /// Rendering context
-        /// </summary>
         private IntPtr _renderingContext;
 
-        /// <summary>
-        /// Holds our window handle
-        /// </summary>
         private IntPtr _windowHandle;
 
         #endregion
 
         #region Свойства
 
-        [Category("OpenGL"), Description("Accumulation buffer depth in bits.")]
+        [Category("OpenGL")]
         [DefaultValue(0)]
         public int AccumBits { get; set; }
 
-        [Category("OpenGL"), Description("Color buffer depth in bits.")]
+        [Category("OpenGL")]
         [DefaultValue(32)]
         public int ColorBits { get; set; }
 
-        [Category("OpenGL"), Description("Depth buffer (Z-buffer) depth in bits.")]
+        [Category("OpenGL")]
         [DefaultValue(16)]
         public int DepthBits { get; set; }
 
-        [Category("OpenGL"), Description("Stencil buffer depth in bits.")]
+        [Category("OpenGL")]
         [DefaultValue(0)]
         public int StencilBits { get; set; }
 
-        [Category("OpenGL"), Description("Automatically send a glGetError command after drawing?")]
+        [Category("OpenGL")]
         [DefaultValue(false)]
         public bool AutoCheckErrors { get; set; }
 
-        [Category("OpenGL"), Description("Automatically send a glFinish command after drawing?")]
+        [Category("OpenGL")]
         [DefaultValue(false)]
         public bool AutoFinish { get; set; }
 
-        [Category("OpenGL"), Description("Automatically make the rendering context current before drawing?")]
+        [Category("OpenGL")]
         [DefaultValue(true)]
         public bool AutoMakeCurrent { get; set; }
 
-        [Category("OpenGL"), Description("Automatically send a SwapBuffers command after drawing?")]
+        [Category("OpenGL")]
         [DefaultValue(true)]
         public bool AutoSwapBuffers { get; set; }
 
@@ -167,19 +149,12 @@ namespace SharpLib.OpenGL
             }
         }
 
-        /// <summary>
-        ///     Sends an see cref="UserControl.Invalidate"  command to this control, thus
-        ///     forcing a redraw to occur.
-        /// </summary>
         public void Draw()
         {
             Invalidate();
         }
 
-        /// <summary>
-        ///     Creates the OpenGL contexts.
-        /// </summary>
-        public void InitializeContexts()
+        private void InitializeContexts()
         {
             // Get window handle
             _windowHandle = Handle;
@@ -254,18 +229,15 @@ namespace SharpLib.OpenGL
                 Environment.Exit(-1);
             }
 
-            MakeCurrent(); // Attempt to activate the rendering context
+            // Attempt to activate the rendering context
+            MakeCurrent();
 
             // Force A Reset On The Working Set Size
             NativeMethods.SetProcessWorkingSetSize(Process.GetCurrentProcess().Handle, -1, -1);
         }
 
-        /// <summary>
-        /// </summary>
         public void MakeCurrent()
         {
-            // Are we not able to activate the rending context?
-            //if(deviceContext == IntPtr.Zero || renderingContext == IntPtr.Zero || !Wgl.wglMakeCurrent(deviceContext, renderingContext)) {
             if (!Gl.wglMakeCurrent(_deviceContext, _renderingContext))
             {
                 MessageBox.Show("Can not activate the GL rendering context.", "Fatal Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -273,19 +245,11 @@ namespace SharpLib.OpenGL
             }
         }
 
-        /// <summary>
-        /// </summary>
         public void SwapBuffers()
         {
             NativeMethods.SwapBuffersFast(_deviceContext);
         }
 
-        // --- Events ---
-
-        /// <summary>
-        ///     Paints the control.
-        /// </summary>
-        /// <param name="e">The paint event arguments.</param>
         protected override void OnPaint(PaintEventArgs e)
         {
             if (DesignHelper.IsDesigntime)
@@ -362,12 +326,17 @@ namespace SharpLib.OpenGL
             }
         }
 
-        /// <summary>
-        ///     Paints the background.
-        /// </summary>
-        /// <param name="e"></param>
         protected override void OnPaintBackground(PaintEventArgs e)
         {
+        }
+
+        void ISupportInitialize.BeginInit()
+        {
+        }
+
+        void ISupportInitialize.EndInit()
+        {
+            InitializeContexts();
         }
 
         #endregion

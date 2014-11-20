@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace SharpLibWpf.Controls
+namespace SharpLib.Wpf.Controls
 {
     [TemplatePart(Name = "FlipButton", Type = typeof(ToggleButton))]
     [TemplatePart(Name = "FlipButtonAlternate", Type = typeof(ToggleButton))]
