@@ -1,0 +1,76 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:SharpLib.Wpf.Controls"
+                    >
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Colors.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style x:Key="ScrollViewerStyle" TargetType="{x:Type ScrollViewer}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" Grid.Column="1">
+                            <ScrollContentPresenter Content="{TemplateBinding ScrollViewer.Content}" />
+                        </Border>
+                        <RepeatButton Grid.Column="0" Style="{DynamicResource ScrollBar_LineButton}" Content="M 0 3.5 L 4 0 L 4 7 Z" />
+                        <RepeatButton Grid.Column="2" Style="{DynamicResource ScrollBar_LineButton}" Content="M 0 0 L 4 3.5 L 0 7 Z" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type controls:ListViewEx}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:ListViewEx}">
+                    <Border Name="Border" 
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Button Content="Поиск" Grid.Row="0"/>
+                            <ScrollViewer Grid.Row="1" Focusable="False" 
+                                          HorizontalScrollBarVisibility="Auto"
+                                          >
+                                <ItemsPresenter />
+                            </ScrollViewer >
+                            <Button Content="Количество" Grid.Row="2"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <!--Шаблон определяющий реализацию вывода элементов-->
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel IsItemsHost="True" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <!--Стиль, определяющий отображение одного элемента-->
+        <!--<Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                
+            </Setter.Value>
+        </Setter>-->
+    </Style>
+
+</ResourceDictionary>

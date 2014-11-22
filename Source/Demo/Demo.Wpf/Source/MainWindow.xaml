@@ -4,6 +4,7 @@
         xmlns:local="clr-namespace:DemoWpf"
         Title="MainWindow" Height="350" Width="525"
         WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
         >
     <Grid>
         <TabControl>
@@ -13,9 +14,13 @@
             <TabItem Header="Text" >
                 <local:TabText />
             </TabItem>
-            <TabItem Header="Radio" IsSelected="True">
+            <TabItem Header="Radio" >
                 <local:TabRadio />
             </TabItem>
+            <TabItem Header="ListView" IsSelected="True">
+                <local:TabListView />
+            </TabItem>
+
         </TabControl>
     </Grid>
 </Window>

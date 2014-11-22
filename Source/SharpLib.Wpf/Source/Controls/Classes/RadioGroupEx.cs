@@ -33,6 +33,20 @@ namespace SharpLib.Wpf.Controls
             set { SetValue(SelectedIndexProperty, value); }
         }
 
+        [Browsable(false)]
+        public RadioButtonEx SelectedItem
+        {
+            get { return Items.Cast<RadioButtonEx>().FirstOrDefault(x => x.IsChecked == true); }
+            set
+            {
+                if (value != null)
+                {
+                    value.IsChecked = true;
+                }
+            }
+        }
+
+
         #endregion
 
         #region Конструктор

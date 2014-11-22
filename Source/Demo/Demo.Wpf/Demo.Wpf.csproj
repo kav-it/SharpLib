@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -65,6 +66,9 @@
     <Compile Include="Source\Tabs\TabButton.xaml.cs">
       <DependentUpon>TabButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Source\Tabs\TabListView.xaml.cs">
+      <DependentUpon>TabListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Source\Tabs\TabText.xaml.cs">
       <DependentUpon>TabText.xaml</DependentUpon>
     </Compile>
@@ -79,6 +83,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Source\Tabs\TabButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Tabs\TabListView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

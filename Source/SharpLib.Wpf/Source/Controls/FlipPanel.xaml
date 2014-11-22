@@ -6,7 +6,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:FlipPanel}">
-                    <Grid>
+                    <Grid Visibility="Visible">
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="ViewStates">
                                 <VisualState x:Name="Normal">

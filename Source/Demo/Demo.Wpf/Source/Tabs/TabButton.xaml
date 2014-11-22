@@ -23,6 +23,5 @@
         <controls:RadioButtonEx Content="Disable" IsEnabled="False" IsChecked="True" HorizontalAlignment="Left" Height="29" Margin="267,64,0,0" VerticalAlignment="Top" Width="121"/>
         <controls:GroupBoxEx  Header="Enable" HorizontalAlignment="Left" Height="72" Margin="26,153,0,0" VerticalAlignment="Top" Width="114"/>
         <controls:GroupBoxEx Header="Disable" IsEnabled="False" HorizontalAlignment="Left" Height="72" Margin="145,153,0,0" VerticalAlignment="Top" Width="114"/>
-        <GroupBox HorizontalAlignment="Left" Margin="344,133,0,0" VerticalAlignment="Top" Height="92" Width="100"/>
     </Grid>
 </UserControl>

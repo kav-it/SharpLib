@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4976118A-DDF9-4C23-AC93-6B99F7C3C246}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SharpLibWpf</RootNamespace>
+    <RootNamespace>SharpLib.Wpf</RootNamespace>
     <AssemblyName>SharpLib.Wpf</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -52,6 +52,9 @@
       <Link>Source\SharpLib.Version.cs</Link>
     </Compile>
     <Compile Include="Source\AssemblyInfo.cs" />
+    <Compile Include="Source\Controls\Classes\ListViewEx\ListViewEx.ColumnCollection.cs" />
+    <Compile Include="Source\Controls\Classes\ListViewEx\ListViewEx.Column.cs" />
+    <Compile Include="Source\Controls\Classes\ListViewEx\ListViewEx.cs" />
     <Compile Include="Source\Controls\Classes\RadioGroupEx.cs" />
     <Compile Include="Source\Controls\Classes\GroupBoxEx.cs" />
     <Compile Include="Source\Controls\Classes\RadioButtonEx.cs" />
@@ -63,10 +66,16 @@
     <Compile Include="Source\Controls\FlipPanel.cs" />
     <Compile Include="Source\Converters\Converter.BoolToVisibility.cs" />
     <Compile Include="Source\Converters\Converter.StringToBool.cs" />
+    <Compile Include="Source\Extensions\Extension.DependencyObject.cs" />
     <Compile Include="Source\Extensions\Extension.WinForms.cs" />
+    <Compile Include="Source\Helpers\VisualTree.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Source\Controls\FlipPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Controls\Styles\ListViewEx.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -112,12 +121,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SharpLib.Native\SharpLib.Native.csproj">
-      <Project>{e9a3f6e0-d63a-4297-a59b-7e1357b443cc}</Project>
-      <Name>SharpLib.Native</Name>
+    <ProjectReference Include="..\SharpLib\SharpLib.csproj">
+      <Project>{9cdec0b8-2232-45d1-815c-90880e1f8595}</Project>
+      <Name>SharpLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
