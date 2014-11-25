@@ -49,6 +49,7 @@
     <Compile Include="Source\Events\EventArgs{T}.Cancel.cs" />
     <Compile Include="Source\Events\EventArgs{T}.Changing.cs" />
     <Compile Include="Source\Events\EventArgs{T}.cs" />
+    <Compile Include="Source\Extensions\Extension.Assembly.cs" />
     <Compile Include="Source\Extensions\Extension.Double.cs" />
     <Compile Include="Source\Extensions\Extension.DateTIme.cs" />
     <Compile Include="Source\Extensions\Extension.Buffer.cs" />
@@ -58,7 +59,6 @@
     <Compile Include="Source\Extensions\Extension.String.cs" />
     <Compile Include="Source\Extensions\Extension.StringArray.cs" />
     <Compile Include="Source\Helpers\Bootstrap\Application.cs" />
-    <Compile Include="Source\Helpers\ModuleVersion.cs" />
     <Compile Include="Source\Helpers\Files\File.Location.cs" />
     <Compile Include="Source\Helpers\Files\File.Error.cs" />
     <Compile Include="Source\Helpers\Files\Files.cs" />
