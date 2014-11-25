@@ -5,15 +5,31 @@ namespace SharpLib
 {
     public class SharpLibApp
     {
+        #region Поля
+
+        private static readonly Lazy<SharpLibApp> _instance = new Lazy<SharpLibApp>(() => new SharpLibApp());
+
+        #endregion
+
+        #region Свойства
+
+        /// <summary>
+        /// Синглтон приложения
+        /// </summary>
+        public static SharpLibApp Instance
+        {
+            get { return _instance.Value; }
+        }
+
         /// <summary>
         /// Время запуска приложения
         /// </summary>
-        public static DateTime StartTime { get; set; }
+        public DateTime StartTime { get; set; }
 
         /// <summary>
         /// Время работы приложения
         /// </summary>
-        public static TimeSpan WorkTime
+        public TimeSpan WorkTime
         {
             get
             {
@@ -26,22 +42,22 @@ namespace SharpLib
         /// <summary>
         /// Версия приложения
         /// </summary>
-        public static Version Version { get; private set; }
+        public Version Version { get; private set; }
 
         /// <summary>
         /// Текстовое название приложения
         /// </summary>
-        public static string Title { get; private set; }
+        public string Title { get; private set; }
 
         /// <summary>
         /// Данные о расположении приложения (директория, имя, расширение)
         /// </summary>
-        public static FileLocation Location { get; private set; }
+        public FileLocation Location { get; private set; }
 
         /// <summary>
         /// Признак отладочной конфигурации
         /// </summary>
-        public static bool IsDebug { get; private set; }
+        public bool IsDebug { get; private set; }
 
         /// <summary>
         /// Полное название с версией и признаком отладки
@@ -49,12 +65,16 @@ namespace SharpLib
         /// <example>
         /// Монитор ServiceD (2.0.1.12) [debug]
         /// </example>
-        public static string TitleFull { get; private set; }
-        
+        public string Caption { get; private set; }
+
+        #endregion
+
+        #region Методы
+
         /// <summary>
         /// Инициализация (должна вызываться в самом начале при старте приложения)
         /// </summary>
-        public static void Init()
+        public void Init()
         {
             var asm = Assembly.GetEntryAssembly();
 
@@ -65,7 +85,9 @@ namespace SharpLib
             Location = new FileLocation(asm.Location);
 
             var debug = IsDebug ? "[debug]" : string.Empty;
-            TitleFull = string.Format("{0} ({1}) {2}", Title, Version, debug);
+            Caption = string.Format("{0} ({1}) {2}", Title, Version, debug);
         }
+
+        #endregion
     }
 }

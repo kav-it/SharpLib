@@ -9,11 +9,27 @@ namespace SharpLib
     {
         #region Методы
 
-        public static string ToStringEx(this byte[] buffer)
+        public static string ToStringEx(byte[] buffer, string fill = null)
         {
-            string text = Encoding.Default.GetString(buffer);
+            var text = Encoding.Default.GetString(buffer);
+            var textLocal = string.Empty;
 
-            return text;
+            foreach (char t in text)
+            {
+                if (Char.IsControl(t))
+                {
+                    if (fill == null)
+                    {
+                        break;
+                    }
+                    textLocal += fill;
+                }
+                else
+                {
+                    textLocal += t;
+                }
+            }
+            return textLocal;
         }
 
         public static MemoryStream ToMemoryStreamEx(this byte[] buffer)

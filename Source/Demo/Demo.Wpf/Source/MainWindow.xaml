@@ -5,6 +5,7 @@
         Title="MainWindow" Height="350" Width="525"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
+        Loaded="MainWindow_OnLoaded"
         >
     <Grid>
         <TabControl>

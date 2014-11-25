@@ -1,11 +1,13 @@
-﻿using System.Windows;
+﻿
+using SharpLib;
 
 namespace DemoWpf
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App
     {
+        public App()
+        {
+            SharpLibApp.Instance.Init();
+        }
     }
 }

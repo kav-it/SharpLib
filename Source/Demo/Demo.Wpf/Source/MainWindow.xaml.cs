@@ -1,4 +1,8 @@
 ﻿
+using System.Windows;
+
+using SharpLib;
+
 namespace DemoWpf
 {
     public partial class MainWindow
@@ -11,5 +15,10 @@ namespace DemoWpf
         }
 
         #endregion
+
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            Title = SharpLibApp.Instance.Caption;
+        }
     }
 }

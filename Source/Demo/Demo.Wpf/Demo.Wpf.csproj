@@ -51,6 +51,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\..\SharpLib.Version.cs">
+      <Link>SharpLib.Version.cs</Link>
+    </Compile>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Source\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -97,6 +100,10 @@
     <ProjectReference Include="..\..\SharpLib.Wpf\SharpLib.Wpf.csproj">
       <Project>{4976118a-ddf9-4c23-ac93-6b99f7c3c246}</Project>
       <Name>SharpLib.Wpf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SharpLib\SharpLib.csproj">
+      <Project>{9cdec0b8-2232-45d1-815c-90880e1f8595}</Project>
+      <Name>SharpLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -49,6 +49,8 @@
     <Compile Include="Source\Events\EventArgs{T}.Cancel.cs" />
     <Compile Include="Source\Events\EventArgs{T}.Changing.cs" />
     <Compile Include="Source\Events\EventArgs{T}.cs" />
+    <Compile Include="Source\Extensions\Extension.Encoding.cs" />
+    <Compile Include="Source\Extensions\Extension.Integer.cs" />
     <Compile Include="Source\Extensions\Extension.Assembly.cs" />
     <Compile Include="Source\Extensions\Extension.Double.cs" />
     <Compile Include="Source\Extensions\Extension.DateTIme.cs" />
@@ -59,12 +61,25 @@
     <Compile Include="Source\Extensions\Extension.String.cs" />
     <Compile Include="Source\Extensions\Extension.StringArray.cs" />
     <Compile Include="Source\Helpers\Bootstrap\Application.cs" />
+    <Compile Include="Source\Helpers\ByteList.cs" />
     <Compile Include="Source\Helpers\Files\File.Location.cs" />
     <Compile Include="Source\Helpers\Files\File.Error.cs" />
     <Compile Include="Source\Helpers\Files\Files.cs" />
+    <Compile Include="Source\Helpers\Log\Config\Logger.Config.cs" />
+    <Compile Include="Source\Helpers\Log\Config\Logger.Config.Module.cs" />
+    <Compile Include="Source\Helpers\Log\Config\Logger.Config.Target.cs" />
+    <Compile Include="Source\Helpers\Log\Config\Logger.Config.Target.File.cs" />
+    <Compile Include="Source\Helpers\Log\Logger.cs" />
+    <Compile Include="Source\Helpers\Log\Logger.Engine.cs" />
+    <Compile Include="Source\Helpers\Log\Log.Target.cs" />
+    <Compile Include="Source\Helpers\Log\Log.Level.cs" />
+    <Compile Include="Source\Helpers\Log\Log.Message.cs" />
+    <Compile Include="Source\Helpers\Log\Log.TargetTyp.cs" />
+    <Compile Include="Source\Helpers\Log\Logger.Target.File.cs" />
     <Compile Include="Source\Helpers\Mem.cs" />
     <Compile Include="Source\Helpers\PathEx.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
