@@ -7,31 +7,6 @@
         <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Colors.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="ScrollViewerStyle" TargetType="{x:Type ScrollViewer}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Border Grid.Row="0" Grid.Column="1">
-                            <ScrollContentPresenter Content="{TemplateBinding ScrollViewer.Content}" />
-                        </Border>
-                        <RepeatButton Grid.Column="0" Style="{DynamicResource ScrollBar_LineButton}" Content="M 0 3.5 L 4 0 L 4 7 Z" />
-                        <RepeatButton Grid.Column="2" Style="{DynamicResource ScrollBar_LineButton}" Content="M 0 0 L 4 3.5 L 0 7 Z" />
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <Style TargetType="{x:Type controls:ListViewEx}">
         <Setter Property="Template">
             <Setter.Value>
@@ -66,11 +41,25 @@
             </Setter.Value>
         </Setter>
         <!--Стиль, определяющий отображение одного элемента-->
-        <!--<Setter Property="ItemContainerStyle">
+        <Setter Property="ItemContainerStyle">
             <Setter.Value>
-                
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <Border BorderBrush="Black" BorderThickness="5">
+                                    <StackPanel>
+                                    <TextBlock Text="1"></TextBlock>
+                                    <ContentPresenter Content="{Binding}"/>
+                                    <TextBlock Text="2"></TextBlock>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
             </Setter.Value>
-        </Setter>-->
+        </Setter>
     </Style>
 
 </ResourceDictionary>

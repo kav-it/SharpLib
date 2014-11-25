@@ -52,6 +52,7 @@
       <Link>Source\SharpLib.Version.cs</Link>
     </Compile>
     <Compile Include="Source\AssemblyInfo.cs" />
+    <Compile Include="Source\Controls\Classes\ListViewEx\ListViewEx.Item.cs" />
     <Compile Include="Source\Controls\Classes\ListViewEx\ListViewEx.ColumnCollection.cs" />
     <Compile Include="Source\Controls\Classes\ListViewEx\ListViewEx.Column.cs" />
     <Compile Include="Source\Controls\Classes\ListViewEx\ListViewEx.cs" />

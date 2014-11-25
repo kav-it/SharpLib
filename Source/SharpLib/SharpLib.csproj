@@ -56,7 +56,10 @@
     <Compile Include="Source\Extensions\Extension.Stream.cs" />
     <Compile Include="Source\Extensions\Extension.String.cs" />
     <Compile Include="Source\Extensions\Extension.StringArray.cs" />
-    <Compile Include="Source\Helpers\Files\FileError.cs" />
+    <Compile Include="Source\Helpers\Bootstrap\Application.cs" />
+    <Compile Include="Source\Helpers\ModuleVersion.cs" />
+    <Compile Include="Source\Helpers\Files\File.Location.cs" />
+    <Compile Include="Source\Helpers\Files\File.Error.cs" />
     <Compile Include="Source\Helpers\Files\Files.cs" />
     <Compile Include="Source\Helpers\Mem.cs" />
     <Compile Include="Source\Helpers\PathEx.cs" />
