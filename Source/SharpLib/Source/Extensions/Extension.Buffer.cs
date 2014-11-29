@@ -9,7 +9,7 @@ namespace SharpLib
     {
         #region Методы
 
-        public static string ToStringEx(byte[] buffer, string fill = null)
+        public static string ToStringEx(this byte[] buffer, string fill = null)
         {
             var text = Encoding.Default.GetString(buffer);
             var textLocal = string.Empty;

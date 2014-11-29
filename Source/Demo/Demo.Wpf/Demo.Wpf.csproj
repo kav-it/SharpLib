@@ -61,6 +61,9 @@
     <Compile Include="Source\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Source\Tabs\TabTabs.xaml.cs">
+      <DependentUpon>TabTabs.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Source\Tabs\TabRadio.xaml.cs">
       <DependentUpon>TabRadio.xaml</DependentUpon>
     </Compile>
@@ -76,6 +79,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Source\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Tabs\TabTabs.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

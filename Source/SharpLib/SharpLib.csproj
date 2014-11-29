@@ -78,6 +78,8 @@
     <Compile Include="Source\Helpers\Log\Logger.Target.File.cs" />
     <Compile Include="Source\Helpers\Mem.cs" />
     <Compile Include="Source\Helpers\PathEx.cs" />
+    <Compile Include="Source\Extensions\Extension.XElement.cs" />
+    <Compile Include="Source\Helpers\Xml\Xmler.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -13,5 +13,6 @@
         <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/TextBlockEx.xaml"/>
         <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/RichTextBoxEx.xaml"/>
         <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/ListViewEx.xaml"/>
+        <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/TabControlEx.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

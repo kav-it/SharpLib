@@ -18,8 +18,11 @@
             <TabItem Header="Radio" >
                 <local:TabRadio />
             </TabItem>
-            <TabItem Header="ListView" IsSelected="True">
+            <TabItem Header="ListView" >
                 <local:TabListView />
+            </TabItem>
+            <TabItem Header="Tabs" IsSelected="True">
+                <local:TabTabs />
             </TabItem>
 
         </TabControl>
