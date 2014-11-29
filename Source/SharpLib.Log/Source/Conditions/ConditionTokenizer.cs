@@ -1,36 +1,3 @@
-// 
-// Copyright (c) 2004-2011 Jaroslaw Kowalski <jaak@jkowalski.net>
-// 
-// All rights reserved.
-// 
-// Redistribution and use in source and binary forms, with or without 
-// modification, are permitted provided that the following conditions 
-// are met:
-// 
-// * Redistributions of source code must retain the above copyright notice, 
-//   this list of conditions and the following disclaimer. 
-// 
-// * Redistributions in binary form must reproduce the above copyright notice,
-//   this list of conditions and the following disclaimer in the documentation
-//   and/or other materials provided with the distribution. 
-// 
-// * Neither the name of Jaroslaw Kowalski nor the names of its 
-//   contributors may be used to endorse or promote products derived from this
-//   software without specific prior written permission. 
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
-// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
-// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
-// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
-// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
-// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
-// THE POSSIBILITY OF SUCH DAMAGE.
-// 
-
 using System;
 using System.Text;
 
@@ -38,9 +5,6 @@ using NLog.Internal;
 
 namespace NLog.Conditions
 {
-    /// <summary>
-    /// Hand-written tokenizer for conditions.
-    /// </summary>
     internal sealed class ConditionTokenizer
     {
         #region Поля
@@ -53,28 +17,12 @@ namespace NLog.Conditions
 
         #region Свойства
 
-        /// <summary>
-        /// Gets the token position.
-        /// </summary>
-        /// <value>The token position.</value>
         public int TokenPosition { get; private set; }
 
-        /// <summary>
-        /// Gets the type of the token.
-        /// </summary>
-        /// <value>The type of the token.</value>
         public ConditionTokenType TokenType { get; private set; }
 
-        /// <summary>
-        /// Gets the token value.
-        /// </summary>
-        /// <value>The token value.</value>
         public string TokenValue { get; private set; }
 
-        /// <summary>
-        /// Gets the value of a string token.
-        /// </summary>
-        /// <value>The string token value.</value>
         public string StringTokenValue
         {
             get
@@ -89,10 +37,6 @@ namespace NLog.Conditions
 
         #region Конструктор
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConditionTokenizer" /> class.
-        /// </summary>
-        /// <param name="stringReader">The string reader.</param>
         public ConditionTokenizer(SimpleStringReader stringReader)
         {
             this.stringReader = stringReader;
@@ -104,11 +48,6 @@ namespace NLog.Conditions
 
         #region Методы
 
-        /// <summary>
-        /// Asserts current token type and advances to the next token.
-        /// </summary>
-        /// <param name="tokenType">Expected token type.</param>
-        /// <remarks>If token type doesn't match, an exception is thrown.</remarks>
         public void Expect(ConditionTokenType tokenType)
         {
             if (TokenType != tokenType)
@@ -119,10 +58,6 @@ namespace NLog.Conditions
             GetNextToken();
         }
 
-        /// <summary>
-        /// Asserts that current token is a keyword and returns its value and advances to the next token.
-        /// </summary>
-        /// <returns>Keyword value.</returns>
         public string EatKeyword()
         {
             if (TokenType != ConditionTokenType.Keyword)
@@ -135,13 +70,6 @@ namespace NLog.Conditions
             return s;
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether current keyword is equal to the specified value.
-        /// </summary>
-        /// <param name="keyword">The keyword.</param>
-        /// <returns>
-        /// A value of <c>true</c> if current keyword is equal to the specified value; otherwise, <c>false</c>.
-        /// </returns>
         public bool IsKeyword(string keyword)
         {
             if (TokenType != ConditionTokenType.Keyword)
@@ -157,12 +85,6 @@ namespace NLog.Conditions
             return true;
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the tokenizer has reached the end of the token stream.
-        /// </summary>
-        /// <returns>
-        /// A value of <c>true</c> if the tokenizer has reached the end of the token stream; otherwise, <c>false</c>.
-        /// </returns>
         public bool IsEOF()
         {
             if (TokenType != ConditionTokenType.EndOfInput)
@@ -173,32 +95,16 @@ namespace NLog.Conditions
             return true;
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether current token is a number.
-        /// </summary>
-        /// <returns>
-        /// A value of <c>true</c> if current token is a number; otherwise, <c>false</c>.
-        /// </returns>
         public bool IsNumber()
         {
             return TokenType == ConditionTokenType.Number;
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the specified token is of specified type.
-        /// </summary>
-        /// <param name="tokenType">The token type.</param>
-        /// <returns>
-        /// A value of <c>true</c> if current token is of specified type; otherwise, <c>false</c>.
-        /// </returns>
         public bool IsToken(ConditionTokenType tokenType)
         {
             return TokenType == tokenType;
         }
 
-        /// <summary>
-        /// Gets the next token and sets <see cref="TokenType" /> and <see cref="TokenValue" /> properties.
-        /// </summary>
         public void GetNextToken()
         {
             if (TokenType == ConditionTokenType.EndOfInput)
@@ -239,7 +145,6 @@ namespace NLog.Conditions
 
             if (ch == '}' || ch == ':')
             {
-                // when condition is embedded
                 TokenType = ConditionTokenType.EndOfInput;
                 return;
             }
@@ -395,7 +300,6 @@ namespace NLog.Conditions
 
             foreach (CharToTokenType cht in charToTokenType)
             {
-                // Console.WriteLine("Setting up {0} to {1}", cht.ch, cht.tokenType);
                 result[cht.Character] = cht.TokenType;
             }
 
@@ -521,9 +425,6 @@ namespace NLog.Conditions
 
         #region Вложенный класс: CharToTokenType
 
-        /// <summary>
-        /// Mapping between characters and token types for punctuations.
-        /// </summary>
         private struct CharToTokenType
         {
             #region Поля
@@ -536,11 +437,6 @@ namespace NLog.Conditions
 
             #region Конструктор
 
-            /// <summary>
-            /// Initializes a new instance of the CharToTokenType struct.
-            /// </summary>
-            /// <param name="character">The character.</param>
-            /// <param name="tokenType">Type of the token.</param>
             public CharToTokenType(char character, ConditionTokenType tokenType)
             {
                 Character = character;

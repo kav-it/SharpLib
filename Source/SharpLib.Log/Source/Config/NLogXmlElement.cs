@@ -1,36 +1,3 @@
-// 
-// Copyright (c) 2004-2011 Jaroslaw Kowalski <jaak@jkowalski.net>
-// 
-// All rights reserved.
-// 
-// Redistribution and use in source and binary forms, with or without 
-// modification, are permitted provided that the following conditions 
-// are met:
-// 
-// * Redistributions of source code must retain the above copyright notice, 
-//   this list of conditions and the following disclaimer. 
-// 
-// * Redistributions in binary form must reproduce the above copyright notice,
-//   this list of conditions and the following disclaimer in the documentation
-//   and/or other materials provided with the distribution. 
-// 
-// * Neither the name of Jaroslaw Kowalski nor the names of its 
-//   contributors may be used to endorse or promote products derived from this
-//   software without specific prior written permission. 
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
-// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
-// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
-// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
-// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
-// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
-// THE POSSIBILITY OF SUCH DAMAGE.
-// 
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -38,41 +5,22 @@ using System.Xml;
 
 namespace NLog.Config
 {
-    /// <summary>
-    /// Represents simple XML element with case-insensitive attribute semantics.
-    /// </summary>
     internal class NLogXmlElement
     {
         #region Свойства
 
-        /// <summary>
-        /// Gets the element name.
-        /// </summary>
         public string LocalName { get; private set; }
 
-        /// <summary>
-        /// Gets the dictionary of attribute values.
-        /// </summary>
         public Dictionary<string, string> AttributeValues { get; private set; }
 
-        /// <summary>
-        /// Gets the collection of child elements.
-        /// </summary>
         public IList<NLogXmlElement> Children { get; private set; }
 
-        /// <summary>
-        /// Gets the value of the element.
-        /// </summary>
         public string Value { get; private set; }
 
         #endregion
 
         #region Конструктор
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NLogXmlElement" /> class.
-        /// </summary>
-        /// <param name="inputUri">The input URI.</param>
         public NLogXmlElement(string inputUri)
             : this()
         {
@@ -83,19 +31,12 @@ namespace NLog.Config
             }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NLogXmlElement" /> class.
-        /// </summary>
-        /// <param name="reader">The reader to initialize element from.</param>
         public NLogXmlElement(XmlReader reader)
             : this()
         {
             Parse(reader);
         }
 
-        /// <summary>
-        /// Prevents a default instance of the <see cref="NLogXmlElement" /> class from being created.
-        /// </summary>
         private NLogXmlElement()
         {
             AttributeValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -106,11 +47,6 @@ namespace NLog.Config
 
         #region Методы
 
-        /// <summary>
-        /// Returns children elements with the specified element name.
-        /// </summary>
-        /// <param name="elementName">Name of the element.</param>
-        /// <returns>Children elements with the specified element name.</returns>
         public IEnumerable<NLogXmlElement> Elements(string elementName)
         {
             var result = new List<NLogXmlElement>();
@@ -126,12 +62,6 @@ namespace NLog.Config
             return result;
         }
 
-        /// <summary>
-        /// Gets the required attribute.
-        /// </summary>
-        /// <param name="attributeName">Name of the attribute.</param>
-        /// <returns>Attribute value.</returns>
-        /// <remarks>Throws if the attribute is not specified.</remarks>
         public string GetRequiredAttribute(string attributeName)
         {
             string value = GetOptionalAttribute(attributeName, null);
@@ -143,12 +73,6 @@ namespace NLog.Config
             return value;
         }
 
-        /// <summary>
-        /// Gets the optional boolean attribute value.
-        /// </summary>
-        /// <param name="attributeName">Name of the attribute.</param>
-        /// <param name="defaultValue">Default value to return if the attribute is not found.</param>
-        /// <returns>Boolean attribute value or default.</returns>
         public bool GetOptionalBooleanAttribute(string attributeName, bool defaultValue)
         {
             string value;
@@ -161,12 +85,6 @@ namespace NLog.Config
             return Convert.ToBoolean(value, CultureInfo.InvariantCulture);
         }
 
-        /// <summary>
-        /// Gets the optional attribute value.
-        /// </summary>
-        /// <param name="attributeName">Name of the attribute.</param>
-        /// <param name="defaultValue">The default value.</param>
-        /// <returns>Value of the attribute or default value.</returns>
         public string GetOptionalAttribute(string attributeName, string defaultValue)
         {
             string value;
@@ -179,10 +97,6 @@ namespace NLog.Config
             return value;
         }
 
-        /// <summary>
-        /// Asserts that the name of the element is among specified element names.
-        /// </summary>
-        /// <param name="allowedNames">The allowed names.</param>
         public void AssertName(params string[] allowedNames)
         {
             foreach (var en in allowedNames)

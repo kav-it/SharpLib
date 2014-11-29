@@ -1,77 +1,22 @@
-// 
-// Copyright (c) 2004-2011 Jaroslaw Kowalski <jaak@jkowalski.net>
-// 
-// All rights reserved.
-// 
-// Redistribution and use in source and binary forms, with or without 
-// modification, are permitted provided that the following conditions 
-// are met:
-// 
-// * Redistributions of source code must retain the above copyright notice, 
-//   this list of conditions and the following disclaimer. 
-// 
-// * Redistributions in binary form must reproduce the above copyright notice,
-//   this list of conditions and the following disclaimer in the documentation
-//   and/or other materials provided with the distribution. 
-// 
-// * Neither the name of Jaroslaw Kowalski nor the names of its 
-//   contributors may be used to endorse or promote products derived from this
-//   software without specific prior written permission. 
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
-// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
-// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
-// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
-// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
-// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
-// THE POSSIBILITY OF SUCH DAMAGE.
-// 
-
 using System;
 using System.Globalization;
 
 namespace NLog.Conditions
 {
-    /// <summary>
-    /// Condition relational (<b>==</b>, <b>!=</b>, <b>&lt;</b>, <b>&lt;=</b>,
-    /// <b>&gt;</b> or <b>&gt;=</b>) expression.
-    /// </summary>
     internal sealed class ConditionRelationalExpression : ConditionExpression
     {
         #region Свойства
 
-        /// <summary>
-        /// Gets the left expression.
-        /// </summary>
-        /// <value>The left expression.</value>
         public ConditionExpression LeftExpression { get; private set; }
 
-        /// <summary>
-        /// Gets the right expression.
-        /// </summary>
-        /// <value>The right expression.</value>
         public ConditionExpression RightExpression { get; private set; }
 
-        /// <summary>
-        /// Gets the relational operator.
-        /// </summary>
-        /// <value>The operator.</value>
         public ConditionRelationalOperator RelationalOperator { get; private set; }
 
         #endregion
 
         #region Конструктор
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConditionRelationalExpression" /> class.
-        /// </summary>
-        /// <param name="leftExpression">The left expression.</param>
-        /// <param name="rightExpression">The right expression.</param>
-        /// <param name="relationalOperator">The relational operator.</param>
         public ConditionRelationalExpression(ConditionExpression leftExpression, ConditionExpression rightExpression, ConditionRelationalOperator relationalOperator)
         {
             LeftExpression = leftExpression;
@@ -83,22 +28,11 @@ namespace NLog.Conditions
 
         #region Методы
 
-        /// <summary>
-        /// Returns a string representation of the expression.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.String" /> that represents the condition expression.
-        /// </returns>
         public override string ToString()
         {
             return "(" + LeftExpression + " " + GetOperatorString() + " " + RightExpression + ")";
         }
 
-        /// <summary>
-        /// Evaluates the expression.
-        /// </summary>
-        /// <param name="context">Evaluation context.</param>
-        /// <returns>Expression result.</returns>
         protected override object EvaluateNode(LogEventInfo context)
         {
             object v1 = LeftExpression.Evaluate(context);
@@ -107,13 +41,6 @@ namespace NLog.Conditions
             return Compare(v1, v2, RelationalOperator);
         }
 
-        /// <summary>
-        /// Compares the specified values using specified relational operator.
-        /// </summary>
-        /// <param name="leftValue">The first value.</param>
-        /// <param name="rightValue">The second value.</param>
-        /// <param name="relationalOperator">The relational operator.</param>
-        /// <returns>Result of the given relational operator.</returns>
         private static object Compare(object leftValue, object rightValue, ConditionRelationalOperator relationalOperator)
         {
             StringComparer comparer = StringComparer.InvariantCulture;

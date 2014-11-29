@@ -1,36 +1,3 @@
-// 
-// Copyright (c) 2004-2011 Jaroslaw Kowalski <jaak@jkowalski.net>
-// 
-// All rights reserved.
-// 
-// Redistribution and use in source and binary forms, with or without 
-// modification, are permitted provided that the following conditions 
-// are met:
-// 
-// * Redistributions of source code must retain the above copyright notice, 
-//   this list of conditions and the following disclaimer. 
-// 
-// * Redistributions in binary form must reproduce the above copyright notice,
-//   this list of conditions and the following disclaimer in the documentation
-//   and/or other materials provided with the distribution. 
-// 
-// * Neither the name of Jaroslaw Kowalski nor the names of its 
-//   contributors may be used to endorse or promote products derived from this
-//   software without specific prior written permission. 
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
-// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
-// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
-// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
-// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
-// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
-// THE POSSIBILITY OF SUCH DAMAGE.
-// 
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -42,9 +9,6 @@ using NLog.Targets;
 
 namespace NLog.Config
 {
-    /// <summary>
-    /// Represents a logging rule. An equivalent of &lt;logger /&gt; configuration element.
-    /// </summary>
     [NLogConfigurationItem]
     public class LoggingRule
     {
@@ -81,33 +45,14 @@ namespace NLog.Config
 
         #region Свойства
 
-        /// <summary>
-        /// Gets a collection of targets that should be written to when this rule matches.
-        /// </summary>
         public IList<Target> Targets { get; private set; }
 
-        /// <summary>
-        /// Gets a collection of child rules to be evaluated when this rule matches.
-        /// </summary>
         public IList<LoggingRule> ChildRules { get; private set; }
 
-        /// <summary>
-        /// Gets a collection of filters to be checked before writing to targets.
-        /// </summary>
         public IList<Filter> Filters { get; private set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether to quit processing any further rule when this one matches.
-        /// </summary>
         public bool Final { get; set; }
 
-        /// <summary>
-        /// Gets or sets logger name pattern.
-        /// </summary>
-        /// <remarks>
-        /// Logger name pattern. It may include the '*' wildcard at the beginning, at the end or at both ends but not anywhere
-        /// else.
-        /// </remarks>
         public string LoggerNamePattern
         {
             get { return loggerNamePattern; }
@@ -147,7 +92,6 @@ namespace NLog.Config
                     return;
                 }
 
-                // *text*
                 if (firstPos == 0 && lastPos == LoggerNamePattern.Length - 1)
                 {
                     string text = LoggerNamePattern.Substring(1, LoggerNamePattern.Length - 2);
@@ -161,9 +105,6 @@ namespace NLog.Config
             }
         }
 
-        /// <summary>
-        /// Gets the collection of log levels enabled by this rule.
-        /// </summary>
         public ReadOnlyCollection<LogLevel> Levels
         {
             get
@@ -186,9 +127,6 @@ namespace NLog.Config
 
         #region Конструктор
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LoggingRule" /> class.
-        /// </summary>
         public LoggingRule()
         {
             Filters = new List<Filter>();
@@ -196,15 +134,6 @@ namespace NLog.Config
             Targets = new List<Target>();
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LoggingRule" /> class.
-        /// </summary>
-        /// <param name="loggerNamePattern">
-        /// Logger name pattern. It may include the '*' wildcard at the beginning, at the end or at
-        /// both ends.
-        /// </param>
-        /// <param name="minLevel">Minimum log level needed to trigger this rule.</param>
-        /// <param name="target">Target to be written to when the rule matches.</param>
         public LoggingRule(string loggerNamePattern, LogLevel minLevel, Target target)
         {
             Filters = new List<Filter>();
@@ -218,18 +147,6 @@ namespace NLog.Config
             }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LoggingRule" /> class.
-        /// </summary>
-        /// <param name="loggerNamePattern">
-        /// Logger name pattern. It may include the '*' wildcard at the beginning, at the end or at
-        /// both ends.
-        /// </param>
-        /// <param name="target">Target to be written to when the rule matches.</param>
-        /// <remarks>
-        /// By default no logging levels are defined. You should call <see cref="EnableLoggingForLevel" /> and
-        /// <see cref="DisableLoggingForLevel" /> to set them.
-        /// </remarks>
         public LoggingRule(string loggerNamePattern, Target target)
         {
             Filters = new List<Filter>();
@@ -243,30 +160,16 @@ namespace NLog.Config
 
         #region Методы
 
-        /// <summary>
-        /// Enables logging for a particular level.
-        /// </summary>
-        /// <param name="level">Level to be enabled.</param>
         public void EnableLoggingForLevel(LogLevel level)
         {
             logLevels[level.Ordinal] = true;
         }
 
-        /// <summary>
-        /// Disables logging for a particular level.
-        /// </summary>
-        /// <param name="level">Level to be disabled.</param>
         public void DisableLoggingForLevel(LogLevel level)
         {
             logLevels[level.Ordinal] = false;
         }
 
-        /// <summary>
-        /// Returns a string representation of <see cref="LoggingRule" />. Used for debugging.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
-        /// </returns>
         public override string ToString()
         {
             var sb = new StringBuilder();
@@ -291,21 +194,11 @@ namespace NLog.Config
             return sb.ToString();
         }
 
-        /// <summary>
-        /// Checks whether te particular log level is enabled for this rule.
-        /// </summary>
-        /// <param name="level">Level to be checked.</param>
-        /// <returns>A value of <see langword="true" /> when the log level is enabled, <see langword="false" /> otherwise.</returns>
         public bool IsLoggingEnabledForLevel(LogLevel level)
         {
             return logLevels[level.Ordinal];
         }
 
-        /// <summary>
-        /// Checks whether given name matches the logger name pattern.
-        /// </summary>
-        /// <param name="loggerName">String to be matched.</param>
-        /// <returns>A value of <see langword="true" /> when the name matches, <see langword="false" /> otherwise.</returns>
         public bool NameMatches(string loggerName)
         {
             switch (loggerNameMatchMode)

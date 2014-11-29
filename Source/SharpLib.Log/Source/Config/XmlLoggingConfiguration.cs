@@ -1,36 +1,3 @@
-// 
-// Copyright (c) 2004-2011 Jaroslaw Kowalski <jaak@jkowalski.net>
-// 
-// All rights reserved.
-// 
-// Redistribution and use in source and binary forms, with or without 
-// modification, are permitted provided that the following conditions 
-// are met:
-// 
-// * Redistributions of source code must retain the above copyright notice, 
-//   this list of conditions and the following disclaimer. 
-// 
-// * Redistributions in binary form must reproduce the above copyright notice,
-//   this list of conditions and the following disclaimer in the documentation
-//   and/or other materials provided with the distribution. 
-// 
-// * Neither the name of Jaroslaw Kowalski nor the names of its 
-//   contributors may be used to endorse or promote products derived from this
-//   software without specific prior written permission. 
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
-// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
-// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
-// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
-// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
-// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
-// THE POSSIBILITY OF SUCH DAMAGE.
-// 
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -49,12 +16,6 @@ using NLog.Time;
 
 namespace NLog.Config
 {
-    // using System.Windows;
-
-    /// <summary>
-    /// A class for configuring NLog through an XML configuration file
-    /// (App.config style or App.nlog style).
-    /// </summary>
     public class XmlLoggingConfiguration : LoggingConfiguration
     {
         private readonly ConfigurationItemFactory configurationItemFactory = ConfigurationItemFactory.Default;
@@ -65,10 +26,6 @@ namespace NLog.Config
 
         private string originalFileName;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlLoggingConfiguration" /> class.
-        /// </summary>
-        /// <param name="fileName">Configuration file to be read.</param>
         public XmlLoggingConfiguration(string fileName)
         {
             using (XmlReader reader = XmlReader.Create(fileName))
@@ -77,11 +34,6 @@ namespace NLog.Config
             }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlLoggingConfiguration" /> class.
-        /// </summary>
-        /// <param name="fileName">Configuration file to be read.</param>
-        /// <param name="ignoreErrors">Ignore any errors during configuration.</param>
         public XmlLoggingConfiguration(string fileName, bool ignoreErrors)
         {
             using (XmlReader reader = XmlReader.Create(fileName))
@@ -90,33 +42,18 @@ namespace NLog.Config
             }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlLoggingConfiguration" /> class.
-        /// </summary>
-        /// <param name="reader"><see cref="XmlReader" /> containing the configuration section.</param>
-        /// <param name="fileName">Name of the file that contains the element (to be used as a base for including other files).</param>
         public XmlLoggingConfiguration(XmlReader reader, string fileName)
         {
             Initialize(reader, fileName, false);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlLoggingConfiguration" /> class.
-        /// </summary>
-        /// <param name="reader"><see cref="XmlReader" /> containing the configuration section.</param>
-        /// <param name="fileName">Name of the file that contains the element (to be used as a base for including other files).</param>
-        /// <param name="ignoreErrors">Ignore any errors during configuration.</param>
         public XmlLoggingConfiguration(XmlReader reader, string fileName, bool ignoreErrors)
         {
             Initialize(reader, fileName, ignoreErrors);
         }
 
 #if !SILVERLIGHT
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlLoggingConfiguration" /> class.
-        /// </summary>
-        /// <param name="element">The XML element.</param>
-        /// <param name="fileName">Name of the XML file.</param>
+
         internal XmlLoggingConfiguration(XmlElement element, string fileName)
         {
             using (var stringReader = new StringReader(element.OuterXml))
@@ -127,12 +64,6 @@ namespace NLog.Config
             }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlLoggingConfiguration" /> class.
-        /// </summary>
-        /// <param name="element">The XML element.</param>
-        /// <param name="fileName">Name of the XML file.</param>
-        /// <param name="ignoreErrors">If set to <c>true</c> errors will be ignored during file processing.</param>
         internal XmlLoggingConfiguration(XmlElement element, string fileName, bool ignoreErrors)
         {
             using (var stringReader = new StringReader(element.OuterXml))
@@ -144,34 +75,18 @@ namespace NLog.Config
         }
 #endif
 
-        /// <summary>
-        /// Gets the default <see cref="LoggingConfiguration" /> object by parsing
-        /// the application configuration file (<c>app.exe.config</c>).
-        /// </summary>
         public static LoggingConfiguration AppConfig
         {
             get { return null; }
         }
 
-        /// <summary>
-        /// Gets the variables defined in the configuration.
-        /// </summary>
         public Dictionary<string, string> Variables
         {
             get { return variables; }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the configuration files
-        /// should be watched for changes and reloaded automatically when changed.
-        /// </summary>
         public bool AutoReload { get; set; }
 
-        /// <summary>
-        /// Gets the collection of file names which should be watched for changes by NLog.
-        /// This is the list of configuration files processed.
-        /// If the <c>autoReload</c> attribute is not set it returns empty collection.
-        /// </summary>
         public override IEnumerable<string> FileNamesToWatch
         {
             get
@@ -185,10 +100,6 @@ namespace NLog.Config
             }
         }
 
-        /// <summary>
-        /// Re-reads the original configuration file and returns the new <see cref="LoggingConfiguration" /> object.
-        /// </summary>
-        /// <returns>The new <see cref="XmlLoggingConfiguration" /> object.</returns>
         public override LoggingConfiguration Reload()
         {
             return new XmlLoggingConfiguration(originalFileName);
@@ -211,7 +122,7 @@ namespace NLog.Config
 
         private static string CleanWhitespace(string s)
         {
-            s = s.Replace(" ", string.Empty); // get rid of the whitespace
+            s = s.Replace(" ", string.Empty);
             return s;
         }
 
@@ -243,12 +154,6 @@ namespace NLog.Config
             return target;
         }
 
-        /// <summary>
-        /// Initializes the configuration.
-        /// </summary>
-        /// <param name="reader"><see cref="XmlReader" /> containing the configuration section.</param>
-        /// <param name="fileName">Name of the file that contains the element (to be used as a base for including other files).</param>
-        /// <param name="ignoreErrors">Ignore any errors during configuration.</param>
         private void Initialize(XmlReader reader, string fileName, bool ignoreErrors)
         {
             try
@@ -301,7 +206,7 @@ namespace NLog.Config
         private void ConfigureFromFile(string fileName)
         {
 #if SILVERLIGHT
-    // file names are relative to XAP
+    
             string key = fileName;
 #else
             string key = Path.GetFullPath(fileName);
@@ -633,7 +538,6 @@ namespace NLog.Config
                             ParseTargetElement(newTarget, childElement);
                             if (newTarget.Name != null)
                             {
-                                // if the new target has name, register it
                                 AddTarget(newTarget.Name, newTarget);
                             }
 
@@ -669,7 +573,6 @@ namespace NLog.Config
                             ParseTargetElement(newTarget, childElement);
                             if (newTarget.Name != null)
                             {
-                                // if the new target has name, register it
                                 AddTarget(newTarget.Name, newTarget);
                             }
 
@@ -900,18 +803,14 @@ namespace NLog.Config
             PropertyInfo targetPropertyInfo;
             string name = layoutElement.LocalName;
 
-            // if property exists
             if (PropertyHelper.TryGetPropertyInfo(o, name, out targetPropertyInfo))
             {
-                // and is a Layout
                 if (typeof(Layout).IsAssignableFrom(targetPropertyInfo.PropertyType))
                 {
                     string layoutTypeName = StripOptionalNamespacePrefix(layoutElement.GetOptionalAttribute("type", null));
 
-                    // and 'type' attribute has been specified
                     if (layoutTypeName != null)
                     {
-                        // configure it from current element
                         Layout layout = configurationItemFactory.Layouts.CreateInstance(ExpandVariables(layoutTypeName));
                         ConfigureObjectFromAttributes(layout, layoutElement, true);
                         ConfigureObjectFromElement(layout, layoutElement);
@@ -965,7 +864,6 @@ namespace NLog.Config
         {
             string output = input;
 
-            // TODO - make this case-insensitive, will probably require a different approach
             foreach (var kvp in variables)
             {
                 output = output.Replace("${" + kvp.Key + "}", kvp.Value);
