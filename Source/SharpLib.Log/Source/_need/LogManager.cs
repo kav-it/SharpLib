@@ -46,10 +46,8 @@ namespace NLog
             get { return _currentAppDomain ?? (_currentAppDomain = AppDomainWrapper.CurrentDomain); }
             set
             {
-#if !SILVERLIGHT
                 _currentAppDomain.DomainUnload -= TurnOffLogging;
                 _currentAppDomain.ProcessExit -= TurnOffLogging;
-#endif
                 _currentAppDomain = value;
             }
         }

@@ -1,6 +1,6 @@
 using System;
-
-using NLog.Internal;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NLog
 {
@@ -8,23 +8,25 @@ namespace NLog
     {
         #region Поля
 
-        public static readonly LogLevel Debug = new LogLevel("Debug", 1);
-
-        public static readonly LogLevel Error = new LogLevel("Error", 4);
-
-        public static readonly LogLevel Fatal = new LogLevel("Fatal", 5);
-
-        public static readonly LogLevel Info = new LogLevel("Info", 2);
-
-        public static readonly LogLevel Off = new LogLevel("Off", 6);
-
-        public static readonly LogLevel Trace = new LogLevel("Trace", 0);
-
-        public static readonly LogLevel Warn = new LogLevel("Warn", 3);
+        private static readonly List<LogLevel> _levels;
 
         #endregion
 
         #region Свойства
+
+        public static LogLevel Debug { get; private set; }
+
+        public static LogLevel Error { get; private set; }
+
+        public static LogLevel Fatal { get; private set; }
+
+        public static LogLevel Info { get; private set; }
+
+        public static LogLevel Off { get; private set; }
+
+        public static LogLevel Trace { get; private set; }
+
+        public static LogLevel Warn { get; private set; }
 
         public string Name { get; private set; }
 
@@ -44,6 +46,27 @@ namespace NLog
 
         #region Конструктор
 
+        static LogLevel()
+        {
+            Debug = new LogLevel("Debug", 1);
+            Trace = new LogLevel("Trace", 0);
+            Info = new LogLevel("Info", 2);
+            Warn = new LogLevel("Warn", 3);
+            Error = new LogLevel("Error", 4);
+            Fatal = new LogLevel("Fatal", 5);
+            Off = new LogLevel("Off", 6);
+
+            _levels = new List<LogLevel>
+            {
+                Off,
+                Trace,
+                Info,
+                Warn,
+                Error,
+                Fatal
+            };
+        }
+
         private LogLevel(string name, int ordinal)
         {
             Name = name;
@@ -56,71 +79,12 @@ namespace NLog
 
         public static LogLevel FromOrdinal(int ordinal)
         {
-            switch (ordinal)
-            {
-                case 0:
-                    return Trace;
-                case 1:
-                    return Debug;
-                case 2:
-                    return Info;
-                case 3:
-                    return Warn;
-                case 4:
-                    return Error;
-                case 5:
-                    return Fatal;
-                case 6:
-                    return Off;
-
-                default:
-                    throw new ArgumentException("Invalid ordinal.");
-            }
+            return _levels.Single(x => x.Ordinal == ordinal);
         }
 
         public static LogLevel FromString(string levelName)
         {
-            if (levelName == null)
-            {
-                throw new ArgumentNullException("levelName");
-            }
-
-            if (levelName.Equals("Trace", StringComparison.OrdinalIgnoreCase))
-            {
-                return Trace;
-            }
-
-            if (levelName.Equals("Debug", StringComparison.OrdinalIgnoreCase))
-            {
-                return Debug;
-            }
-
-            if (levelName.Equals("Info", StringComparison.OrdinalIgnoreCase))
-            {
-                return Info;
-            }
-
-            if (levelName.Equals("Warn", StringComparison.OrdinalIgnoreCase))
-            {
-                return Warn;
-            }
-
-            if (levelName.Equals("Error", StringComparison.OrdinalIgnoreCase))
-            {
-                return Error;
-            }
-
-            if (levelName.Equals("Fatal", StringComparison.OrdinalIgnoreCase))
-            {
-                return Fatal;
-            }
-
-            if (levelName.Equals("Off", StringComparison.OrdinalIgnoreCase))
-            {
-                return Off;
-            }
-
-            throw new ArgumentException("Unknown log level: " + levelName);
+            return _levels.Single(x => x.Name.Equals(levelName, StringComparison.OrdinalIgnoreCase));
         }
 
         public override string ToString()

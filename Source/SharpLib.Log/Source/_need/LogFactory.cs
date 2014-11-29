@@ -20,28 +20,45 @@ namespace NLog
     {
         #region Константы
 
+        private const int FLUSH_TIMEOUT = 15000;
+
         private const int RECONFIG_AFTER_FILE_CHANGED_TIMEOUT = 1000;
+
+        private const string CONFIG_EXTENSION = ".log.config";
 
         #endregion
 
         #region Поля
 
-        private static readonly TimeSpan _defaultFlushTimeout = TimeSpan.FromSeconds(15);
+        private static readonly TimeSpan _defaultFlushTimeout;
 
+        /// <summary>
+        /// Текущий домен
+        /// </summary>
         private static IAppDomain _currentAppDomain;
 
+        /// <summary>
+        /// Кеш объектов-логгеров
+        /// </summary>
         private readonly Dictionary<LoggerCacheKey, WeakReference> _loggerCache;
 
+        /// <summary>
+        /// Модуль анализа изменения файлов конфигурации в файловой системе
+        /// </summary>
         private readonly MultiFileWatcher _watcher;
 
+        /// <summary>
+        /// Конфигурация
+        /// </summary>
         private LoggingConfiguration _config;
-
-        private bool _configLoaded;
 
         private LogLevel _globalThreshold;
 
         private int _logsEnabled;
 
+        /// <summary>
+        /// Таймер перезагрузки конфигурации
+        /// </summary>
         private Timer _reloadTimer;
 
         #endregion
@@ -62,109 +79,19 @@ namespace NLog
             {
                 lock (this)
                 {
-                    if (_configLoaded)
+                    if (_config != null)
                     {
                         return _config;
                     }
 
-                    _configLoaded = true;
-
-                    if (_config == null)
-                    {
-                        _config = XmlLoggingConfiguration.AppConfig;
-                    }
-
-                    if (_config == null)
-                    {
-                        foreach (string configFile in GetCandidateFileNames())
-                        {
-                            if (File.Exists(configFile))
-                            {
-                                InternalLogger.Debug("Attempting to load config from {0}", configFile);
-                                _config = new XmlLoggingConfiguration(configFile);
-                                break;
-                            }
-                        }
-                    }
-
-                    if (_config != null)
-                    {
-                        Dump(_config);
-                        try
-                        {
-                            _watcher.Watch(_config.FileNamesToWatch);
-                        }
-                        catch (Exception exception)
-                        {
-                            InternalLogger.Warn("Cannot start file watching: {0}. File watching is disabled", exception);
-                        }
-                    }
-                    if (_config != null)
-                    {
-                        _config.InitializeAll();
-                    }
+                    _config = GetConfiguration();
 
                     return _config;
                 }
             }
-
             set
             {
-                try
-                {
-                    _watcher.StopWatching();
-                }
-                catch (Exception exception)
-                {
-                    if (exception.MustBeRethrown())
-                    {
-                        throw;
-                    }
-
-                    InternalLogger.Error("Cannot stop file watching: {0}", exception);
-                }
-
-                lock (this)
-                {
-                    LoggingConfiguration oldConfig = _config;
-                    if (oldConfig != null)
-                    {
-                        InternalLogger.Info("Closing old configuration.");
-                        Flush();
-                        oldConfig.Close();
-                    }
-
-                    _config = value;
-                    _configLoaded = true;
-
-                    if (_config != null)
-                    {
-                        Dump(_config);
-
-                        _config.InitializeAll();
-                        ReconfigExistingLoggers(_config);
-                        try
-                        {
-                            _watcher.Watch(_config.FileNamesToWatch);
-                        }
-                        catch (Exception exception)
-                        {
-                            if (exception.MustBeRethrown())
-                            {
-                                throw;
-                            }
-
-                            InternalLogger.Warn("Cannot start file watching: {0}", exception);
-                        }
-                    }
-
-                    var configurationChangedDelegate = ConfigurationChanged;
-
-                    if (configurationChangedDelegate != null)
-                    {
-                        configurationChangedDelegate(this, new LoggingConfigurationChangedEventArgs(oldConfig, value));
-                    }
-                }
+                SetConfiguration(value);
             }
         }
 
@@ -193,6 +120,11 @@ namespace NLog
         #endregion
 
         #region Конструктор
+
+        static LogFactory()
+        {
+            _defaultFlushTimeout = TimeSpan.FromMilliseconds(FLUSH_TIMEOUT);
+        }
 
         public LogFactory()
         {
@@ -519,43 +451,22 @@ namespace NLog
 
         private static IEnumerable<string> GetCandidateFileNames()
         {
-            if (CurrentAppDomain.BaseDirectory != null)
+            const string VSHOST_SUB_STR = ".vshost.";
+
+            var list = new List<string>();
+
+            var rootDir = CurrentAppDomain.BaseDirectory;
+            var exeName = Path.Combine(rootDir, CurrentAppDomain.FriendlyName);
+            var configName = Path.ChangeExtension(exeName, CONFIG_EXTENSION);
+
+            if (configName.Contains(VSHOST_SUB_STR))
             {
-                yield return Path.Combine(CurrentAppDomain.BaseDirectory, "NLog.config");
+                configName = configName.Replace(VSHOST_SUB_STR, ".");
             }
 
-            string cf = CurrentAppDomain.ConfigurationFile;
-            if (cf != null)
-            {
-                yield return Path.ChangeExtension(cf, ".nlog");
+            list.Add(configName);
 
-                const string VSHOST_SUB_STR = ".vshost.";
-                if (cf.Contains(VSHOST_SUB_STR))
-                {
-                    yield return Path.ChangeExtension(cf.Replace(VSHOST_SUB_STR, "."), ".nlog");
-                }
-
-                IEnumerable<string> privateBinPaths = CurrentAppDomain.PrivateBinPath;
-                if (privateBinPaths != null)
-                {
-                    foreach (var path in privateBinPaths)
-                    {
-                        if (path != null)
-                        {
-                            yield return Path.Combine(path, "NLog.config");
-                        }
-                    }
-                }
-            }
-
-            var nlogAssembly = typeof(LogFactory).Assembly;
-            if (!nlogAssembly.GlobalAssemblyCache)
-            {
-                if (!string.IsNullOrEmpty(nlogAssembly.Location))
-                {
-                    yield return nlogAssembly.Location + ".nlog";
-                }
-            }
+            return list;
         }
 
         private static void Dump(LoggingConfiguration config)
@@ -617,7 +528,8 @@ namespace NLog
 
                 if (cacheKey.ConcreteType != null)
                 {
-                    newLogger.Initialize(cacheKey.Name, GetConfigurationForLogger(cacheKey.Name, Configuration), this);
+                    var configuration = GetConfigurationForLogger(cacheKey.Name, Configuration);
+                    newLogger.Initialize(cacheKey.Name, configuration, this);
                 }
 
                 _loggerCache[cacheKey] = new WeakReference(newLogger);
@@ -642,6 +554,100 @@ namespace NLog
                 else
                 {
                     _reloadTimer.Change(RECONFIG_AFTER_FILE_CHANGED_TIMEOUT, Timeout.Infinite);
+                }
+            }
+        }
+
+        private LoggingConfiguration GetConfiguration()
+        {
+            LoggingConfiguration config = null;
+
+            var files = GetCandidateFileNames();
+
+            foreach (string configFile in files)
+            {
+                if (File.Exists(configFile))
+                {
+                    InternalLogger.Debug("Формирование конфигурации из файла {0}", configFile);
+                    config = new XmlLoggingConfiguration(configFile);
+                    break;
+                }
+            }
+
+            if (config == null)
+            {
+                throw new Exception("Не найдено файла конфигурации для логгера");
+            }
+
+            Dump(config);
+            try
+            {
+                _watcher.Watch(_config.FileNamesToWatch);
+            }
+            catch (Exception exception)
+            {
+                InternalLogger.Warn("Не запущен мониторинг изменений файла конфигурации: {0}", exception);
+            }
+
+            config.InitializeAll();
+
+            return config;
+        }
+
+        private void SetConfiguration(LoggingConfiguration newValue)
+        {
+            try
+            {
+                _watcher.StopWatching();
+            }
+            catch (Exception exception)
+            {
+                if (exception.MustBeRethrown())
+                {
+                    throw;
+                }
+
+                InternalLogger.Error("Cannot stop file watching: {0}", exception);
+            }
+
+            lock (this)
+            {
+                LoggingConfiguration oldConfig = _config;
+                if (oldConfig != null)
+                {
+                    InternalLogger.Info("Closing old configuration.");
+                    Flush();
+                    oldConfig.Close();
+                }
+
+                _config = newValue;
+
+                if (_config != null)
+                {
+                    Dump(_config);
+
+                    _config.InitializeAll();
+                    ReconfigExistingLoggers(_config);
+                    try
+                    {
+                        _watcher.Watch(_config.FileNamesToWatch);
+                    }
+                    catch (Exception exception)
+                    {
+                        if (exception.MustBeRethrown())
+                        {
+                            throw;
+                        }
+
+                        InternalLogger.Warn("Cannot start file watching: {0}", exception);
+                    }
+                }
+
+                var configurationChangedDelegate = ConfigurationChanged;
+
+                if (configurationChangedDelegate != null)
+                {
+                    configurationChangedDelegate(this, new LoggingConfigurationChangedEventArgs(oldConfig, newValue));
                 }
             }
         }

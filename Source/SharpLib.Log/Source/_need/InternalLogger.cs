@@ -13,7 +13,7 @@ namespace NLog.Common
     {
         #region Поля
 
-        private static readonly object lockObject = new object();
+        private static readonly object _lockObject = new object();
 
         #endregion
 
@@ -65,7 +65,6 @@ namespace NLog.Common
 
         #region Конструктор
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Significant logic in .cctor()")]
         static InternalLogger()
         {
             LogToConsole = GetSetting("nlog.internalLogToConsole", "NLOG_INTERNAL_LOG_TO_CONSOLE", false);
@@ -195,7 +194,7 @@ namespace NLog.Common
                 var writer = LogWriter;
                 if (writer != null)
                 {
-                    lock (lockObject)
+                    lock (_lockObject)
                     {
                         writer.WriteLine(msg);
                     }

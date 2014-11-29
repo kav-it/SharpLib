@@ -18,71 +18,23 @@ namespace NLog.Config
 {
     public class XmlLoggingConfiguration : LoggingConfiguration
     {
-        private readonly ConfigurationItemFactory configurationItemFactory = ConfigurationItemFactory.Default;
+        #region Поля
 
-        private readonly Dictionary<string, bool> visitedFile = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+        private readonly ConfigurationItemFactory _configurationItemFactory;
 
-        private readonly Dictionary<string, string> variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, string> _variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-        private string originalFileName;
+        private readonly Dictionary<string, bool> _visitedFile;
 
-        public XmlLoggingConfiguration(string fileName)
-        {
-            using (XmlReader reader = XmlReader.Create(fileName))
-            {
-                Initialize(reader, fileName, false);
-            }
-        }
+        private string _originalFileName;
 
-        public XmlLoggingConfiguration(string fileName, bool ignoreErrors)
-        {
-            using (XmlReader reader = XmlReader.Create(fileName))
-            {
-                Initialize(reader, fileName, ignoreErrors);
-            }
-        }
+        #endregion
 
-        public XmlLoggingConfiguration(XmlReader reader, string fileName)
-        {
-            Initialize(reader, fileName, false);
-        }
-
-        public XmlLoggingConfiguration(XmlReader reader, string fileName, bool ignoreErrors)
-        {
-            Initialize(reader, fileName, ignoreErrors);
-        }
-
-#if !SILVERLIGHT
-
-        internal XmlLoggingConfiguration(XmlElement element, string fileName)
-        {
-            using (var stringReader = new StringReader(element.OuterXml))
-            {
-                XmlReader reader = XmlReader.Create(stringReader);
-
-                Initialize(reader, fileName, false);
-            }
-        }
-
-        internal XmlLoggingConfiguration(XmlElement element, string fileName, bool ignoreErrors)
-        {
-            using (var stringReader = new StringReader(element.OuterXml))
-            {
-                XmlReader reader = XmlReader.Create(stringReader);
-
-                Initialize(reader, fileName, ignoreErrors);
-            }
-        }
-#endif
-
-        public static LoggingConfiguration AppConfig
-        {
-            get { return null; }
-        }
+        #region Свойства
 
         public Dictionary<string, string> Variables
         {
-            get { return variables; }
+            get { return _variables; }
         }
 
         public bool AutoReload { get; set; }
@@ -93,16 +45,82 @@ namespace NLog.Config
             {
                 if (AutoReload)
                 {
-                    return visitedFile.Keys;
+                    return _visitedFile.Keys;
                 }
 
                 return new string[0];
             }
         }
 
+        #endregion
+
+        #region Конструктор
+
+        public XmlLoggingConfiguration(string fileName)
+        {
+            _visitedFile = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+            _configurationItemFactory = ConfigurationItemFactory.Default;
+            using (XmlReader reader = XmlReader.Create(fileName))
+            {
+                Initialize(reader, fileName, false);
+            }
+        }
+
+        public XmlLoggingConfiguration(string fileName, bool ignoreErrors)
+        {
+            _visitedFile = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+            _configurationItemFactory = ConfigurationItemFactory.Default;
+            using (XmlReader reader = XmlReader.Create(fileName))
+            {
+                Initialize(reader, fileName, ignoreErrors);
+            }
+        }
+
+        public XmlLoggingConfiguration(XmlReader reader, string fileName)
+        {
+            _visitedFile = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+            _configurationItemFactory = ConfigurationItemFactory.Default;
+            Initialize(reader, fileName, false);
+        }
+
+        public XmlLoggingConfiguration(XmlReader reader, string fileName, bool ignoreErrors)
+        {
+            _visitedFile = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+            _configurationItemFactory = ConfigurationItemFactory.Default;
+            Initialize(reader, fileName, ignoreErrors);
+        }
+
+        internal XmlLoggingConfiguration(XmlElement element, string fileName)
+        {
+            _visitedFile = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+            _configurationItemFactory = ConfigurationItemFactory.Default;
+            using (var stringReader = new StringReader(element.OuterXml))
+            {
+                XmlReader reader = XmlReader.Create(stringReader);
+
+                Initialize(reader, fileName, false);
+            }
+        }
+
+        internal XmlLoggingConfiguration(XmlElement element, string fileName, bool ignoreErrors)
+        {
+            _visitedFile = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+            _configurationItemFactory = ConfigurationItemFactory.Default;
+            using (var stringReader = new StringReader(element.OuterXml))
+            {
+                XmlReader reader = XmlReader.Create(stringReader);
+
+                Initialize(reader, fileName, ignoreErrors);
+            }
+        }
+
+        #endregion
+
+        #region Методы
+
         public override LoggingConfiguration Reload()
         {
-            return new XmlLoggingConfiguration(originalFileName);
+            return new XmlLoggingConfiguration(_originalFileName);
         }
 
         private static bool IsTargetElement(string name)
@@ -162,14 +180,10 @@ namespace NLog.Config
                 var content = new NLogXmlElement(reader);
                 if (fileName != null)
                 {
-#if SILVERLIGHT
-                    string key = fileName;
-#else
                     string key = Path.GetFullPath(fileName);
-#endif
-                    visitedFile[key] = true;
+                    _visitedFile[key] = true;
 
-                    originalFileName = fileName;
+                    _originalFileName = fileName;
                     ParseTopLevel(content, Path.GetDirectoryName(fileName));
 
                     InternalLogger.Info("Configured from an XML element in {0}...", fileName);
@@ -205,18 +219,13 @@ namespace NLog.Config
 
         private void ConfigureFromFile(string fileName)
         {
-#if SILVERLIGHT
-    
-            string key = fileName;
-#else
             string key = Path.GetFullPath(fileName);
-#endif
-            if (visitedFile.ContainsKey(key))
+            if (_visitedFile.ContainsKey(key))
             {
                 return;
             }
 
-            visitedFile[key] = true;
+            _visitedFile[key] = true;
 
             ParseTopLevel(new NLogXmlElement(fileName), Path.GetDirectoryName(fileName));
         }
@@ -421,7 +430,7 @@ namespace NLog.Config
             {
                 string name = filterElement.LocalName;
 
-                Filter filter = configurationItemFactory.Filters.CreateInstance(name);
+                Filter filter = _configurationItemFactory.Filters.CreateInstance(name);
                 ConfigureObjectFromAttributes(filter, filterElement, false);
                 rule.Filters.Add(filter);
             }
@@ -434,7 +443,7 @@ namespace NLog.Config
             string name = variableElement.GetRequiredAttribute("name");
             string value = ExpandVariables(variableElement.GetRequiredAttribute("value"));
 
-            variables[name] = value;
+            _variables[name] = value;
         }
 
         private void ParseTargetsElement(NLogXmlElement targetsElement)
@@ -475,7 +484,7 @@ namespace NLog.Config
                             throw new NLogConfigurationException("Missing 'type' attribute on <" + name + "/>.");
                         }
 
-                        Target newTarget = configurationItemFactory.Targets.CreateInstance(type);
+                        Target newTarget = _configurationItemFactory.Targets.CreateInstance(type);
 
                         NLogXmlElement defaults;
                         if (typeNameToDefaultTargetParameters.TryGetValue(type, out defaults))
@@ -532,7 +541,7 @@ namespace NLog.Config
                     {
                         string type = StripOptionalNamespacePrefix(childElement.GetRequiredAttribute("type"));
 
-                        Target newTarget = configurationItemFactory.Targets.CreateInstance(type);
+                        Target newTarget = _configurationItemFactory.Targets.CreateInstance(type);
                         if (newTarget != null)
                         {
                             ParseTargetElement(newTarget, childElement);
@@ -567,7 +576,7 @@ namespace NLog.Config
                     {
                         string type = StripOptionalNamespacePrefix(childElement.GetRequiredAttribute("type"));
 
-                        Target newTarget = configurationItemFactory.Targets.CreateInstance(type);
+                        Target newTarget = _configurationItemFactory.Targets.CreateInstance(type);
                         if (newTarget != null)
                         {
                             ParseTargetElement(newTarget, childElement);
@@ -610,7 +619,7 @@ namespace NLog.Config
                 string type = StripOptionalNamespacePrefix(addElement.GetOptionalAttribute("type", null));
                 if (type != null)
                 {
-                    configurationItemFactory.RegisterType(Type.GetType(type, true), prefix);
+                    _configurationItemFactory.RegisterType(Type.GetType(type, true), prefix);
                 }
 
                 string assemblyFile = addElement.GetOptionalAttribute("assemblyFile", null);
@@ -618,18 +627,11 @@ namespace NLog.Config
                 {
                     try
                     {
-#if SILVERLIGHT
-                                var si = Application.GetResourceStream(new Uri(assemblyFile, UriKind.Relative));
-                                var assemblyPart = new AssemblyPart();
-                                Assembly asm = assemblyPart.Load(si.Stream);
-#else
-
                         string fullFileName = Path.Combine(baseDirectory, assemblyFile);
                         InternalLogger.Info("Loading assembly file: {0}", fullFileName);
 
                         Assembly asm = Assembly.LoadFrom(fullFileName);
-#endif
-                        configurationItemFactory.RegisterItemsFromAssembly(asm, prefix);
+                        _configurationItemFactory.RegisterItemsFromAssembly(asm, prefix);
                     }
                     catch (Exception exception)
                     {
@@ -654,15 +656,9 @@ namespace NLog.Config
                     try
                     {
                         InternalLogger.Info("Loading assembly name: {0}", assemblyName);
-#if SILVERLIGHT
-                        var si = Application.GetResourceStream(new Uri(assemblyName + ".dll", UriKind.Relative));
-                        var assemblyPart = new AssemblyPart();
-                        Assembly asm = assemblyPart.Load(si.Stream);
-#else
                         Assembly asm = Assembly.Load(assemblyName);
-#endif
 
-                        configurationItemFactory.RegisterItemsFromAssembly(asm, prefix);
+                        _configurationItemFactory.RegisterItemsFromAssembly(asm, prefix);
                     }
                     catch (Exception exception)
                     {
@@ -696,12 +692,7 @@ namespace NLog.Config
                     newFileName = Path.Combine(baseDirectory, newFileName);
                 }
 
-#if SILVERLIGHT
-                newFileName = newFileName.Replace("\\", "/");
-                if (Application.GetResourceStream(new Uri(newFileName, UriKind.Relative)) != null)
-#else
                 if (File.Exists(newFileName))
-#endif
                 {
                     InternalLogger.Debug("Including file '{0}'", newFileName);
                     ConfigureFromFile(newFileName);
@@ -735,7 +726,7 @@ namespace NLog.Config
 
             string type = timeElement.GetRequiredAttribute("type");
 
-            TimeSource newTimeSource = configurationItemFactory.TimeSources.CreateInstance(type);
+            TimeSource newTimeSource = _configurationItemFactory.TimeSources.CreateInstance(type);
 
             ConfigureObjectFromAttributes(newTimeSource, timeElement, true);
 
@@ -755,7 +746,7 @@ namespace NLog.Config
                 return;
             }
 
-            PropertyHelper.SetPropertyFromString(o, element.LocalName, ExpandVariables(element.Value), configurationItemFactory);
+            PropertyHelper.SetPropertyFromString(o, element.LocalName, ExpandVariables(element.Value), _configurationItemFactory);
         }
 
         private bool AddArrayItemFromElement(object o, NLogXmlElement element)
@@ -794,7 +785,7 @@ namespace NLog.Config
                     continue;
                 }
 
-                PropertyHelper.SetPropertyFromString(targetObject, childName, ExpandVariables(childValue), configurationItemFactory);
+                PropertyHelper.SetPropertyFromString(targetObject, childName, ExpandVariables(childValue), _configurationItemFactory);
             }
         }
 
@@ -811,7 +802,7 @@ namespace NLog.Config
 
                     if (layoutTypeName != null)
                     {
-                        Layout layout = configurationItemFactory.Layouts.CreateInstance(ExpandVariables(layoutTypeName));
+                        Layout layout = _configurationItemFactory.Layouts.CreateInstance(ExpandVariables(layoutTypeName));
                         ConfigureObjectFromAttributes(layout, layoutElement, true);
                         ConfigureObjectFromElement(layout, layoutElement);
                         targetPropertyInfo.SetValue(o, layout, null);
@@ -835,7 +826,7 @@ namespace NLog.Config
         {
             string wrapperType = StripOptionalNamespacePrefix(defaultParameters.GetRequiredAttribute("type"));
 
-            Target wrapperTargetInstance = configurationItemFactory.Targets.CreateInstance(wrapperType);
+            Target wrapperTargetInstance = _configurationItemFactory.Targets.CreateInstance(wrapperType);
             WrapperTargetBase wtb = wrapperTargetInstance as WrapperTargetBase;
             if (wtb == null)
             {
@@ -864,12 +855,14 @@ namespace NLog.Config
         {
             string output = input;
 
-            foreach (var kvp in variables)
+            foreach (var kvp in _variables)
             {
                 output = output.Replace("${" + kvp.Key + "}", kvp.Value);
             }
 
             return output;
         }
+
+        #endregion
     }
 }

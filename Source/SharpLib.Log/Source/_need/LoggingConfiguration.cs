@@ -74,12 +74,7 @@ namespace NLog.Config
         {
             Target value;
 
-            if (!_targets.TryGetValue(name, out value))
-            {
-                return null;
-            }
-
-            return value;
+            return !_targets.TryGetValue(name, out value) ? null : value;
         }
 
         public virtual LoggingConfiguration Reload()
@@ -177,7 +172,7 @@ namespace NLog.Config
 
         internal void Dump()
         {
-            InternalLogger.Debug("--- NLog configuration dump. ---");
+            InternalLogger.Debug("--- configuration dump. ---");
             InternalLogger.Debug("Targets:");
             foreach (Target target in _targets.Values)
             {
@@ -190,7 +185,7 @@ namespace NLog.Config
                 InternalLogger.Info("{0}", rule);
             }
 
-            InternalLogger.Debug("--- End of NLog configuration dump ---");
+            InternalLogger.Debug("--- End of configuration dump ---");
         }
 
         internal void FlushAllTargets(AsyncContinuation asyncContinuation)

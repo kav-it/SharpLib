@@ -48,7 +48,7 @@
     <Compile Include="Source\Common\AsyncHelpers.cs" />
     <Compile Include="Source\Common\AsynchronousAction.cs" />
     <Compile Include="Source\Common\AsyncLogEventInfo.cs" />
-    <Compile Include="Source\Common\InternalLogger.cs" />
+    <Compile Include="Source\_need\InternalLogger.cs" />
     <Compile Include="Source\Common\LogEventInfoBuffer.cs" />
     <Compile Include="Source\Conditions\ConditionAndExpression.cs" />
     <Compile Include="Source\Conditions\ConditionEvaluationException.cs" />
@@ -143,8 +143,8 @@
     <Compile Include="Source\Internal\EnvironmentHelper.cs" />
     <Compile Include="Source\Internal\ExceptionHelper.cs" />
     <Compile Include="Source\Internal\FactoryHelper.cs" />
-    <Compile Include="Source\Internal\Fakeables\AppDomainWrapper.cs" />
-    <Compile Include="Source\Internal\Fakeables\IAppDomain.cs" />
+    <Compile Include="Source\_need\AppDomainWrapper.cs" />
+    <Compile Include="Source\_need\IAppDomain.cs" />
     <Compile Include="Source\Internal\FileAppenders\BaseFileAppender.cs" />
     <Compile Include="Source\Internal\FileAppenders\CountingSingleProcessFileAppender.cs" />
     <Compile Include="Source\Internal\FileAppenders\ICreateFileParameters.cs" />
@@ -161,7 +161,7 @@
     <Compile Include="Source\Internal\IUsesStackTrace.cs" />
     <Compile Include="Source\Internal\LocalizableAttribute.cs" />
     <Compile Include="Source\Internal\LoggerConfiguration.cs" />
-    <Compile Include="Source\Internal\MultiFileWatcher.cs" />
+    <Compile Include="Source\_need\MultiFileWatcher.cs" />
     <Compile Include="Source\Internal\MySmtpClient.cs" />
     <Compile Include="Source\Internal\NativeMethods.cs" />
     <Compile Include="Source\Internal\NetworkSenders\HttpNetworkSender.cs" />
@@ -354,6 +354,8 @@
     <Compile Include="Source\Time\TimeSource.cs" />
     <Compile Include="Source\Time\TimeSourceAttribute.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Source\Internal\Fakeables\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
