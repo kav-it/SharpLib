@@ -1,0 +1,335 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{44809241-3223-423A-B9D3-93F011D0BEB6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>SharpLib.Log</RootNamespace>
+    <AssemblyName>SharpLib.Log</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\SharpLib.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>False</DelaySign>
+    <AssemblyOriginatorKeyMode>File</AssemblyOriginatorKeyMode>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\SharpLib.Version.cs">
+      <Link>Source\SharpLib.Version.cs</Link>
+    </Compile>
+    <Compile Include="Source\_other\Annotations.cs" />
+    <Compile Include="Source\AssemblyInfo.cs" />
+    <Compile Include="Source\Common\AsyncContinuation.cs" />
+    <Compile Include="Source\Common\AsyncHelpers.cs" />
+    <Compile Include="Source\Common\AsynchronousAction.cs" />
+    <Compile Include="Source\Common\AsyncLogEventInfo.cs" />
+    <Compile Include="Source\Common\InternalLogger.cs" />
+    <Compile Include="Source\Common\LogEventInfoBuffer.cs" />
+    <Compile Include="Source\Conditions\ConditionAndExpression.cs" />
+    <Compile Include="Source\Conditions\ConditionEvaluationException.cs" />
+    <Compile Include="Source\Conditions\ConditionExpression.cs" />
+    <Compile Include="Source\Conditions\ConditionLayoutExpression.cs" />
+    <Compile Include="Source\Conditions\ConditionLevelExpression.cs" />
+    <Compile Include="Source\Conditions\ConditionLiteralExpression.cs" />
+    <Compile Include="Source\Conditions\ConditionLoggerNameExpression.cs" />
+    <Compile Include="Source\Conditions\ConditionMessageExpression.cs" />
+    <Compile Include="Source\Conditions\ConditionMethodAttribute.cs" />
+    <Compile Include="Source\Conditions\ConditionMethodExpression.cs" />
+    <Compile Include="Source\Conditions\ConditionMethods.cs" />
+    <Compile Include="Source\Conditions\ConditionMethodsAttribute.cs" />
+    <Compile Include="Source\Conditions\ConditionNotExpression.cs" />
+    <Compile Include="Source\Conditions\ConditionOrExpression.cs" />
+    <Compile Include="Source\Conditions\ConditionParseException.cs" />
+    <Compile Include="Source\Conditions\ConditionParser.cs" />
+    <Compile Include="Source\Conditions\ConditionRelationalExpression.cs" />
+    <Compile Include="Source\Conditions\ConditionRelationalOperator.cs" />
+    <Compile Include="Source\Conditions\ConditionTokenizer.cs" />
+    <Compile Include="Source\Conditions\ConditionTokenType.cs" />
+    <Compile Include="Source\Config\AdvancedAttribute.cs" />
+    <Compile Include="Source\Config\AppDomainFixedOutputAttribute.cs" />
+    <Compile Include="Source\Config\ArrayParameterAttribute.cs" />
+    <Compile Include="Source\Config\ConfigSectionHandler.cs" />
+    <Compile Include="Source\Config\ConfigurationItemCreator.cs" />
+    <Compile Include="Source\Config\ConfigurationItemFactory.cs" />
+    <Compile Include="Source\Config\DefaultParameterAttribute.cs" />
+    <Compile Include="Source\Config\Factory.cs" />
+    <Compile Include="Source\Config\IFactory.cs" />
+    <Compile Include="Source\Config\IInstallable.cs" />
+    <Compile Include="Source\Config\INamedItemFactory.cs" />
+    <Compile Include="Source\Config\InstallationContext.cs" />
+    <Compile Include="Source\Config\LoggingConfiguration.cs" />
+    <Compile Include="Source\Config\LoggingConfigurationChangedEventArgs.cs" />
+    <Compile Include="Source\Config\LoggingConfigurationReloadedEventArgs.cs" />
+    <Compile Include="Source\Config\LoggingRule.cs" />
+    <Compile Include="Source\Config\MethodFactory.cs" />
+    <Compile Include="Source\Config\NameBaseAttribute.cs" />
+    <Compile Include="Source\Config\NLogConfigurationIgnorePropertyAttribute.cs" />
+    <Compile Include="Source\Config\NLogConfigurationItemAttribute.cs" />
+    <Compile Include="Source\Config\NLogXmlElement.cs" />
+    <Compile Include="Source\Config\RequiredParameterAttribute.cs" />
+    <Compile Include="Source\Config\SimpleConfigurator.cs" />
+    <Compile Include="Source\Config\StackTraceUsage.cs" />
+    <Compile Include="Source\Config\ThreadAgnosticAttribute.cs" />
+    <Compile Include="Source\Config\XmlLoggingConfiguration.cs" />
+    <Compile Include="Source\Filters\ConditionBasedFilter.cs" />
+    <Compile Include="Source\Filters\Filter.cs" />
+    <Compile Include="Source\Filters\FilterAttribute.cs" />
+    <Compile Include="Source\Filters\FilterResult.cs" />
+    <Compile Include="Source\Filters\LayoutBasedFilter.cs" />
+    <Compile Include="Source\Filters\WhenContainsFilter.cs" />
+    <Compile Include="Source\Filters\WhenEqualFilter.cs" />
+    <Compile Include="Source\Filters\WhenNotContainsFilter.cs" />
+    <Compile Include="Source\Filters\WhenNotEqualFilter.cs" />
+    <Compile Include="Source\Fluent\Log.cs" />
+    <Compile Include="Source\Fluent\LogBuilder.cs" />
+    <Compile Include="Source\Fluent\LoggerExtensions.cs" />
+    <Compile Include="Source\_other\GDC.cs" />
+    <Compile Include="Source\_other\GlobalDiagnosticsContext.cs" />
+    <Compile Include="Source\Internal\AspHelper.cs" />
+    <Compile Include="Source\Internal\DictionaryAdapter.cs" />
+    <Compile Include="Source\Internal\EnvironmentHelper.cs" />
+    <Compile Include="Source\Internal\ExceptionHelper.cs" />
+    <Compile Include="Source\Internal\FactoryHelper.cs" />
+    <Compile Include="Source\Internal\Fakeables\AppDomainWrapper.cs" />
+    <Compile Include="Source\Internal\Fakeables\IAppDomain.cs" />
+    <Compile Include="Source\Internal\FileAppenders\BaseFileAppender.cs" />
+    <Compile Include="Source\Internal\FileAppenders\CountingSingleProcessFileAppender.cs" />
+    <Compile Include="Source\Internal\FileAppenders\ICreateFileParameters.cs" />
+    <Compile Include="Source\Internal\FileAppenders\IFileAppenderFactory.cs" />
+    <Compile Include="Source\Internal\FileAppenders\MutexMultiProcessFileAppender.cs" />
+    <Compile Include="Source\Internal\FileAppenders\RetryingMultiProcessFileAppender.cs" />
+    <Compile Include="Source\Internal\FileAppenders\SingleProcessFileAppender.cs" />
+    <Compile Include="Source\Internal\FileAppenders\UnixMultiProcessFileAppender.cs" />
+    <Compile Include="Source\Internal\FileInfoHelper.cs" />
+    <Compile Include="Source\Internal\IConfigurationManager.cs" />
+    <Compile Include="Source\Internal\IRenderable.cs" />
+    <Compile Include="Source\Internal\ISmtpClient.cs" />
+    <Compile Include="Source\Internal\ISupportsInitialize.cs" />
+    <Compile Include="Source\Internal\IUsesStackTrace.cs" />
+    <Compile Include="Source\Internal\LocalizableAttribute.cs" />
+    <Compile Include="Source\Internal\LoggerConfiguration.cs" />
+    <Compile Include="Source\Internal\MultiFileWatcher.cs" />
+    <Compile Include="Source\Internal\MySmtpClient.cs" />
+    <Compile Include="Source\Internal\NativeMethods.cs" />
+    <Compile Include="Source\Internal\NetworkSenders\HttpNetworkSender.cs" />
+    <Compile Include="Source\Internal\NetworkSenders\INetworkSenderFactory.cs" />
+    <Compile Include="Source\Internal\NetworkSenders\ISocket.cs" />
+    <Compile Include="Source\Internal\NetworkSenders\NetworkSender.cs" />
+    <Compile Include="Source\Internal\NetworkSenders\NetworkSenderFactory.cs" />
+    <Compile Include="Source\Internal\NetworkSenders\SocketAsyncEventArgs.cs" />
+    <Compile Include="Source\Internal\NetworkSenders\SocketError.cs" />
+    <Compile Include="Source\Internal\NetworkSenders\SocketProxy.cs" />
+    <Compile Include="Source\Internal\NetworkSenders\TcpNetworkSender.cs" />
+    <Compile Include="Source\Internal\NetworkSenders\UdpNetworkSender.cs" />
+    <Compile Include="Source\Internal\ObjectGraphScanner.cs" />
+    <Compile Include="Source\Internal\ParameterUtils.cs" />
+    <Compile Include="Source\Internal\PlatformDetector.cs" />
+    <Compile Include="Source\Internal\PortableFileInfoHelper.cs" />
+    <Compile Include="Source\Internal\PortableThreadIDHelper.cs" />
+    <Compile Include="Source\Internal\PropertyHelper.cs" />
+    <Compile Include="Source\Internal\ReflectionHelpers.cs" />
+    <Compile Include="Source\Internal\RuntimeOS.cs" />
+    <Compile Include="Source\Internal\SimpleStringReader.cs" />
+    <Compile Include="Source\Internal\SingleCallContinuation.cs" />
+    <Compile Include="Source\Internal\SortHelpers.cs" />
+    <Compile Include="Source\Internal\StackTraceUsageUtils.cs" />
+    <Compile Include="Source\Internal\TargetWithFilterChain.cs" />
+    <Compile Include="Source\Internal\ThreadIDHelper.cs" />
+    <Compile Include="Source\Internal\ThreadLocalStorageHelper.cs" />
+    <Compile Include="Source\Internal\TimeoutContinuation.cs" />
+    <Compile Include="Source\Internal\UrlHelper.cs" />
+    <Compile Include="Source\Internal\Win32FileInfoHelper.cs" />
+    <Compile Include="Source\Internal\Win32FileNativeMethods.cs" />
+    <Compile Include="Source\Internal\Win32ThreadIDHelper.cs" />
+    <Compile Include="Source\Internal\XmlHelper.cs" />
+    <Compile Include="Source\LayoutRenderers\AmbientPropertyAttribute.cs" />
+    <Compile Include="Source\LayoutRenderers\AspApplicationValueLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\AspRequestValueLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\AspSessionValueLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\AssemblyVersionLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\BaseDirLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\CallSiteLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\CounterLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\DateLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\DocumentUriLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\EnvironmentLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\EventContextLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\EventPropertiesLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\ExceptionLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\FileContentsLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\GarbageCollectorInfoLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\GarbageCollectorProperty.cs" />
+    <Compile Include="Source\LayoutRenderers\GdcLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\GuidLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\IdentityLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\InstallContextLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\LayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\LayoutRendererAttribute.cs" />
+    <Compile Include="Source\LayoutRenderers\LevelLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\LiteralLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\Log4JXmlEventLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\LoggerNameLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\LongDateLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\MachineNameLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\MdcLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\MessageLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\NdcLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\NewLineLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\NLogDirLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\PerformanceCounterLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\ProcessIdLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\ProcessInfoLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\ProcessInfoProperty.cs" />
+    <Compile Include="Source\LayoutRenderers\ProcessNameLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\ProcessTimeLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\QueryPerformanceCounterLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\RegistryLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\ShortDateLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\SilverlightApplicationInfoLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\SilverlightApplicationInfoOption.cs" />
+    <Compile Include="Source\LayoutRenderers\SpecialFolderLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\StackTraceFormat.cs" />
+    <Compile Include="Source\LayoutRenderers\StackTraceLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\TempDirLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\ThreadIdLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\ThreadNameLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\TicksLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\TimeLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\WindowsIdentityLayoutRenderer.cs" />
+    <Compile Include="Source\LayoutRenderers\Wrappers\CachedLayoutRendererWrapper.cs" />
+    <Compile Include="Source\LayoutRenderers\Wrappers\FileSystemNormalizeLayoutRendererWrapper.cs" />
+    <Compile Include="Source\LayoutRenderers\Wrappers\JsonEncodeLayoutRendererWrapper.cs" />
+    <Compile Include="Source\LayoutRenderers\Wrappers\LowercaseLayoutRendererWrapper.cs" />
+    <Compile Include="Source\LayoutRenderers\Wrappers\OnExceptionLayoutRendererWrapper.cs" />
+    <Compile Include="Source\LayoutRenderers\Wrappers\PaddingLayoutRendererWrapper.cs" />
+    <Compile Include="Source\LayoutRenderers\Wrappers\ReplaceLayoutRendererWrapper.cs" />
+    <Compile Include="Source\LayoutRenderers\Wrappers\Rot13LayoutRendererWrapper.cs" />
+    <Compile Include="Source\LayoutRenderers\Wrappers\TrimWhiteSpaceLayoutRendererWrapper.cs" />
+    <Compile Include="Source\LayoutRenderers\Wrappers\UppercaseLayoutRendererWrapper.cs" />
+    <Compile Include="Source\LayoutRenderers\Wrappers\UrlEncodeLayoutRendererWrapper.cs" />
+    <Compile Include="Source\LayoutRenderers\Wrappers\WhenEmptyLayoutRendererWrapper.cs" />
+    <Compile Include="Source\LayoutRenderers\Wrappers\WhenLayoutRendererWrapper.cs" />
+    <Compile Include="Source\LayoutRenderers\Wrappers\WrapperLayoutRendererBase.cs" />
+    <Compile Include="Source\LayoutRenderers\Wrappers\XmlEncodeLayoutRendererWrapper.cs" />
+    <Compile Include="Source\Layouts\CsvColumn.cs" />
+    <Compile Include="Source\Layouts\CsvColumnDelimiterMode.cs" />
+    <Compile Include="Source\Layouts\CsvLayout.cs" />
+    <Compile Include="Source\Layouts\CsvQuotingMode.cs" />
+    <Compile Include="Source\Layouts\Layout.cs" />
+    <Compile Include="Source\Layouts\LayoutAttribute.cs" />
+    <Compile Include="Source\Layouts\LayoutParser.cs" />
+    <Compile Include="Source\Layouts\LayoutWithHeaderAndFooter.cs" />
+    <Compile Include="Source\Layouts\Log4JXmlEventLayout.cs" />
+    <Compile Include="Source\Layouts\SimpleLayout.cs" />
+    <Compile Include="Source\_other\LogEventInfo.cs" />
+    <Compile Include="Source\_other\LogFactory-T.cs" />
+    <Compile Include="Source\_other\LogFactory.cs" />
+    <Compile Include="Source\_other\Logger.cs" />
+    <Compile Include="Source\_other\LoggerImpl.cs" />
+    <Compile Include="Source\_other\LogLevel.cs" />
+    <Compile Include="Source\_other\LogManager.cs" />
+    <Compile Include="Source\_other\LogMessageGenerator.cs" />
+    <Compile Include="Source\LogReceiverService\ILogReceiverClient.cs" />
+    <Compile Include="Source\LogReceiverService\ILogReceiverServer.cs" />
+    <Compile Include="Source\LogReceiverService\LogReceiverForwardingService.cs" />
+    <Compile Include="Source\LogReceiverService\LogReceiverServiceConfig.cs" />
+    <Compile Include="Source\LogReceiverService\NLogEvent.cs" />
+    <Compile Include="Source\LogReceiverService\NLogEvents.cs" />
+    <Compile Include="Source\LogReceiverService\StringCollection.cs" />
+    <Compile Include="Source\_other\MappedDiagnosticsContext.cs" />
+    <Compile Include="Source\_other\MDC.cs" />
+    <Compile Include="Source\_other\NDC.cs" />
+    <Compile Include="Source\_other\NestedDiagnosticsContext.cs" />
+    <Compile Include="Source\_other\NLogConfigurationException.cs" />
+    <Compile Include="Source\_other\NLogRuntimeException.cs" />
+    <Compile Include="Source\_other\NLogTraceListener.cs" />
+    <Compile Include="Source\Targets\ArchiveNumberingMode.cs" />
+    <Compile Include="Source\Targets\AspResponseTarget.cs" />
+    <Compile Include="Source\Targets\ChainsawTarget.cs" />
+    <Compile Include="Source\Targets\Console\ColoredConsoleTarget.cs" />
+    <Compile Include="Source\Targets\Console\ConsoleOutputColor.cs" />
+    <Compile Include="Source\Targets\Console\ConsoleRowHighlightingRule.cs" />
+    <Compile Include="Source\Targets\Console\ConsoleTarget.cs" />
+    <Compile Include="Source\Targets\Console\ConsoleWordHighlightingRule.cs" />
+    <Compile Include="Source\Targets\Debug\DebuggerTarget.cs" />
+    <Compile Include="Source\Targets\Debug\DebugTarget.cs" />
+    <Compile Include="Source\Targets\EventLogTarget.cs" />
+    <Compile Include="Source\Targets\File\FileArchivePeriod.cs" />
+    <Compile Include="Source\Targets\File\FileTarget.cs" />
+    <Compile Include="Source\Targets\LineEndingMode.cs" />
+    <Compile Include="Source\Targets\Mail\MailTarget.cs" />
+    <Compile Include="Source\Targets\Memory\MemoryTarget.cs" />
+    <Compile Include="Source\Targets\MethodCall\MethodCallParameter.cs" />
+    <Compile Include="Source\Targets\MethodCall\MethodCallTarget.cs" />
+    <Compile Include="Source\Targets\MethodCall\MethodCallTargetBase.cs" />
+    <Compile Include="Source\Targets\Network\NetworkTarget.cs" />
+    <Compile Include="Source\Targets\Network\NetworkTargetOverflowAction.cs" />
+    <Compile Include="Source\Targets\NLogViewer\NLogViewerParameterInfo.cs" />
+    <Compile Include="Source\Targets\NLogViewer\NLogViewerTarget.cs" />
+    <Compile Include="Source\Targets\NullTarget.cs" />
+    <Compile Include="Source\Targets\OutputDebug\OutputDebugStringTarget.cs" />
+    <Compile Include="Source\Targets\PerformanceCounterTarget.cs" />
+    <Compile Include="Source\Targets\Mail\SmtpAuthenticationMode.cs" />
+    <Compile Include="Source\Targets\Target.cs" />
+    <Compile Include="Source\Targets\TargetAttribute.cs" />
+    <Compile Include="Source\Targets\TargetWithLayout.cs" />
+    <Compile Include="Source\Targets\TargetWithLayoutHeaderAndFooter.cs" />
+    <Compile Include="Source\Targets\TraceTarget.cs" />
+    <Compile Include="Source\Targets\Win32FileAttributes.cs" />
+    <Compile Include="Source\Targets\Wrappers\AsyncRequestQueue-T.cs" />
+    <Compile Include="Source\Targets\Wrappers\AsyncTargetWrapper.cs" />
+    <Compile Include="Source\Targets\Wrappers\AsyncTargetWrapperOverflowAction.cs" />
+    <Compile Include="Source\Targets\Wrappers\AutoFlushTargetWrapper.cs" />
+    <Compile Include="Source\Targets\Wrappers\BufferingTargetWrapper.cs" />
+    <Compile Include="Source\Targets\Wrappers\CompoundTargetBase.cs" />
+    <Compile Include="Source\Targets\Wrappers\FallbackGroupTarget.cs" />
+    <Compile Include="Source\Targets\Wrappers\FilteringRule.cs" />
+    <Compile Include="Source\Targets\Wrappers\FilteringTargetWrapper.cs" />
+    <Compile Include="Source\Targets\Wrappers\ImpersonatingTargetWrapper.cs" />
+    <Compile Include="Source\Targets\Wrappers\LogOnProviderType.cs" />
+    <Compile Include="Source\Targets\Wrappers\PostFilteringTargetWrapper.cs" />
+    <Compile Include="Source\Targets\Wrappers\RandomizeGroupTarget.cs" />
+    <Compile Include="Source\Targets\Wrappers\RepeatingTargetWrapper.cs" />
+    <Compile Include="Source\Targets\Wrappers\RetryingTargetWrapper.cs" />
+    <Compile Include="Source\Targets\Wrappers\RoundRobinGroupTarget.cs" />
+    <Compile Include="Source\Targets\Wrappers\SecurityImpersonationLevel.cs" />
+    <Compile Include="Source\Targets\Wrappers\SecurityLogOnType.cs" />
+    <Compile Include="Source\Targets\Wrappers\SplitGroupTarget.cs" />
+    <Compile Include="Source\Targets\Wrappers\WrapperTargetBase.cs" />
+    <Compile Include="Source\Time\AccurateLocalTimeSource.cs" />
+    <Compile Include="Source\Time\AccurateUtcTimeSource.cs" />
+    <Compile Include="Source\Time\CachedTimeSource.cs" />
+    <Compile Include="Source\Time\FastLocalTimeSource.cs" />
+    <Compile Include="Source\Time\FastUtcTimeSource.cs" />
+    <Compile Include="Source\Time\TimeSource.cs" />
+    <Compile Include="Source\Time\TimeSourceAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
