@@ -122,7 +122,7 @@
     <Compile Include="Source\Attibutes\NameBaseAttribute.cs" />
     <Compile Include="Source\Attibutes\NLogConfigurationIgnorePropertyAttribute.cs" />
     <Compile Include="Source\Attibutes\NLogConfigurationItemAttribute.cs" />
-    <Compile Include="Source\Config\NLogXmlElement.cs" />
+    <Compile Include="Source\_need\NLogXmlElement.cs" />
     <Compile Include="Source\Config\RequiredParameterAttribute.cs" />
     <Compile Include="Source\Config\SimpleConfigurator.cs" />
     <Compile Include="Source\Config\StackTraceUsage.cs" />
@@ -356,6 +356,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\Internal\Fakeables\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Source\_need\DefaultConfig.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpLib\SharpLib.csproj">
+      <Project>{9CDEC0B8-2232-45D1-815C-90880E1F8595}</Project>
+      <Name>SharpLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

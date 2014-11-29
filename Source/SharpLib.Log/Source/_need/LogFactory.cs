@@ -14,6 +14,8 @@ using NLog.Internal;
 using NLog.Internal.Fakeables;
 using NLog.Targets;
 
+using SharpLib;
+
 namespace NLog
 {
     public class LogFactory : IDisposable
@@ -449,11 +451,9 @@ namespace NLog
             }
         }
 
-        private static IEnumerable<string> GetCandidateFileNames()
+        private static string GetConfigFilename()
         {
             const string VSHOST_SUB_STR = ".vshost.";
-
-            var list = new List<string>();
 
             var rootDir = CurrentAppDomain.BaseDirectory;
             var exeName = Path.Combine(rootDir, CurrentAppDomain.FriendlyName);
@@ -464,9 +464,7 @@ namespace NLog
                 configName = configName.Replace(VSHOST_SUB_STR, ".");
             }
 
-            list.Add(configName);
-
-            return list;
+            return configName;
         }
 
         private static void Dump(LoggingConfiguration config)
@@ -562,17 +560,16 @@ namespace NLog
         {
             LoggingConfiguration config = null;
 
-            var files = GetCandidateFileNames();
+            var configFile = GetConfigFilename();
 
-            foreach (string configFile in files)
+            if (!File.Exists(configFile))
             {
-                if (File.Exists(configFile))
-                {
-                    InternalLogger.Debug("Формирование конфигурации из файла {0}", configFile);
-                    config = new XmlLoggingConfiguration(configFile);
-                    break;
-                }
+                var context = XmlLoggingConfiguration.GetDefaultConfigAsText();
+                File.WriteAllText(configFile, context);
             }
+
+            InternalLogger.Debug("Формирование конфигурации из файла {0}", configFile);
+            config = new XmlLoggingConfiguration(configFile);
 
             if (config == null)
             {

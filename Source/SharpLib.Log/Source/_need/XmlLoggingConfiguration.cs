@@ -22,7 +22,7 @@ namespace NLog.Config
 
         private readonly ConfigurationItemFactory _configurationItemFactory;
 
-        private readonly Dictionary<string, string> _variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, string> _variables;
 
         private readonly Dictionary<string, bool> _visitedFile;
 
@@ -58,6 +58,7 @@ namespace NLog.Config
 
         public XmlLoggingConfiguration(string fileName)
         {
+            _variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _visitedFile = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
             _configurationItemFactory = ConfigurationItemFactory.Default;
             using (XmlReader reader = XmlReader.Create(fileName))
@@ -68,6 +69,7 @@ namespace NLog.Config
 
         public XmlLoggingConfiguration(string fileName, bool ignoreErrors)
         {
+            _variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _visitedFile = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
             _configurationItemFactory = ConfigurationItemFactory.Default;
             using (XmlReader reader = XmlReader.Create(fileName))
@@ -78,6 +80,7 @@ namespace NLog.Config
 
         public XmlLoggingConfiguration(XmlReader reader, string fileName)
         {
+            _variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _visitedFile = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
             _configurationItemFactory = ConfigurationItemFactory.Default;
             Initialize(reader, fileName, false);
@@ -85,6 +88,7 @@ namespace NLog.Config
 
         public XmlLoggingConfiguration(XmlReader reader, string fileName, bool ignoreErrors)
         {
+            _variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _visitedFile = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
             _configurationItemFactory = ConfigurationItemFactory.Default;
             Initialize(reader, fileName, ignoreErrors);
@@ -92,6 +96,7 @@ namespace NLog.Config
 
         internal XmlLoggingConfiguration(XmlElement element, string fileName)
         {
+            _variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _visitedFile = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
             _configurationItemFactory = ConfigurationItemFactory.Default;
             using (var stringReader = new StringReader(element.OuterXml))
@@ -104,6 +109,7 @@ namespace NLog.Config
 
         internal XmlLoggingConfiguration(XmlElement element, string fileName, bool ignoreErrors)
         {
+            _variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _visitedFile = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
             _configurationItemFactory = ConfigurationItemFactory.Default;
             using (var stringReader = new StringReader(element.OuterXml))
@@ -861,6 +867,30 @@ namespace NLog.Config
             }
 
             return output;
+        }
+
+        internal static string GetDefaultConfigAsText()
+        {
+            string result = GetResourceTextFile(@"SharpLib.Log.Source._need.DefaultConfig.xml");
+
+            return result;
+        }
+
+        private static string GetResourceTextFile(string filename)
+        {
+            string result;
+
+            var asm = Assembly.GetExecutingAssembly();
+            var path = asm.Location;
+            using (var stream = asm.GetManifestResourceStream(filename))
+            {
+                using (var sr = new StreamReader(stream))
+                {
+                    result = sr.ReadToEnd();
+                }
+            }
+
+            return result;
         }
 
         #endregion
