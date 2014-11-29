@@ -287,7 +287,7 @@ namespace NLog
             {
                 try
                 {
-                    formattedMessage = string.Format(FormatProvider ?? LogManager.DefaultCultureInfo(), Message, Parameters);
+                    formattedMessage = string.Format(FormatProvider ?? LogManager.Instance.DefaultCultureInfo(), Message, Parameters);
                 }
                 catch (Exception exception)
                 {

@@ -150,7 +150,7 @@ namespace NLog
                 }
                 else
                 {
-                    LogManager.Flush();
+                    LogManager.Instance.Flush();
                 }
             }
         }
@@ -302,7 +302,7 @@ namespace NLog
             }
             else
             {
-                logger = LogManager.GetLogger(ev.LoggerName);
+                logger = LogManager.Instance.GetLogger(ev.LoggerName);
             }
 
             logger.Log(ev);

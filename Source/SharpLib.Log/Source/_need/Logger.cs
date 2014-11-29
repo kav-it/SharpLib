@@ -7,27 +7,27 @@ using NLog.Internal;
 
 namespace NLog
 {
-    [CLSCompliant(true)]
     public class Logger
     {
-        private readonly Type loggerType = typeof(Logger);
+        private readonly Type _loggerType;
 
-        private volatile LoggerConfiguration configuration;
+        private volatile LoggerConfiguration _configuration;
 
-        private volatile bool isTraceEnabled;
+        private volatile bool _isTraceEnabled;
 
-        private volatile bool isDebugEnabled;
+        private volatile bool _isDebugEnabled;
 
-        private volatile bool isInfoEnabled;
+        private volatile bool _isInfoEnabled;
 
-        private volatile bool isWarnEnabled;
+        private volatile bool _isWarnEnabled;
 
-        private volatile bool isErrorEnabled;
+        private volatile bool _isErrorEnabled;
 
-        private volatile bool isFatalEnabled;
+        private volatile bool _isFatalEnabled;
 
         protected internal Logger()
         {
+            _loggerType = typeof(Logger);
         }
 
         public event EventHandler<EventArgs> LoggerReconfigured;
@@ -38,32 +38,32 @@ namespace NLog
 
         public bool IsTraceEnabled
         {
-            get { return isTraceEnabled; }
+            get { return _isTraceEnabled; }
         }
 
         public bool IsDebugEnabled
         {
-            get { return isDebugEnabled; }
+            get { return _isDebugEnabled; }
         }
 
         public bool IsInfoEnabled
         {
-            get { return isInfoEnabled; }
+            get { return _isInfoEnabled; }
         }
 
         public bool IsWarnEnabled
         {
-            get { return isWarnEnabled; }
+            get { return _isWarnEnabled; }
         }
 
         public bool IsErrorEnabled
         {
-            get { return isErrorEnabled; }
+            get { return _isErrorEnabled; }
         }
 
         public bool IsFatalEnabled
         {
-            get { return isFatalEnabled; }
+            get { return _isFatalEnabled; }
         }
 
         public bool IsEnabled(LogLevel level)
@@ -121,12 +121,6 @@ namespace NLog
 
                 WriteToTargets(level, null, messageFunc());
             }
-        }
-
-        [Obsolete("Use Log(LogLevel, String, Exception) method instead.")]
-        public void LogException(LogLevel level, [Localizable(false)] string message, Exception exception)
-        {
-            Log(level, message, exception);
         }
 
         [StringFormatMethod("message")]
@@ -259,12 +253,6 @@ namespace NLog
             }
         }
 
-        [Obsolete("Use Trace(String, Exception) method instead.")]
-        public void TraceException([Localizable(false)] string message, Exception exception)
-        {
-            Trace(message, exception);
-        }
-
         [StringFormatMethod("message")]
         public void Trace(IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
         {
@@ -391,12 +379,6 @@ namespace NLog
 
                 WriteToTargets(LogLevel.Debug, null, messageFunc());
             }
-        }
-
-        [Obsolete("Use Debug(String, Exception) method instead.")]
-        public void DebugException([Localizable(false)] string message, Exception exception)
-        {
-            Debug(message, exception);
         }
 
         [StringFormatMethod("message")]
@@ -527,12 +509,6 @@ namespace NLog
             }
         }
 
-        [Obsolete("Use Info(String, Exception) method instead.")]
-        public void InfoException([Localizable(false)] string message, Exception exception)
-        {
-            Info(message, exception);
-        }
-
         [StringFormatMethod("message")]
         public void Info(IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
         {
@@ -659,12 +635,6 @@ namespace NLog
 
                 WriteToTargets(LogLevel.Warn, null, messageFunc());
             }
-        }
-
-        [Obsolete("Use Warn(String, Exception) method instead.")]
-        public void WarnException([Localizable(false)] string message, Exception exception)
-        {
-            Warn(message, exception);
         }
 
         [StringFormatMethod("message")]
@@ -928,12 +898,6 @@ namespace NLog
             }
         }
 
-        [Obsolete("Use Fatal(String, Exception) method instead.")]
-        public void FatalException([Localizable(false)] string message, Exception exception)
-        {
-            Fatal(message, exception);
-        }
-
         [StringFormatMethod("message")]
         public void Fatal(IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
         {
@@ -1121,23 +1085,23 @@ namespace NLog
 
         internal void WriteToTargets(LogLevel level, IFormatProvider formatProvider, [Localizable(false)] string message, object[] args)
         {
-            LoggerImpl.Write(loggerType, GetTargetsForLevel(level), LogEventInfo.Create(level, Name, formatProvider, message, args), Factory);
+            LoggerImpl.Write(_loggerType, GetTargetsForLevel(level), LogEventInfo.Create(level, Name, formatProvider, message, args), Factory);
         }
 
         internal void WriteToTargets(LogLevel level, IFormatProvider formatProvider, [Localizable(false)] string message)
         {
             var logEvent = LogEventInfo.Create(level, Name, formatProvider, message, null);
-            LoggerImpl.Write(loggerType, GetTargetsForLevel(level), logEvent, Factory);
+            LoggerImpl.Write(_loggerType, GetTargetsForLevel(level), logEvent, Factory);
         }
 
         internal void WriteToTargets<T>(LogLevel level, IFormatProvider formatProvider, T value)
         {
-            LoggerImpl.Write(loggerType, GetTargetsForLevel(level), LogEventInfo.Create(level, Name, formatProvider, value), Factory);
+            LoggerImpl.Write(_loggerType, GetTargetsForLevel(level), LogEventInfo.Create(level, Name, formatProvider, value), Factory);
         }
 
         internal void WriteToTargets(LogLevel level, [Localizable(false)] string message, Exception ex)
         {
-            LoggerImpl.Write(loggerType, GetTargetsForLevel(level), LogEventInfo.Create(level, Name, message, ex), Factory);
+            LoggerImpl.Write(_loggerType, GetTargetsForLevel(level), LogEventInfo.Create(level, Name, message, ex), Factory);
         }
 
         internal void WriteToTargets(LogLevel level, [Localizable(false)] string message, object[] args)
@@ -1147,7 +1111,7 @@ namespace NLog
 
         internal void WriteToTargets(LogEventInfo logEvent)
         {
-            LoggerImpl.Write(loggerType, GetTargetsForLevel(logEvent.Level), logEvent, Factory);
+            LoggerImpl.Write(_loggerType, GetTargetsForLevel(logEvent.Level), logEvent, Factory);
         }
 
         internal void WriteToTargets(Type wrapperType, LogEventInfo logEvent)
@@ -1157,14 +1121,14 @@ namespace NLog
 
         internal void SetConfiguration(LoggerConfiguration newConfiguration)
         {
-            configuration = newConfiguration;
+            _configuration = newConfiguration;
 
-            isTraceEnabled = newConfiguration.IsEnabled(LogLevel.Trace);
-            isDebugEnabled = newConfiguration.IsEnabled(LogLevel.Debug);
-            isInfoEnabled = newConfiguration.IsEnabled(LogLevel.Info);
-            isWarnEnabled = newConfiguration.IsEnabled(LogLevel.Warn);
-            isErrorEnabled = newConfiguration.IsEnabled(LogLevel.Error);
-            isFatalEnabled = newConfiguration.IsEnabled(LogLevel.Fatal);
+            _isTraceEnabled = newConfiguration.IsEnabled(LogLevel.Trace);
+            _isDebugEnabled = newConfiguration.IsEnabled(LogLevel.Debug);
+            _isInfoEnabled = newConfiguration.IsEnabled(LogLevel.Info);
+            _isWarnEnabled = newConfiguration.IsEnabled(LogLevel.Warn);
+            _isErrorEnabled = newConfiguration.IsEnabled(LogLevel.Error);
+            _isFatalEnabled = newConfiguration.IsEnabled(LogLevel.Fatal);
 
             var loggerReconfiguredDelegate = LoggerReconfigured;
 
@@ -1176,7 +1140,7 @@ namespace NLog
 
         private TargetWithFilterChain GetTargetsForLevel(LogLevel level)
         {
-            return configuration.GetTargetsForLevel(level);
+            return _configuration.GetTargetsForLevel(level);
         }
     }
 }

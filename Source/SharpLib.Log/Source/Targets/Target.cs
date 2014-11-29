@@ -222,7 +222,7 @@ namespace NLog.Targets
                         throw;
                     }
 
-                    if (LogManager.ThrowExceptions)
+                    if (LogManager.Instance.ThrowExceptions)
                     {
                         throw;
                     }

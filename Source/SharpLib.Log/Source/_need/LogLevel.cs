@@ -8,39 +8,25 @@ namespace NLog
     {
         #region Поля
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Type is immutable")]
         public static readonly LogLevel Debug = new LogLevel("Debug", 1);
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Type is immutable")]
         public static readonly LogLevel Error = new LogLevel("Error", 4);
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Type is immutable")]
         public static readonly LogLevel Fatal = new LogLevel("Fatal", 5);
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Type is immutable")]
         public static readonly LogLevel Info = new LogLevel("Info", 2);
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Type is immutable")]
         public static readonly LogLevel Off = new LogLevel("Off", 6);
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Type is immutable")]
         public static readonly LogLevel Trace = new LogLevel("Trace", 0);
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Type is immutable")]
         public static readonly LogLevel Warn = new LogLevel("Warn", 3);
-
-        private readonly string name;
-
-        private readonly int ordinal;
 
         #endregion
 
         #region Свойства
 
-        public string Name
-        {
-            get { return name; }
-        }
+        public string Name { get; private set; }
 
         internal static LogLevel MaxLevel
         {
@@ -52,23 +38,16 @@ namespace NLog
             get { return Trace; }
         }
 
-        public int Ordinal
-        {
-            get { return ordinal; }
-        }
+        public int Ordinal { get; private set; }
 
         #endregion
 
         #region Конструктор
 
-        private LogLevel()
-        {
-        }
-
         private LogLevel(string name, int ordinal)
         {
-            this.name = name;
-            this.ordinal = ordinal;
+            Name = name;
+            Ordinal = ordinal;
         }
 
         #endregion
@@ -210,33 +189,21 @@ namespace NLog
 
         public static bool operator >(LogLevel level1, LogLevel level2)
         {
-            ParameterUtils.AssertNotNull(level1, "level1");
-            ParameterUtils.AssertNotNull(level2, "level2");
-
             return level1.Ordinal > level2.Ordinal;
         }
 
         public static bool operator >=(LogLevel level1, LogLevel level2)
         {
-            ParameterUtils.AssertNotNull(level1, "level1");
-            ParameterUtils.AssertNotNull(level2, "level2");
-
             return level1.Ordinal >= level2.Ordinal;
         }
 
         public static bool operator <(LogLevel level1, LogLevel level2)
         {
-            ParameterUtils.AssertNotNull(level1, "level1");
-            ParameterUtils.AssertNotNull(level2, "level2");
-
             return level1.Ordinal < level2.Ordinal;
         }
 
         public static bool operator <=(LogLevel level1, LogLevel level2)
         {
-            ParameterUtils.AssertNotNull(level1, "level1");
-            ParameterUtils.AssertNotNull(level2, "level2");
-
             return level1.Ordinal <= level2.Ordinal;
         }
     }

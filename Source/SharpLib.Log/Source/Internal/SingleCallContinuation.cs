@@ -85,7 +85,7 @@ namespace NLog.Internal
                     throw;
                 }
 
-                if (LogManager.ThrowExceptions)
+                if (LogManager.Instance.ThrowExceptions)
                 {
                     throw;
                 }

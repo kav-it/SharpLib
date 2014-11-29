@@ -20,29 +20,29 @@ namespace NLog
     {
         #region Константы
 
-        private const int ReconfigAfterFileChangedTimeout = 1000;
+        private const int RECONFIG_AFTER_FILE_CHANGED_TIMEOUT = 1000;
 
         #endregion
 
         #region Поля
 
-        private static readonly TimeSpan defaultFlushTimeout = TimeSpan.FromSeconds(15);
+        private static readonly TimeSpan _defaultFlushTimeout = TimeSpan.FromSeconds(15);
 
-        private static IAppDomain currentAppDomain;
+        private static IAppDomain _currentAppDomain;
 
-        private readonly Dictionary<LoggerCacheKey, WeakReference> loggerCache = new Dictionary<LoggerCacheKey, WeakReference>();
+        private readonly Dictionary<LoggerCacheKey, WeakReference> _loggerCache;
 
-        private readonly MultiFileWatcher watcher;
+        private readonly MultiFileWatcher _watcher;
 
-        private LoggingConfiguration config;
+        private LoggingConfiguration _config;
 
-        private bool configLoaded;
+        private bool _configLoaded;
 
-        private LogLevel globalThreshold = LogLevel.MinLevel;
+        private LogLevel _globalThreshold;
 
-        private int logsEnabled;
+        private int _logsEnabled;
 
-        private Timer reloadTimer;
+        private Timer _reloadTimer;
 
         #endregion
 
@@ -50,8 +50,8 @@ namespace NLog
 
         public static IAppDomain CurrentAppDomain
         {
-            get { return currentAppDomain ?? (currentAppDomain = AppDomainWrapper.CurrentDomain); }
-            set { currentAppDomain = value; }
+            get { return _currentAppDomain ?? (_currentAppDomain = AppDomainWrapper.CurrentDomain); }
+            set { _currentAppDomain = value; }
         }
 
         public bool ThrowExceptions { get; set; }
@@ -62,49 +62,49 @@ namespace NLog
             {
                 lock (this)
                 {
-                    if (configLoaded)
+                    if (_configLoaded)
                     {
-                        return config;
+                        return _config;
                     }
 
-                    configLoaded = true;
+                    _configLoaded = true;
 
-                    if (config == null)
+                    if (_config == null)
                     {
-                        config = XmlLoggingConfiguration.AppConfig;
+                        _config = XmlLoggingConfiguration.AppConfig;
                     }
 
-                    if (config == null)
+                    if (_config == null)
                     {
                         foreach (string configFile in GetCandidateFileNames())
                         {
                             if (File.Exists(configFile))
                             {
                                 InternalLogger.Debug("Attempting to load config from {0}", configFile);
-                                config = new XmlLoggingConfiguration(configFile);
+                                _config = new XmlLoggingConfiguration(configFile);
                                 break;
                             }
                         }
                     }
 
-                    if (config != null)
+                    if (_config != null)
                     {
-                        Dump(config);
+                        Dump(_config);
                         try
                         {
-                            watcher.Watch(config.FileNamesToWatch);
+                            _watcher.Watch(_config.FileNamesToWatch);
                         }
                         catch (Exception exception)
                         {
                             InternalLogger.Warn("Cannot start file watching: {0}. File watching is disabled", exception);
                         }
                     }
-                    if (config != null)
+                    if (_config != null)
                     {
-                        config.InitializeAll();
+                        _config.InitializeAll();
                     }
 
-                    return config;
+                    return _config;
                 }
             }
 
@@ -112,7 +112,7 @@ namespace NLog
             {
                 try
                 {
-                    watcher.StopWatching();
+                    _watcher.StopWatching();
                 }
                 catch (Exception exception)
                 {
@@ -126,7 +126,7 @@ namespace NLog
 
                 lock (this)
                 {
-                    LoggingConfiguration oldConfig = config;
+                    LoggingConfiguration oldConfig = _config;
                     if (oldConfig != null)
                     {
                         InternalLogger.Info("Closing old configuration.");
@@ -134,18 +134,18 @@ namespace NLog
                         oldConfig.Close();
                     }
 
-                    config = value;
-                    configLoaded = true;
+                    _config = value;
+                    _configLoaded = true;
 
-                    if (config != null)
+                    if (_config != null)
                     {
-                        Dump(config);
+                        Dump(_config);
 
-                        config.InitializeAll();
-                        ReconfigExistingLoggers(config);
+                        _config.InitializeAll();
+                        ReconfigExistingLoggers(_config);
                         try
                         {
-                            watcher.Watch(config.FileNamesToWatch);
+                            _watcher.Watch(_config.FileNamesToWatch);
                         }
                         catch (Exception exception)
                         {
@@ -170,13 +170,13 @@ namespace NLog
 
         public LogLevel GlobalThreshold
         {
-            get { return globalThreshold; }
+            get { return _globalThreshold; }
 
             set
             {
                 lock (this)
                 {
-                    globalThreshold = value;
+                    _globalThreshold = value;
                     ReconfigExistingLoggers();
                 }
             }
@@ -196,8 +196,10 @@ namespace NLog
 
         public LogFactory()
         {
-            watcher = new MultiFileWatcher();
-            watcher.OnChange += ConfigFileChanged;
+            _globalThreshold = LogLevel.MinLevel;
+            _loggerCache = new Dictionary<LoggerCacheKey, WeakReference>();
+            _watcher = new MultiFileWatcher();
+            _watcher.OnChange += ConfigFileChanged;
         }
 
         public LogFactory(LoggingConfiguration config)
@@ -252,12 +254,12 @@ namespace NLog
 
         public void ReconfigExistingLoggers()
         {
-            ReconfigExistingLoggers(config);
+            ReconfigExistingLoggers(_config);
         }
 
         public void Flush()
         {
-            Flush(defaultFlushTimeout);
+            Flush(_defaultFlushTimeout);
         }
 
         public void Flush(TimeSpan timeout)
@@ -324,8 +326,8 @@ namespace NLog
         {
             lock (this)
             {
-                logsEnabled--;
-                if (logsEnabled == -1)
+                _logsEnabled--;
+                if (_logsEnabled == -1)
                 {
                     ReconfigExistingLoggers();
                 }
@@ -338,8 +340,8 @@ namespace NLog
         {
             lock (this)
             {
-                logsEnabled++;
-                if (logsEnabled == 0)
+                _logsEnabled++;
+                if (_logsEnabled == 0)
                 {
                     ReconfigExistingLoggers();
                 }
@@ -348,7 +350,7 @@ namespace NLog
 
         public bool IsLoggingEnabled()
         {
-            return logsEnabled >= 0;
+            return _logsEnabled >= 0;
         }
 
         internal void ReloadConfigOnTimer(object state)
@@ -358,13 +360,13 @@ namespace NLog
             InternalLogger.Info("Reloading configuration...");
             lock (this)
             {
-                if (reloadTimer != null)
+                if (_reloadTimer != null)
                 {
-                    reloadTimer.Dispose();
-                    reloadTimer = null;
+                    _reloadTimer.Dispose();
+                    _reloadTimer = null;
                 }
 
-                watcher.StopWatching();
+                _watcher.StopWatching();
                 try
                 {
                     if (Configuration != configurationToReload)
@@ -393,7 +395,7 @@ namespace NLog
                         throw;
                     }
 
-                    watcher.Watch(configurationToReload.FileNamesToWatch);
+                    _watcher.Watch(configurationToReload.FileNamesToWatch);
 
                     var configurationReloadedDelegate = ConfigurationReloaded;
                     if (configurationReloadedDelegate != null)
@@ -411,7 +413,7 @@ namespace NLog
                 configuration.EnsureInitialized();
             }
 
-            foreach (var loggerWrapper in loggerCache.Values.ToList())
+            foreach (var loggerWrapper in _loggerCache.Values.ToList())
             {
                 Logger logger = loggerWrapper.Target as Logger;
                 if (logger != null)
@@ -505,12 +507,12 @@ namespace NLog
         {
             if (disposing)
             {
-                watcher.Dispose();
+                _watcher.Dispose();
 
-                if (reloadTimer != null)
+                if (_reloadTimer != null)
                 {
-                    reloadTimer.Dispose();
-                    reloadTimer = null;
+                    _reloadTimer.Dispose();
+                    _reloadTimer = null;
                 }
             }
         }
@@ -527,10 +529,10 @@ namespace NLog
             {
                 yield return Path.ChangeExtension(cf, ".nlog");
 
-                const string vshostSubStr = ".vshost.";
-                if (cf.Contains(vshostSubStr))
+                const string VSHOST_SUB_STR = ".vshost.";
+                if (cf.Contains(VSHOST_SUB_STR))
                 {
-                    yield return Path.ChangeExtension(cf.Replace(vshostSubStr, "."), ".nlog");
+                    yield return Path.ChangeExtension(cf.Replace(VSHOST_SUB_STR, "."), ".nlog");
                 }
 
                 IEnumerable<string> privateBinPaths = CurrentAppDomain.PrivateBinPath;
@@ -572,7 +574,7 @@ namespace NLog
             {
                 WeakReference l;
 
-                if (loggerCache.TryGetValue(cacheKey, out l))
+                if (_loggerCache.TryGetValue(cacheKey, out l))
                 {
                     Logger existingLogger = l.Target as Logger;
                     if (existingLogger != null)
@@ -618,28 +620,28 @@ namespace NLog
                     newLogger.Initialize(cacheKey.Name, GetConfigurationForLogger(cacheKey.Name, Configuration), this);
                 }
 
-                loggerCache[cacheKey] = new WeakReference(newLogger);
+                _loggerCache[cacheKey] = new WeakReference(newLogger);
                 return newLogger;
             }
         }
 
         private void ConfigFileChanged(object sender, EventArgs args)
         {
-            InternalLogger.Info("Configuration file change detected! Reloading in {0}ms...", ReconfigAfterFileChangedTimeout);
+            InternalLogger.Info("Configuration file change detected! Reloading in {0}ms...", RECONFIG_AFTER_FILE_CHANGED_TIMEOUT);
 
             lock (this)
             {
-                if (reloadTimer == null)
+                if (_reloadTimer == null)
                 {
-                    reloadTimer = new Timer(
+                    _reloadTimer = new Timer(
                         ReloadConfigOnTimer,
                         Configuration,
-                        ReconfigAfterFileChangedTimeout,
+                        RECONFIG_AFTER_FILE_CHANGED_TIMEOUT,
                         Timeout.Infinite);
                 }
                 else
                 {
-                    reloadTimer.Change(ReconfigAfterFileChangedTimeout, Timeout.Infinite);
+                    _reloadTimer.Change(RECONFIG_AFTER_FILE_CHANGED_TIMEOUT, Timeout.Infinite);
                 }
             }
         }
@@ -652,7 +654,7 @@ namespace NLog
         {
             #region Поля
 
-            private readonly LogFactory factory;
+            private readonly LogFactory _factory;
 
             #endregion
 
@@ -660,7 +662,7 @@ namespace NLog
 
             public LogEnabler(LogFactory factory)
             {
-                this.factory = factory;
+                _factory = factory;
             }
 
             #endregion
@@ -669,7 +671,7 @@ namespace NLog
 
             void IDisposable.Dispose()
             {
-                factory.EnableLogging();
+                _factory.EnableLogging();
             }
 
             #endregion

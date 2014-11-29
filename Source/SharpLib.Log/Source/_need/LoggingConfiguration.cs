@@ -14,10 +14,9 @@ namespace NLog.Config
     {
         #region Поля
 
-        private readonly IDictionary<string, Target> targets =
-            new Dictionary<string, Target>(StringComparer.OrdinalIgnoreCase);
+        private readonly IDictionary<string, Target> _targets;
 
-        private object[] configItems;
+        private object[] _configItems;
 
         #endregion
 
@@ -25,7 +24,7 @@ namespace NLog.Config
 
         public ReadOnlyCollection<Target> ConfiguredNamedTargets
         {
-            get { return new List<Target>(targets.Values).AsReadOnly(); }
+            get { return new List<Target>(_targets.Values).AsReadOnly(); }
         }
 
         public virtual IEnumerable<string> FileNamesToWatch
@@ -37,13 +36,13 @@ namespace NLog.Config
 
         public CultureInfo DefaultCultureInfo
         {
-            get { return LogManager.DefaultCultureInfo(); }
-            set { LogManager.DefaultCultureInfo = () => value; }
+            get { return LogManager.Instance.DefaultCultureInfo(); }
+            set { LogManager.Instance.DefaultCultureInfo = () => value; }
         }
 
         public ReadOnlyCollection<Target> AllTargets
         {
-            get { return configItems.OfType<Target>().ToList().AsReadOnly(); }
+            get { return _configItems.OfType<Target>().ToList().AsReadOnly(); }
         }
 
         #endregion
@@ -52,6 +51,7 @@ namespace NLog.Config
 
         public LoggingConfiguration()
         {
+            _targets = new Dictionary<string, Target>(StringComparer.OrdinalIgnoreCase);
             LoggingRules = new List<LoggingRule>();
         }
 
@@ -67,14 +67,14 @@ namespace NLog.Config
             }
 
             InternalLogger.Debug("Registering target {0}: {1}", name, target.GetType().FullName);
-            targets[name] = target;
+            _targets[name] = target;
         }
 
         public Target FindTargetByName(string name)
         {
             Target value;
 
-            if (!targets.TryGetValue(name, out value))
+            if (!_targets.TryGetValue(name, out value))
             {
                 return null;
             }
@@ -89,7 +89,7 @@ namespace NLog.Config
 
         public void RemoveTarget(string name)
         {
-            targets.Remove(name);
+            _targets.Remove(name);
         }
 
         public void Install(InstallationContext installationContext)
@@ -100,7 +100,7 @@ namespace NLog.Config
             }
 
             InitializeAll();
-            foreach (IInstallable installable in configItems.OfType<IInstallable>())
+            foreach (IInstallable installable in _configItems.OfType<IInstallable>())
             {
                 installationContext.Info("Installing '{0}'", installable);
 
@@ -130,7 +130,7 @@ namespace NLog.Config
 
             InitializeAll();
 
-            foreach (IInstallable installable in configItems.OfType<IInstallable>())
+            foreach (IInstallable installable in _configItems.OfType<IInstallable>())
             {
                 installationContext.Info("Uninstalling '{0}'", installable);
 
@@ -154,7 +154,7 @@ namespace NLog.Config
         internal void Close()
         {
             InternalLogger.Debug("Closing logging configuration...");
-            foreach (ISupportsInitialize initialize in configItems.OfType<ISupportsInitialize>())
+            foreach (ISupportsInitialize initialize in _configItems.OfType<ISupportsInitialize>())
             {
                 InternalLogger.Trace("Closing {0}", initialize);
                 try
@@ -179,7 +179,7 @@ namespace NLog.Config
         {
             InternalLogger.Debug("--- NLog configuration dump. ---");
             InternalLogger.Debug("Targets:");
-            foreach (Target target in targets.Values)
+            foreach (Target target in _targets.Values)
             {
                 InternalLogger.Info("{0}", target);
             }
@@ -218,16 +218,16 @@ namespace NLog.Config
                 roots.Add(r);
             }
 
-            foreach (Target target in targets.Values)
+            foreach (Target target in _targets.Values)
             {
                 roots.Add(target);
             }
 
-            configItems = ObjectGraphScanner.FindReachableObjects<object>(roots.ToArray());
+            _configItems = ObjectGraphScanner.FindReachableObjects<object>(roots.ToArray());
 
-            InternalLogger.Info("Found {0} configuration items", configItems.Length);
+            InternalLogger.Info("Found {0} configuration items", _configItems.Length);
 
-            foreach (object o in configItems)
+            foreach (object o in _configItems)
             {
                 PropertyHelper.CheckRequiredParameters(o);
             }
@@ -237,7 +237,7 @@ namespace NLog.Config
         {
             ValidateConfig();
 
-            foreach (ISupportsInitialize initialize in configItems.OfType<ISupportsInitialize>().Reverse())
+            foreach (ISupportsInitialize initialize in _configItems.OfType<ISupportsInitialize>().Reverse())
             {
                 InternalLogger.Trace("Initializing {0}", initialize);
 
@@ -252,7 +252,7 @@ namespace NLog.Config
                         throw;
                     }
 
-                    if (LogManager.ThrowExceptions)
+                    if (LogManager.Instance.ThrowExceptions)
                     {
                         throw new NLogConfigurationException("Error during initialization of " + initialize, exception);
                     }

@@ -190,7 +190,7 @@ namespace NLog.Config
 
                 if (!ignoreErrors)
                 {
-                    if (LogManager.ThrowExceptions)
+                    if (LogManager.Instance.ThrowExceptions)
                     {
                         throw ConfigException;
                     }
@@ -258,12 +258,12 @@ namespace NLog.Config
                 DefaultCultureInfo = CultureInfo.InvariantCulture;
             }
             AutoReload = nlogElement.GetOptionalBooleanAttribute("autoReload", false);
-            LogManager.ThrowExceptions = nlogElement.GetOptionalBooleanAttribute("throwExceptions", LogManager.ThrowExceptions);
+            LogManager.Instance.ThrowExceptions = nlogElement.GetOptionalBooleanAttribute("throwExceptions", LogManager.Instance.ThrowExceptions);
             InternalLogger.LogToConsole = nlogElement.GetOptionalBooleanAttribute("internalLogToConsole", InternalLogger.LogToConsole);
             InternalLogger.LogToConsoleError = nlogElement.GetOptionalBooleanAttribute("internalLogToConsoleError", InternalLogger.LogToConsoleError);
             InternalLogger.LogFile = nlogElement.GetOptionalAttribute("internalLogFile", InternalLogger.LogFile);
             InternalLogger.LogLevel = LogLevel.FromString(nlogElement.GetOptionalAttribute("internalLogLevel", InternalLogger.LogLevel.Name));
-            LogManager.GlobalThreshold = LogLevel.FromString(nlogElement.GetOptionalAttribute("globalThreshold", LogManager.GlobalThreshold.Name));
+            LogManager.Instance.GlobalThreshold = LogLevel.FromString(nlogElement.GetOptionalAttribute("globalThreshold", LogManager.Instance.GlobalThreshold.Name));
 
             foreach (var el in nlogElement.Children)
             {
@@ -639,7 +639,7 @@ namespace NLog.Config
                         }
 
                         InternalLogger.Error("Error loading extensions: {0}", exception);
-                        if (LogManager.ThrowExceptions)
+                        if (LogManager.Instance.ThrowExceptions)
                         {
                             throw new NLogConfigurationException("Error loading extensions: " + assemblyFile, exception);
                         }
@@ -672,7 +672,7 @@ namespace NLog.Config
                         }
 
                         InternalLogger.Error("Error loading extensions: {0}", exception);
-                        if (LogManager.ThrowExceptions)
+                        if (LogManager.Instance.ThrowExceptions)
                         {
                             throw new NLogConfigurationException("Error loading extensions: " + assemblyName, exception);
                         }

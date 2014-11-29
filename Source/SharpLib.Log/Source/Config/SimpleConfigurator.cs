@@ -19,7 +19,7 @@ namespace NLog.Config
             LoggingConfiguration config = new LoggingConfiguration();
             LoggingRule rule = new LoggingRule("*", minLevel, consoleTarget);
             config.LoggingRules.Add(rule);
-            LogManager.Configuration = config;
+            LogManager.Instance.Configuration = config;
         }
 
         public static void ConfigureForTargetLogging(Target target)
@@ -32,7 +32,7 @@ namespace NLog.Config
             LoggingConfiguration config = new LoggingConfiguration();
             LoggingRule rule = new LoggingRule("*", minLevel, target);
             config.LoggingRules.Add(rule);
-            LogManager.Configuration = config;
+            LogManager.Instance.Configuration = config;
         }
 
         public static void ConfigureForFileLogging(string fileName)
