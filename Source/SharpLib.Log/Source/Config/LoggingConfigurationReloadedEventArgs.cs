@@ -1,8 +1,9 @@
-﻿using System;
+﻿
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 
-#if !SILVERLIGHT
-
-namespace NLog.Config
+namespace SharpLib.Log
 {
     public class LoggingConfigurationReloadedEventArgs : EventArgs
     {
@@ -25,5 +26,3 @@ namespace NLog.Config
         #endregion
     }
 }
-
-#endif

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -28,12 +29,13 @@ namespace SharpLib
             return elem.AddElementEx(name, "");
         }
 
-        public static String GetAttributeEx(this XElement elem, string name)
+        public static string GetAttributeEx(this XElement elem, string name, StringComparison comparsion = StringComparison.OrdinalIgnoreCase)
         {
-            XAttribute attr = elem.Attribute(name);
-            if (attr != null)
+            var xAttr = elem.Attributes().FirstOrDefault(x => x.Name.LocalName.Equals(name, comparsion));
+
+            if (xAttr != null)
             {
-                return attr.Value;
+                return xAttr.Value;
             }
 
             return null;
@@ -65,6 +67,30 @@ namespace SharpLib
         public static void ClearEx(this XElement elem)
         {
             elem.RemoveNodes();
+        }
+
+        public static bool GetAttributeBoolEx(this XElement elem, string name, bool defaultValue)
+        {
+            var value = elem.GetAttributeEx(name);
+
+            if (value.IsValid())
+            {
+                defaultValue = Convert.ToBoolean(value, CultureInfo.InvariantCulture);
+            }
+
+            return defaultValue;
+        }
+
+        public static string GetAttributeStringEx(this XElement elem, string name, string defaultValue)
+        {
+            var value = elem.GetAttributeEx(name);
+
+            if (value.IsValid())
+            {
+                return value;
+            }
+
+            return defaultValue;
         }
 
         #endregion

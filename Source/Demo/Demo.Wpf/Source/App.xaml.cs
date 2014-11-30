@@ -1,7 +1,6 @@
 ﻿
-using NLog;
-
 using SharpLib;
+using SharpLib.Log;
 
 namespace DemoWpf
 {

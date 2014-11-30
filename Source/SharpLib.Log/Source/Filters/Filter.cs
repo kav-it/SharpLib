@@ -1,8 +1,6 @@
-using NLog.Config;
-
-namespace NLog.Filters
+namespace SharpLib.Log
 {
-    [NLogConfigurationItem]
+    [LogConfigurationItem]
     public abstract class Filter
     {
         #region Свойства

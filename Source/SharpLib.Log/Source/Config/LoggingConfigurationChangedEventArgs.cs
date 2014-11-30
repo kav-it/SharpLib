@@ -1,6 +1,9 @@
-﻿using System;
+﻿
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 
-namespace NLog.Config
+namespace SharpLib.Log
 {
     public class LoggingConfigurationChangedEventArgs : EventArgs
     {

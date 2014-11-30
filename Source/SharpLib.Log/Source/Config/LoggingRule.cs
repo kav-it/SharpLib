@@ -1,18 +1,15 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text;
 
-using NLog.Filters;
-using NLog.Targets;
-
-namespace NLog.Config
+namespace SharpLib.Log
 {
-    [NLogConfigurationItem]
+    [LogConfigurationItem]
     public class LoggingRule
     {
-        #region Перечисления
+        #region РџРµСЂРµС‡РёСЃР»РµРЅРёСЏ
 
         internal enum MatchMode
         {
@@ -31,7 +28,7 @@ namespace NLog.Config
 
         #endregion
 
-        #region Поля
+        #region РџРѕР»СЏ
 
         private readonly bool[] logLevels = new bool[LogLevel.MaxLevel.Ordinal + 1];
 
@@ -43,7 +40,7 @@ namespace NLog.Config
 
         #endregion
 
-        #region Свойства
+        #region РЎРІРѕР№СЃС‚РІР°
 
         public IList<Target> Targets { get; private set; }
 
@@ -125,7 +122,7 @@ namespace NLog.Config
 
         #endregion
 
-        #region Конструктор
+        #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
         public LoggingRule()
         {
@@ -158,7 +155,7 @@ namespace NLog.Config
 
         #endregion
 
-        #region Методы
+        #region РњРµС‚РѕРґС‹
 
         public void EnableLoggingForLevel(LogLevel level)
         {
