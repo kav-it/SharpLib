@@ -23,10 +23,6 @@ namespace SharpLib.Log
 
         private const string LOG_ATTR_GLOBAL_THRESHOLD = @"globalThreshold";
 
-        private const string LOG_ATTR_THROW_EXCEPTIONS = @"throwExceptions";
-
-        private const string LOG_ATTR_USE_INVARIANT_CULTURE = @"useInvariantCulture";
-
         private const string LOG_CHILD_RULES = @"rules";
 
         private const string LOG_CHILD_TARGETS = @"targets";
@@ -103,17 +99,10 @@ namespace SharpLib.Log
         /// </summary>
         private void ParseRootElement(XElement xElement)
         {
-            if (xElement.GetAttributeBoolEx(LOG_ATTR_USE_INVARIANT_CULTURE, false))
-            {
-                DefaultCultureInfo = CultureInfo.InvariantCulture;
-            }
-
             var autoReload = xElement.GetAttributeBoolEx(LOG_ATTR_AUTO_RELOAD, false);
-            var throwException = xElement.GetAttributeBoolEx(LOG_ATTR_THROW_EXCEPTIONS, LogManager.Instance.ThrowExceptions);
             var globalThreshold = xElement.GetAttributeStringEx(LOG_ATTR_GLOBAL_THRESHOLD, LogManager.Instance.GlobalThreshold.Name);
 
             AutoReload = autoReload;
-            LogManager.Instance.ThrowExceptions = throwException;
             LogManager.Instance.GlobalThreshold = LogLevel.FromString(globalThreshold);
 
             var xChilds = xElement.Elements();
@@ -133,7 +122,7 @@ namespace SharpLib.Log
                         break;
 
                     case LOG_CHILD_RULES:
-                        ParseRulesElement(xChild, LoggingRules);
+                        ParseRulesElement(xChild, Rules);
                         break;
 
                     case LOG_CHILD_TIME:
@@ -174,7 +163,7 @@ namespace SharpLib.Log
                             newTarget = WrapWithAsyncTargetWrapper(newTarget);
                         }
 
-                        AddTarget(newTarget.Name, newTarget);
+                        AddTarget(newTarget);
                         break;
                 }
             }
@@ -220,7 +209,7 @@ namespace SharpLib.Log
                             ParseTargetElement(newTarget, xChild);
                             if (newTarget.Name != null)
                             {
-                                AddTarget(newTarget.Name, newTarget);
+                                AddTarget(newTarget);
                             }
 
                             compound.Targets.Add(newTarget);
@@ -255,7 +244,7 @@ namespace SharpLib.Log
                             ParseTargetElement(newTarget, xChild);
                             if (newTarget.Name != null)
                             {
-                                AddTarget(newTarget.Name, newTarget);
+                                AddTarget(newTarget);
                             }
 
                             if (wrapper.WrappedTarget != null)

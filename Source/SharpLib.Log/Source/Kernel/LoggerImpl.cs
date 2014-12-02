@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
-using System.Threading;
 
 namespace SharpLib.Log
 {
@@ -26,7 +25,7 @@ namespace SharpLib.Log
 
         #region Методы
 
-        internal static void Write(Type loggerType, TargetWithFilterChain targets, LogEventInfo logEvent, LogFactory factory)
+        internal static void Write(Type loggerType, TargetWithFilterChain targets, LogEventInfo logEvent)
         {
             if (targets == null)
             {
@@ -44,24 +43,9 @@ namespace SharpLib.Log
                 logEvent.SetStackTrace(stackTrace, firstUserFrame);
             }
 
-            int originalThreadId = Thread.CurrentThread.ManagedThreadId;
-
-            AsyncContinuation exceptionHandler = ex =>
-            {
-                if (ex == null)
-                {
-                    return;
-                }
-
-                if (factory.ThrowExceptions && Thread.CurrentThread.ManagedThreadId == originalThreadId)
-                {
-                    throw new Exception("Exception occurred in engine", ex);
-                }
-            };
-
             for (var t = targets; t != null; t = t.NextInChain)
             {
-                var result = WriteToTargetWithFilterChain(t, logEvent, exceptionHandler);
+                var result = WriteToTargetWithFilterChain(t, logEvent);
 
                 if (result == false)
                 {
@@ -147,7 +131,7 @@ namespace SharpLib.Log
             return false;
         }
 
-        private static bool WriteToTargetWithFilterChain(TargetWithFilterChain targetListHead, LogEventInfo logEvent, AsyncContinuation onException)
+        private static bool WriteToTargetWithFilterChain(TargetWithFilterChain targetListHead, LogEventInfo logEvent)
         {
             Target target = targetListHead.Target;
             FilterResult result = GetFilterResult(targetListHead.FilterChain, logEvent);
@@ -162,7 +146,7 @@ namespace SharpLib.Log
                 return true;
             }
 
-            target.WriteAsyncLogEvent(logEvent.WithContinuation(onException));
+            target.WriteAsyncLogEvent(logEvent.WithContinuation());
             if (result == FilterResult.LogFinal)
             {
                 return false;

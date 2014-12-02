@@ -21,8 +21,11 @@
             <TabItem Header="ListView" >
                 <local:TabListView />
             </TabItem>
-            <TabItem Header="Tabs" IsSelected="True">
+            <TabItem Header="Tabs">
                 <local:TabTabs />
+            </TabItem>
+            <TabItem Header="Memo" IsSelected="True">
+                <local:TabMemo />
             </TabItem>
 
         </TabControl>

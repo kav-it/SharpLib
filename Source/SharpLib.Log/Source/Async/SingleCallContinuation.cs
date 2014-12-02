@@ -43,11 +43,6 @@ namespace SharpLib.Log
                 {
                     throw;
                 }
-
-                if (LogManager.Instance.ThrowExceptions)
-                {
-                    throw;
-                }
             }
         }
 

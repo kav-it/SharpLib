@@ -8,9 +8,7 @@ namespace DemoWpf
     {
         public App()
         {
-            var logger = LogManager.Instance.GetCurrentClassLogger();
-            logger.Debug("sdfsdf");
-
+            LogManager.Instance.GetLogger()
             SharpLibApp.Instance.Init();
         }
     }

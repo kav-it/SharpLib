@@ -43,6 +43,7 @@
     <Compile Include="..\SharpLib.Version.cs">
       <Link>Source\SharpLib.Version.cs</Link>
     </Compile>
+    <Compile Include="Source\Factory\Factory.cs" />
     <Compile Include="Source\Internal\Utils\AppDomainWrapper.cs" />
     <Compile Include="Source\AssemblyInfo.cs" />
     <Compile Include="Source\Async\AsyncContinuation.cs" />
@@ -73,8 +74,6 @@
     <Compile Include="Source\Config\InstallationContext.cs" />
     <Compile Include="Source\Config\LoggerConfiguration.cs" />
     <Compile Include="Source\Config\LoggingConfiguration.cs" />
-    <Compile Include="Source\Config\LoggingConfigurationChangedEventArgs.cs" />
-    <Compile Include="Source\Config\LoggingConfigurationReloadedEventArgs.cs" />
     <Compile Include="Source\Config\LoggingRule.cs" />
     <Compile Include="Source\Config\XmlLoggingConfiguration.cs" />
     <Compile Include="Source\Internal\Utils\DictionaryAdapter.cs" />
@@ -84,7 +83,6 @@
     <Compile Include="Source\Enums\ProcessInfoProperty.cs" />
     <Compile Include="Source\Enums\RuntimeOS.cs" />
     <Compile Include="Source\Enums\StackTraceFormat.cs" />
-    <Compile Include="Source\Factory\Factory.cs" />
     <Compile Include="Source\Factory\MethodFactory.cs" />
     <Compile Include="Source\Filters\Filter.ConditionBased.cs" />
     <Compile Include="Source\Filters\Filter.cs" />
@@ -185,7 +183,6 @@
     <Compile Include="Source\Layouts\Layout.Simple.cs" />
     <Compile Include="Source\Layouts\Layout.WithHeaderAndFooter.cs" />
     <Compile Include="Source\Kernel\LogEventInfo.cs" />
-    <Compile Include="Source\Kernel\LogFactory.cs" />
     <Compile Include="Source\Kernel\Logger.cs" />
     <Compile Include="Source\Kernel\LoggerImpl.cs" />
     <Compile Include="Source\Kernel\LogLevel.cs" />
@@ -238,6 +235,9 @@
     <Compile Include="Source\Targets\Debug\DebuggerTarget.cs" />
     <Compile Include="Source\Targets\Debug\DebugTarget.cs" />
     <Compile Include="Source\Targets\File\FileTarget.cs" />
+    <Compile Include="Source\Targets\MemoryEvent\Target.MemoryEvent.Args.cs" />
+    <Compile Include="Source\Targets\MemoryEvent\Target.MemoryEvent.Handler.cs" />
+    <Compile Include="Source\Targets\MemoryEvent\Target.MemoryEvent.cs" />
     <Compile Include="Source\Targets\OutputDebug\OutputDebugStringTarget.cs" />
     <Compile Include="Source\Targets\Target.CompoundBase.cs" />
     <Compile Include="Source\Targets\Target.cs" />
@@ -254,7 +254,9 @@
     <Compile Include="Source\TimeSource\TimeSource.FastUtc.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Source\Assets\Config.xml" />
+    <EmbeddedResource Include="Source\Assets\Config.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpLib\SharpLib.csproj">

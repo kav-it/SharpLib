@@ -31,8 +31,6 @@ namespace SharpLib.Log
 
         public string Name { get; private set; }
 
-        public LogFactory Factory { get; private set; }
-
         public bool IsTraceEnabled
         {
             get { return _isTraceEnabled; }
@@ -1013,32 +1011,31 @@ namespace SharpLib.Log
             }
         }
 
-        internal void Initialize(string name, LoggerConfiguration loggerConfiguration, LogFactory factory)
+        internal void Initialize(string name, LoggerConfiguration loggerConfiguration)
         {
             Name = name;
-            Factory = factory;
             SetConfiguration(loggerConfiguration);
         }
 
         internal void WriteToTargets(LogLevel level, IFormatProvider formatProvider, [Localizable(false)] string message, object[] args)
         {
-            LoggerImpl.Write(_loggerType, GetTargetsForLevel(level), LogEventInfo.Create(level, Name, formatProvider, message, args), Factory);
+            LoggerImpl.Write(_loggerType, GetTargetsForLevel(level), LogEventInfo.Create(level, Name, formatProvider, message, args));
         }
 
         internal void WriteToTargets(LogLevel level, IFormatProvider formatProvider, [Localizable(false)] string message)
         {
             var logEvent = LogEventInfo.Create(level, Name, formatProvider, message, null);
-            LoggerImpl.Write(_loggerType, GetTargetsForLevel(level), logEvent, Factory);
+            LoggerImpl.Write(_loggerType, GetTargetsForLevel(level), logEvent);
         }
 
         internal void WriteToTargets<T>(LogLevel level, IFormatProvider formatProvider, T value)
         {
-            LoggerImpl.Write(_loggerType, GetTargetsForLevel(level), LogEventInfo.Create(level, Name, formatProvider, value), Factory);
+            LoggerImpl.Write(_loggerType, GetTargetsForLevel(level), LogEventInfo.Create(level, Name, formatProvider, value));
         }
 
         internal void WriteToTargets(LogLevel level, [Localizable(false)] string message, Exception ex)
         {
-            LoggerImpl.Write(_loggerType, GetTargetsForLevel(level), LogEventInfo.Create(level, Name, message, ex), Factory);
+            LoggerImpl.Write(_loggerType, GetTargetsForLevel(level), LogEventInfo.Create(level, Name, message, ex));
         }
 
         internal void WriteToTargets(LogLevel level, [Localizable(false)] string message, object[] args)
@@ -1048,12 +1045,12 @@ namespace SharpLib.Log
 
         internal void WriteToTargets(LogEventInfo logEvent)
         {
-            LoggerImpl.Write(_loggerType, GetTargetsForLevel(logEvent.Level), logEvent, Factory);
+            LoggerImpl.Write(_loggerType, GetTargetsForLevel(logEvent.Level), logEvent);
         }
 
         internal void WriteToTargets(Type wrapperType, LogEventInfo logEvent)
         {
-            LoggerImpl.Write(wrapperType, GetTargetsForLevel(logEvent.Level), logEvent, Factory);
+            LoggerImpl.Write(wrapperType, GetTargetsForLevel(logEvent.Level), logEvent);
         }
 
         internal void SetConfiguration(LoggerConfiguration newConfiguration)

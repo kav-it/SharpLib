@@ -9,11 +9,16 @@ namespace SharpLib.Log
     {
         #region Поля
 
-        private readonly object lockObject = new object();
+        private readonly object _lockObject;
 
-        private List<Layout> allLayouts;
+        private List<Layout> _allLayouts;
 
-        private Exception initializeException;
+        private Exception _initializeException;
+
+        protected Target()
+        {
+            _lockObject = new object();
+        }
 
         #endregion
 
@@ -23,7 +28,7 @@ namespace SharpLib.Log
 
         protected object SyncRoot
         {
-            get { return lockObject; }
+            get { return _lockObject; }
         }
 
         protected LoggingConfiguration LoggingConfiguration { get; private set; }
@@ -89,7 +94,7 @@ namespace SharpLib.Log
             {
                 if (IsInitialized)
                 {
-                    foreach (Layout l in allLayouts)
+                    foreach (Layout l in _allLayouts)
                     {
                         l.Precalculate(logEvent);
                     }
@@ -114,21 +119,17 @@ namespace SharpLib.Log
             {
                 if (!IsInitialized)
                 {
-                    logEvent.Continuation(null);
                     return;
                 }
 
-                if (initializeException != null)
+                if (_initializeException != null)
                 {
-                    logEvent.Continuation(CreateInitException());
                     return;
                 }
-
-                var wrappedContinuation = AsyncHelpers.PreventMultipleCalls(logEvent.Continuation);
 
                 try
                 {
-                    Write(logEvent.LogEvent.WithContinuation(wrappedContinuation));
+                    Write(logEvent.LogEvent.WithContinuation());
                 }
                 catch (Exception exception)
                 {
@@ -136,13 +137,6 @@ namespace SharpLib.Log
                     {
                         throw;
                     }
-
-                    if (LogManager.Instance.ThrowExceptions)
-                    {
-                        throw;
-                    }
-
-                    wrappedContinuation(exception);
                 }
             }
         }
@@ -158,28 +152,18 @@ namespace SharpLib.Log
             {
                 if (!IsInitialized)
                 {
-                    foreach (var ev in logEvents)
-                    {
-                        ev.Continuation(null);
-                    }
-
                     return;
                 }
 
-                if (initializeException != null)
+                if (_initializeException != null)
                 {
-                    foreach (var ev in logEvents)
-                    {
-                        ev.Continuation(CreateInitException());
-                    }
-
                     return;
                 }
 
                 var wrappedEvents = new AsyncLogEventInfo[logEvents.Length];
                 for (int i = 0; i < logEvents.Length; ++i)
                 {
-                    wrappedEvents[i] = logEvents[i].LogEvent.WithContinuation(AsyncHelpers.PreventMultipleCalls(logEvents[i].Continuation));
+                    wrappedEvents[i] = logEvents[i].LogEvent.WithContinuation();
                 }
 
                 try
@@ -191,11 +175,6 @@ namespace SharpLib.Log
                     if (exception.MustBeRethrown())
                     {
                         throw;
-                    }
-
-                    foreach (var ev in wrappedEvents)
-                    {
-                        ev.Continuation(exception);
                     }
                 }
             }
@@ -214,7 +193,7 @@ namespace SharpLib.Log
                     try
                     {
                         InitializeTarget();
-                        initializeException = null;
+                        _initializeException = null;
                     }
                     catch (Exception exception)
                     {
@@ -223,7 +202,7 @@ namespace SharpLib.Log
                             throw;
                         }
 
-                        initializeException = exception;
+                        _initializeException = exception;
                         throw;
                     }
                 }
@@ -236,26 +215,27 @@ namespace SharpLib.Log
             {
                 LoggingConfiguration = null;
 
-                if (IsInitialized)
+                if (!IsInitialized)
                 {
-                    IsInitialized = false;
+                    return;
+                }
+                IsInitialized = false;
 
-                    try
+                try
+                {
+                    if (_initializeException == null)
                     {
-                        if (initializeException == null)
-                        {
-                            CloseTarget();
-                        }
+                        CloseTarget();
                     }
-                    catch (Exception exception)
+                }
+                catch (Exception exception)
+                {
+                    if (exception.MustBeRethrown())
                     {
-                        if (exception.MustBeRethrown())
-                        {
-                            throw;
-                        }
-
                         throw;
                     }
+
+                    throw;
                 }
             }
         }
@@ -269,22 +249,6 @@ namespace SharpLib.Log
             else
             {
                 var wrappedLogEventInfos = new AsyncLogEventInfo[logEventInfos.Length];
-                int remaining = logEventInfos.Length;
-                for (int i = 0; i < logEventInfos.Length; ++i)
-                {
-                    AsyncContinuation originalContinuation = logEventInfos[i].Continuation;
-                    AsyncContinuation wrappedContinuation = ex =>
-                    {
-                        originalContinuation(ex);
-                        if (0 == Interlocked.Decrement(ref remaining))
-                        {
-                            continuation(null);
-                        }
-                    };
-
-                    wrappedLogEventInfos[i] = logEventInfos[i].LogEvent.WithContinuation(wrappedContinuation);
-                }
-
                 WriteAsyncLogEvents(wrappedLogEventInfos);
             }
         }
@@ -322,7 +286,6 @@ namespace SharpLib.Log
                 MergeEventProperties(logEvent.LogEvent);
 
                 Write(logEvent.LogEvent);
-                logEvent.Continuation(null);
             }
             catch (Exception exception)
             {
@@ -330,27 +293,25 @@ namespace SharpLib.Log
                 {
                     throw;
                 }
-
-                logEvent.Continuation(exception);
             }
         }
 
         protected virtual void Write(AsyncLogEventInfo[] logEvents)
         {
-            for (int i = 0; i < logEvents.Length; ++i)
+            foreach (AsyncLogEventInfo evt in logEvents)
             {
-                Write(logEvents[i]);
+                Write(evt);
             }
         }
 
         private Exception CreateInitException()
         {
-            return new Exception("Target " + this + " failed to initialize.", initializeException);
+            return new Exception("Target " + this + " failed to initialize.", _initializeException);
         }
 
         private void GetAllLayouts()
         {
-            allLayouts = new List<Layout>(ObjectGraphScanner.FindReachableObjects<Layout>(this));
+            _allLayouts = new List<Layout>(ObjectGraphScanner.FindReachableObjects<Layout>(this));
         }
 
         protected void MergeEventProperties(LogEventInfo logEvent)

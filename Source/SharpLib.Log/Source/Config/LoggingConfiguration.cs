@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 
 namespace SharpLib.Log
@@ -23,20 +22,22 @@ namespace SharpLib.Log
             get { return new List<Target>(_targets.Values).AsReadOnly(); }
         }
 
+        /// <summary>
+        /// </summary>
         public virtual IEnumerable<string> FileNamesToWatch
         {
             get { return new string[0]; }
         }
 
-        public IList<LoggingRule> LoggingRules { get; private set; }
+        /// <summary>
+        /// Правила вывода/фильтрации сообщений
+        /// </summary>
+        public IList<LoggingRule> Rules { get; private set; }
 
-        public CultureInfo DefaultCultureInfo
-        {
-            get { return LogManager.Instance.DefaultCultureInfo(); }
-            set { LogManager.Instance.DefaultCultureInfo = () => value; }
-        }
-
-        public ReadOnlyCollection<Target> AllTargets
+        /// <summary>
+        /// Объекты логгирования
+        /// </summary>
+        public ReadOnlyCollection<Target> Targets
         {
             get { return _configItems.OfType<Target>().ToList().AsReadOnly(); }
         }
@@ -48,21 +49,30 @@ namespace SharpLib.Log
         public LoggingConfiguration()
         {
             _targets = new Dictionary<string, Target>(StringComparer.OrdinalIgnoreCase);
-            LoggingRules = new List<LoggingRule>();
+            Rules = new List<LoggingRule>();
         }
 
         #endregion
 
         #region Методы
 
-        public void AddTarget(string name, Target target)
+        public void AddTarget(Target target)
         {
-            if (name == null)
+            if (target.Name.IsNotValid())
             {
                 throw new ArgumentException("Target name cannot be null", "name");
             }
 
-            _targets[name] = target;
+            _targets[target.Name] = target;
+        }
+
+        public void AddTarget(Target target, LogLevel minLevel)
+        {
+            var rule = new LoggingRule("*", minLevel, target);
+            AddTarget(target);
+            Rules.Add(rule);
+
+            LogManager.Instance.Reconfig();
         }
 
         public Target FindTargetByName(string name)
@@ -162,7 +172,7 @@ namespace SharpLib.Log
         internal void FlushAllTargets(AsyncContinuation asyncContinuation)
         {
             var uniqueTargets = new List<Target>();
-            foreach (var rule in LoggingRules)
+            foreach (var rule in Rules)
             {
                 foreach (var t in rule.Targets)
                 {
@@ -178,7 +188,7 @@ namespace SharpLib.Log
 
         internal void ValidateConfig()
         {
-            var roots = LoggingRules.Cast<object>().ToList();
+            var roots = Rules.Cast<object>().ToList();
 
             roots.AddRange(_targets.Values);
 
@@ -205,11 +215,6 @@ namespace SharpLib.Log
                     if (exception.MustBeRethrown())
                     {
                         throw;
-                    }
-
-                    if (LogManager.Instance.ThrowExceptions)
-                    {
-                        throw new Exception("Error during initialization of " + initialize, exception);
                     }
                 }
             }

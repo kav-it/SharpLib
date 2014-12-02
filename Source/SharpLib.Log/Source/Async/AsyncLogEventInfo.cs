@@ -14,17 +14,14 @@ namespace SharpLib.Log
 
         public LogEventInfo LogEvent { get; private set; }
 
-        public AsyncContinuation Continuation { get; internal set; }
-
         #endregion
 
         #region Конструктор
 
-        public AsyncLogEventInfo(LogEventInfo logEvent, AsyncContinuation continuation)
+        public AsyncLogEventInfo(LogEventInfo logEvent)
             : this()
         {
             LogEvent = logEvent;
-            Continuation = continuation;
         }
 
         #endregion
@@ -39,21 +36,19 @@ namespace SharpLib.Log
 
         public override int GetHashCode()
         {
-            return LogEvent.GetHashCode() ^ Continuation.GetHashCode();
+            return LogEvent.GetHashCode();
         }
 
         #endregion
 
         public static bool operator ==(AsyncLogEventInfo eventInfo1, AsyncLogEventInfo eventInfo2)
         {
-            return ReferenceEquals(eventInfo1.Continuation, eventInfo2.Continuation)
-                   && ReferenceEquals(eventInfo1.LogEvent, eventInfo2.LogEvent);
+            return ReferenceEquals(eventInfo1.LogEvent, eventInfo2.LogEvent);
         }
 
         public static bool operator !=(AsyncLogEventInfo eventInfo1, AsyncLogEventInfo eventInfo2)
         {
-            return !ReferenceEquals(eventInfo1.Continuation, eventInfo2.Continuation)
-                   || !ReferenceEquals(eventInfo1.LogEvent, eventInfo2.LogEvent);
+            return !ReferenceEquals(eventInfo1.LogEvent, eventInfo2.LogEvent);
         }
     }
 }

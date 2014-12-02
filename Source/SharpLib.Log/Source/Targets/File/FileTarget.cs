@@ -340,8 +340,6 @@ namespace SharpLib.Log
             var buckets = logEvents.BucketSort(c => FileName.Render(c.LogEvent));
             using (var ms = new MemoryStream())
             {
-                var pendingContinuations = new List<AsyncContinuation>();
-
                 foreach (var bucket in buckets)
                 {
                     string fileName = CleanupFileName(bucket.Key);
@@ -360,10 +358,9 @@ namespace SharpLib.Log
 
                         byte[] bytes = GetBytesToWrite(ev.LogEvent);
                         ms.Write(bytes, 0, bytes.Length);
-                        pendingContinuations.Add(ev.Continuation);
                     }
 
-                    FlushCurrentFileWrites(fileName, firstLogEvent, ms, pendingContinuations);
+                    FlushCurrentFileWrites(fileName, firstLogEvent, ms);
                 }
             }
         }
@@ -401,10 +398,8 @@ namespace SharpLib.Log
             return pattern.Substring(0, firstPart) + Convert.ToString(value, 10).PadLeft(numDigits, '0') + pattern.Substring(lastPart);
         }
 
-        private void FlushCurrentFileWrites(string currentFileName, LogEventInfo firstLogEvent, MemoryStream ms, List<AsyncContinuation> pendingContinuations)
+        private void FlushCurrentFileWrites(string currentFileName, LogEventInfo firstLogEvent, MemoryStream ms)
         {
-            Exception lastException = null;
-
             try
             {
                 if (currentFileName != null)
@@ -425,16 +420,7 @@ namespace SharpLib.Log
                 {
                     throw;
                 }
-
-                lastException = exception;
             }
-
-            foreach (AsyncContinuation cont in pendingContinuations)
-            {
-                cont(lastException);
-            }
-
-            pendingContinuations.Clear();
         }
 
         private void RecursiveRollingRename(string fileName, string pattern, int archiveNumber)

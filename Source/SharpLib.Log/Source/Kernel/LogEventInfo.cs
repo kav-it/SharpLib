@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Threading;
 
 namespace SharpLib.Log
@@ -16,8 +17,6 @@ namespace SharpLib.Log
         private static int _globalSequenceId;
 
         private readonly object _layoutCacheLock;
-
-        private IDictionary _eventContextAdapter;
 
         private string _formattedMessage;
 
@@ -151,9 +150,9 @@ namespace SharpLib.Log
             return new LogEventInfo(logLevel, loggerName, null, message, null, exception);
         }
 
-        public AsyncLogEventInfo WithContinuation(AsyncContinuation asyncContinuation)
+        public AsyncLogEventInfo WithContinuation()
         {
-            return new AsyncLogEventInfo(this, asyncContinuation);
+            return new AsyncLogEventInfo(this);
         }
 
         public override string ToString()
@@ -252,7 +251,7 @@ namespace SharpLib.Log
             {
                 try
                 {
-                    _formattedMessage = string.Format(FormatProvider ?? LogManager.Instance.DefaultCultureInfo(), Message, Parameters);
+                    _formattedMessage = string.Format(FormatProvider ?? CultureInfo.CurrentCulture, Message, Parameters);
                 }
                 catch (Exception exception)
                 {
@@ -268,7 +267,6 @@ namespace SharpLib.Log
         private void InitEventContext()
         {
             _properties = new Dictionary<object, object>();
-            _eventContextAdapter = new DictionaryAdapter<object, object>(_properties);
         }
 
         #endregion

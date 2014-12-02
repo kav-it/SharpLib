@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
+using System.Threading;
 
 namespace SharpLib.Log
 {
-    public sealed class LogManager
+    public class LogManager : IDisposable
     {
         #region Делегаты
 
@@ -16,27 +17,109 @@ namespace SharpLib.Log
 
         #endregion
 
-        #region Поля
+        #region Константы
 
-        private readonly LogFactory _globalFactory;
+        /// <summary>
+        /// Расширение файлов конфигурации
+        /// </summary>
+        private const string CONFIG_EXTENSION = ".log.config";
+
+        /// <summary>
+        /// Время паузы перед сохранением событий (мс)
+        /// </summary>
+        private const int FLUSH_TIMEOUT = 15000;
+
+        /// <summary>
+        /// Время перед загрузкой конфигурации, после изменения пользователем (мс)
+        /// </summary>
+        private const int RECONFIG_AFTER_FILE_CHANGED_TIMEOUT = 1000;
+
+        #endregion
+
+        #region Поля
 
         private static readonly Lazy<LogManager> _instance = new Lazy<LogManager>(() => new LogManager());
 
+        /// <summary>
+        /// Объект интервала времени <see cref="FLUSH_TIMEOUT" />
+        /// </summary>
+        private readonly TimeSpan _defaultFlushTimeout;
+
+        /// <summary>
+        /// Кеш объектов-логгеров
+        /// </summary>
+        private readonly Dictionary<LoggerCacheKey, WeakReference> _loggerCache;
+
+        /// <summary>
+        /// Модуль анализа изменения файлов конфигурации в файловой системе
+        /// </summary>
+        private readonly MultiFileWatcher _watcher;
+
+        /// <summary>
+        /// Конфигурация
+        /// </summary>
+        private LoggingConfiguration _config;
+
+        /// <summary>
+        /// Текущий домен
+        /// </summary>
         private IAppDomain _currentAppDomain;
+
+        /// <summary>
+        /// Общий уровень отладки
+        /// </summary>
+        private LogLevel _globalThreshold;
+
+        /// <summary>
+        /// ХЗ
+        /// </summary>
+        private int _logsEnabled;
+
+        /// <summary>
+        /// Таймер перезагрузки конфигурации
+        /// </summary>
+        private Timer _reloadTimer;
 
         #endregion
 
         #region Свойства
 
+        public LoggingConfiguration Configuration
+        {
+            get
+            {
+                lock (this)
+                {
+                    if (_config != null)
+                    {
+                        return _config;
+                    }
+
+                    _config = GetConfiguration();
+
+                    return _config;
+                }
+            }
+            set { SetConfiguration(value); }
+        }
+
+        public LogLevel GlobalThreshold
+        {
+            get { return _globalThreshold; }
+
+            set
+            {
+                lock (this)
+                {
+                    _globalThreshold = value;
+                    Reconfig();
+                }
+            }
+        }
+
         public static LogManager Instance
         {
             get { return _instance.Value; }
-        }
-
-        public bool ThrowExceptions
-        {
-            get { return _globalFactory.ThrowExceptions; }
-            set { _globalFactory.ThrowExceptions = value; }
         }
 
         internal IAppDomain CurrentAppDomain
@@ -50,35 +133,10 @@ namespace SharpLib.Log
             }
         }
 
-        public LoggingConfiguration Configuration
-        {
-            get { return _globalFactory.Configuration; }
-            set { _globalFactory.Configuration = value; }
-        }
-
-        public LogLevel GlobalThreshold
-        {
-            get { return _globalFactory.GlobalThreshold; }
-            set { _globalFactory.GlobalThreshold = value; }
-        }
-
-        public GetCultureInfo DefaultCultureInfo { get; set; }
-
         #endregion
 
         #region События
 
-        public event EventHandler<LoggingConfigurationChangedEventArgs> ConfigurationChanged
-        {
-            add { _globalFactory.ConfigurationChanged += value; }
-            remove { _globalFactory.ConfigurationChanged -= value; }
-        }
-
-        public event EventHandler<LoggingConfigurationReloadedEventArgs> ConfigurationReloaded
-        {
-            add { _globalFactory.ConfigurationReloaded += value; }
-            remove { _globalFactory.ConfigurationReloaded -= value; }
-        }
 
         #endregion
 
@@ -86,8 +144,12 @@ namespace SharpLib.Log
 
         private LogManager()
         {
-            DefaultCultureInfo = () => CultureInfo.CurrentCulture;
-            _globalFactory = new LogFactory();
+            _defaultFlushTimeout = TimeSpan.FromMilliseconds(FLUSH_TIMEOUT);
+            _globalThreshold = LogLevel.MinLevel;
+            _loggerCache = new Dictionary<LoggerCacheKey, WeakReference>();
+            _watcher = new MultiFileWatcher();
+            _watcher.OnChange += ConfigFileChanged;
+
             try
             {
                 SetupTerminationEvents();
@@ -105,8 +167,45 @@ namespace SharpLib.Log
 
         #region Методы
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _watcher.Dispose();
+
+                if (_reloadTimer != null)
+                {
+                    _reloadTimer.Dispose();
+                    _reloadTimer = null;
+                }
+            }
+        }
+
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public Logger GetCurrentClassLogger()
+        public Logger GetLogger(Type loggerType)
+        {
+            Type declaringType;
+            int framesToSkip = 1;
+            do
+            {
+                StackFrame frame = new StackFrame(framesToSkip, false);
+                declaringType = frame.GetMethod().DeclaringType;
+                framesToSkip++;
+            } while (declaringType != null && declaringType.Module.Name.Equals("mscorlib.dll", StringComparison.OrdinalIgnoreCase));
+
+            return declaringType != null
+                ? GetLoggerByTypeAndName(declaringType.FullName, loggerType)
+                : null;
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public Logger GetLogger()
         {
             string loggerName;
             Type declaringType;
@@ -126,92 +225,131 @@ namespace SharpLib.Log
                 loggerName = declaringType.FullName;
             } while (declaringType.Module.Name.Equals("mscorlib.dll", StringComparison.OrdinalIgnoreCase));
 
-            return _globalFactory.GetLogger(loggerName);
-        }
-
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        public Logger GetCurrentClassLogger(Type loggerType)
-        {
-            Type declaringType;
-            int framesToSkip = 1;
-            do
-            {
-                StackFrame frame = new StackFrame(framesToSkip, false);
-                declaringType = frame.GetMethod().DeclaringType;
-                framesToSkip++;
-            } while (declaringType.Module.Name.Equals("mscorlib.dll", StringComparison.OrdinalIgnoreCase));
-
-            return _globalFactory.GetLogger(declaringType.FullName, loggerType);
-        }
-
-        public Logger CreateNullLogger()
-        {
-            return _globalFactory.CreateNullLogger();
+            return GetLoggerByName(loggerName);
         }
 
         public Logger GetLogger(string name)
         {
-            return _globalFactory.GetLogger(name);
+            return GetLoggerByName(name);
         }
 
         public Logger GetLogger(string name, Type loggerType)
         {
-            return _globalFactory.GetLogger(name, loggerType);
+            return GetLoggerByTypeAndName(name, loggerType);
         }
 
-        public void ReconfigExistingLoggers()
+        private Logger GetLoggerByName(string name)
         {
-            _globalFactory.ReconfigExistingLoggers();
+            return GetLogger(new LoggerCacheKey(typeof(Logger), name));
+        }
+
+        private Logger GetLoggerByTypeAndName(string name, Type loggerType)
+        {
+            return GetLogger(new LoggerCacheKey(loggerType, name));
+        }
+
+        /// <summary>
+        /// Переконфигурирования логгеров
+        /// </summary>
+        /// <remarks>
+        /// Используется после изменения логгеров в коде
+        /// </remarks>
+        public void Reconfig()
+        {
+            ReconfigExistingLoggers(_config);
+        }
+
+        internal void ReconfigExistingLoggers(LoggingConfiguration configuration)
+        {
+            if (configuration != null)
+            {
+                configuration.EnsureInitialized();
+            }
+
+            foreach (var loggerWrapper in _loggerCache.Values.ToList())
+            {
+                Logger logger = loggerWrapper.Target as Logger;
+                if (logger != null)
+                {
+                    logger.SetConfiguration(GetConfigurationForLogger(logger.Name, configuration));
+                }
+            }
         }
 
         public void Flush()
         {
-            _globalFactory.Flush();
-        }
-
-        public void Flush(TimeSpan timeout)
-        {
-            _globalFactory.Flush(timeout);
+            Flush(_defaultFlushTimeout);
         }
 
         public void Flush(int timeoutMilliseconds)
         {
-            _globalFactory.Flush(timeoutMilliseconds);
+            Flush(TimeSpan.FromMilliseconds(timeoutMilliseconds));
         }
 
-        public void Flush(AsyncContinuation asyncContinuation)
+        public void Flush(TimeSpan timeout)
         {
-            _globalFactory.Flush(asyncContinuation);
+            try
+            {
+                AsyncHelpers.RunSynchronously(cb => Flush(cb, timeout));
+            }
+            catch
+            {
+            }
         }
 
-        public void Flush(AsyncContinuation asyncContinuation, TimeSpan timeout)
+        private void Flush(AsyncContinuation asyncContinuation, TimeSpan timeout)
         {
-            _globalFactory.Flush(asyncContinuation, timeout);
-        }
-
-        public void Flush(AsyncContinuation asyncContinuation, int timeoutMilliseconds)
-        {
-            _globalFactory.Flush(asyncContinuation, timeoutMilliseconds);
+            try
+            {
+                var loggingConfiguration = Configuration;
+                if (loggingConfiguration != null)
+                {
+                    loggingConfiguration.FlushAllTargets(AsyncHelpers.WithTimeout(asyncContinuation, timeout));
+                }
+                else
+                {
+                    asyncContinuation(null);
+                }
+            }
+            catch
+            {
+            }
         }
 
         public IDisposable DisableLogging()
         {
-            return _globalFactory.DisableLogging();
+            lock (this)
+            {
+                _logsEnabled--;
+                if (_logsEnabled == -1)
+                {
+                    Reconfig();
+                }
+            }
+
+            return new LogEnabler(this);
         }
 
         public void EnableLogging()
         {
-            _globalFactory.EnableLogging();
+            lock (this)
+            {
+                _logsEnabled++;
+                if (_logsEnabled == 0)
+                {
+                    Reconfig();
+                }
+            }
         }
 
         public bool IsLoggingEnabled()
         {
-            return _globalFactory.IsLoggingEnabled();
+            return _logsEnabled >= 0;
         }
 
         public void Shutdown()
         {
-            foreach (var target in Configuration.AllTargets)
+            foreach (var target in Configuration.Targets)
             {
                 target.Dispose();
             }
@@ -226,6 +364,347 @@ namespace SharpLib.Log
         private void TurnOffLogging(object sender, EventArgs args)
         {
             Configuration = null;
+        }
+
+        private void ConfigFileChanged(object sender, EventArgs args)
+        {
+            lock (this)
+            {
+                if (_reloadTimer == null)
+                {
+                    _reloadTimer = new Timer(
+                        ReloadConfigOnTimer,
+                        Configuration,
+                        RECONFIG_AFTER_FILE_CHANGED_TIMEOUT,
+                        Timeout.Infinite);
+                }
+                else
+                {
+                    _reloadTimer.Change(RECONFIG_AFTER_FILE_CHANGED_TIMEOUT, Timeout.Infinite);
+                }
+            }
+        }
+
+        private void ReloadConfigOnTimer(object state)
+        {
+            LoggingConfiguration configurationToReload = (LoggingConfiguration)state;
+
+            lock (this)
+            {
+                if (_reloadTimer != null)
+                {
+                    _reloadTimer.Dispose();
+                    _reloadTimer = null;
+                }
+
+                _watcher.StopWatching();
+                try
+                {
+                    if (Configuration != configurationToReload)
+                    {
+                        throw new Exception("Config changed in between. Not reloading.");
+                    }
+
+                    LoggingConfiguration newConfig = configurationToReload.Reload();
+                    if (newConfig != null)
+                    {
+                        Configuration = newConfig;
+                    }
+                    else
+                    {
+                        throw new Exception("Configuration.Reload() returned null. Not reloading.");
+                    }
+                }
+                catch (Exception exception)
+                {
+                    if (exception.MustBeRethrown())
+                    {
+                        throw;
+                    }
+
+                    _watcher.Watch(configurationToReload.FileNamesToWatch);
+                }
+            }
+        }
+
+        private Logger GetLogger(LoggerCacheKey cacheKey)
+        {
+            lock (this)
+            {
+                WeakReference l;
+
+                if (_loggerCache.TryGetValue(cacheKey, out l))
+                {
+                    Logger existingLogger = l.Target as Logger;
+                    if (existingLogger != null)
+                    {
+                        return existingLogger;
+                    }
+                }
+
+                Logger newLogger;
+
+                if (cacheKey.ConcreteType != null && cacheKey.ConcreteType != typeof(Logger))
+                {
+                    try
+                    {
+                        newLogger = (Logger)FactoryHelper.CreateInstance(cacheKey.ConcreteType);
+                    }
+                    catch (Exception exception)
+                    {
+                        if (exception.MustBeRethrown())
+                        {
+                            throw;
+                        }
+
+                        cacheKey = new LoggerCacheKey(typeof(Logger), cacheKey.Name);
+
+                        newLogger = new Logger();
+                    }
+                }
+                else
+                {
+                    newLogger = new Logger();
+                }
+
+                if (cacheKey.ConcreteType != null)
+                {
+                    var configuration = GetConfigurationForLogger(cacheKey.Name, Configuration);
+                    newLogger.Initialize(cacheKey.Name, configuration);
+                }
+
+                _loggerCache[cacheKey] = new WeakReference(newLogger);
+                return newLogger;
+            }
+        }
+
+        internal LoggerConfiguration GetConfigurationForLogger(string name, LoggingConfiguration configuration)
+        {
+            var targetsByLevel = new TargetWithFilterChain[LogLevel.MaxLevel.Ordinal + 1];
+            var lastTargetsByLevel = new TargetWithFilterChain[LogLevel.MaxLevel.Ordinal + 1];
+
+            if (configuration != null && IsLoggingEnabled())
+            {
+                GetTargetsByLevelForLogger(name, configuration.Rules, targetsByLevel, lastTargetsByLevel);
+            }
+
+            return new LoggerConfiguration(targetsByLevel);
+        }
+
+        internal void GetTargetsByLevelForLogger(string name, IList<LoggingRule> rules, TargetWithFilterChain[] targetsByLevel, TargetWithFilterChain[] lastTargetsByLevel)
+        {
+            foreach (LoggingRule rule in rules)
+            {
+                if (!rule.NameMatches(name))
+                {
+                    continue;
+                }
+
+                for (int i = 0; i <= LogLevel.MaxLevel.Ordinal; ++i)
+                {
+                    if (i < GlobalThreshold.Ordinal || !rule.IsLoggingEnabledForLevel(LogLevel.FromOrdinal(i)))
+                    {
+                        continue;
+                    }
+
+                    foreach (Target target in rule.Targets)
+                    {
+                        var awf = new TargetWithFilterChain(target, rule.Filters);
+                        if (lastTargetsByLevel[i] != null)
+                        {
+                            lastTargetsByLevel[i].NextInChain = awf;
+                        }
+                        else
+                        {
+                            targetsByLevel[i] = awf;
+                        }
+
+                        lastTargetsByLevel[i] = awf;
+                    }
+                }
+
+                GetTargetsByLevelForLogger(name, rule.ChildRules, targetsByLevel, lastTargetsByLevel);
+
+                if (rule.Final)
+                {
+                    break;
+                }
+            }
+
+            for (int i = 0; i <= LogLevel.MaxLevel.Ordinal; ++i)
+            {
+                TargetWithFilterChain tfc = targetsByLevel[i];
+                if (tfc != null)
+                {
+                    tfc.PrecalculateStackTraceUsage();
+                }
+            }
+        }
+
+        private LoggingConfiguration GetConfiguration()
+        {
+            var configFile = GetConfigFilename();
+
+            if (!File.Exists(configFile))
+            {
+                var context = XmlLoggingConfiguration.GetDefaultConfigAsText();
+                File.WriteAllText(configFile, context);
+            }
+
+            var config = new XmlLoggingConfiguration(configFile);
+
+            if (config == null)
+            {
+                throw new Exception("Не найдено файла конфигурации для логгера");
+            }
+
+            try
+            {
+                _watcher.Watch(config.FileNamesToWatch);
+            }
+            catch (Exception)
+            {
+            }
+
+            config.InitializeAll();
+
+            return config;
+        }
+
+        private void SetConfiguration(LoggingConfiguration newValue)
+        {
+            try
+            {
+                _watcher.StopWatching();
+            }
+            catch (Exception exception)
+            {
+                if (exception.MustBeRethrown())
+                {
+                    throw;
+                }
+            }
+
+            lock (this)
+            {
+                LoggingConfiguration oldConfig = _config;
+                if (oldConfig != null)
+                {
+                    Flush();
+                    oldConfig.Close();
+                }
+
+                _config = newValue;
+
+                if (_config != null)
+                {
+                    _config.InitializeAll();
+                    ReconfigExistingLoggers(_config);
+                    try
+                    {
+                        _watcher.Watch(_config.FileNamesToWatch);
+                    }
+                    catch (Exception exception)
+                    {
+                        if (exception.MustBeRethrown())
+                        {
+                            throw;
+                        }
+                    }
+                }
+            }
+        }
+
+        private string GetConfigFilename()
+        {
+            const string VSHOST_SUB_STR = ".vshost.";
+
+            var rootDir = CurrentAppDomain.BaseDirectory;
+            var exeName = Path.Combine(rootDir, CurrentAppDomain.FriendlyName);
+            var configName = Path.ChangeExtension(exeName, CONFIG_EXTENSION);
+
+            if (configName.Contains(VSHOST_SUB_STR))
+            {
+                configName = configName.Replace(VSHOST_SUB_STR, ".");
+            }
+
+            return configName;
+        }
+
+        #endregion
+
+        #region Вложенный класс: LogEnabler
+
+        private class LogEnabler : IDisposable
+        {
+            #region Поля
+
+            private readonly LogManager _manager;
+
+            #endregion
+
+            #region Конструктор
+
+            public LogEnabler(LogManager manager)
+            {
+                _manager = manager;
+            }
+
+            #endregion
+
+            #region Методы
+
+            void IDisposable.Dispose()
+            {
+                _manager.EnableLogging();
+            }
+
+            #endregion
+        }
+
+        #endregion
+
+        #region Вложенный класс: LoggerCacheKey
+
+        internal class LoggerCacheKey
+        {
+            #region Свойства
+
+            internal Type ConcreteType { get; private set; }
+
+            internal string Name { get; private set; }
+
+            #endregion
+
+            #region Конструктор
+
+            internal LoggerCacheKey(Type loggerConcreteType, string name)
+            {
+                ConcreteType = loggerConcreteType;
+                Name = name;
+            }
+
+            #endregion
+
+            #region Методы
+
+            public override int GetHashCode()
+            {
+                return ConcreteType.GetHashCode() ^ Name.GetHashCode();
+            }
+
+            public override bool Equals(object o)
+            {
+                var key = o as LoggerCacheKey;
+                if (ReferenceEquals(key, null))
+                {
+                    return false;
+                }
+
+                return (ConcreteType == key.ConcreteType) && (key.Name == Name);
+            }
+
+            #endregion
         }
 
         #endregion

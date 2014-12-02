@@ -7,41 +7,40 @@ namespace SharpLib.Log
         [RequiredParameter]
         public override Layout Layout
         {
-            get { return LHF.Layout; }
-
+            get { return LayoutHeaderFooter.Layout; }
             set
             {
                 if (value is LayoutWithHeaderAndFooter)
                 {
                     base.Layout = value;
                 }
-                else if (LHF == null)
+                else if (LayoutHeaderFooter == null)
                 {
-                    LHF = new LayoutWithHeaderAndFooter
+                    LayoutHeaderFooter = new LayoutWithHeaderAndFooter
                     {
                         Layout = value
                     };
                 }
                 else
                 {
-                    LHF.Layout = value;
+                    LayoutHeaderFooter.Layout = value;
                 }
             }
         }
 
         public Layout Footer
         {
-            get { return LHF.Footer; }
-            set { LHF.Footer = value; }
+            get { return LayoutHeaderFooter.Footer; }
+            set { LayoutHeaderFooter.Footer = value; }
         }
 
         public Layout Header
         {
-            get { return LHF.Header; }
-            set { LHF.Header = value; }
+            get { return LayoutHeaderFooter.Header; }
+            set { LayoutHeaderFooter.Header = value; }
         }
 
-        private LayoutWithHeaderAndFooter LHF
+        private LayoutWithHeaderAndFooter LayoutHeaderFooter
         {
             get { return (LayoutWithHeaderAndFooter)base.Layout; }
             set { base.Layout = value; }
