@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace SharpLib.Log
 {
-    public class Logger
+    internal class Logger : ILogger
     {
         #region Поля
 
@@ -65,7 +65,7 @@ namespace SharpLib.Log
 
         #region События
 
-        public event EventHandler<EventArgs> LoggerReconfigured;
+        internal event EventHandler<EventArgs> LoggerReconfigured;
 
         #endregion
 
@@ -90,7 +90,7 @@ namespace SharpLib.Log
             return GetTargetsForLevel(level) != null;
         }
 
-        public void Log(LogEventInfo logEvent)
+        void ILogger.Log(LogEventInfo logEvent)
         {
             if (IsEnabled(logEvent.Level))
             {
@@ -98,7 +98,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Log(Type wrapperType, LogEventInfo logEvent)
+        void ILogger.Log(Type wrapperType, LogEventInfo logEvent)
         {
             if (IsEnabled(logEvent.Level))
             {
@@ -106,7 +106,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Log<T>(LogLevel level, T value)
+        void ILogger.Log<T>(LogLevel level, T value)
         {
             if (IsEnabled(level))
             {
@@ -114,7 +114,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Log<T>(LogLevel level, IFormatProvider formatProvider, T value)
+        void ILogger.Log<T>(LogLevel level, IFormatProvider formatProvider, T value)
         {
             if (IsEnabled(level))
             {
@@ -122,7 +122,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Log(LogLevel level, LogMessageGenerator messageFunc)
+        void ILogger.Log(LogLevel level, LogMessageGenerator messageFunc)
         {
             if (IsEnabled(level))
             {
@@ -136,7 +136,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Log(LogLevel level, IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
+        void ILogger.Log(LogLevel level, IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
         {
             if (IsEnabled(level))
             {
@@ -144,7 +144,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Log(LogLevel level, [Localizable(false)] string message)
+        void ILogger.Log(LogLevel level, [Localizable(false)] string message)
         {
             if (IsEnabled(level))
             {
@@ -152,7 +152,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Log(LogLevel level, [Localizable(false)] string message, params object[] args)
+        void ILogger.Log(LogLevel level, [Localizable(false)] string message, params object[] args)
         {
             if (IsEnabled(level))
             {
@@ -169,7 +169,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Log<TArgument>(LogLevel level, IFormatProvider formatProvider, [Localizable(false)] string message, TArgument argument)
+        void ILogger.Log<TArgument>(LogLevel level, IFormatProvider formatProvider, [Localizable(false)] string message, TArgument argument)
         {
             if (IsEnabled(level))
             {
@@ -178,7 +178,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Log<TArgument>(LogLevel level, [Localizable(false)] string message, TArgument argument)
+        void ILogger.Log<TArgument>(LogLevel level, [Localizable(false)] string message, TArgument argument)
         {
             if (IsEnabled(level))
             {
@@ -193,7 +193,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Log<TArgument1, TArgument2>(LogLevel level, IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
+        void ILogger.Log<TArgument1, TArgument2>(LogLevel level, IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
         {
             if (IsEnabled(level))
             {
@@ -202,7 +202,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Log<TArgument1, TArgument2>(LogLevel level, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
+        void ILogger.Log<TArgument1, TArgument2>(LogLevel level, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
         {
             if (IsEnabled(level))
             {
@@ -210,7 +210,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Log<TArgument1, TArgument2, TArgument3>(LogLevel level,
+        void ILogger.Log<TArgument1, TArgument2, TArgument3>(LogLevel level,
             IFormatProvider formatProvider,
             [Localizable(false)] string message,
             TArgument1 argument1,
@@ -224,7 +224,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Log<TArgument1, TArgument2, TArgument3>(LogLevel level, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
+        void ILogger.Log<TArgument1, TArgument2, TArgument3>(LogLevel level, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
         {
             if (IsEnabled(level))
             {
@@ -232,7 +232,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Trace<T>(T value)
+        void ILogger.Trace<T>(T value)
         {
             if (IsTraceEnabled)
             {
@@ -240,7 +240,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Trace<T>(IFormatProvider formatProvider, T value)
+        void ILogger.Trace<T>(IFormatProvider formatProvider, T value)
         {
             if (IsTraceEnabled)
             {
@@ -248,7 +248,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Trace(LogMessageGenerator messageFunc)
+        void ILogger.Trace(LogMessageGenerator messageFunc)
         {
             if (IsTraceEnabled)
             {
@@ -262,7 +262,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Trace(IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
+        void ILogger.Trace(IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
         {
             if (IsTraceEnabled)
             {
@@ -270,7 +270,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Trace([Localizable(false)] string message)
+        void ILogger.Trace([Localizable(false)] string message)
         {
             if (IsTraceEnabled)
             {
@@ -279,7 +279,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Trace([Localizable(false)] string message, params object[] args)
+        void ILogger.Trace([Localizable(false)] string message, params object[] args)
         {
             if (IsTraceEnabled)
             {
@@ -296,7 +296,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Trace<TArgument>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument argument)
+        void ILogger.Trace<TArgument>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument argument)
         {
             if (IsTraceEnabled)
             {
@@ -305,7 +305,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Trace<TArgument>([Localizable(false)] string message, TArgument argument)
+        void ILogger.Trace<TArgument>([Localizable(false)] string message, TArgument argument)
         {
             if (IsTraceEnabled)
             {
@@ -321,7 +321,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Trace<TArgument1, TArgument2>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
+        void ILogger.Trace<TArgument1, TArgument2>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
         {
             if (IsTraceEnabled)
             {
@@ -330,7 +330,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Trace<TArgument1, TArgument2>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
+        void ILogger.Trace<TArgument1, TArgument2>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
         {
             if (IsTraceEnabled)
             {
@@ -339,7 +339,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Trace<TArgument1, TArgument2, TArgument3>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
+        void ILogger.Trace<TArgument1, TArgument2, TArgument3>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
         {
             if (IsTraceEnabled)
             {
@@ -348,7 +348,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Trace<TArgument1, TArgument2, TArgument3>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
+        void ILogger.Trace<TArgument1, TArgument2, TArgument3>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
         {
             if (IsTraceEnabled)
             {
@@ -356,7 +356,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Debug<T>(T value)
+        void ILogger.Debug<T>(T value)
         {
             if (IsDebugEnabled)
             {
@@ -364,7 +364,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Debug<T>(IFormatProvider formatProvider, T value)
+        void ILogger.Debug<T>(IFormatProvider formatProvider, T value)
         {
             if (IsDebugEnabled)
             {
@@ -372,7 +372,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Debug(LogMessageGenerator messageFunc)
+        void ILogger.Debug(LogMessageGenerator messageFunc)
         {
             if (IsDebugEnabled)
             {
@@ -386,7 +386,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Debug(IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
+        void ILogger.Debug(IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
         {
             if (IsDebugEnabled)
             {
@@ -394,7 +394,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Debug([Localizable(false)] string message)
+        void ILogger.Debug([Localizable(false)] string message)
         {
             if (IsDebugEnabled)
             {
@@ -403,7 +403,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Debug([Localizable(false)] string message, params object[] args)
+        void ILogger.Debug([Localizable(false)] string message, params object[] args)
         {
             if (IsDebugEnabled)
             {
@@ -420,7 +420,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Debug<TArgument>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument argument)
+        void ILogger.Debug<TArgument>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument argument)
         {
             if (IsDebugEnabled)
             {
@@ -429,7 +429,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Debug<TArgument>([Localizable(false)] string message, TArgument argument)
+        void ILogger.Debug<TArgument>([Localizable(false)] string message, TArgument argument)
         {
             if (IsDebugEnabled)
             {
@@ -445,7 +445,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Debug<TArgument1, TArgument2>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
+        void ILogger.Debug<TArgument1, TArgument2>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
         {
             if (IsDebugEnabled)
             {
@@ -454,7 +454,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Debug<TArgument1, TArgument2>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
+        void ILogger.Debug<TArgument1, TArgument2>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
         {
             if (IsDebugEnabled)
             {
@@ -463,7 +463,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Debug<TArgument1, TArgument2, TArgument3>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
+        void ILogger.Debug<TArgument1, TArgument2, TArgument3>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
         {
             if (IsDebugEnabled)
             {
@@ -472,7 +472,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Debug<TArgument1, TArgument2, TArgument3>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
+        void ILogger.Debug<TArgument1, TArgument2, TArgument3>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
         {
             if (IsDebugEnabled)
             {
@@ -480,7 +480,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Info<T>(T value)
+        void ILogger.Info<T>(T value)
         {
             if (IsInfoEnabled)
             {
@@ -488,7 +488,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Info<T>(IFormatProvider formatProvider, T value)
+        void ILogger.Info<T>(IFormatProvider formatProvider, T value)
         {
             if (IsInfoEnabled)
             {
@@ -496,7 +496,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Info(LogMessageGenerator messageFunc)
+        void ILogger.Info(LogMessageGenerator messageFunc)
         {
             if (IsInfoEnabled)
             {
@@ -510,7 +510,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Info(IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
+        void ILogger.Info(IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
         {
             if (IsInfoEnabled)
             {
@@ -518,7 +518,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Info([Localizable(false)] string message)
+        void ILogger.Info([Localizable(false)] string message)
         {
             if (IsInfoEnabled)
             {
@@ -527,7 +527,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Info([Localizable(false)] string message, params object[] args)
+        void ILogger.Info([Localizable(false)] string message, params object[] args)
         {
             if (IsInfoEnabled)
             {
@@ -544,7 +544,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Info<TArgument>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument argument)
+        void ILogger.Info<TArgument>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument argument)
         {
             if (IsInfoEnabled)
             {
@@ -553,7 +553,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Info<TArgument>([Localizable(false)] string message, TArgument argument)
+        void ILogger.Info<TArgument>([Localizable(false)] string message, TArgument argument)
         {
             if (IsInfoEnabled)
             {
@@ -569,7 +569,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Info<TArgument1, TArgument2>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
+        void ILogger.Info<TArgument1, TArgument2>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
         {
             if (IsInfoEnabled)
             {
@@ -578,7 +578,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Info<TArgument1, TArgument2>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
+        void ILogger.Info<TArgument1, TArgument2>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
         {
             if (IsInfoEnabled)
             {
@@ -587,7 +587,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Info<TArgument1, TArgument2, TArgument3>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
+        void ILogger.Info<TArgument1, TArgument2, TArgument3>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
         {
             if (IsInfoEnabled)
             {
@@ -596,7 +596,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Info<TArgument1, TArgument2, TArgument3>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
+        void ILogger.Info<TArgument1, TArgument2, TArgument3>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
         {
             if (IsInfoEnabled)
             {
@@ -604,7 +604,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Warn<T>(T value)
+        void ILogger.Warn<T>(T value)
         {
             if (IsWarnEnabled)
             {
@@ -612,7 +612,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Warn<T>(IFormatProvider formatProvider, T value)
+        void ILogger.Warn<T>(IFormatProvider formatProvider, T value)
         {
             if (IsWarnEnabled)
             {
@@ -620,7 +620,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Warn(LogMessageGenerator messageFunc)
+        void ILogger.Warn(LogMessageGenerator messageFunc)
         {
             if (IsWarnEnabled)
             {
@@ -634,7 +634,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Warn(IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
+        void ILogger.Warn(IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
         {
             if (IsWarnEnabled)
             {
@@ -642,7 +642,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Warn([Localizable(false)] string message)
+        void ILogger.Warn([Localizable(false)] string message)
         {
             if (IsWarnEnabled)
             {
@@ -651,7 +651,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Warn([Localizable(false)] string message, params object[] args)
+        void ILogger.Warn([Localizable(false)] string message, params object[] args)
         {
             if (IsWarnEnabled)
             {
@@ -659,7 +659,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Warn([Localizable(false)] string message, Exception exception)
+        void ILogger.Warn([Localizable(false)] string message, Exception exception)
         {
             if (IsWarnEnabled)
             {
@@ -668,7 +668,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Warn<TArgument>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument argument)
+        void ILogger.Warn<TArgument>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument argument)
         {
             if (IsWarnEnabled)
             {
@@ -693,7 +693,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Warn<TArgument1, TArgument2>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
+        void ILogger.Warn<TArgument1, TArgument2>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
         {
             if (IsWarnEnabled)
             {
@@ -702,7 +702,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Warn<TArgument1, TArgument2>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
+        void ILogger.Warn<TArgument1, TArgument2>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
         {
             if (IsWarnEnabled)
             {
@@ -711,7 +711,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Warn<TArgument1, TArgument2, TArgument3>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
+        void ILogger.Warn<TArgument1, TArgument2, TArgument3>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
         {
             if (IsWarnEnabled)
             {
@@ -720,7 +720,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Warn<TArgument1, TArgument2, TArgument3>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
+        void ILogger.Warn<TArgument1, TArgument2, TArgument3>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
         {
             if (IsWarnEnabled)
             {
@@ -736,7 +736,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Error<T>(IFormatProvider formatProvider, T value)
+        void ILogger.Error<T>(IFormatProvider formatProvider, T value)
         {
             if (IsErrorEnabled)
             {
@@ -744,7 +744,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Error(LogMessageGenerator messageFunc)
+        void ILogger.Error(LogMessageGenerator messageFunc)
         {
             if (IsErrorEnabled)
             {
@@ -757,13 +757,13 @@ namespace SharpLib.Log
             }
         }
 
-        public void ErrorException([Localizable(false)] string message, Exception exception)
+        void ILogger.ErrorException([Localizable(false)] string message, Exception exception)
         {
             Error(message, exception);
         }
 
         [StringFormatMethod("message")]
-        public void Error(IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
+        void ILogger.Error(IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
         {
             if (IsErrorEnabled)
             {
@@ -771,7 +771,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Error([Localizable(false)] string message)
+        void ILogger.Error([Localizable(false)] string message)
         {
             if (IsErrorEnabled)
             {
@@ -780,7 +780,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Error([Localizable(false)] string message, params object[] args)
+        void ILogger.Error([Localizable(false)] string message, params object[] args)
         {
             if (IsErrorEnabled)
             {
@@ -797,7 +797,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Error<TArgument>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument argument)
+        void ILogger.Error<TArgument>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument argument)
         {
             if (IsErrorEnabled)
             {
@@ -806,7 +806,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Error<TArgument>([Localizable(false)] string message, TArgument argument)
+        void ILogger.Error<TArgument>([Localizable(false)] string message, TArgument argument)
         {
             var exceptionCandidate = argument as Exception;
             if (exceptionCandidate != null)
@@ -822,7 +822,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Error<TArgument1, TArgument2>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
+        void ILogger.Error<TArgument1, TArgument2>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
         {
             if (IsErrorEnabled)
             {
@@ -831,7 +831,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Error<TArgument1, TArgument2>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
+        void ILogger.Error<TArgument1, TArgument2>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
         {
             if (IsErrorEnabled)
             {
@@ -840,7 +840,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Error<TArgument1, TArgument2, TArgument3>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
+        void ILogger.Error<TArgument1, TArgument2, TArgument3>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
         {
             if (IsErrorEnabled)
             {
@@ -849,7 +849,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Error<TArgument1, TArgument2, TArgument3>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
+        void ILogger.Error<TArgument1, TArgument2, TArgument3>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
         {
             if (IsErrorEnabled)
             {
@@ -857,7 +857,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Fatal<T>(T value)
+        void ILogger.Fatal<T>(T value)
         {
             if (IsFatalEnabled)
             {
@@ -865,7 +865,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Fatal<T>(IFormatProvider formatProvider, T value)
+        void ILogger.Fatal<T>(IFormatProvider formatProvider, T value)
         {
             if (IsFatalEnabled)
             {
@@ -873,7 +873,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Fatal(LogMessageGenerator messageFunc)
+        void ILogger.Fatal(LogMessageGenerator messageFunc)
         {
             if (IsFatalEnabled)
             {
@@ -887,7 +887,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Fatal(IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
+        void ILogger.Fatal(IFormatProvider formatProvider, [Localizable(false)] string message, params object[] args)
         {
             if (IsFatalEnabled)
             {
@@ -895,7 +895,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Fatal([Localizable(false)] string message)
+        void ILogger.Fatal([Localizable(false)] string message)
         {
             if (IsFatalEnabled)
             {
@@ -904,7 +904,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Fatal([Localizable(false)] string message, params object[] args)
+        void ILogger.Fatal([Localizable(false)] string message, params object[] args)
         {
             if (IsFatalEnabled)
             {
@@ -921,7 +921,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Fatal<TArgument>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument argument)
+        void ILogger.Fatal<TArgument>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument argument)
         {
             if (IsFatalEnabled)
             {
@@ -930,7 +930,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Fatal<TArgument>([Localizable(false)] string message, TArgument argument)
+        void ILogger.Fatal<TArgument>([Localizable(false)] string message, TArgument argument)
         {
             if (IsFatalEnabled)
             {
@@ -946,7 +946,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Fatal<TArgument1, TArgument2>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
+        void ILogger.Fatal<TArgument1, TArgument2>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
         {
             if (IsFatalEnabled)
             {
@@ -955,7 +955,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Fatal<TArgument1, TArgument2>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
+        void ILogger.Fatal<TArgument1, TArgument2>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2)
         {
             if (IsFatalEnabled)
             {
@@ -964,7 +964,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Fatal<TArgument1, TArgument2, TArgument3>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
+        void ILogger.Fatal<TArgument1, TArgument2, TArgument3>(IFormatProvider formatProvider, [Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
         {
             if (IsFatalEnabled)
             {
@@ -973,7 +973,7 @@ namespace SharpLib.Log
         }
 
         [StringFormatMethod("message")]
-        public void Fatal<TArgument1, TArgument2, TArgument3>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
+        void ILogger.Fatal<TArgument1, TArgument2, TArgument3>([Localizable(false)] string message, TArgument1 argument1, TArgument2 argument2, TArgument3 argument3)
         {
             if (IsFatalEnabled)
             {
@@ -981,7 +981,7 @@ namespace SharpLib.Log
             }
         }
 
-        public void Swallow(Action action)
+        internal void Swallow(Action action)
         {
             try
             {
@@ -993,12 +993,12 @@ namespace SharpLib.Log
             }
         }
 
-        public T Swallow<T>(Func<T> func)
+        internal T Swallow<T>(Func<T> func)
         {
             return Swallow(func, default(T));
         }
 
-        public T Swallow<T>(Func<T> func, T fallback)
+        internal T Swallow<T>(Func<T> func, T fallback)
         {
             try
             {

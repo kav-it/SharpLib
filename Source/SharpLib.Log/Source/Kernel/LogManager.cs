@@ -188,7 +188,7 @@ namespace SharpLib.Log
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public Logger GetLogger(Type loggerType)
+        public ILogger GetLogger(Type loggerType)
         {
             Type declaringType;
             int framesToSkip = 1;
@@ -205,7 +205,7 @@ namespace SharpLib.Log
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public Logger GetLogger()
+        public ILogger GetLogger()
         {
             string loggerName;
             Type declaringType;
@@ -228,22 +228,22 @@ namespace SharpLib.Log
             return GetLoggerByName(loggerName);
         }
 
-        public Logger GetLogger(string name)
+        public ILogger GetLogger(string name)
         {
             return GetLoggerByName(name);
         }
 
-        public Logger GetLogger(string name, Type loggerType)
+        public ILogger GetLogger(string name, Type loggerType)
         {
             return GetLoggerByTypeAndName(name, loggerType);
         }
 
-        private Logger GetLoggerByName(string name)
+        private ILogger GetLoggerByName(string name)
         {
             return GetLogger(new LoggerCacheKey(typeof(Logger), name));
         }
 
-        private Logger GetLoggerByTypeAndName(string name, Type loggerType)
+        private ILogger GetLoggerByTypeAndName(string name, Type loggerType)
         {
             return GetLogger(new LoggerCacheKey(loggerType, name));
         }

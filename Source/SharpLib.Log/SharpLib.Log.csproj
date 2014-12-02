@@ -44,6 +44,7 @@
       <Link>Source\SharpLib.Version.cs</Link>
     </Compile>
     <Compile Include="Source\Factory\Factory.cs" />
+    <Compile Include="Source\Interfaces\ILogger.cs" />
     <Compile Include="Source\Internal\Utils\AppDomainWrapper.cs" />
     <Compile Include="Source\AssemblyInfo.cs" />
     <Compile Include="Source\Async\AsyncContinuation.cs" />

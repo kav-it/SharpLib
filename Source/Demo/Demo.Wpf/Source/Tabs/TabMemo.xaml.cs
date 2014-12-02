@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 
-using SharpLib;
 using SharpLib.Log;
 
 namespace DemoWpf
@@ -10,7 +8,7 @@ namespace DemoWpf
     {
         #region Поля
 
-        private readonly Logger _logger;
+        private readonly ILogger _logger;
 
         private int _id;
 

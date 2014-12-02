@@ -1,6 +1,5 @@
 ﻿
 using SharpLib;
-using SharpLib.Log;
 
 namespace DemoWpf
 {
@@ -8,7 +7,6 @@ namespace DemoWpf
     {
         public App()
         {
-            LogManager.Instance.GetLogger()
             SharpLibApp.Instance.Init();
         }
     }
