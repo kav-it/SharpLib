@@ -67,9 +67,20 @@
     <Compile Include="Source\Helpers\Files\File.Error.cs" />
     <Compile Include="Source\Helpers\Files\Files.cs" />
     <Compile Include="Source\Helpers\Mem.cs" />
+    <Compile Include="Source\Helpers\Net\Net.Addr.cs" />
+    <Compile Include="Source\Helpers\Net\Net.IpAddr.cs" />
+    <Compile Include="Source\Helpers\Net\Sockets\Net.Socket.Error.cs" />
+    <Compile Include="Source\Helpers\Net\Sockets\Net.Socket.State.cs" />
+    <Compile Include="Source\Helpers\Net\Sockets\Net.Socket.EventArgs.cs" />
+    <Compile Include="Source\Helpers\Net\Sockets\Net.Socket.cs" />
+    <Compile Include="Source\Helpers\Net\Sockets\Net.Socket.Server.cs" />
+    <Compile Include="Source\Helpers\Net\Net.Extension.cs" />
+    <Compile Include="Source\Helpers\Net\Net.Proto.cs" />
     <Compile Include="Source\Helpers\PathEx.cs" />
     <Compile Include="Source\Extensions\Extension.XElement.cs" />
     <Compile Include="Source\Helpers\Reflector.cs" />
+    <Compile Include="Source\Helpers\Threads\Thread.SafeList.cs" />
+    <Compile Include="Source\Helpers\Threads\Thread.SharedId.cs" />
     <Compile Include="Source\Helpers\Xml\Xmler.Config.cs" />
     <Compile Include="Source\Helpers\Xml\Xmler.cs" />
   </ItemGroup>

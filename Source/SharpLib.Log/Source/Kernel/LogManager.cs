@@ -15,12 +15,6 @@ namespace SharpLib.Log
     /// </summary>
     public class LogManager : IDisposable
     {
-        #region Делегаты
-
-        public delegate CultureInfo GetCultureInfo();
-
-        #endregion
-
         #region Константы
 
         /// <summary>

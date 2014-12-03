@@ -1,0 +1,19 @@
+﻿using System.ComponentModel;
+
+namespace SharpLib
+{
+    /// <summary>
+    /// Коды ошибок при открытии/закрытии сокета
+    /// </summary>
+    public enum NetSocketError
+    {
+        [Description("Ошибка")]
+        Unknow = 0,
+
+        [Description("")]
+        Ok = 1,
+
+        [Description("Порт занят")]
+        Busy = 2
+    }
+}
