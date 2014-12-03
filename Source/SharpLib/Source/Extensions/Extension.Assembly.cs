@@ -29,7 +29,7 @@ namespace SharpLib
         /// <summary>
         /// Дата/время создания сборки
         /// </summary>
-        public static DateTime GetStampEx(this Assembly assembly)
+        public static DateTime GetTimeEx(this Assembly assembly)
         {
             var fileInfo = new FileInfo(assembly.Location);
             var result = fileInfo.LastWriteTime;
@@ -57,7 +57,6 @@ namespace SharpLib
             return attr.Title;
         }
 
-
         /// <summary>
         /// Чтение атрибута из сборки
         /// </summary>
@@ -69,6 +68,38 @@ namespace SharpLib
                 return null;
             }
             return attributes.OfType<T>().SingleOrDefault();
+        }
+
+        /// <summary>
+        /// Чтение Embedded-ресурсов как строку
+        /// </summary>
+        /// <param name="assembly">Сборка</param>
+        /// <param name="uriEmbeddedResource">Путь к ресурсам</param>
+        /// <returns></returns>
+        /// <example>
+        /// SharpLib.Log.Source.Assets.Config.xml, где
+        /// SharpLib.Log - имя сборки
+        /// 
+        /// Source
+        ///   + Assets
+        ///     + Config.xml      // Расположение файла в директории проекта
+        /// </example>
+        public static string GetEmbeddedText(this Assembly assembly, string uriEmbeddedResource)
+        {
+            var result = string.Empty;
+
+            using (var stream = assembly.GetManifestResourceStream(uriEmbeddedResource))
+            {
+                if (stream != null)
+                {
+                    using (var sr = new StreamReader(stream))
+                    {
+                        result = sr.ReadToEnd();
+                    }
+                }
+            }
+
+            return result;
         }
 
         #endregion

@@ -4,11 +4,15 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace SharpLib.Log
 {
+    /// <summary>
+    /// Менеджер логов (основной класс создания логгеров)
+    /// </summary>
     public class LogManager : IDisposable
     {
         #region Делегаты
@@ -22,7 +26,7 @@ namespace SharpLib.Log
         /// <summary>
         /// Расширение файлов конфигурации
         /// </summary>
-        private const string CONFIG_EXTENSION = ".log.config";
+        private const string CONFIG_EXTENSION = ".log.xml";
 
         /// <summary>
         /// Время паузы перед сохранением событий (мс)
@@ -84,6 +88,9 @@ namespace SharpLib.Log
 
         #region Свойства
 
+        /// <summary>
+        /// Текущая конфигурация
+        /// </summary>
         public LoggingConfiguration Configuration
         {
             get
@@ -95,7 +102,7 @@ namespace SharpLib.Log
                         return _config;
                     }
 
-                    _config = GetConfiguration();
+                    _config = GetConfigurationFromFile();
 
                     return _config;
                 }
@@ -103,6 +110,9 @@ namespace SharpLib.Log
             set { SetConfiguration(value); }
         }
 
+        /// <summary>
+        /// Глобальный уровень отладки
+        /// </summary>
         public LogLevel GlobalThreshold
         {
             get { return _globalThreshold; }
@@ -117,6 +127,9 @@ namespace SharpLib.Log
             }
         }
 
+        /// <summary>
+        /// Экземпляр класса
+        /// </summary>
         public static LogManager Instance
         {
             get { return _instance.Value; }
@@ -246,6 +259,58 @@ namespace SharpLib.Log
         private ILogger GetLoggerByTypeAndName(string name, Type loggerType)
         {
             return GetLogger(new LoggerCacheKey(loggerType, name));
+        }
+
+        public void LoadConfigFromResource(Assembly assembly, string pathInResources)
+        {
+            pathInResources = string.Format("{0}.{1}", assembly.GetName().Name, pathInResources);
+
+            using (var stream = assembly.GetManifestResourceStream(pathInResources))
+            {
+                if (stream != null)
+                {
+                    using (var sr = new StreamReader(stream))
+                    {
+                        var result = sr.ReadToEnd();
+
+                        var config = new XmlLoggingConfiguration(null, result);
+
+                        config.InitializeAll();
+
+                        _config = config;
+                    }
+                }
+            }
+        }
+
+        private LoggingConfiguration GetConfigurationFromFile()
+        {
+            var configFile = GetConfigFilename();
+
+            if (!File.Exists(configFile))
+            {
+                var context = XmlLoggingConfiguration.GetDefaultConfigAsText();
+                File.WriteAllText(configFile, context);
+            }
+
+            var config = new XmlLoggingConfiguration(configFile, null);
+
+            if (config == null)
+            {
+                throw new Exception("Не найдено файла конфигурации для логгера");
+            }
+
+            try
+            {
+                _watcher.Watch(config.FileNamesToWatch);
+            }
+            catch (Exception)
+            {
+            }
+
+            config.InitializeAll();
+
+            return config;
         }
 
         /// <summary>
@@ -541,35 +606,7 @@ namespace SharpLib.Log
             }
         }
 
-        private LoggingConfiguration GetConfiguration()
-        {
-            var configFile = GetConfigFilename();
-
-            if (!File.Exists(configFile))
-            {
-                var context = XmlLoggingConfiguration.GetDefaultConfigAsText();
-                File.WriteAllText(configFile, context);
-            }
-
-            var config = new XmlLoggingConfiguration(configFile);
-
-            if (config == null)
-            {
-                throw new Exception("Не найдено файла конфигурации для логгера");
-            }
-
-            try
-            {
-                _watcher.Watch(config.FileNamesToWatch);
-            }
-            catch (Exception)
-            {
-            }
-
-            config.InitializeAll();
-
-            return config;
-        }
+        
 
         private void SetConfiguration(LoggingConfiguration newValue)
         {

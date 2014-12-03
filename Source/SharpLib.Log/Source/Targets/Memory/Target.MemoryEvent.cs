@@ -7,21 +7,28 @@ namespace SharpLib.Log
     {
         #region События
 
-        public MemoryEventTargetHandler _onReceived;
+        public MemoryEventTargetHandler OnReceived;
 
         #endregion
 
         #region Методы
 
+        public MemoryEventTarget()
+        {
+        }
+
         public MemoryEventTarget(string name, MemoryEventTargetHandler handler)
         {
             Name = name;
-            _onReceived = handler;
+            OnReceived = handler;
         }
 
         protected override void Write(LogEventInfo logEvent)
         {
-            _onReceived(this, new MemoryEventTargetArgs(logEvent));
+            if (OnReceived != null)
+            {
+                OnReceived(this, new MemoryEventTargetArgs(logEvent, Layout));
+            }
         }
 
         #endregion

@@ -49,6 +49,7 @@
     <Compile Include="Source\Events\EventArgs{T}.Cancel.cs" />
     <Compile Include="Source\Events\EventArgs{T}.Changing.cs" />
     <Compile Include="Source\Events\EventArgs{T}.cs" />
+    <Compile Include="Source\Extensions\Extension.PropertyInfo.cs" />
     <Compile Include="Source\Extensions\Extension.Encoding.cs" />
     <Compile Include="Source\Extensions\Extension.Integer.cs" />
     <Compile Include="Source\Extensions\Extension.Assembly.cs" />
@@ -68,6 +69,8 @@
     <Compile Include="Source\Helpers\Mem.cs" />
     <Compile Include="Source\Helpers\PathEx.cs" />
     <Compile Include="Source\Extensions\Extension.XElement.cs" />
+    <Compile Include="Source\Helpers\Reflector.cs" />
+    <Compile Include="Source\Helpers\Xml\Xmler.Config.cs" />
     <Compile Include="Source\Helpers\Xml\Xmler.cs" />
   </ItemGroup>
   <ItemGroup />

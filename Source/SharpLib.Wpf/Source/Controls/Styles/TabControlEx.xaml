@@ -20,7 +20,9 @@
                             <Setter Property="Control.Template">
                                 <Setter.Value>
                                     <ControlTemplate>
-                                        <Rectangle Margin="2" SnapsToDevicePixels="True" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                                        <Rectangle Margin="2" SnapsToDevicePixels="True" 
+                                                   Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" 
+                                                   StrokeThickness="1" StrokeDashArray="1 2"/>
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
@@ -46,9 +48,20 @@
                         <ControlTemplate TargetType="{x:Type TabItem}">
                             <Grid x:Name="templateRoot" SnapsToDevicePixels="True">
                                 <Border x:Name="mainBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,1,1,0" Background="{TemplateBinding Background}" Margin="0">
-                                    <Border x:Name="innerBorder" BorderBrush="#FFACACAC" BorderThickness="1,1,1,0" Background="White" Margin="-1" Opacity="0"/>
+                                    <Border x:Name="innerBorder" BorderBrush="#FFACACAC" 
+                                            BorderThickness="1,1,1,0" Background="White" Margin="-1" Opacity="0"/>
                                 </Border>
-                                <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" Focusable="False" HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"/>
+                                <ContentPresenter x:Name="contentPresenter" 
+                                                  ContentSource="Header" 
+                                                  Focusable="False" RecognizesAccessKey="True" 
+                                                  ContentTemplate="{TemplateBinding HeaderTemplate}" 
+                                                  Content="{TemplateBinding Header}" 
+                                                  ContentStringFormat="{TemplateBinding HeaderStringFormat}" 
+                                                  HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}" 
+                                                  VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"
+                                                  Margin="{TemplateBinding Padding}" 
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                                  />
                             </Grid>
                             <ControlTemplate.Triggers>
                                 <MultiDataTrigger>

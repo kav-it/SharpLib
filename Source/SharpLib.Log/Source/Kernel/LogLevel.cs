@@ -48,13 +48,13 @@ namespace SharpLib.Log
 
         static LogLevel()
         {
-            Debug = new LogLevel("Debug", 1);
-            Trace = new LogLevel("Trace", 0);
-            Info = new LogLevel("Info", 2);
-            Warn = new LogLevel("Warn", 3);
-            Error = new LogLevel("Error", 4);
-            Fatal = new LogLevel("Fatal", 5);
-            Off = new LogLevel("Off", 6);
+            Off = new LogLevel("Off", 0);
+            Trace = new LogLevel("Trace", 1);
+            Debug = new LogLevel("Debug", 2);
+            Info = new LogLevel("Info", 3);
+            Warn = new LogLevel("Warn", 4);
+            Error = new LogLevel("Error", 5);
+            Fatal = new LogLevel("Fatal", 6);
 
             _levels = new List<LogLevel>
             {

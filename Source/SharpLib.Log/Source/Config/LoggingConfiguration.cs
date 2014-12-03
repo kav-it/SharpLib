@@ -75,7 +75,7 @@ namespace SharpLib.Log
             LogManager.Instance.Reconfig();
         }
 
-        public Target FindTargetByName(string name)
+        public Target GetTarget(string name)
         {
             Target value;
 
@@ -85,6 +85,16 @@ namespace SharpLib.Log
         public virtual LoggingConfiguration Reload()
         {
             return this;
+        }
+
+        public void RemoveTarget(Target target)
+        {
+            if (target.Name.IsNotValid())
+            {
+                throw new ArgumentException("Target name cannot be null", "name");
+            }
+
+            RemoveTarget(target.Name);
         }
 
         public void RemoveTarget(string name)

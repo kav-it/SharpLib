@@ -71,7 +71,7 @@ namespace SharpLib
             }
         }
 
-        public static void SaveSerialize(string filename, Object obj)
+        public static void SaveSerialize(string filename, object obj)
         {
             XmlTextWriter writer = new XmlTextWriter(filename, new UTF8Encoding(false));
 
@@ -83,7 +83,7 @@ namespace SharpLib
             writer.Close();
         }
 
-        public static Object LoadSerialize(string filename, Type typ)
+        public static object LoadSerialize(string filename, Type typ)
         {
             try
             {

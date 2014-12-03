@@ -31,7 +31,7 @@ namespace SharpLib.Log
 
         public static ConfigurationItemFactory Default { get; set; }
 
-        public ConfigurationItemCreator CreateInstance { get; set; }
+        internal ConfigurationItemCreator CreateInstance { get; set; }
 
         public INamedItemFactory<Target, Type> Targets
         {

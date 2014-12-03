@@ -236,9 +236,9 @@
     <Compile Include="Source\Targets\Debug\DebuggerTarget.cs" />
     <Compile Include="Source\Targets\Debug\DebugTarget.cs" />
     <Compile Include="Source\Targets\File\FileTarget.cs" />
-    <Compile Include="Source\Targets\MemoryEvent\Target.MemoryEvent.Args.cs" />
-    <Compile Include="Source\Targets\MemoryEvent\Target.MemoryEvent.Handler.cs" />
-    <Compile Include="Source\Targets\MemoryEvent\Target.MemoryEvent.cs" />
+    <Compile Include="Source\Targets\Memory\Target.MemoryEvent.Args.cs" />
+    <Compile Include="Source\Targets\Memory\Target.MemoryEvent.Handler.cs" />
+    <Compile Include="Source\Targets\Memory\Target.MemoryEvent.cs" />
     <Compile Include="Source\Targets\OutputDebug\OutputDebugStringTarget.cs" />
     <Compile Include="Source\Targets\Target.CompoundBase.cs" />
     <Compile Include="Source\Targets\Target.cs" />

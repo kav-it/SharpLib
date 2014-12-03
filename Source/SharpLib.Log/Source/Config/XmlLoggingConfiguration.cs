@@ -70,29 +70,34 @@ namespace SharpLib.Log
 
         #region Конструктор
 
-        public XmlLoggingConfiguration(string fileName)
+        public XmlLoggingConfiguration(string fileName, string xmlText)
         {
             Variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             _visitedFile = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
             _configurationItemFactory = ConfigurationItemFactory.Default;
 
-            LoadFromFile(fileName);
+            if (fileName.IsValid())
+            {
+                var doc = XDocument.Load(fileName);
+
+                string key = Path.GetFullPath(fileName);
+                _visitedFile[key] = true;
+
+                _originalFileName = fileName;
+
+                ParseRootElement(doc.Root);
+            }
+            else
+            {
+                var doc = XDocument.Parse(xmlText);
+
+                ParseRootElement(doc.Root);
+            }
         }
 
         #endregion
 
         #region Методы
-
-        private void LoadFromFile(string fileName)
-        {
-            var doc = XDocument.Load(fileName);
-
-            string key = Path.GetFullPath(fileName);
-            _visitedFile[key] = true;
-
-            _originalFileName = fileName;
-            ParseRootElement(doc.Root);
-        }
 
         /// <summary>
         /// Разбор корневого элемента
@@ -189,7 +194,7 @@ namespace SharpLib.Log
                     if (IsTargetRefElement(name))
                     {
                         string targetName = xChild.GetAttributeEx(ATTR_NAME_NAME);
-                        Target newTarget = FindTargetByName(targetName);
+                        Target newTarget = GetTarget(targetName);
                         if (newTarget == null)
                         {
                             throw new Exception(string.Format("Target '{0} не найден", targetName));
@@ -224,7 +229,7 @@ namespace SharpLib.Log
                     if (IsTargetRefElement(name))
                     {
                         string targetName = xChild.GetAttributeEx(ATTR_NAME_NAME);
-                        Target newTarget = FindTargetByName(targetName);
+                        Target newTarget = GetTarget(targetName);
                         if (newTarget == null)
                         {
                             throw new Exception(string.Format("Target '{0} не найден", targetName));
@@ -266,7 +271,7 @@ namespace SharpLib.Log
 
         public override LoggingConfiguration Reload()
         {
-            return new XmlLoggingConfiguration(_originalFileName);
+            return new XmlLoggingConfiguration(_originalFileName, null);
         }
 
         private static bool IsTargetElement(string name)
@@ -338,7 +343,7 @@ namespace SharpLib.Log
                 foreach (string t in writeTo.Split(','))
                 {
                     string targetName = t.Trim();
-                    Target target = FindTargetByName(targetName);
+                    Target target = GetTarget(targetName);
 
                     if (target != null)
                     {

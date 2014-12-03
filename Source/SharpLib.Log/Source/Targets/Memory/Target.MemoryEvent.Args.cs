@@ -6,9 +6,12 @@ namespace SharpLib.Log
     {
         public LogEventInfo Value { get; set; }
 
-        public MemoryEventTargetArgs(LogEventInfo value)
+        public Layout Layout { get; set; }
+
+        public MemoryEventTargetArgs(LogEventInfo value, Layout layout)
         {
             Value = value;
+            Layout = layout;
         }
     }
 }
