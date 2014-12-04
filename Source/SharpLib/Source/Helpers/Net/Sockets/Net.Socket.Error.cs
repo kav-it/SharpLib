@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace SharpLib
+namespace SharpLib.Net
 {
     /// <summary>
     /// Коды ошибок при открытии/закрытии сокета

@@ -195,23 +195,6 @@ namespace SharpLib.Log
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public ILogger GetLogger(Type loggerType)
-        {
-            Type declaringType;
-            int framesToSkip = 1;
-            do
-            {
-                StackFrame frame = new StackFrame(framesToSkip, false);
-                declaringType = frame.GetMethod().DeclaringType;
-                framesToSkip++;
-            } while (declaringType != null && declaringType.Module.Name.Equals("mscorlib.dll", StringComparison.OrdinalIgnoreCase));
-
-            return declaringType != null
-                ? GetLoggerByTypeAndName(declaringType.FullName, loggerType)
-                : null;
-        }
-
-        [MethodImpl(MethodImplOptions.NoInlining)]
         public ILogger GetLogger()
         {
             string loggerName;
@@ -229,7 +212,8 @@ namespace SharpLib.Log
                 }
 
                 framesToSkip++;
-                loggerName = declaringType.FullName;
+                loggerName = declaringType.Name;
+
             } while (declaringType.Module.Name.Equals("mscorlib.dll", StringComparison.OrdinalIgnoreCase));
 
             return GetLoggerByName(loggerName);
@@ -240,19 +224,9 @@ namespace SharpLib.Log
             return GetLoggerByName(name);
         }
 
-        public ILogger GetLogger(string name, Type loggerType)
-        {
-            return GetLoggerByTypeAndName(name, loggerType);
-        }
-
         private ILogger GetLoggerByName(string name)
         {
             return GetLogger(new LoggerCacheKey(typeof(Logger), name));
-        }
-
-        private ILogger GetLoggerByTypeAndName(string name, Type loggerType)
-        {
-            return GetLogger(new LoggerCacheKey(loggerType, name));
         }
 
         public void LoadConfigFromResource(Assembly assembly, string pathInResources)

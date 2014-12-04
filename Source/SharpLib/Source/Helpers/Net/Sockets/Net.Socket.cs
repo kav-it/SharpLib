@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 
-namespace SharpLib
+namespace SharpLib.Net
 {
     /// <summary>
     /// Базовый класс асинхронного сокета

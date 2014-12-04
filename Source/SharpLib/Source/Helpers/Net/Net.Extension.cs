@@ -1,25 +1,8 @@
-﻿//*****************************************************************************
-//
-// Имя файла    : 'Net.Types.cs'
-// Заголовок    : Подсистема сокетов на базе SharpLib
-// Автор        : Крыцкий А.В.
-// Контакты     : kav.it@mail.ru
-// Дата         : 17/04/2013
-//
-//*****************************************************************************
-
-using System;
+﻿using System;
 using System.Net;
-using System.Net.Sockets;
 
-namespace SharpLib
+namespace SharpLib.Net
 {
-    //public delegate void NetSocketNotifyEvent(NetSocket sender, Socket sock);
-
-    //public delegate void NetSocketReadEvent(NetSocket sender, Socket sock, byte[] buffer);
-
-    //public delegate void NetSocketErrorEvent(NetSocket sender, Socket sock, SocketError error);
-
     public static class NetExtension
     {
         #region Методы

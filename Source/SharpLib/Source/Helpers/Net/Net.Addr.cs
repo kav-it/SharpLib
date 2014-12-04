@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SharpLib
+namespace SharpLib.Net
 {
     /// <summary>
     /// Своя реализация представления сетевого адреса (IP + Port) (в .NET намудрили)

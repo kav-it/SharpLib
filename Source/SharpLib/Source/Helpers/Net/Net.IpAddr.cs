@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace SharpLib
+namespace SharpLib.Net
 {
     /// <summary>
     /// Своя реализация представления IP-адреса (в .NET намудрили)

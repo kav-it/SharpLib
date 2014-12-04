@@ -1,4 +1,4 @@
-﻿namespace SharpLib
+﻿namespace SharpLib.Net
 {
     /// <summary>
     /// Состояния сокетов

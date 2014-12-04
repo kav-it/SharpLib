@@ -137,7 +137,8 @@ namespace SharpLib.Log
 
             if (handle.ToInt32() == -1)
             {
-                Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
+                var result = Marshal.GetHRForLastWin32Error();
+                Marshal.ThrowExceptionForHR(result);
             }
 
             var safeHandle = new Microsoft.Win32.SafeHandles.SafeFileHandle(handle, true);
