@@ -3,14 +3,14 @@ using System.Windows.Controls;
 
 namespace SharpLib.Wpf.Controls
 {
-    public class ButtonEx : Button
+    public class ComboBoxEx : ComboBox
     {
         #region Конструктор
 
-        static ButtonEx()
+        static ComboBoxEx()
         {
             // Переопределение стиля по умолчанию
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(ButtonEx), new FrameworkPropertyMetadata(typeof(ButtonEx)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(ComboBoxEx), new FrameworkPropertyMetadata(typeof(ComboBoxEx)));
         }
 
         #endregion

@@ -146,6 +146,16 @@ namespace SharpLib.Log
             sb.Append(ex);
         }
 
+        protected virtual void AppendToStringNewLine(StringBuilder sb, Exception ex)
+        {
+            sb.Append(Environment.NewLine);
+            sb.Append("------------------------------------------------");
+            sb.Append(Environment.NewLine);
+            sb.Append(ex);
+            sb.Append(Environment.NewLine);
+            sb.Append("------------------------------------------------");
+        }
+
         protected virtual void AppendType(StringBuilder sb, Exception ex)
         {
             sb.Append(ex.GetType().FullName);
@@ -190,6 +200,10 @@ namespace SharpLib.Log
 
                     case "TOSTRING":
                         dataTargets.Add(AppendToString);
+                        break;
+
+                    case "TOSTRINGNEWLINE":
+                        dataTargets.Add(AppendToStringNewLine);
                         break;
 
                     case "METHOD":

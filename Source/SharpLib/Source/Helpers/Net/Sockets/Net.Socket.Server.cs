@@ -28,17 +28,17 @@ namespace SharpLib.Net
         /// <summary>
         /// Установлено соединение
         /// </summary>
-        public event EventHandler<NetSocketEventArgs> OnAccept;
+        public event EventHandler<NetSocketEventArgs> OnConnect;
 
         /// <summary>
         /// Разорвано соединение (инициатива клиента)
         /// </summary>
-        public event EventHandler<NetSocketEventArgs> OnBreak;
+        public event EventHandler<NetSocketEventArgs> OnDisconnect;
 
         /// <summary>
         /// Разорвано соединение (инициатива сервера)
         /// </summary>
-        public event EventHandler<NetSocketEventArgs> OnClose;
+        public event EventHandler<NetSocketEventArgs> OnBreak;
 
         /// <summary>
         /// Сокет переведен в режим приема входящих соединений
@@ -46,7 +46,12 @@ namespace SharpLib.Net
         public event EventHandler<NetSocketEventArgs> OnListen;
 
         /// <summary>
-        /// Приняты данные
+        /// Сокет закрыт
+        /// </summary>
+        public event EventHandler<NetSocketEventArgs> OnClose;
+
+        /// <summary>
+        /// Приняты данные от удаленной точки
         /// </summary>
         public event EventHandler<NetSocketEventArgs> OnReceive;
 
@@ -58,7 +63,7 @@ namespace SharpLib.Net
         {
             OnListen = null;
             OnClose = null;
-            OnAccept = null;
+            OnConnect = null;
             OnReceive = null;
 
             _listenSocket = new NetSocket();
@@ -102,8 +107,9 @@ namespace SharpLib.Net
         {
             // Создание нового объекта SharpLib-сокета, использующего указанный .NET-сокет
             var newSocket = new NetSocket(args.Sock);
-            newSocket.OnBreak += SocketOnBreak;
+            newSocket.OnBreak += SocketOnDisconnect;
             newSocket.OnReceive += SocketOnReceive;
+            newSocket.OnDisconnect += SocketOnBreak;
 
             // Добавление в список нового сокета
             Sockets.Add(newSocket);
@@ -111,10 +117,10 @@ namespace SharpLib.Net
             newSocket.Receive();
 
             // Генерация события
-            if (OnAccept != null)
+            if (OnConnect != null)
             {
                 // Передача события приложению
-                OnAccept(newSocket, args);
+                OnConnect(newSocket, args);
             }
         }
 
@@ -132,16 +138,27 @@ namespace SharpLib.Net
         /// <summary>
         /// Обработка КЛИЕНТСКОГО сокета "Соединение разорвано (по инициативе удаленной точки)"
         /// </summary>
+        private void SocketOnDisconnect(object sender, NetSocketEventArgs args)
+        {
+            if (OnDisconnect != null)
+            {
+                OnDisconnect(sender, args);
+            }
+
+            // Удаление сокета из списка
+            var socket = sender as NetSocket;
+            Sockets.Remove(socket);
+        }
+
+        /// <summary>
+        /// Обработка КЛИЕНТСКОГО сокета "Соединение разорвано (по инициативе сервера)"
+        /// </summary>
         private void SocketOnBreak(object sender, NetSocketEventArgs args)
         {
             if (OnBreak != null)
             {
                 OnBreak(sender, args);
             }
-
-            // Удаление сокета из списка
-            var socket = sender as NetSocket;
-            Sockets.Remove(socket);
         }
 
         /// <summary>
@@ -162,8 +179,7 @@ namespace SharpLib.Net
             // Закрытие текущих клиентских соединений 
             foreach (var socket in Sockets)
             {
-                socket.Disconnect();
-                socket.Dispose();
+                socket.Close();
             }
 
             Sockets.Clear();

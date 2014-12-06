@@ -517,7 +517,7 @@ namespace SharpLib
 
         public static Byte[] ToAsciiBufferEx(this string text, string delimeter)
         {
-            text = text.Replace(delimeter, "");
+            text = text.Replace(delimeter, string.Empty);
 
             return ToAsciiBufferEx(text);
         }
@@ -543,6 +543,11 @@ namespace SharpLib
             int index = source.IndexOf(text, comp);
 
             return (index >= 0);
+        }
+
+        public static bool EqualEx(this string value1, string value2)
+        {
+            return value1.Equals(value2, StringComparison.Ordinal);
         }
 
         #endregion

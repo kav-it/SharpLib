@@ -7,10 +7,20 @@
              mc:Ignorable="d" 
              d:DesignHeight="247.802" d:DesignWidth="764.272">
     <Grid>
-        <controls:TextBlockEx HorizontalAlignment="Left" Margin="26,20,0,0" VerticalAlignment="Top" Width="162" Height="28"/>
-        <controls:TextBoxEx HorizontalAlignment="Left" Margin="26,61,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="162" Height="32" WatermarkText="TextBoxEx"/>
+        <controls:Label HorizontalAlignment="Left" Margin="26,20,0,0" VerticalAlignment="Top" Width="162" Height="28"/>
+        <controls:TextEdit HorizontalAlignment="Left" Margin="26,61,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="162" Height="32" WatermarkText="TextBoxEx"/>
         <controls:RichTextBoxEx 
             Margin="26,111,18,0"
             Text="RichTextBoxEx" Height="86" VerticalAlignment="Top"/>
+
+        <controls:PasswordEdit x:Name="PART_passwordEdit" 
+                               WatermarkText="PasswordEdit" 
+                               ShowPassword="True"
+                               Text="12" 
+                               HorizontalAlignment="Left" Margin="243,61,0,0" 
+                           VerticalAlignment="Top" Width="162" Height="32" 
+                           />
+        <controls:ButtonEx Content="ShowPassword" 
+                           HorizontalAlignment="Left" Margin="243,20,0,0" VerticalAlignment="Top" Click="ButtonEx_Click" Width="107"/>
     </Grid>
 </UserControl>

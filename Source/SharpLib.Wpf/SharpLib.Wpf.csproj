@@ -53,6 +53,9 @@
       <Link>Source\SharpLib.Version.cs</Link>
     </Compile>
     <Compile Include="Source\AssemblyInfo.cs" />
+    <Compile Include="Source\Controls\Classes\ComboBoxEx.cs" />
+    <Compile Include="Source\Controls\Classes\Shape\ShapeEx.Type.cs" />
+    <Compile Include="Source\Controls\Classes\Shape\ShapeEx.cs" />
     <Compile Include="Source\Controls\Classes\Menu\ContextMenuEx.cs" />
     <Compile Include="Source\Controls\Classes\Menu\MenuItemEx.cs" />
     <Compile Include="Source\Controls\Classes\ListViewEx\ListViewEx.Item.cs" />
@@ -66,21 +69,42 @@
     <Compile Include="Source\Controls\Classes\ButtonEx.cs" />
     <Compile Include="Source\Controls\Classes\RichTextBoxEx.cs" />
     <Compile Include="Source\Controls\Classes\TabControl\TabControlEx.cs" />
-    <Compile Include="Source\Controls\Classes\TextBlockEx.cs" />
-    <Compile Include="Source\Controls\Classes\TextBoxEx.cs" />
+    <Compile Include="Source\Controls\Classes\Label.cs" />
+    <Compile Include="Source\Controls\Classes\PasswordEdit.cs" />
+    <Compile Include="Source\Controls\Classes\TextEdit.cs" />
     <Compile Include="Source\Controls\FlipPanel.cs" />
     <Compile Include="Source\Controls\User\Memo\MemoEx.ContextMenu.cs" />
     <Compile Include="Source\Controls\User\Memo\MemoEx.xaml.cs">
       <DependentUpon>MemoEx.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Source\Controls\User\OkCancel\OkCancel.Control.xaml.cs">
+      <DependentUpon>OkCancel.Control.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Source\Converters\Converter.BoolToVisibility.cs" />
     <Compile Include="Source\Converters\Converter.StringToBool.cs" />
+    <Compile Include="Source\Extensions\Extension.Application.cs" />
     <Compile Include="Source\Extensions\Extension.DependencyObject.cs" />
     <Compile Include="Source\Extensions\Extension.WinForms.cs" />
     <Compile Include="Source\Helpers\VisualTree.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Source\Controls\Fonts.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Controls\Effects.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Source\Controls\FlipPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Controls\Styles\ComboBoxEx.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Controls\Styles\ShapeEx.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -116,11 +140,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Source\Controls\Styles\TextBlockEx.xaml">
+    <Page Include="Source\Controls\Styles\Label.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Source\Controls\Styles\TextBoxEx.xaml">
+    <Page Include="Source\Controls\Styles\PasswordEdit.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Controls\Styles\TextEdit.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -129,6 +157,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Source\Controls\User\Memo\MemoEx.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Controls\User\OkCancel\OkCancel.Control.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

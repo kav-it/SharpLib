@@ -41,6 +41,7 @@ namespace SharpLib
             {
                 // Создание объекта конфигурации
                 localConfig = (XmlerConfig)Reflector.CreateObject(GetType());
+                localConfig.OnInit();
                 // Копирование полей
                 Reflector.DeepCopy(this, localConfig);
                 // Сохранение новой конфигурации
@@ -51,6 +52,20 @@ namespace SharpLib
                 // Копирование полей
                 Reflector.DeepCopy(this, localConfig);
             }
+        }
+
+        /// <summary>
+        /// Инициализация полей при первом создании элемента (для списков) (реализация в наследниках)
+        /// </summary>
+        /// <remarks>
+        /// Инициализация не списочных полей выполняется в конструкторе, а для списков такой подход не работает, т.к.
+        /// создаются дублирующие записи конфигурации
+        /// 1. Добавляется конструктор - list.Add(item)
+        /// 2. Добавляется сериализатор
+        /// </remarks>
+        protected virtual void OnInit()
+        {
+            
         }
     }
 }

@@ -49,6 +49,7 @@
     <Compile Include="Source\Events\EventArgs{T}.Cancel.cs" />
     <Compile Include="Source\Events\EventArgs{T}.Changing.cs" />
     <Compile Include="Source\Events\EventArgs{T}.cs" />
+    <Compile Include="Source\Extensions\Extension.Dictionary.cs" />
     <Compile Include="Source\Extensions\Extension.PropertyInfo.cs" />
     <Compile Include="Source\Extensions\Extension.Encoding.cs" />
     <Compile Include="Source\Extensions\Extension.Integer.cs" />

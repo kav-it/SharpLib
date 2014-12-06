@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="SharpLib.Wpf.Controls.OkCancelControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:control="clr-namespace:SharpLib.Wpf.Controls"
+             x:Name="PART_control" 
+             >
+    <Grid>
+        <StackPanel Name="PART_stackPanel" Orientation="Horizontal" HorizontalAlignment="Right">
+            <control:ButtonEx Content="ОК" x:Name="PART_buttonOk" Margin="0 10 10 10" Click="Ok_Click" 
+                              Command="{Binding ElementName=PART_control, Path=OkCommand}" 
+                              CommandParameter="{Binding ElementName=PART_control, Path=OkCommandParameter}"/>
+            <control:ButtonEx Content="Отмена" x:Name="PART_buttonCancel" Margin="10 10 0 10" Click="Cancel_Click" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace SharpLib.Wpf.Controls
 {
-    public class TextBlockEx : Control
+    public class Label : Control
     {
         #region Поля
 
@@ -25,15 +25,15 @@ namespace SharpLib.Wpf.Controls
 
         #region Конструктор
 
-        static TextBlockEx()
+        static Label()
         {
             // Переопределение стиля по умолчанию
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(TextBlockEx), new FrameworkPropertyMetadata(typeof(TextBlockEx)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(Label), new FrameworkPropertyMetadata(typeof(Label)));
 
             // Установка вертикального выравнивания текста по умолчанию
-            VerticalAlignmentProperty.OverrideMetadata(typeof(TextBlockEx), new FrameworkPropertyMetadata(VerticalAlignment.Center));
+            VerticalAlignmentProperty.OverrideMetadata(typeof(Label), new FrameworkPropertyMetadata(VerticalAlignment.Center));
 
-            TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(TextBlockEx), new PropertyMetadata("TextBlockEx"));
+            TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(Label), new PropertyMetadata("Label"));
         }
 
         #endregion

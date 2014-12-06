@@ -179,7 +179,6 @@ namespace SharpLib.Net
         /// <summary>
         /// Текстовое представление объекта
         /// </summary>
-        /// <returns></returns>
         public override string ToString()
         {
             string text = String.Format("[{0}] {1} -> {2}", Id, LocalPoint, RemotePoint);
@@ -425,16 +424,25 @@ namespace SharpLib.Net
                                 return;
                             }
 
-                            if (IsRunning)
+                            if (State == NetSocketState.Opened)
                             {
-                                // Данных нет: Соединение разорвано по инициативе сервера
-                                sock.Shutdown(SocketShutdown.Both);
-                                sock.Close();
-
+                                // Соединение разорвано по удаленной инициативе
                                 State = NetSocketState.Closed;
 
                                 // Оповещение приложения
                                 RaiseEventBreak(sock);
+
+                                // Удаление сокета                                
+                                sock.Shutdown(SocketShutdown.Both);
+                                sock.Close();
+
+                            }
+                            else if (State == NetSocketState.Closing)
+                            {
+                                // Соединение разорвано по локальной инициативе
+                                State = NetSocketState.Closed;
+                                // Оповещение приложения
+                                RaiseEventDisconnect(sock);
                             }
                         }
                     }
@@ -557,7 +565,6 @@ namespace SharpLib.Net
                 }
 
                 State = NetSocketState.Opening;
-
                 Sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ConvertFromoProtoTyp(Proto));
 
                 SocketAsyncEventArgs async = new SocketAsyncEventArgs();
@@ -651,9 +658,9 @@ namespace SharpLib.Net
         {
             if (IsRunning)
             {
-                Sock.Close();
-
                 State = NetSocketState.Closing;
+
+                Sock.Close();
             }
         }
 

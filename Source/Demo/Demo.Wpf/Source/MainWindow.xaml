@@ -9,7 +9,7 @@
         >
     <Grid>
         <TabControl>
-            <TabItem Header="Button" >
+            <TabItem Header="Button" IsSelected="True" >
                 <local:TabButton />
             </TabItem>
             <TabItem Header="Text" >
@@ -24,7 +24,7 @@
             <TabItem Header="Tabs">
                 <local:TabTabs />
             </TabItem>
-            <TabItem Header="Memo" IsSelected="True">
+            <TabItem Header="Memo" >
                 <local:TabMemo />
             </TabItem>
 
