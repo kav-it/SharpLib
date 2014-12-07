@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.WinForms", "SharpL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.Log", "SharpLib.Log\SharpLib.Log.csproj", "{44809241-3223-423A-B9D3-93F011D0BEB6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.Json", "SharpLib.Json\SharpLib.Json.csproj", "{893AAF6E-AC29-402A-B2FB-356CB417E562}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{44809241-3223-423A-B9D3-93F011D0BEB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44809241-3223-423A-B9D3-93F011D0BEB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44809241-3223-423A-B9D3-93F011D0BEB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{893AAF6E-AC29-402A-B2FB-356CB417E562}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{893AAF6E-AC29-402A-B2FB-356CB417E562}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{893AAF6E-AC29-402A-B2FB-356CB417E562}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{893AAF6E-AC29-402A-B2FB-356CB417E562}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
