@@ -9,23 +9,33 @@ using System.Xml.Linq;
 
 namespace SharpLib.Json
 {
-    public static class JsonConvert
+    public static class Json
     {
-        public static Func<JsonSerializerSettings> DefaultSettings { get; set; }
-
-        public static readonly string True = "true";
+        #region Поля
 
         public static readonly string False = "false";
 
-        public static readonly string Null = "null";
-
-        public static readonly string Undefined = "undefined";
-
-        public static readonly string PositiveInfinity = "Infinity";
+        public static readonly string NaN = "NaN";
 
         public static readonly string NegativeInfinity = "-Infinity";
 
-        public static readonly string NaN = "NaN";
+        public static readonly string Null = "null";
+
+        public static readonly string PositiveInfinity = "Infinity";
+
+        public static readonly string True = "true";
+
+        public static readonly string Undefined = "undefined";
+
+        #endregion
+
+        #region Свойства
+
+        public static Func<JsonSerializerSettings> DefaultSettings { get; set; }
+
+        #endregion
+
+        #region Методы
 
         public static string ToString(DateTime value)
         {
@@ -301,14 +311,12 @@ namespace SharpLib.Json
             throw new ArgumentException("Unsupported type: {0}. Use the JsonSerializer class to get the object's JSON representation.".FormatWith(CultureInfo.InvariantCulture, value.GetType()));
         }
 
-        #region Serialize
-
         public static string SerializeObject(object value)
         {
             return SerializeObject(value, null, (JsonSerializerSettings)null);
         }
 
-        public static string SerializeObject(object value, Formatting formatting)
+        public static string SerializeObject(object value, JsonFormatting formatting)
         {
             return SerializeObject(value, formatting, (JsonSerializerSettings)null);
         }
@@ -325,7 +333,7 @@ namespace SharpLib.Json
             return SerializeObject(value, null, settings);
         }
 
-        public static string SerializeObject(object value, Formatting formatting, params JsonConverter[] converters)
+        public static string SerializeObject(object value, JsonFormatting formatting, params JsonConverter[] converters)
         {
             JsonSerializerSettings settings = (converters != null && converters.Length > 0)
                 ? new JsonSerializerSettings
@@ -349,12 +357,12 @@ namespace SharpLib.Json
             return SerializeObjectInternal(value, type, jsonSerializer);
         }
 
-        public static string SerializeObject(object value, Formatting formatting, JsonSerializerSettings settings)
+        public static string SerializeObject(object value, JsonFormatting formatting, JsonSerializerSettings settings)
         {
             return SerializeObject(value, null, formatting, settings);
         }
 
-        public static string SerializeObject(object value, Type type, Formatting formatting, JsonSerializerSettings settings)
+        public static string SerializeObject(object value, Type type, JsonFormatting formatting, JsonSerializerSettings settings)
         {
             JsonSerializer jsonSerializer = JsonSerializer.CreateDefault(settings);
             jsonSerializer.Formatting = formatting;
@@ -376,28 +384,26 @@ namespace SharpLib.Json
             return sw.ToString();
         }
 
-
-        [Obsolete("SerializeObjectAsync is obsolete. Use the Task.Factory.StartNew method to serialize JSON asynchronously: Task.Factory.StartNew(() => JsonConvert.SerializeObject(value))")]
+        [Obsolete("SerializeObjectAsync is obsolete. Use the Task.Factory.StartNew method to serialize JSON asynchronously: Task.Factory.StartNew(() => Json.SerializeObject(value))")]
         public static Task<string> SerializeObjectAsync(object value)
         {
-            return SerializeObjectAsync(value, Formatting.None, null);
+            return SerializeObjectAsync(value, JsonFormatting.None, null);
         }
 
-        [Obsolete("SerializeObjectAsync is obsolete. Use the Task.Factory.StartNew method to serialize JSON asynchronously: Task.Factory.StartNew(() => JsonConvert.SerializeObject(value, formatting))")]
-        public static Task<string> SerializeObjectAsync(object value, Formatting formatting)
+        [Obsolete(
+            "SerializeObjectAsync is obsolete. Use the Task.Factory.StartNew method to serialize JSON asynchronously: Task.Factory.StartNew(() => Json.SerializeObject(value, JsonFormatting))")]
+        public static Task<string> SerializeObjectAsync(object value, JsonFormatting formatting)
         {
             return SerializeObjectAsync(value, formatting, null);
         }
 
-        [Obsolete("SerializeObjectAsync is obsolete. Use the Task.Factory.StartNew method to serialize JSON asynchronously: Task.Factory.StartNew(() => JsonConvert.SerializeObject(value, formatting, settings))")]
-        public static Task<string> SerializeObjectAsync(object value, Formatting formatting, JsonSerializerSettings settings)
+        [Obsolete(
+            "SerializeObjectAsync is obsolete. Use the Task.Factory.StartNew method to serialize JSON asynchronously: Task.Factory.StartNew(() => Json.SerializeObject(value, JsonFormatting, settings))"
+            )]
+        public static Task<string> SerializeObjectAsync(object value, JsonFormatting formatting, JsonSerializerSettings settings)
         {
             return Task.Factory.StartNew(() => SerializeObject(value, formatting, settings));
         }
-
-        #endregion
-
-        #region Deserialize
 
         public static object DeserializeObject(string value)
         {
@@ -468,36 +474,6 @@ namespace SharpLib.Json
             }
         }
 
-        [Obsolete("DeserializeObjectAsync is obsolete. Use the Task.Factory.StartNew method to deserialize JSON asynchronously: Task.Factory.StartNew(() => JsonConvert.DeserializeObject<T>(value))")]
-        public static Task<T> DeserializeObjectAsync<T>(string value)
-        {
-            return DeserializeObjectAsync<T>(value, null);
-        }
-
-        [Obsolete(
-            "DeserializeObjectAsync is obsolete. Use the Task.Factory.StartNew method to deserialize JSON asynchronously: Task.Factory.StartNew(() => JsonConvert.DeserializeObject<T>(value, settings))"
-            )]
-        public static Task<T> DeserializeObjectAsync<T>(string value, JsonSerializerSettings settings)
-        {
-            return Task.Factory.StartNew(() => DeserializeObject<T>(value, settings));
-        }
-
-        [Obsolete("DeserializeObjectAsync is obsolete. Use the Task.Factory.StartNew method to deserialize JSON asynchronously: Task.Factory.StartNew(() => JsonConvert.DeserializeObject(value))")]
-        public static Task<object> DeserializeObjectAsync(string value)
-        {
-            return DeserializeObjectAsync(value, null, null);
-        }
-
-        [Obsolete(
-            "DeserializeObjectAsync is obsolete. Use the Task.Factory.StartNew method to deserialize JSON asynchronously: Task.Factory.StartNew(() => JsonConvert.DeserializeObject(value, type, settings))"
-            )]
-        public static Task<object> DeserializeObjectAsync(string value, Type type, JsonSerializerSettings settings)
-        {
-            return Task.Factory.StartNew(() => DeserializeObject(value, type, settings));
-        }
-
-        #endregion
-
         public static void PopulateObject(string value, object target)
         {
             PopulateObject(value, target, null);
@@ -518,9 +494,8 @@ namespace SharpLib.Json
             }
         }
 
-
         [Obsolete(
-            "PopulateObjectAsync is obsolete. Use the Task.Factory.StartNew method to populate an object with JSON values asynchronously: Task.Factory.StartNew(() => JsonConvert.PopulateObject(value, target, settings))"
+            "PopulateObjectAsync is obsolete. Use the Task.Factory.StartNew method to populate an object with JSON values asynchronously: Task.Factory.StartNew(() => Json.PopulateObject(value, target, settings))"
             )]
         public static Task PopulateObjectAsync(string value, object target, JsonSerializerSettings settings)
         {
@@ -529,17 +504,17 @@ namespace SharpLib.Json
 
         public static string SerializeXmlNode(XmlNode node)
         {
-            return SerializeXmlNode(node, Formatting.None);
+            return SerializeXmlNode(node, JsonFormatting.None);
         }
 
-        public static string SerializeXmlNode(XmlNode node, Formatting formatting)
+        public static string SerializeXmlNode(XmlNode node, JsonFormatting formatting)
         {
             XmlNodeConverter converter = new XmlNodeConverter();
 
             return SerializeObject(node, formatting, converter);
         }
 
-        public static string SerializeXmlNode(XmlNode node, Formatting formatting, bool omitRootObject)
+        public static string SerializeXmlNode(XmlNode node, JsonFormatting formatting, bool omitRootObject)
         {
             XmlNodeConverter converter = new XmlNodeConverter
             {
@@ -570,15 +545,15 @@ namespace SharpLib.Json
 
         public static string SerializeXNode(XObject node)
         {
-            return SerializeXNode(node, Formatting.None);
+            return SerializeXNode(node, JsonFormatting.None);
         }
 
-        public static string SerializeXNode(XObject node, Formatting formatting)
+        public static string SerializeXNode(XObject node, JsonFormatting formatting)
         {
             return SerializeXNode(node, formatting, false);
         }
 
-        public static string SerializeXNode(XObject node, Formatting formatting, bool omitRootObject)
+        public static string SerializeXNode(XObject node, JsonFormatting formatting, bool omitRootObject)
         {
             XmlNodeConverter converter = new XmlNodeConverter
             {
@@ -606,5 +581,7 @@ namespace SharpLib.Json
 
             return (XDocument)DeserializeObject(value, typeof(XDocument), converter);
         }
+
+        #endregion
     }
 }

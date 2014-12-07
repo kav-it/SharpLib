@@ -1,6 +1,6 @@
 ﻿namespace SharpLib.Json
 {
-    public enum Formatting
+    public enum JsonFormatting
     {
         None,
 

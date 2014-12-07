@@ -63,7 +63,7 @@ namespace SharpLib.Json
 
         private State _currentState;
 
-        private Formatting _formatting;
+        private JsonFormatting _formatting;
 
         private StringEscapeHandling _stringEscapeHandling;
 
@@ -150,7 +150,7 @@ namespace SharpLib.Json
             }
         }
 
-        public Formatting Formatting
+        public JsonFormatting Formatting
         {
             get { return _formatting; }
             set { _formatting = value; }
@@ -193,7 +193,7 @@ namespace SharpLib.Json
         {
             _stack = new List<JsonPosition>(4);
             _currentState = State.Start;
-            _formatting = Formatting.None;
+            _formatting = JsonFormatting.None;
             DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind;
 
             CloseOutput = true;
@@ -609,7 +609,7 @@ namespace SharpLib.Json
                     WriteNull();
                 }
 
-                if (_formatting == Formatting.Indented)
+                if (_formatting == JsonFormatting.Indented)
                 {
                     if (_currentState != State.ObjectStart && _currentState != State.ArrayStart)
                     {
@@ -672,7 +672,7 @@ namespace SharpLib.Json
                 WriteValueDelimiter();
             }
 
-            if (_formatting == Formatting.Indented)
+            if (_formatting == JsonFormatting.Indented)
             {
                 if (_currentState == State.Property)
                 {

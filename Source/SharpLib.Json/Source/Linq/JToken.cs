@@ -296,10 +296,10 @@ namespace SharpLib.Json.Linq
 
         public override string ToString()
         {
-            return ToString(Formatting.Indented);
+            return ToString(JsonFormatting.Indented);
         }
 
-        public string ToString(Formatting formatting, params JsonConverter[] converters)
+        public string ToString(JsonFormatting formatting, params JsonConverter[] converters)
         {
             using (StringWriter sw = new StringWriter(CultureInfo.InvariantCulture))
             {
@@ -422,7 +422,7 @@ namespace SharpLib.Json.Linq
 
         public object ToObject(Type objectType)
         {
-            if (JsonConvert.DefaultSettings == null)
+            if (Json.DefaultSettings == null)
             {
                 bool isEnum;
                 PrimitiveTypeCode typeCode = ConvertUtils.GetTypeCode(objectType, out isEnum);

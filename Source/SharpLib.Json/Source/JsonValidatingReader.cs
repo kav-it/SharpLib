@@ -750,7 +750,7 @@ namespace SharpLib.Json
 
                 if (notDivisible)
                 {
-                    RaiseError("Integer {0} is not evenly divisible by {1}.".FormatWith(CultureInfo.InvariantCulture, JsonConvert.ToString(value), schema.DivisibleBy), schema);
+                    RaiseError("Integer {0} is not evenly divisible by {1}.".FormatWith(CultureInfo.InvariantCulture, Json.ToString(value), schema.DivisibleBy), schema);
                 }
             }
         }
@@ -795,11 +795,11 @@ namespace SharpLib.Json
             {
                 if (value > schema.Maximum)
                 {
-                    RaiseError("Float {0} exceeds maximum value of {1}.".FormatWith(CultureInfo.InvariantCulture, JsonConvert.ToString(value), schema.Maximum), schema);
+                    RaiseError("Float {0} exceeds maximum value of {1}.".FormatWith(CultureInfo.InvariantCulture, Json.ToString(value), schema.Maximum), schema);
                 }
                 if (schema.ExclusiveMaximum && value == schema.Maximum)
                 {
-                    RaiseError("Float {0} equals maximum value of {1} and exclusive maximum is true.".FormatWith(CultureInfo.InvariantCulture, JsonConvert.ToString(value), schema.Maximum), schema);
+                    RaiseError("Float {0} equals maximum value of {1} and exclusive maximum is true.".FormatWith(CultureInfo.InvariantCulture, Json.ToString(value), schema.Maximum), schema);
                 }
             }
 
@@ -807,11 +807,11 @@ namespace SharpLib.Json
             {
                 if (value < schema.Minimum)
                 {
-                    RaiseError("Float {0} is less than minimum value of {1}.".FormatWith(CultureInfo.InvariantCulture, JsonConvert.ToString(value), schema.Minimum), schema);
+                    RaiseError("Float {0} is less than minimum value of {1}.".FormatWith(CultureInfo.InvariantCulture, Json.ToString(value), schema.Minimum), schema);
                 }
                 if (schema.ExclusiveMinimum && value == schema.Minimum)
                 {
-                    RaiseError("Float {0} equals minimum value of {1} and exclusive minimum is true.".FormatWith(CultureInfo.InvariantCulture, JsonConvert.ToString(value), schema.Minimum), schema);
+                    RaiseError("Float {0} equals minimum value of {1} and exclusive minimum is true.".FormatWith(CultureInfo.InvariantCulture, Json.ToString(value), schema.Minimum), schema);
                 }
             }
 
@@ -821,7 +821,7 @@ namespace SharpLib.Json
 
                 if (!IsZero(remainder))
                 {
-                    RaiseError("Float {0} is not evenly divisible by {1}.".FormatWith(CultureInfo.InvariantCulture, JsonConvert.ToString(value), schema.DivisibleBy), schema);
+                    RaiseError("Float {0} is not evenly divisible by {1}.".FormatWith(CultureInfo.InvariantCulture, Json.ToString(value), schema.DivisibleBy), schema);
                 }
             }
         }

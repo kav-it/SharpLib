@@ -43,7 +43,7 @@ namespace SharpLib.Json
 
         private FloatParseHandling? _floatParseHandling;
 
-        private Formatting? _formatting;
+        private JsonFormatting? _formatting;
 
         private int? _maxDepth;
 
@@ -266,51 +266,51 @@ namespace SharpLib.Json
             set { _context = value; }
         }
 
-        public virtual Formatting Formatting
+        public virtual JsonFormatting Formatting
         {
-            get { return _formatting ?? JsonSerializerSettings.DefaultFormatting; }
+            get { return _formatting ?? JsonSerializerSettings.DEFAULT_FORMATTING; }
             set { _formatting = value; }
         }
 
         public virtual DateFormatHandling DateFormatHandling
         {
-            get { return _dateFormatHandling ?? JsonSerializerSettings.DefaultDateFormatHandling; }
+            get { return _dateFormatHandling ?? JsonSerializerSettings.DEFAULT_DATE_FORMAT_HANDLING; }
             set { _dateFormatHandling = value; }
         }
 
         public virtual DateTimeZoneHandling DateTimeZoneHandling
         {
-            get { return _dateTimeZoneHandling ?? JsonSerializerSettings.DefaultDateTimeZoneHandling; }
+            get { return _dateTimeZoneHandling ?? JsonSerializerSettings.DEFAULT_DATE_TIME_ZONE_HANDLING; }
             set { _dateTimeZoneHandling = value; }
         }
 
         public virtual DateParseHandling DateParseHandling
         {
-            get { return _dateParseHandling ?? JsonSerializerSettings.DefaultDateParseHandling; }
+            get { return _dateParseHandling ?? JsonSerializerSettings.DEFAULT_DATE_PARSE_HANDLING; }
             set { _dateParseHandling = value; }
         }
 
         public virtual FloatParseHandling FloatParseHandling
         {
-            get { return _floatParseHandling ?? JsonSerializerSettings.DefaultFloatParseHandling; }
+            get { return _floatParseHandling ?? JsonSerializerSettings.DEFAULT_FLOAT_PARSE_HANDLING; }
             set { _floatParseHandling = value; }
         }
 
         public virtual FloatFormatHandling FloatFormatHandling
         {
-            get { return _floatFormatHandling ?? JsonSerializerSettings.DefaultFloatFormatHandling; }
+            get { return _floatFormatHandling ?? JsonSerializerSettings.DEFAULT_FLOAT_FORMAT_HANDLING; }
             set { _floatFormatHandling = value; }
         }
 
         public virtual StringEscapeHandling StringEscapeHandling
         {
-            get { return _stringEscapeHandling ?? JsonSerializerSettings.DefaultStringEscapeHandling; }
+            get { return _stringEscapeHandling ?? JsonSerializerSettings.DEFAULT_STRING_ESCAPE_HANDLING; }
             set { _stringEscapeHandling = value; }
         }
 
         public virtual string DateFormatString
         {
-            get { return _dateFormatString ?? JsonSerializerSettings.DefaultDateFormatString; }
+            get { return _dateFormatString ?? JsonSerializerSettings.DEFAULT_DATE_FORMAT_STRING; }
             set
             {
                 _dateFormatString = value;
@@ -341,7 +341,7 @@ namespace SharpLib.Json
 
         public virtual bool CheckAdditionalContent
         {
-            get { return _checkAdditionalContent ?? JsonSerializerSettings.DefaultCheckAdditionalContent; }
+            get { return _checkAdditionalContent ?? JsonSerializerSettings.DEFAULT_CHECK_ADDITIONAL_CONTENT; }
             set { _checkAdditionalContent = value; }
         }
 
@@ -357,15 +357,15 @@ namespace SharpLib.Json
 
         public JsonSerializer()
         {
-            _referenceLoopHandling = JsonSerializerSettings.DefaultReferenceLoopHandling;
-            _missingMemberHandling = JsonSerializerSettings.DefaultMissingMemberHandling;
-            _nullValueHandling = JsonSerializerSettings.DefaultNullValueHandling;
-            _defaultValueHandling = JsonSerializerSettings.DefaultDefaultValueHandling;
-            _objectCreationHandling = JsonSerializerSettings.DefaultObjectCreationHandling;
-            _preserveReferencesHandling = JsonSerializerSettings.DefaultPreserveReferencesHandling;
-            _constructorHandling = JsonSerializerSettings.DefaultConstructorHandling;
-            _typeNameHandling = JsonSerializerSettings.DefaultTypeNameHandling;
-            _metadataPropertyHandling = JsonSerializerSettings.DefaultMetadataPropertyHandling;
+            _referenceLoopHandling = JsonSerializerSettings.DEFAULT_REFERENCE_LOOP_HANDLING;
+            _missingMemberHandling = JsonSerializerSettings.DEFAULT_MISSING_MEMBER_HANDLING;
+            _nullValueHandling = JsonSerializerSettings.DEFAULT_NULL_VALUE_HANDLING;
+            _defaultValueHandling = JsonSerializerSettings.DEFAULT_DEFAULT_VALUE_HANDLING;
+            _objectCreationHandling = JsonSerializerSettings.DEFAULT_OBJECT_CREATION_HANDLING;
+            _preserveReferencesHandling = JsonSerializerSettings.DEFAULT_PRESERVE_REFERENCES_HANDLING;
+            _constructorHandling = JsonSerializerSettings.DEFAULT_CONSTRUCTOR_HANDLING;
+            _typeNameHandling = JsonSerializerSettings.DEFAULT_TYPE_NAME_HANDLING;
+            _metadataPropertyHandling = JsonSerializerSettings.DEFAULT_METADATA_PROPERTY_HANDLING;
             _context = JsonSerializerSettings.DefaultContext;
             _binder = DefaultSerializationBinder.Instance;
 
@@ -401,7 +401,7 @@ namespace SharpLib.Json
 
         public static JsonSerializer CreateDefault()
         {
-            Func<JsonSerializerSettings> defaultSettingsCreator = JsonConvert.DefaultSettings;
+            Func<JsonSerializerSettings> defaultSettingsCreator = Json.DefaultSettings;
             JsonSerializerSettings defaultSettings = (defaultSettingsCreator != null) ? defaultSettingsCreator() : null;
 
             return Create(defaultSettings);
@@ -773,7 +773,7 @@ namespace SharpLib.Json
         {
             ValidationUtils.ArgumentNotNull(jsonWriter, "jsonWriter");
 
-            Formatting? previousFormatting = null;
+            JsonFormatting? previousFormatting = null;
             if (_formatting != null && jsonWriter.Formatting != _formatting)
             {
                 previousFormatting = jsonWriter.Formatting;

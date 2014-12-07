@@ -15,6 +15,10 @@ xcopy /Y "..\Source\SharpLib.Wpf\bin\Debug\SharpLib.Wpf.dll" "..\BuildResult\"
 xcopy /Y "..\Source\SharpLib.Wpf\bin\Debug\SharpLib.Wpf.pdb" "..\BuildResult\"
 xcopy /Y "..\Source\SharpLib.OpenGL\bin\Debug\SharpLib.OpenGL.dll" "..\BuildResult\"
 xcopy /Y "..\Source\SharpLib.OpenGL\bin\Debug\SharpLib.OpenGL.pdb" "..\BuildResult\"
+xcopy /Y "..\Source\SharpLib.Log\bin\Debug\SharpLib.Log.dll" "..\BuildResult\"
+xcopy /Y "..\Source\SharpLib.Log\bin\Debug\SharpLib.Log.pdb" "..\BuildResult\"
+xcopy /Y "..\Source\SharpLib.Json\bin\Debug\SharpLib.Json.dll" "..\BuildResult\"
+xcopy /Y "..\Source\SharpLib.Json\bin\Debug\SharpLib.Json.pdb" "..\BuildResult\"
 
 pause
 

@@ -252,13 +252,13 @@ namespace SharpLib.Json
         public override void WriteNull()
         {
             InternalWriteValue(JsonToken.Null);
-            WriteValueInternal(JsonConvert.Null, JsonToken.Null);
+            WriteValueInternal(Json.Null, JsonToken.Null);
         }
 
         public override void WriteUndefined()
         {
             InternalWriteValue(JsonToken.Undefined);
-            WriteValueInternal(JsonConvert.Undefined, JsonToken.Undefined);
+            WriteValueInternal(Json.Undefined, JsonToken.Undefined);
         }
 
         public override void WriteRaw(string json)
@@ -274,7 +274,7 @@ namespace SharpLib.Json
 
             if (value == null)
             {
-                WriteValueInternal(JsonConvert.Null, JsonToken.Null);
+                WriteValueInternal(Json.Null, JsonToken.Null);
             }
             else
             {
@@ -317,7 +317,7 @@ namespace SharpLib.Json
         public override void WriteValue(float value)
         {
             InternalWriteValue(JsonToken.Float);
-            WriteValueInternal(JsonConvert.ToString(value, FloatFormatHandling, QuoteChar, false), JsonToken.Float);
+            WriteValueInternal(Json.ToString(value, FloatFormatHandling, QuoteChar, false), JsonToken.Float);
         }
 
         public override void WriteValue(float? value)
@@ -329,14 +329,14 @@ namespace SharpLib.Json
             else
             {
                 InternalWriteValue(JsonToken.Float);
-                WriteValueInternal(JsonConvert.ToString(value.Value, FloatFormatHandling, QuoteChar, true), JsonToken.Float);
+                WriteValueInternal(Json.ToString(value.Value, FloatFormatHandling, QuoteChar, true), JsonToken.Float);
             }
         }
 
         public override void WriteValue(double value)
         {
             InternalWriteValue(JsonToken.Float);
-            WriteValueInternal(JsonConvert.ToString(value, FloatFormatHandling, QuoteChar, false), JsonToken.Float);
+            WriteValueInternal(Json.ToString(value, FloatFormatHandling, QuoteChar, false), JsonToken.Float);
         }
 
         public override void WriteValue(double? value)
@@ -348,14 +348,14 @@ namespace SharpLib.Json
             else
             {
                 InternalWriteValue(JsonToken.Float);
-                WriteValueInternal(JsonConvert.ToString(value.Value, FloatFormatHandling, QuoteChar, true), JsonToken.Float);
+                WriteValueInternal(Json.ToString(value.Value, FloatFormatHandling, QuoteChar, true), JsonToken.Float);
             }
         }
 
         public override void WriteValue(bool value)
         {
             InternalWriteValue(JsonToken.Boolean);
-            WriteValueInternal(JsonConvert.ToString(value), JsonToken.Boolean);
+            WriteValueInternal(Json.ToString(value), JsonToken.Boolean);
         }
 
         public override void WriteValue(short value)
@@ -374,7 +374,7 @@ namespace SharpLib.Json
         public override void WriteValue(char value)
         {
             InternalWriteValue(JsonToken.String);
-            WriteValueInternal(JsonConvert.ToString(value), JsonToken.String);
+            WriteValueInternal(Json.ToString(value), JsonToken.String);
         }
 
         public override void WriteValue(byte value)
@@ -393,7 +393,7 @@ namespace SharpLib.Json
         public override void WriteValue(decimal value)
         {
             InternalWriteValue(JsonToken.Float);
-            WriteValueInternal(JsonConvert.ToString(value), JsonToken.Float);
+            WriteValueInternal(Json.ToString(value), JsonToken.Float);
         }
 
         public override void WriteValue(DateTime value)

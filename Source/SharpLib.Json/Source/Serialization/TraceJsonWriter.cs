@@ -25,7 +25,7 @@ namespace SharpLib.Json
 
             _sw = new StringWriter(CultureInfo.InvariantCulture);
             _textWriter = new JsonTextWriter(_sw);
-            _textWriter.Formatting = Formatting.Indented;
+            _textWriter.Formatting = JsonFormatting.Indented;
             _textWriter.Culture = innerWriter.Culture;
             _textWriter.DateFormatHandling = innerWriter.DateFormatHandling;
             _textWriter.DateFormatString = innerWriter.DateFormatString;

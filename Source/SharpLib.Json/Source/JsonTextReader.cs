@@ -1531,7 +1531,7 @@ namespace SharpLib.Json
 
         private void ParseTrue()
         {
-            if (MatchValueWithTrailingSeparator(JsonConvert.True))
+            if (MatchValueWithTrailingSeparator(Json.True))
             {
                 SetToken(JsonToken.Boolean, true);
             }
@@ -1543,7 +1543,7 @@ namespace SharpLib.Json
 
         private void ParseNull()
         {
-            if (MatchValueWithTrailingSeparator(JsonConvert.Null))
+            if (MatchValueWithTrailingSeparator(Json.Null))
             {
                 SetToken(JsonToken.Null);
             }
@@ -1555,7 +1555,7 @@ namespace SharpLib.Json
 
         private void ParseUndefined()
         {
-            if (MatchValueWithTrailingSeparator(JsonConvert.Undefined))
+            if (MatchValueWithTrailingSeparator(Json.Undefined))
             {
                 SetToken(JsonToken.Undefined);
             }
@@ -1567,7 +1567,7 @@ namespace SharpLib.Json
 
         private void ParseFalse()
         {
-            if (MatchValueWithTrailingSeparator(JsonConvert.False))
+            if (MatchValueWithTrailingSeparator(Json.False))
             {
                 SetToken(JsonToken.Boolean, false);
             }
@@ -1579,7 +1579,7 @@ namespace SharpLib.Json
 
         private void ParseNumberNegativeInfinity()
         {
-            if (MatchValueWithTrailingSeparator(JsonConvert.NegativeInfinity))
+            if (MatchValueWithTrailingSeparator(Json.NegativeInfinity))
             {
                 if (_floatParseHandling == FloatParseHandling.Decimal)
                 {
@@ -1596,7 +1596,7 @@ namespace SharpLib.Json
 
         private void ParseNumberPositiveInfinity()
         {
-            if (MatchValueWithTrailingSeparator(JsonConvert.PositiveInfinity))
+            if (MatchValueWithTrailingSeparator(Json.PositiveInfinity))
             {
                 if (_floatParseHandling == FloatParseHandling.Decimal)
                 {
@@ -1613,7 +1613,7 @@ namespace SharpLib.Json
 
         private void ParseNumberNaN()
         {
-            if (MatchValueWithTrailingSeparator(JsonConvert.NaN))
+            if (MatchValueWithTrailingSeparator(Json.NaN))
             {
                 if (_floatParseHandling == FloatParseHandling.Decimal)
                 {

@@ -164,7 +164,7 @@ namespace SharpLib.Json
 
         public override bool Read()
         {
-            _readType = Json.ReadType.Read;
+            _readType = SharpLib.Json.ReadType.Read;
 
             return ReadInternal();
         }

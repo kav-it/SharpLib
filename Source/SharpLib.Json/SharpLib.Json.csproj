@@ -151,7 +151,7 @@
     <Compile Include="Source\JsonWriter.cs" />
     <Compile Include="Source\JsonConverter.cs" />
     <Compile Include="Source\Enums\FloatFormatHandling.cs" />
-    <Compile Include="Source\Enums\Formatting.cs" />
+    <Compile Include="Source\Enums\JsonFormatting.cs" />
     <Compile Include="Source\Linq\Extensions.cs" />
     <Compile Include="Source\Linq\IJEnumerable.cs" />
     <Compile Include="Source\Linq\JArray.cs" />
@@ -257,8 +257,7 @@
     <Compile Include="Source\Utils\ThreadSafeStore.cs" />
     <Compile Include="Source\Utils\TypeExtensions.cs" />
     <Compile Include="Source\Utils\ValidationUtils.cs" />
-    <Compile Include="Source\Version\Class1.cs" />
-    <Compile Include="Source\JsonConvert.cs" />
+    <Compile Include="Source\Json.cs" />
     <Compile Include="Source\Version\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

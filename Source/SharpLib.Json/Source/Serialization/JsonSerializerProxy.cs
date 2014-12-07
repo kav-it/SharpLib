@@ -114,7 +114,7 @@ namespace SharpLib.Json
             set { _serializer.Context = value; }
         }
 
-        public override Formatting Formatting
+        public override JsonFormatting Formatting
         {
             get { return _serializer.Formatting; }
             set { _serializer.Formatting = value; }

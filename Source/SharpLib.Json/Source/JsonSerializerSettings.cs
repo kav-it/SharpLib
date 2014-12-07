@@ -10,45 +10,45 @@ namespace SharpLib.Json
     {
         #region Константы
 
-        internal const bool DefaultCheckAdditionalContent = false;
+        internal const bool DEFAULT_CHECK_ADDITIONAL_CONTENT = false;
 
-        internal const ConstructorHandling DefaultConstructorHandling = ConstructorHandling.Default;
+        internal const ConstructorHandling DEFAULT_CONSTRUCTOR_HANDLING = ConstructorHandling.Default;
 
-        internal const DateFormatHandling DefaultDateFormatHandling = DateFormatHandling.IsoDateFormat;
+        internal const DateFormatHandling DEFAULT_DATE_FORMAT_HANDLING = DateFormatHandling.IsoDateFormat;
 
-        internal const string DefaultDateFormatString = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK";
+        internal const string DEFAULT_DATE_FORMAT_STRING = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK";
 
-        internal const DateParseHandling DefaultDateParseHandling = DateParseHandling.DateTime;
+        internal const DateParseHandling DEFAULT_DATE_PARSE_HANDLING = DateParseHandling.DateTime;
 
-        internal const DateTimeZoneHandling DefaultDateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind;
+        internal const DateTimeZoneHandling DEFAULT_DATE_TIME_ZONE_HANDLING = DateTimeZoneHandling.RoundtripKind;
 
-        internal const DefaultValueHandling DefaultDefaultValueHandling = DefaultValueHandling.Include;
+        internal const DefaultValueHandling DEFAULT_DEFAULT_VALUE_HANDLING = DefaultValueHandling.Include;
 
-        internal const FloatFormatHandling DefaultFloatFormatHandling = FloatFormatHandling.String;
+        internal const FloatFormatHandling DEFAULT_FLOAT_FORMAT_HANDLING = FloatFormatHandling.String;
 
-        internal const FloatParseHandling DefaultFloatParseHandling = FloatParseHandling.Double;
+        internal const FloatParseHandling DEFAULT_FLOAT_PARSE_HANDLING = FloatParseHandling.Double;
 
-        internal const FormatterAssemblyStyle DefaultFormatterAssemblyStyle = FormatterAssemblyStyle.Simple;
+        internal const FormatterAssemblyStyle DEFAULT_FORMATTER_ASSEMBLY_STYLE = FormatterAssemblyStyle.Simple;
 
-        internal const Formatting DefaultFormatting = Formatting.None;
+        internal const JsonFormatting DEFAULT_FORMATTING = JsonFormatting.None;
 
-        internal const MetadataPropertyHandling DefaultMetadataPropertyHandling = MetadataPropertyHandling.Default;
+        internal const MetadataPropertyHandling DEFAULT_METADATA_PROPERTY_HANDLING = MetadataPropertyHandling.Default;
 
-        internal const MissingMemberHandling DefaultMissingMemberHandling = MissingMemberHandling.Ignore;
+        internal const MissingMemberHandling DEFAULT_MISSING_MEMBER_HANDLING = MissingMemberHandling.Ignore;
 
-        internal const NullValueHandling DefaultNullValueHandling = NullValueHandling.Include;
+        internal const NullValueHandling DEFAULT_NULL_VALUE_HANDLING = NullValueHandling.Include;
 
-        internal const ObjectCreationHandling DefaultObjectCreationHandling = ObjectCreationHandling.Auto;
+        internal const ObjectCreationHandling DEFAULT_OBJECT_CREATION_HANDLING = ObjectCreationHandling.Auto;
 
-        internal const PreserveReferencesHandling DefaultPreserveReferencesHandling = PreserveReferencesHandling.None;
+        internal const PreserveReferencesHandling DEFAULT_PRESERVE_REFERENCES_HANDLING = PreserveReferencesHandling.None;
 
-        internal const ReferenceLoopHandling DefaultReferenceLoopHandling = ReferenceLoopHandling.Error;
+        internal const ReferenceLoopHandling DEFAULT_REFERENCE_LOOP_HANDLING = ReferenceLoopHandling.Error;
 
-        internal const StringEscapeHandling DefaultStringEscapeHandling = StringEscapeHandling.Default;
+        internal const StringEscapeHandling DEFAULT_STRING_ESCAPE_HANDLING = StringEscapeHandling.Default;
 
-        internal const FormatterAssemblyStyle DefaultTypeNameAssemblyFormat = FormatterAssemblyStyle.Simple;
+        internal const FormatterAssemblyStyle DEFAULT_TYPE_NAME_ASSEMBLY_FORMAT = FormatterAssemblyStyle.Simple;
 
-        internal const TypeNameHandling DefaultTypeNameHandling = TypeNameHandling.None;
+        internal const TypeNameHandling DEFAULT_TYPE_NAME_HANDLING = TypeNameHandling.None;
 
         #endregion
 
@@ -82,7 +82,7 @@ namespace SharpLib.Json
 
         internal FloatParseHandling? _floatParseHandling;
 
-        internal Formatting? _formatting;
+        internal JsonFormatting? _formatting;
 
         internal int? _maxDepth;
 
@@ -112,31 +112,31 @@ namespace SharpLib.Json
 
         public ReferenceLoopHandling ReferenceLoopHandling
         {
-            get { return _referenceLoopHandling ?? DefaultReferenceLoopHandling; }
+            get { return _referenceLoopHandling ?? DEFAULT_REFERENCE_LOOP_HANDLING; }
             set { _referenceLoopHandling = value; }
         }
 
         public MissingMemberHandling MissingMemberHandling
         {
-            get { return _missingMemberHandling ?? DefaultMissingMemberHandling; }
+            get { return _missingMemberHandling ?? DEFAULT_MISSING_MEMBER_HANDLING; }
             set { _missingMemberHandling = value; }
         }
 
         public ObjectCreationHandling ObjectCreationHandling
         {
-            get { return _objectCreationHandling ?? DefaultObjectCreationHandling; }
+            get { return _objectCreationHandling ?? DEFAULT_OBJECT_CREATION_HANDLING; }
             set { _objectCreationHandling = value; }
         }
 
         public NullValueHandling NullValueHandling
         {
-            get { return _nullValueHandling ?? DefaultNullValueHandling; }
+            get { return _nullValueHandling ?? DEFAULT_NULL_VALUE_HANDLING; }
             set { _nullValueHandling = value; }
         }
 
         public DefaultValueHandling DefaultValueHandling
         {
-            get { return _defaultValueHandling ?? DefaultDefaultValueHandling; }
+            get { return _defaultValueHandling ?? DEFAULT_DEFAULT_VALUE_HANDLING; }
             set { _defaultValueHandling = value; }
         }
 
@@ -144,31 +144,31 @@ namespace SharpLib.Json
 
         public PreserveReferencesHandling PreserveReferencesHandling
         {
-            get { return _preserveReferencesHandling ?? DefaultPreserveReferencesHandling; }
+            get { return _preserveReferencesHandling ?? DEFAULT_PRESERVE_REFERENCES_HANDLING; }
             set { _preserveReferencesHandling = value; }
         }
 
         public TypeNameHandling TypeNameHandling
         {
-            get { return _typeNameHandling ?? DefaultTypeNameHandling; }
+            get { return _typeNameHandling ?? DEFAULT_TYPE_NAME_HANDLING; }
             set { _typeNameHandling = value; }
         }
 
         public MetadataPropertyHandling MetadataPropertyHandling
         {
-            get { return _metadataPropertyHandling ?? DefaultMetadataPropertyHandling; }
+            get { return _metadataPropertyHandling ?? DEFAULT_METADATA_PROPERTY_HANDLING; }
             set { _metadataPropertyHandling = value; }
         }
 
         public FormatterAssemblyStyle TypeNameAssemblyFormat
         {
-            get { return _typeNameAssemblyFormat ?? DefaultFormatterAssemblyStyle; }
+            get { return _typeNameAssemblyFormat ?? DEFAULT_FORMATTER_ASSEMBLY_STYLE; }
             set { _typeNameAssemblyFormat = value; }
         }
 
         public ConstructorHandling ConstructorHandling
         {
-            get { return _constructorHandling ?? DefaultConstructorHandling; }
+            get { return _constructorHandling ?? DEFAULT_CONSTRUCTOR_HANDLING; }
             set { _constructorHandling = value; }
         }
 
@@ -190,7 +190,7 @@ namespace SharpLib.Json
 
         public string DateFormatString
         {
-            get { return _dateFormatString ?? DefaultDateFormatString; }
+            get { return _dateFormatString ?? DEFAULT_DATE_FORMAT_STRING; }
             set
             {
                 _dateFormatString = value;
@@ -213,45 +213,45 @@ namespace SharpLib.Json
             }
         }
 
-        public Formatting Formatting
+        public JsonFormatting Formatting
         {
-            get { return _formatting ?? DefaultFormatting; }
+            get { return _formatting ?? DEFAULT_FORMATTING; }
             set { _formatting = value; }
         }
 
         public DateFormatHandling DateFormatHandling
         {
-            get { return _dateFormatHandling ?? DefaultDateFormatHandling; }
+            get { return _dateFormatHandling ?? DEFAULT_DATE_FORMAT_HANDLING; }
             set { _dateFormatHandling = value; }
         }
 
         public DateTimeZoneHandling DateTimeZoneHandling
         {
-            get { return _dateTimeZoneHandling ?? DefaultDateTimeZoneHandling; }
+            get { return _dateTimeZoneHandling ?? DEFAULT_DATE_TIME_ZONE_HANDLING; }
             set { _dateTimeZoneHandling = value; }
         }
 
         public DateParseHandling DateParseHandling
         {
-            get { return _dateParseHandling ?? DefaultDateParseHandling; }
+            get { return _dateParseHandling ?? DEFAULT_DATE_PARSE_HANDLING; }
             set { _dateParseHandling = value; }
         }
 
         public FloatFormatHandling FloatFormatHandling
         {
-            get { return _floatFormatHandling ?? DefaultFloatFormatHandling; }
+            get { return _floatFormatHandling ?? DEFAULT_FLOAT_FORMAT_HANDLING; }
             set { _floatFormatHandling = value; }
         }
 
         public FloatParseHandling FloatParseHandling
         {
-            get { return _floatParseHandling ?? DefaultFloatParseHandling; }
+            get { return _floatParseHandling ?? DEFAULT_FLOAT_PARSE_HANDLING; }
             set { _floatParseHandling = value; }
         }
 
         public StringEscapeHandling StringEscapeHandling
         {
-            get { return _stringEscapeHandling ?? DefaultStringEscapeHandling; }
+            get { return _stringEscapeHandling ?? DEFAULT_STRING_ESCAPE_HANDLING; }
             set { _stringEscapeHandling = value; }
         }
 
@@ -263,7 +263,7 @@ namespace SharpLib.Json
 
         public bool CheckAdditionalContent
         {
-            get { return _checkAdditionalContent ?? DefaultCheckAdditionalContent; }
+            get { return _checkAdditionalContent ?? DEFAULT_CHECK_ADDITIONAL_CONTENT; }
             set { _checkAdditionalContent = value; }
         }
 

@@ -155,7 +155,7 @@ namespace SharpLib.Json.Schema
         {
             StringWriter writer = new StringWriter(CultureInfo.InvariantCulture);
             JsonTextWriter jsonWriter = new JsonTextWriter(writer);
-            jsonWriter.Formatting = Formatting.Indented;
+            jsonWriter.Formatting = JsonFormatting.Indented;
 
             WriteTo(jsonWriter);
 

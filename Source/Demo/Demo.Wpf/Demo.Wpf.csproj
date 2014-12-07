@@ -118,6 +118,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SharpLib.Json\SharpLib.Json.csproj">
+      <Project>{893AAF6E-AC29-402A-B2FB-356CB417E562}</Project>
+      <Name>SharpLib.Json</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SharpLib.Log\SharpLib.Log.csproj">
       <Project>{44809241-3223-423a-b9d3-93f011d0beb6}</Project>
       <Name>SharpLib.Log</Name>
