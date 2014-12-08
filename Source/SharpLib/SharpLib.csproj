@@ -64,6 +64,8 @@
     <Compile Include="Source\Extensions\Extension.StringArray.cs" />
     <Compile Include="Source\Helpers\Bootstrap\Application.cs" />
     <Compile Include="Source\Helpers\ByteList.cs" />
+    <Compile Include="Source\Helpers\Crypto\Aes.cs" />
+    <Compile Include="Source\Helpers\Crypto\Md5.cs" />
     <Compile Include="Source\Helpers\Files\File.Location.cs" />
     <Compile Include="Source\Helpers\Files\File.Error.cs" />
     <Compile Include="Source\Helpers\Files\Files.cs" />

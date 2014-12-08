@@ -1,5 +1,5 @@
 ﻿
-namespace SharpLibWpf
+namespace SharpLib.Wpf
 {
     public static class ExtensionWinForms
     {

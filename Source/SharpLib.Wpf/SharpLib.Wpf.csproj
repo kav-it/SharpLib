@@ -85,6 +85,7 @@
     <Compile Include="Source\Extensions\Extension.Application.cs" />
     <Compile Include="Source\Extensions\Extension.DependencyObject.cs" />
     <Compile Include="Source\Extensions\Extension.WinForms.cs" />
+    <Compile Include="Source\Helpers\UI.cs" />
     <Compile Include="Source\Helpers\ResourcesWpf.cs" />
     <Compile Include="Source\Helpers\VisualTree.cs" />
   </ItemGroup>

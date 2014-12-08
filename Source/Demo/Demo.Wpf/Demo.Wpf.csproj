@@ -52,9 +52,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="..\..\SharpLib.Version.cs">
-      <Link>SharpLib.Version.cs</Link>
+      <Link>Source\Version\SharpLib.Version.cs</Link>
     </Compile>
-    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Source\Version\AssemblyInfo.cs" />
     <Compile Include="Source\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>

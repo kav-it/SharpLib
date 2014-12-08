@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace SharpLibWpf.Converters
+namespace SharpLib.Wpf.Converters
 {
     [ValueConversion(typeof(string), typeof(bool))]
     public class StringToBoolConverter : IValueConverter

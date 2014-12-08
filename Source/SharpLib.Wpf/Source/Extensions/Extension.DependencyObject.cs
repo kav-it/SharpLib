@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 
-namespace SharpLibWpf
+namespace SharpLib.Wpf
 {
     public static class DependencyObjectExtension
     {

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Windows;
 
-namespace SharpLibWpf
+namespace SharpLib.Wpf
 {
     public static class ApplicationExtension
     {

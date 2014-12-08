@@ -3,7 +3,6 @@ using System.Globalization;
 using System.IO;
 using System.Numerics;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -115,7 +114,7 @@ namespace SharpLib.Json
 
         private static string ToStringInternal(BigInteger value)
         {
-            return value.ToString(null, CultureInfo.InvariantCulture);
+            return value.ToString(string.Empty, CultureInfo.InvariantCulture);
         }
 
         [CLSCompliant(false)]
@@ -384,27 +383,6 @@ namespace SharpLib.Json
             return sw.ToString();
         }
 
-        [Obsolete("SerializeObjectAsync is obsolete. Use the Task.Factory.StartNew method to serialize JSON asynchronously: Task.Factory.StartNew(() => Json.SerializeObject(value))")]
-        public static Task<string> SerializeObjectAsync(object value)
-        {
-            return SerializeObjectAsync(value, JsonFormatting.None, null);
-        }
-
-        [Obsolete(
-            "SerializeObjectAsync is obsolete. Use the Task.Factory.StartNew method to serialize JSON asynchronously: Task.Factory.StartNew(() => Json.SerializeObject(value, JsonFormatting))")]
-        public static Task<string> SerializeObjectAsync(object value, JsonFormatting formatting)
-        {
-            return SerializeObjectAsync(value, formatting, null);
-        }
-
-        [Obsolete(
-            "SerializeObjectAsync is obsolete. Use the Task.Factory.StartNew method to serialize JSON asynchronously: Task.Factory.StartNew(() => Json.SerializeObject(value, JsonFormatting, settings))"
-            )]
-        public static Task<string> SerializeObjectAsync(object value, JsonFormatting formatting, JsonSerializerSettings settings)
-        {
-            return Task.Factory.StartNew(() => SerializeObject(value, formatting, settings));
-        }
-
         public static object DeserializeObject(string value)
         {
             return DeserializeObject(value, null, (JsonSerializerSettings)null);
@@ -492,14 +470,6 @@ namespace SharpLib.Json
                     throw new JsonSerializationException("Additional text found in JSON string after finishing deserializing object.");
                 }
             }
-        }
-
-        [Obsolete(
-            "PopulateObjectAsync is obsolete. Use the Task.Factory.StartNew method to populate an object with JSON values asynchronously: Task.Factory.StartNew(() => Json.PopulateObject(value, target, settings))"
-            )]
-        public static Task PopulateObjectAsync(string value, object target, JsonSerializerSettings settings)
-        {
-            return Task.Factory.StartNew(() => PopulateObject(value, target, settings));
         }
 
         public static string SerializeXmlNode(XmlNode node)
