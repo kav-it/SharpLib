@@ -8,7 +8,7 @@ namespace SharpLib
     {
         #region Методы
 
-        public static Object CreateObject(Type typ)
+        public static object CreateObject(Type typ)
         {
             Object result = Activator.CreateInstance(typ);
 

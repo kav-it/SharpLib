@@ -552,6 +552,43 @@ namespace SharpLib.Json
             return (XDocument)DeserializeObject(value, typeof(XDocument), converter);
         }
 
+        /// <summary>
+        /// Сохранение объекта в файл .json
+        /// </summary>
+        public static void SaveToFile(string path, object value)
+        {
+            using (StreamWriter streamWriter = File.CreateText(path))
+            using (JsonWriter jsonWriter = new JsonTextWriter(streamWriter))
+            {
+                jsonWriter.Formatting = JsonFormatting.Indented;
+                
+                var serializer = new JsonSerializer();
+                serializer.Serialize(jsonWriter, value);
+            }
+        }
+
+        /// <summary>
+        /// Загрузка объекта из файла .json
+        /// </summary>
+        public static T LoadFromFile<T>(string path)
+        {
+            var text = File.ReadAllText(path);
+            T result = DeserializeObject<T>(text);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Загрузка объекта из файла .json
+        /// </summary>
+        public static object LoadFromFile(string path, Type valueType)
+        {
+            var text = File.ReadAllText(path);
+            var result = DeserializeObject(text, valueType);
+
+            return result;
+        }
+
         #endregion
     }
 }

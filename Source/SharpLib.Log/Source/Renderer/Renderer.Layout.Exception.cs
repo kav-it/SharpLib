@@ -69,7 +69,7 @@ namespace SharpLib.Log
         public ExceptionLayoutRenderer()
         {
             _innerFormat = string.Empty;
-            Format = "message";
+            Format = "ToString";
             Separator = " ";
             InnerExceptionSeparator = EnvironmentHelper.NewLine;
             MaxInnerExceptionLevel = 0;
@@ -143,11 +143,6 @@ namespace SharpLib.Log
 
         protected virtual void AppendToString(StringBuilder sb, Exception ex)
         {
-            sb.Append(ex);
-        }
-
-        protected virtual void AppendToStringNewLine(StringBuilder sb, Exception ex)
-        {
             sb.Append(Environment.NewLine);
             sb.Append("------------------------------------------------");
             sb.Append(Environment.NewLine);
@@ -200,10 +195,6 @@ namespace SharpLib.Log
 
                     case "TOSTRING":
                         dataTargets.Add(AppendToString);
-                        break;
-
-                    case "TOSTRINGNEWLINE":
-                        dataTargets.Add(AppendToStringNewLine);
                         break;
 
                     case "METHOD":

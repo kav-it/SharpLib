@@ -8,8 +8,7 @@ namespace SharpLib
     /// <summary>
     /// Потокобезопасный список
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class ThreadSafeList<T> : IList<T>
+    public class ConcurrentList<T> : IList<T>
     {
         #region Поля
 
@@ -68,7 +67,7 @@ namespace SharpLib
 
         #region Конструктор
 
-        public ThreadSafeList(IEnumerable<T> items = null)
+        public ConcurrentList(IEnumerable<T> items = null)
         {
             Add(items);
         }
@@ -99,7 +98,7 @@ namespace SharpLib
             }
         }
 
-        public Boolean TryAdd(T item)
+        public bool TryAdd(T item)
         {
             try
             {

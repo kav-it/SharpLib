@@ -1,8 +1,4 @@
-﻿#region License
-
-#endregion
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using SharpLib.Json.Linq;
 

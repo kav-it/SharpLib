@@ -16,7 +16,7 @@ namespace SharpLib
             byte[] bufIn = text.ToBufferEx();
             byte[] bufOut = md5Hasher.ComputeHash(bufIn);
 
-            string hash = bufOut.ToStringEx();
+            string hash = bufOut.ToAsciiEx(string.Empty).ToLower();
 
             return hash;
         }

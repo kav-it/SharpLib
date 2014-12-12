@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.Log", "SharpLib.Lo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.Json", "SharpLib.Json\SharpLib.Json.csproj", "{893AAF6E-AC29-402A-B2FB-356CB417E562}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A8882717-57A0-4AD1-9C85-1691AB894F9B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.Tests", "SharpLib.Tests\SharpLib.Tests.csproj", "{208555F6-8889-4AFA-9D78-AD1C0D1726F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +63,10 @@ Global
 		{893AAF6E-AC29-402A-B2FB-356CB417E562}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{893AAF6E-AC29-402A-B2FB-356CB417E562}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{893AAF6E-AC29-402A-B2FB-356CB417E562}.Release|Any CPU.Build.0 = Release|Any CPU
+		{208555F6-8889-4AFA-9D78-AD1C0D1726F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{208555F6-8889-4AFA-9D78-AD1C0D1726F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{208555F6-8889-4AFA-9D78-AD1C0D1726F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{208555F6-8889-4AFA-9D78-AD1C0D1726F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,5 +74,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{FD5A22F4-9C7D-44FC-9FB4-74C5F5F81F75} = {E5BB9540-B329-4A3F-B531-9933F8FF96D2}
 		{7EA447A7-B526-4BBA-A025-B68B7F6A5579} = {E5BB9540-B329-4A3F-B531-9933F8FF96D2}
+		{208555F6-8889-4AFA-9D78-AD1C0D1726F8} = {A8882717-57A0-4AD1-9C85-1691AB894F9B}
 	EndGlobalSection
 EndGlobal

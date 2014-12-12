@@ -71,10 +71,15 @@ namespace SharpLib
 
         public static string SubstringEx(this string value, int startIndex, int endIndex)
         {
-            int length = endIndex - startIndex;
-            string result = value.Substring(startIndex, length);
+            if (endIndex > startIndex)
+            {
+                int length = endIndex - startIndex;
+                string result = value.Substring(startIndex, length);
 
-            return result;
+                return result;
+            }
+
+            return string.Empty;
         }
 
         public static string RemoveEx(this string value, int startIndex, int endIndex)
@@ -545,9 +550,14 @@ namespace SharpLib
             return (index >= 0);
         }
 
-        public static bool EqualEx(this string value1, string value2)
+        public static bool EqualsOrdinalEx(this string value1, string value2)
         {
             return value1.Equals(value2, StringComparison.Ordinal);
+        }
+
+        public static bool EqualsIgnoreCaseEx(this string value1, string value2)
+        {
+            return value1.Equals(value2, StringComparison.OrdinalIgnoreCase);
         }
 
         #endregion
