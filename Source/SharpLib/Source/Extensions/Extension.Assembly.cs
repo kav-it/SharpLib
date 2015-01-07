@@ -84,11 +84,13 @@ namespace SharpLib
         ///   + Assets
         ///     + Config.xml      // Расположение файла в директории проекта
         /// </example>
-        public static string GetEmbeddedText(this Assembly assembly, string uriEmbeddedResource)
+        public static string GetEmbeddedTextEx(this Assembly assembly, string uriEmbeddedResource)
         {
             var result = string.Empty;
 
-            using (var stream = assembly.GetManifestResourceStream(uriEmbeddedResource))
+            var pathInResources = string.Format("{0}.{1}", assembly.GetName().Name, uriEmbeddedResource);
+
+            using (var stream = assembly.GetManifestResourceStream(pathInResources))
             {
                 if (stream != null)
                 {

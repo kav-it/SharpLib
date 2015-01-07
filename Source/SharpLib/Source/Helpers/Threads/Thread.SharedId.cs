@@ -3,7 +3,7 @@
     /// <summary>
     /// Потокобезопасный общий идентификаторов
     /// </summary>
-    internal class SharedId
+    public class SharedId
     {
         #region Свойства
 

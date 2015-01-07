@@ -52,10 +52,10 @@ namespace SharpLib.Net
 
         public override string ToString()
         {
-            return ToString(Ip.Value, Port);
+            return ToText(Ip.Value, Port);
         }
 
-        public static String ToString(UInt32 ip, int port)
+        public static String ToText(UInt32 ip, int port)
         {
             string result = string.Format("{0}:{1}", NetIpAddr.ToText(ip), port);
 

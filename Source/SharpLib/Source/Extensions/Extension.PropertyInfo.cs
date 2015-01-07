@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace SharpLib
@@ -10,12 +7,12 @@ namespace SharpLib
     {
         #region Методы
 
-        public static Object GetValueEx(this PropertyInfo property, Object obj)
+        public static object GetValueEx(this PropertyInfo property, object obj)
         {
             return property.GetValue(obj, null);    
         }
 
-        public static void SetValueEx(this PropertyInfo property, Object obj, Object value)
+        public static void SetValueEx(this PropertyInfo property, object obj, object value)
         {
             value = Convert.ChangeType(value, property.PropertyType);
 

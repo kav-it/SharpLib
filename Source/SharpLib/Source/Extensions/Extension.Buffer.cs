@@ -9,26 +9,16 @@ namespace SharpLib
     {
         #region Методы
 
-        public static string ToStringEx(this byte[] buffer, string fill = null)
+        public static string ToStringEx(this byte[] buffer)
         {
-            var text = Encoding.Default.GetString(buffer);
+            var text = Encoding.UTF8.GetString(buffer);
             var textLocal = string.Empty;
 
             foreach (char t in text)
             {
-                if (Char.IsControl(t))
-                {
-                    if (fill == null)
-                    {
-                        break;
-                    }
-                    textLocal += fill;
-                }
-                else
-                {
-                    textLocal += t;
-                }
+                textLocal += t;
             }
+
             return textLocal;
         }
 

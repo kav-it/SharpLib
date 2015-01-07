@@ -6,6 +6,9 @@ using System.Xml.Linq;
 
 namespace SharpLib
 {
+    /// <summary>
+    /// Метод расширения класса XElement
+    /// </summary>
     public static class ExtensionXElement
     {
         #region Методы
@@ -69,6 +72,9 @@ namespace SharpLib
             elem.RemoveNodes();
         }
 
+        /// <summary>
+        /// Чтение атрибута типа "bool"
+        /// </summary>
         public static bool GetAttributeBoolEx(this XElement elem, string name, bool defaultValue)
         {
             var value = elem.GetAttributeEx(name);
@@ -81,6 +87,9 @@ namespace SharpLib
             return defaultValue;
         }
 
+        /// <summary>
+        /// Чтение атрибута типа "string"
+        /// </summary>
         public static string GetAttributeStringEx(this XElement elem, string name, string defaultValue)
         {
             var value = elem.GetAttributeEx(name);
@@ -88,6 +97,21 @@ namespace SharpLib
             if (value.IsValid())
             {
                 return value;
+            }
+
+            return defaultValue;
+        }
+
+        /// <summary>
+        /// Чтение атрибута типа "int"
+        /// </summary>
+        public static int GetAttributeIntEx(this XElement elem, string name, int defaultValue)
+        {
+            var value = elem.GetAttributeEx(name);
+
+            if (value.IsValid())
+            {
+                defaultValue = Convert.ToInt32(value, CultureInfo.InvariantCulture);
             }
 
             return defaultValue;

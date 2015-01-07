@@ -49,6 +49,8 @@
     <Compile Include="Source\Events\EventArgs{T}.Cancel.cs" />
     <Compile Include="Source\Events\EventArgs{T}.Changing.cs" />
     <Compile Include="Source\Events\EventArgs{T}.cs" />
+    <Compile Include="Source\Extensions\Extension.StringBuilder.cs" />
+    <Compile Include="Source\Extensions\Extension.Exception.cs" />
     <Compile Include="Source\Extensions\Extension.Guid.cs" />
     <Compile Include="Source\Extensions\Extension.IEnumerable-T.cs" />
     <Compile Include="Source\Extensions\Extension.ParametrInfo.cs" />
