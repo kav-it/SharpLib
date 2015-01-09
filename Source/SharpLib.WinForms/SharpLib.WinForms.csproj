@@ -79,6 +79,14 @@
     <Compile Include="Source\Controls\HexBox\Interfaces\IByteCharConverter.cs" />
     <Compile Include="Source\Controls\HexBox\Interfaces\IHexBoxDataSource.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\DataBlock\DataBlock.Memory.cs" />
+    <Compile Include="Source\Controls\TreeView\TreeViewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\Controls\TreeView\TreeViewControl.Designer.cs">
+      <DependentUpon>TreeViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Controls\TreeView\TreeViewNode.cs" />
+    <Compile Include="Source\Controls\TreeView\TreeViewNodeCollection.cs" />
     <Compile Include="Source\Helpers\Dialogs\Dialog.Filter.cs" />
     <Compile Include="Source\Helpers\Dialogs\Dialogs.cs" />
     <Compile Include="Source\Helpers\DesignHelper.cs" />
@@ -93,6 +101,12 @@
       <Project>{9cdec0b8-2232-45d1-815c-90880e1f8595}</Project>
       <Name>SharpLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Source\Controls\TreeView\TreeViewControl.resx">
+      <DependentUpon>TreeViewControl.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

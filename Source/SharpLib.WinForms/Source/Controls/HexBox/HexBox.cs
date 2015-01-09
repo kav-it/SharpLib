@@ -496,7 +496,6 @@ namespace SharpLib.WinForms.Controls
             _headerOffsetVisible = DEFAULT_HEADER_OFFSET_VISIBLE;
             _columnAddrVisible = DEFAULT_COLUMN_ADDR_VISIBLE;
             _columnAsciiVisible = DEFAULT_COLUMN_ASCII_VISIBLE;
-            _vScrollBarVisible = DEFAULT_VSCROLL_BAR_VISIBLE;
             _groupSize = DEFAULT_GROUP_SIZE;
             _bytePos = -1;
             _bytesPerLine = DEFAULT_BYTE_PES_LINE;
@@ -527,6 +526,7 @@ namespace SharpLib.WinForms.Controls
 
             ActivateEmptyKeyInterpreter();
 
+            VScrollBarVisible = DEFAULT_VSCROLL_BAR_VISIBLE;
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.DoubleBuffer, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
@@ -1699,8 +1699,8 @@ namespace SharpLib.WinForms.Controls
                         _messageHandlers.Add(Keys.Tab, PreProcessWmKeyDown_Tab); // switch to string view
                         _messageHandlers.Add(Keys.Back, PreProcessWmKeyDown_Back); // back
                         _messageHandlers.Add(Keys.Delete, PreProcessWmKeyDown_Delete); // delete
-                        _messageHandlers.Add(Keys.Home, PreProcessWmKeyDown_Home); // move to home
-                        _messageHandlers.Add(Keys.End, PreProcessWmKeyDown_End); // move to end
+                        _messageHandlers.Add(Keys.Home | Keys.Control, PreProcessWmKeyDown_Home); // move to home
+                        _messageHandlers.Add(Keys.End | Keys.Control, PreProcessWmKeyDown_End); // move to end
                         _messageHandlers.Add(Keys.ShiftKey | Keys.Shift, PreProcessWmKeyDown_ShiftShiftKey); // begin selection process
                         _messageHandlers.Add(Keys.C | Keys.Control, PreProcessWmKeyDown_ControlC); // copy 
                         _messageHandlers.Add(Keys.X | Keys.Control, PreProcessWmKeyDown_ControlX); // cut
