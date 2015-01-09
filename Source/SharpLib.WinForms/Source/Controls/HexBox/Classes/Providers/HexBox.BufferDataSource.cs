@@ -8,7 +8,7 @@ namespace SharpLib.WinForms.Controls
     /// <summary>
     /// Провайде данных для небольших блоков данных (менее 10 Мегабайт)
     /// </summary>
-    public class HexBoxBufferProvider : IByteProvider
+    public class HexBoxBufferDataSource : IHexBoxDataSource
     {
         #region Поля
 
@@ -87,7 +87,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Конструктор
         /// </summary>
-        public HexBoxBufferProvider(IEnumerable<byte> bytes)
+        public HexBoxBufferDataSource(IEnumerable<byte> bytes)
         {
             _bytes = bytes.ToList();
         }

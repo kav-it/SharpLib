@@ -7,7 +7,7 @@ namespace SharpLib.WinForms.Controls
     /// <summary>
     /// Провайдер данных для больших файлов (более 100 МБ)
     /// </summary>
-    public class HexBoxFileProvider : IByteProvider, IDisposable
+    public class HexBoxFileDataSource : IHexBoxDataSource, IDisposable
     {
         #region Поля
 
@@ -96,7 +96,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Конструктор
         /// </summary>
-        public HexBoxFileProvider(string fileName)
+        public HexBoxFileDataSource(string fileName)
         {
             _writes = new Dictionary<long, byte>();
 
@@ -118,7 +118,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Паттер Dispose (не используется unmanaged)
         /// </summary>
-        ~HexBoxFileProvider()
+        ~HexBoxFileDataSource()
         {
             Dispose();
         }
@@ -213,7 +213,7 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         public void DeleteBytes(long index, long length)
         {
-            throw new NotSupportedException("HexBoxFileProvider.DeleteBytes");
+            throw new NotSupportedException("HexBoxFileDataSource.DeleteBytes");
         }
 
         /// <summary>
@@ -221,11 +221,11 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         public void InsertBytes(long index, byte[] bs)
         {
-            throw new NotSupportedException("HexBoxFileProvider.InsertBytes");
+            throw new NotSupportedException("HexBoxFileDataSource.InsertBytes");
         }
 
         /// <summary>
-        /// Releases the file handle used by the HexBoxFileProvider.
+        /// Releases the file handle used by the HexBoxFileDataSource.
         /// </summary>
         public void Dispose()
         {

@@ -44,6 +44,13 @@
     <Compile Include="..\SharpLib.Version.cs">
       <Link>Source\SharpLib.Version.cs</Link>
     </Compile>
+    <Compile Include="Source\Controls\HexBox\HexBox.Border.cs" />
+    <Compile Include="Source\Controls\HexBox\HexBox.Paint.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Source\Controls\HexBox\HexBox.Scroll.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Source\Controls\HexBox\HexBox.Properties.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -55,9 +62,9 @@
     <Compile Include="Source\Controls\HexBox\Classes\BytePositionInfo.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\DataBlock\DataBlock.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\DataMap.cs" />
-    <Compile Include="Source\Controls\HexBox\Classes\Providers\HexBoxBufferProvider.cs" />
+    <Compile Include="Source\Controls\HexBox\Classes\Providers\HexBox.BufferDataSource.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\Converters\EbcdicByteCharProvider.cs" />
-    <Compile Include="Source\Controls\HexBox\Classes\Providers\HexBoxFileProvider.cs" />
+    <Compile Include="Source\Controls\HexBox\Classes\Providers\HexBox.FileDataSource.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\DataBlock\DataBlock.File.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\FindOptions.cs" />
     <Compile Include="Source\Controls\HexBox\Enums\FindType.cs" />
@@ -69,7 +76,7 @@
     </Compile>
     <Compile Include="Source\Controls\HexBox\Enums\HexCasing.cs" />
     <Compile Include="Source\Controls\HexBox\Interfaces\IByteCharConverter.cs" />
-    <Compile Include="Source\Controls\HexBox\Interfaces\IByteProvider.cs" />
+    <Compile Include="Source\Controls\HexBox\Interfaces\IHexBoxDataSource.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\DataBlock\DataBlock.Memory.cs" />
     <Compile Include="Source\Helpers\Dialogs\Dialog.Filter.cs" />
     <Compile Include="Source\Helpers\Dialogs\Dialogs.cs" />

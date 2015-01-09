@@ -5,7 +5,7 @@ namespace SharpLib.WinForms.Controls
     /// <summary>
     /// Класс доступа в массиву байт в компоненте HexBox
     /// </summary>
-    public interface IByteProvider
+    public interface IHexBoxDataSource
     {
         #region Свойства
 

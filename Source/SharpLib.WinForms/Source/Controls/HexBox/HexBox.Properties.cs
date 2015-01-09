@@ -315,14 +315,14 @@ namespace SharpLib.WinForms.Controls
                 switch (_borderStyle)
                 {
                     case BorderStyle.None:
-                        _recBorderLeft = _recBorderTop = _recBorderRight = _recBorderBottom = 0;
+                        _borderInfo.SetValues(0);
                         break;
                     case BorderStyle.Fixed3D:
-                        _recBorderLeft = _recBorderRight = SystemInformation.Border3DSize.Width;
-                        _recBorderTop = _recBorderBottom = SystemInformation.Border3DSize.Height;
+                        _borderInfo.Left = _borderInfo.Right = SystemInformation.Border3DSize.Width;
+                        _borderInfo.Top = _borderInfo.Bottom = SystemInformation.Border3DSize.Height;
                         break;
                     case BorderStyle.FixedSingle:
-                        _recBorderLeft = _recBorderTop = _recBorderRight = _recBorderBottom = 1;
+                        _borderInfo.SetValues(1);
                         break;
                 }
 
@@ -364,11 +364,7 @@ namespace SharpLib.WinForms.Controls
         {
             get
             {
-                if (_hexStringFormat == "X")
-                {
-                    return HexCasing.Upper;
-                }
-                return HexCasing.Lower;
+                return _hexStringFormat == "X" ? HexCasing.Upper : HexCasing.Lower;
             }
             set
             {
@@ -475,9 +471,9 @@ namespace SharpLib.WinForms.Controls
         public event EventHandler BorderStyleChanged;
 
         /// <summary>
-        /// Изменилось свойство ByteProvider
+        /// Изменилось свойство DataSource
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство ByteProvider")]
+        [Category(CATEGORY_NAME), Description("Изменилось свойство DataSource")]
         public event EventHandler ByteProviderChanged;
 
         /// <summary>

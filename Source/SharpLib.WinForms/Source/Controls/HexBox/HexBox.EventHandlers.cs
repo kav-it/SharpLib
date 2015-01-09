@@ -105,55 +105,6 @@ namespace SharpLib.WinForms.Controls
             }
         }
 
-        /// <summary>
-        /// Paints the hex box.
-        /// </summary>
-        /// <param name="e">A PaintEventArgs that contains the event data.</param>
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-
-            if (_byteProvider == null)
-            {
-                return;
-            }
-
-            System.Diagnostics.Debug.WriteLine("OnPaint " + DateTime.Now, "HexBox");
-
-            // draw only in the content rectangle, so exclude the border and the scrollbar.
-            Region r = new Region(ClientRectangle);
-            r.Exclude(_recContent);
-            e.Graphics.ExcludeClip(r);
-
-            UpdateVisibilityBytes();
-
-            if (_columnAddrVisible)
-            {
-                PaintLineInfo(e.Graphics, _startByte, _endByte);
-            }
-
-            if (!_columnAsciiVisible)
-            {
-                PaintHex(e.Graphics, _startByte, _endByte);
-            }
-            else
-            {
-                PaintHexAndStringView(e.Graphics, _startByte, _endByte);
-                if (_shadowSelectionVisible)
-                {
-                    PaintCurrentBytesSign(e.Graphics);
-                }
-            }
-            if (_headerOffsetVisible)
-            {
-                PaintHeaderRow(e.Graphics);
-            }
-            if (_groupSeparatorVisible)
-            {
-                PaintColumnSeparator(e.Graphics);
-            }
-        }
-
         private void ScrollBarOnScroll(object sender, ScrollEventArgs e)
         {
             switch (e.Type)
@@ -214,7 +165,6 @@ namespace SharpLib.WinForms.Controls
             PerformScrollThumpPosition(_thumbTrackPosition);
             _lastThumbtrack = Environment.TickCount;
         }
-
 
         /// <summary>
         /// Raises the InsertActiveChanged event.
@@ -474,8 +424,6 @@ namespace SharpLib.WinForms.Controls
         /// <param name="e">An EventArgs that contains the event data.</param>
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("OnMouseDown()", "HexBox");
-
             if (!Focused)
             {
                 Focus();
@@ -517,8 +465,6 @@ namespace SharpLib.WinForms.Controls
         /// <param name="e">An EventArgs that contains the event data.</param>
         protected override void OnGotFocus(EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("OnGotFocus()", "HexBox");
-
             base.OnGotFocus(e);
 
             CreateCaret();
@@ -530,11 +476,47 @@ namespace SharpLib.WinForms.Controls
         /// <param name="e">An EventArgs that contains the event data.</param>
         protected override void OnLostFocus(EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("OnLostFocus()", "HexBox");
-
             base.OnLostFocus(e);
 
             DestroyCaret();
+        }
+
+        private void CheckCurrentLineChanged()
+        {
+            long currentLine = (long)Math.Floor(_bytePos / (double)_iHexMaxHBytes) + 1;
+
+            if (_dataSource == null && _currentLine != 0)
+            {
+                _currentLine = 0;
+                OnCurrentLineChanged(EventArgs.Empty);
+            }
+            else if (currentLine != _currentLine)
+            {
+                _currentLine = currentLine;
+                OnCurrentLineChanged(EventArgs.Empty);
+            }
+        }
+
+        private void CheckCurrentPositionInLineChanged()
+        {
+            Point gb = GetGridBytePoint(_bytePos);
+            int currentPositionInLine = gb.X + 1;
+
+            if (_dataSource == null && _currentPositionInLine != 0)
+            {
+                _currentPositionInLine = 0;
+                OnCurrentPositionInLineChanged(EventArgs.Empty);
+            }
+            else if (currentPositionInLine != _currentPositionInLine)
+            {
+                _currentPositionInLine = currentPositionInLine;
+                OnCurrentPositionInLineChanged(EventArgs.Empty);
+            }
+        }
+
+        private void DataSourceLengthChanged(object sender, EventArgs e)
+        {
+            UpdateScrollSize();
         }
 
         #endregion

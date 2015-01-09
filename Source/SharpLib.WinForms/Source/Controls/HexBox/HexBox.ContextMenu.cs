@@ -152,7 +152,7 @@ namespace SharpLib.WinForms.Controls
         #region Методы
 
         /// <summary>
-        /// If ByteProvider
+        /// If DataSource
         /// </summary>
         /// <param name="sender">the sender object</param>
         /// <param name="e">the event data</param>
@@ -190,11 +190,11 @@ namespace SharpLib.WinForms.Controls
                 _contextMenuStrip = cms;
             }
 
-            if (_hexBox.ByteProvider == null && _hexBox.ContextMenuStrip == _contextMenuStrip)
+            if (_hexBox.DataSource == null && _hexBox.ContextMenuStrip == _contextMenuStrip)
             {
                 _hexBox.ContextMenuStrip = null;
             }
-            else if (_hexBox.ByteProvider != null && _hexBox.ContextMenuStrip == null)
+            else if (_hexBox.DataSource != null && _hexBox.ContextMenuStrip == null)
             {
                 _hexBox.ContextMenuStrip = _contextMenuStrip;
             }
