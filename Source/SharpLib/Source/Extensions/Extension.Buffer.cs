@@ -5,26 +5,26 @@ using System.Text;
 
 namespace SharpLib
 {
+    /// <summary>
+    /// Метод расширения класса byte[]
+    /// </summary>
     public static class ExtensionBuffer
     {
         #region Методы
 
+        /// <summary>
+        /// Преобразование буфера с строку (кодировка UTF-8 без BOM)
+        /// </summary>
         public static string ToStringEx(this byte[] buffer)
         {
             var text = Encoding.UTF8.GetString(buffer);
-            var textLocal = string.Empty;
 
-            foreach (char t in text)
-            {
-                textLocal += t;
-            }
-
-            return textLocal;
+            return text;
         }
 
         public static MemoryStream ToMemoryStreamEx(this byte[] buffer)
         {
-            MemoryStream stream = new MemoryStream(buffer.Length);
+            var stream = new MemoryStream(buffer.Length);
 
             stream.Write(buffer, 0, buffer.Length);
 

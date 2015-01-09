@@ -36,14 +36,50 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharpLib.Version.cs">
       <Link>Source\SharpLib.Version.cs</Link>
     </Compile>
+    <Compile Include="Source\Controls\HexBox\BuiltInContextMenu.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Source\Controls\HexBox\ByteCharConverters.cs" />
+    <Compile Include="Source\Controls\HexBox\ByteCollection.cs" />
+    <Compile Include="Source\Controls\HexBox\BytePositionInfo.cs" />
+    <Compile Include="Source\Controls\HexBox\DataBlock.cs" />
+    <Compile Include="Source\Controls\HexBox\DataMap.cs" />
+    <Compile Include="Source\Controls\HexBox\DynamicByteProvider.cs" />
+    <Compile Include="Source\Controls\HexBox\DynamicFileByteProvider.cs" />
+    <Compile Include="Source\Controls\HexBox\FileByteProvider.cs" />
+    <Compile Include="Source\Controls\HexBox\FileDataBlock.cs" />
+    <Compile Include="Source\Controls\HexBox\FindOptions.cs" />
+    <Compile Include="Source\Controls\HexBox\Enums\FindType.cs" />
+    <Compile Include="Source\Controls\HexBox\HexBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Source\Controls\HexBox\Enums\HexCasing.cs" />
+    <Compile Include="Source\Controls\HexBox\IByteProvider.cs" />
+    <Compile Include="Source\Controls\HexBox\MemoryDataBlock.cs" />
+    <Compile Include="Source\Controls\HexBox\NativeMethods.cs" />
+    <Compile Include="Source\Controls\HexBox\Util.cs" />
+    <Compile Include="Source\Helpers\Dialogs\Dialog.Filter.cs" />
+    <Compile Include="Source\Helpers\Dialogs\Dialogs.cs" />
     <Compile Include="Source\Helpers\DesignHelper.cs" />
     <Compile Include="Source\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpLib.Native\SharpLib.Native.csproj">
+      <Project>{e9a3f6e0-d63a-4297-a59b-7e1357b443cc}</Project>
+      <Name>SharpLib.Native</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpLib\SharpLib.csproj">
+      <Project>{9cdec0b8-2232-45d1-815c-90880e1f8595}</Project>
+      <Name>SharpLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

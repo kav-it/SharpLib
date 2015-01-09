@@ -46,13 +46,13 @@ namespace SharpLib.Native.Windows
             /// <summary>
             /// Handle to the owner window for the dialog box.
             /// </summary>
-            internal IntPtr HwndOwner;
+            public IntPtr HwndOwner;
 
             /// <summary>
             /// Pointer to an item identifier list (PIDL) specifying the
             /// location of the root folder from which to start browsing.
             /// </summary>
-            internal IntPtr Root;
+            public IntPtr Root;
 
             /// <summary>
             /// Address of a buffer to receive the display name of the

@@ -128,6 +128,31 @@ namespace SharpLib
             return result;
         }
 
+        /// <summary>
+        /// Проверка, установлен ли бит
+        /// </summary>
+        public static bool IsBitEx(this int self, int bitIndex)
+        {
+            return ((self & (1 << bitIndex)) != 0);
+        }
+
+        /// <summary>
+        /// Установка бита в нужное состояние
+        /// </summary>
+        public static int SetBitEx(this int self, int bitIndex, bool state)
+        {
+            if (state)
+            {
+                self = (self + (1 << bitIndex));
+            }
+            else
+            {
+                self = (self & ~(1 << bitIndex));
+            }
+
+            return self;
+        }
+
         #endregion
     }
 }
