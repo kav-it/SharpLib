@@ -1,4 +1,6 @@
-﻿namespace SharpLib.WinForms.Controls
+﻿using System.Text;
+
+namespace SharpLib.WinForms.Controls
 {
     /// <summary>
     /// Реализация IByteCharConverter по умолчанию
@@ -8,19 +10,40 @@
         #region Методы
 
         /// <summary>
-        /// Преобразование byte - char 
+        /// Преобразование byte - string 
         /// </summary>
-        public virtual char ToChar(byte value)
+        public virtual string ToChar(byte value)
         {
-            // Диапазон отображаемых значений
-            // [0x20..0x7E] && [0xC0..0xFF] - char
-            // иное - '.'
-            if ((value >= 0x20 && value <= 0x7E) || (value >= 0xC0))
+            return ToText(new[] { value });
+        }
+
+        /// <summary>
+        /// Преобразование byte[] - string
+        /// </summary>
+        public string ToText(byte[] bytes)
+        {
+            for (int i = 0; i < bytes.Length; i++)
             {
-                return (char)value;
+                var b = bytes[i];
+
+                if ((b < 0x20) || ((b > 0x7E) && (b < 0xC0)))
+                {
+                    // Символ '.'
+                    bytes[i] = 0x2E;
+                }
             }
-            
-            return '.';
+
+            var result = ExtensionEncoding.Windows1251.GetString(bytes);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Преобразование string - byte[]
+        /// </summary>
+        public byte[] ToBuffer(string text)
+        {
+            return ExtensionEncoding.Windows1251.GetBytes(text);
         }
 
         /// <summary>

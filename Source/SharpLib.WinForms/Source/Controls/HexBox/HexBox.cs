@@ -58,8 +58,6 @@ namespace SharpLib.WinForms.Controls
 
         private BorderStyle _borderStyle;
 
-        private IByteCharConverter _byteCharConverter;
-
         /// <summary>
         /// Contains the current char position in one byte
         /// </summary>
@@ -210,6 +208,11 @@ namespace SharpLib.WinForms.Controls
         #endregion
 
         #region Свойства
+
+        /// <summary>
+        /// Конвертер байт в текст и обратно
+        /// </summary>
+        internal IByteCharConverter ByteCharConverter { get; private set; }
 
         /// <summary>
         /// true: Активна область выделения Ascii
@@ -478,33 +481,6 @@ namespace SharpLib.WinForms.Controls
             }
         }
 
-        /// <summary>
-        /// Gets or sets the built-in context menu.
-        /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        internal HexBoxContextMenu BuiltInContextMenu
-        {
-            get { return _builtInContextMenu; }
-        }
-
-        /// <summary>
-        /// Gets or sets the converter that will translate between byte and character values.
-        /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public IByteCharConverter ByteCharConverter
-        {
-            get { return _byteCharConverter ?? (_byteCharConverter = new DefaultByteCharConverter()); }
-            set
-            {
-                if (value == null || value == _byteCharConverter)
-                {
-                    return;
-                }
-                _byteCharConverter = value;
-                Invalidate();
-            }
-        }
-
         #endregion
 
         #region Конструктор
@@ -537,6 +513,7 @@ namespace SharpLib.WinForms.Controls
             _infoForeColor = Color.FromName(DEFAULT_INFO_BACKGROUND);
             _thumbTrackTimer = new Timer();
             _borderStyle = BorderStyle.Fixed3D;
+            ByteCharConverter = new DefaultByteCharConverter();
 
             BackColorDisabled = Color.FromName(DEFAULT_DISABLE_COLOR_NAME);
             _vScrollBar = new VScrollBar();
@@ -987,8 +964,8 @@ namespace SharpLib.WinForms.Controls
             var buffer = GetCopyData();
             var da = new DataObject();
 
-            var copyText = IsAsciiActive 
-                ? ExtensionEncoding.Windows1251.GetString(buffer) 
+            var copyText = IsAsciiActive
+                ? ByteCharConverter.ToText(buffer)
                 : buffer.ToAsciiEx();
 
             // Формирование строки для установки в буфер обмена
@@ -1089,8 +1066,8 @@ namespace SharpLib.WinForms.Controls
             }
             else if (da.GetDataPresent(typeof(string)))
             {
-                string sBuffer = (string)da.GetData(typeof(string));
-                buffer = ExtensionEncoding.Windows1251.GetBytes(sBuffer);
+                string text = (string)da.GetData(typeof(string));
+                buffer = ByteCharConverter.ToBuffer(text);
             }
             else
             {
@@ -1612,7 +1589,7 @@ namespace SharpLib.WinForms.Controls
             bool PreProcessWmKeyUp(ref Message m);
 
             /// <summary>
-            /// Обработка windows-сообщения WM_CHAR 
+            /// Обработка windows-сообщения WM_CHAR
             /// </summary>
             bool PreProcessWmChar(ref Message m);
 

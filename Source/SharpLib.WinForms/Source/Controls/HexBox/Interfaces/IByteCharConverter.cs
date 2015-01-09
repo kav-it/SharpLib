@@ -10,7 +10,17 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Отображение символа для байта
         /// </summary>
-        char ToChar(byte b);
+        string ToChar(byte b);
+
+        /// <summary>
+        /// Отображение массива в виде текста
+        /// </summary>
+        string ToText(byte[] bytes);
+
+        /// <summary>
+        /// Преобразование string - byte[]
+        /// </summary>
+        byte[] ToBuffer(string text);
 
         /// <summary>
         /// Байтовое значение символа

@@ -30,9 +30,9 @@ namespace Demo.Winforms
 
         private void InitHexBox()
         {
-            var data = Mem.Fill(1024, 0xFF);
+            // var data = Mem.Fill(1024, 0xDC);
+            var data = Rand.GetBuffer(1024);
             hexBox1.DataSource = new HexBoxBufferDataSource(data);
-            // hexBox1.DataSource = new HexBoxBufferDataSource(Rand.GetBuffer(1024));
         }
     }
 }

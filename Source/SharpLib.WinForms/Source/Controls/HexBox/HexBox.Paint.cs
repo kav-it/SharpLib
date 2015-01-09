@@ -259,19 +259,16 @@ namespace SharpLib.WinForms.Controls
                     PaintHexString(g, b, brush, gridPoint);
                 }
 
-                char ch = ByteCharConverter.ToChar(b);
-                var text = ExtensionEncoding.Windows1251.GetString(new[] { b });
-
-                string s = new string(ch, 1);
+                string chText = ByteCharConverter.ToChar(b);
 
                 if (isSelectedByte && isStringKeyInterpreterActive)
                 {
                     g.FillRectangle(selBrushBack, byteStringPointF.X, byteStringPointF.Y, _charSize.Width, _charSize.Height);
-                    g.DrawString(s, Font, selBrush, byteStringPointF, _stringFormat);
+                    g.DrawString(chText, Font, selBrush, byteStringPointF, _stringFormat);
                 }
                 else
                 {
-                    g.DrawString(s, Font, brush, byteStringPointF, _stringFormat);
+                    g.DrawString(chText, Font, brush, byteStringPointF, _stringFormat);
                 }
             }
         }
