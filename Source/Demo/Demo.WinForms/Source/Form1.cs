@@ -30,7 +30,7 @@ namespace Demo.Winforms
 
         private void InitHexBox()
         {
-            // hexBox1.DataSource = new HexBoxBufferDataSource(Rand.GetBuffer(300));
+            hexBox1.DataSource = new HexBoxBufferDataSource(Rand.GetBuffer(300));
         }
     }
 }

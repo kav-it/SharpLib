@@ -515,12 +515,13 @@ namespace SharpLib.WinForms.Controls
             _groupSeparatorVisible = DEFAULT_GROUP_SEPARATOR_VISIBLE;
             _headerOffsetVisible = DEFAULT_HEADER_OFFSET_VISIBLE;
             _columnAddrVisible = DEFAULT_COLUMN_ADDR_VISIBLE;
+            _columnAsciiVisible = DEFAULT_COLUMN_ASCII_VISIBLE;
             _vScrollBarVisible = DEFAULT_VSCROLL_BAR_VISIBLE;
             _groupSize = DEFAULT_GROUP_SIZE;
             _bytePos = -1;
             _bytesPerLine = DEFAULT_BYTE_PES_LINE;
-            _selectionBackColor = Color.Blue;
-            _selectionForeColor = Color.White;
+            _selectionBackColor = Color.FromName(DEFAULT_SELECTION_BACKGROUND);
+            _selectionForeColor = Color.FromName(DEFAULT_SELECTION_FOREGROUND);
             _shadowSelectionColor = Color.FromArgb(100, 60, 188, 255);
             _shadowSelectionVisible = true;
             _borderInfo = new HexBoxBorder(
@@ -528,7 +529,7 @@ namespace SharpLib.WinForms.Controls
                 SystemInformation.Border3DSize.Height,
                 SystemInformation.Border3DSize.Width,
                 SystemInformation.Border3DSize.Height);
-            _infoForeColor = Color.Gray;
+            _infoForeColor = Color.FromName(DEFAULT_INFO_BACKGROUND);
             _hexStringFormat = "X";
             _thumbTrackTimer = new Timer();
             _borderStyle = BorderStyle.Fixed3D;

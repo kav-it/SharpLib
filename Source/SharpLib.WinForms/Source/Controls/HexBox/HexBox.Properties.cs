@@ -72,6 +72,21 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         private const bool DEFAULT_VSCROLL_BAR_VISIBLE = true;
 
+        /// <summary>
+        /// Цвет выделения
+        /// </summary>
+        private const string DEFAULT_SELECTION_BACKGROUND = "LightBlue";
+
+        /// <summary>
+        /// Цвет текста выделения
+        /// </summary>
+        private const string DEFAULT_SELECTION_FOREGROUND = "Black";
+
+        /// <summary>
+        /// Цвет фона служебных полей
+        /// </summary>
+        private const string DEFAULT_INFO_BACKGROUND = "Gray";
+
         #endregion
 
         #region Свойства
@@ -386,7 +401,7 @@ namespace SharpLib.WinForms.Controls
         /// Цвет поля информации
         /// </summary>
         [Category(CATEGORY_NAME), Description("Цвет поля информации")]
-        [DefaultValue(typeof(Color), "Gray")]
+        [DefaultValue(typeof(Color), DEFAULT_INFO_BACKGROUND)]
         public Color InfoForeColor
         {
             get { return _infoForeColor; }
@@ -401,7 +416,7 @@ namespace SharpLib.WinForms.Controls
         /// Цвет фона выбранных байт
         /// </summary>
         [Category(CATEGORY_NAME), Description("Цвет фона выбранных байт")]
-        [DefaultValue(typeof(Color), "Blue")]
+        [DefaultValue(typeof(Color), DEFAULT_SELECTION_BACKGROUND)]
         public Color SelectionBackColor
         {
             get { return _selectionBackColor; }
@@ -416,7 +431,7 @@ namespace SharpLib.WinForms.Controls
         /// Цвет текста выбранных байт
         /// </summary>
         [Category(CATEGORY_NAME), Description("Цвет фона выбранных байт")]
-        [DefaultValue(typeof(Color), "White")]
+        [DefaultValue(typeof(Color), DEFAULT_SELECTION_FOREGROUND)]
         public Color SelectionForeColor
         {
             get { return _selectionForeColor; }
