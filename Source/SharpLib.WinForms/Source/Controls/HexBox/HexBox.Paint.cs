@@ -9,6 +9,8 @@ namespace SharpLib.WinForms.Controls
     /// </summary>
     public partial class HexBox
     {
+        #region Константы
+
         /// <summary>
         /// Размер адреса (8 байт)
         /// </summary>
@@ -19,17 +21,24 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         private const int SIZE_BETWEEN_ADDR_AND_HEX = 20;
 
+        #endregion
+
         #region Поля
 
         /// <summary>
-        /// Регион вывода всего текста (не включаются Scrollbar-ы)
+        /// Формат для отображения адреса в Hex-формате
         /// </summary>
-        private Rectangle _recContent;
+        private static readonly string _addrHexFormat = string.Format("X{0}", ADDR_SIZE);
 
         /// <summary>
-        /// Регион вывода Hex-данных
+        /// Строка форматирования для отображения адреса в Int-формате
         /// </summary>
-        private Rectangle _recHex;
+        private static readonly string _addrIntFormat = new string('0', ADDR_SIZE);
+
+        /// <summary>
+        /// Регион вывода Ascii
+        /// </summary>
+        private Rectangle _recAscii;
 
         /// <summary>
         /// Регион вывода колонки адреса
@@ -37,14 +46,19 @@ namespace SharpLib.WinForms.Controls
         private Rectangle _recColumnAddr;
 
         /// <summary>
+        /// Регион вывода всего текста (не включаются Scrollbar-ы)
+        /// </summary>
+        private Rectangle _recContent;
+
+        /// <summary>
         /// Регион заголовка в котором отображаются смещения (0 1 2 3 и т.д.)
         /// </summary>
         private Rectangle _recHeader;
 
         /// <summary>
-        /// Регион вывода Ascii
+        /// Регион вывода Hex-данных
         /// </summary>
-        private Rectangle _recAscii;
+        private Rectangle _recHex;
 
         #endregion
 
@@ -124,17 +138,12 @@ namespace SharpLib.WinForms.Controls
 
             for (int i = 0; i < maxLine; i++)
             {
-                long firstLineByte = (startByte + (_iHexMaxHBytes) * i) + _lineInfoOffset;
-
+                long addr = (startByte + (_iHexMaxHBytes) * i) + _addrOffset;
                 var bytePointF = GetBytePointF(new Point(0, 0 + i));
-                string info = firstLineByte.ToString(_hexStringFormat, System.Threading.Thread.CurrentThread.CurrentCulture);
 
-                int padding = ADDR_SIZE - info.Length;
-                var lineText = padding > -1 
-                    ? new string('0', 8 - info.Length) + info 
-                    : new string('~', 8);
+                var addrText = addr.ToString(_showAddrAsHex ? _addrHexFormat : _addrIntFormat);
 
-                g.DrawString(lineText, Font, brush, new PointF(_recColumnAddr.X, bytePointF.Y), _stringFormat);
+                g.DrawString(addrText, Font, brush, new PointF(_recColumnAddr.X, bytePointF.Y), _stringFormat);
             }
         }
 
@@ -150,7 +159,7 @@ namespace SharpLib.WinForms.Controls
             int counter = -1;
             long internEndByte = Math.Min(_dataSource.Length - 1, endByte + _iHexMaxHBytes);
 
-            bool isKeyInterpreterActive = _keyInterpreter == null || _keyInterpreter.GetType() == typeof(KeyInterpreter);
+            bool isKeyInterpreterActive = _keyProcessor == null || _keyProcessor.GetType() == typeof(KeyProcessor);
 
             for (long i = startByte; i < internEndByte + 1; i++)
             {
@@ -180,7 +189,6 @@ namespace SharpLib.WinForms.Controls
             }
         }
 
-       
         /// <summary>
         /// Рисование строки Hex
         /// </summary>
@@ -206,43 +214,41 @@ namespace SharpLib.WinForms.Controls
 
         private void PaintHexStringSelected(Graphics g, byte b, Brush brush, Brush brushBack, Point gridPoint)
         {
-            string sB = b.ToString(_hexStringFormat, System.Threading.Thread.CurrentThread.CurrentCulture);
-            if (sB.Length == 1)
-            {
-                sB = "0" + sB;
-            }
-
-            PointF bytePointF = GetBytePointF(gridPoint);
+            var text = HexBoxUtils.ConvertByteToHex(b);
+            var bytePointF = GetBytePointF(gridPoint);
 
             bool isLastLineChar = (gridPoint.X + 1 == _iHexMaxHBytes);
             float bcWidth = (isLastLineChar) ? _charSize.Width * 2 : _charSize.Width * 3;
 
             g.FillRectangle(brushBack, bytePointF.X, bytePointF.Y, bcWidth, _charSize.Height);
-            g.DrawString(sB.Substring(0, 1), Font, brush, bytePointF, _stringFormat);
+            g.DrawString(text.Substring(0, 1), Font, brush, bytePointF, _stringFormat);
             bytePointF.X += _charSize.Width;
-            g.DrawString(sB.Substring(1, 1), Font, brush, bytePointF, _stringFormat);
+            g.DrawString(text.Substring(1, 1), Font, brush, bytePointF, _stringFormat);
         }
 
+        /// <summary>
+        /// Отображение Hex + Ascii регионов
+        /// </summary>
         private void PaintHexAndAsciiView(Graphics g, long startByte, long endByte)
         {
-            Brush brush = new SolidBrush(GetDefaultForeColor());
-            Brush selBrush = new SolidBrush(_selectionForeColor);
-            Brush selBrushBack = new SolidBrush(_selectionBackColor);
+            var brush = new SolidBrush(GetDefaultForeColor());
+            var selBrush = new SolidBrush(_selectionForeColor);
+            var selBrushBack = new SolidBrush(_selectionBackColor);
 
             int counter = -1;
             long internEndByte = Math.Min(_dataSource.Length - 1, endByte + _iHexMaxHBytes);
 
-            bool isKeyInterpreterActive = _keyInterpreter == null || _keyInterpreter.GetType() == typeof(KeyInterpreter);
-            bool isStringKeyInterpreterActive = _keyInterpreter != null && _keyInterpreter.GetType() == typeof(StringKeyInterpreter);
+            bool isKeyInterpreterActive = _keyProcessor == null || _keyProcessor.GetType() == typeof(KeyProcessor);
+            bool isStringKeyInterpreterActive = _keyProcessor != null && _keyProcessor.GetType() == typeof(StringKeyProcessor);
 
             for (long i = startByte; i < internEndByte + 1; i++)
             {
                 counter++;
-                Point gridPoint = GetGridBytePoint(counter);
-                PointF byteStringPointF = GetAsciiPointF(gridPoint);
-                byte b = _dataSource.ReadByte(i);
+                var gridPoint = GetGridBytePoint(counter);
+                var byteStringPointF = GetAsciiPointF(gridPoint);
+                var b = _dataSource.ReadByte(i);
 
-                bool isSelectedByte = i >= _bytePos && i <= (_bytePos + _selectionLength - 1) && _selectionLength != 0;
+                var isSelectedByte = i >= _bytePos && i <= (_bytePos + _selectionLength - 1) && _selectionLength != 0;
 
                 if (isSelectedByte && isKeyInterpreterActive)
                 {
@@ -253,7 +259,10 @@ namespace SharpLib.WinForms.Controls
                     PaintHexString(g, b, brush, gridPoint);
                 }
 
-                string s = new String(ByteCharConverter.ToChar(b), 1);
+                char ch = ByteCharConverter.ToChar(b);
+                var text = ExtensionEncoding.Windows1251.GetString(new[] { b });
+
+                string s = new string(ch, 1);
 
                 if (isSelectedByte && isStringKeyInterpreterActive)
                 {
@@ -269,9 +278,9 @@ namespace SharpLib.WinForms.Controls
 
         private void PaintCurrentBytesSign(Graphics g)
         {
-            if (_keyInterpreter != null && _bytePos != -1 && Enabled)
+            if (_keyProcessor != null && _bytePos != -1 && Enabled)
             {
-                if (_keyInterpreter.GetType() == typeof(KeyInterpreter))
+                if (_keyProcessor.GetType() == typeof(KeyProcessor))
                 {
                     if (_selectionLength == 0)
                     {

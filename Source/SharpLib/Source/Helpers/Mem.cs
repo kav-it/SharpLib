@@ -407,6 +407,21 @@ namespace SharpLib
             return result;
         }
 
+        /// <summary>
+        /// Создание буфера указанного размера, заполненного указанным значением
+        /// </summary>
+        public static byte[] Fill(int size, int value)
+        {
+            var bytes = new byte[size];
+
+            for (int i = 0; i < size; i++)
+            {
+                bytes[i] = (byte)value;
+            }
+
+            return bytes;
+        }
+
         #endregion
     }
 }

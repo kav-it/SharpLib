@@ -15,32 +15,37 @@ namespace SharpLib.WinForms.Controls
         #region Поля
 
         /// <summary>
-        /// Contains the HexBox control.
+        /// Ссылка на элемент HexBox
         /// </summary>
         private readonly HexBox _hexBox;
 
         /// <summary>
-        /// Contains the ContextMenuStrip control.
+        /// Элемент меню "Отображение адреса в Hex-формате"
+        /// </summary>
+        private ToolStripMenuItem _addrAsHexToolStripMenuItem;
+
+        /// <summary>
+        /// Контекстное меню
         /// </summary>
         private ContextMenuStrip _contextMenuStrip;
 
         /// <summary>
-        /// Contains the "Copy"-ToolStripMenuItem object.
+        /// Элемент меню "Копировать"
         /// </summary>
         private ToolStripMenuItem _copyToolStripMenuItem;
 
         /// <summary>
-        /// Contains the "Cut"-ToolStripMenuItem object.
+        /// Элемент меню "Вырезать"
         /// </summary>
         private ToolStripMenuItem _cutToolStripMenuItem;
 
         /// <summary>
-        /// Contains the "Paste"-ToolStripMenuItem object.
+        /// Элемент меню "Вставить"
         /// </summary>
         private ToolStripMenuItem _pasteToolStripMenuItem;
 
         /// <summary>
-        /// Contains the "Select All"-ToolStripMenuItem object.
+        /// Элемент меню "Выделить все"
         /// </summary>
         private ToolStripMenuItem _selectAllToolStripMenuItem;
 
@@ -48,84 +53,12 @@ namespace SharpLib.WinForms.Controls
 
         #region Свойства
 
-        /// <summary>
-        /// Gets or sets the custom text of the "Copy" ContextMenuStrip item.
-        /// </summary>
-        [Category("BuiltIn-ContextMenu"), DefaultValue(null), Localizable(true)]
-        public string CopyMenuItemText { get; set; }
-
-        /// <summary>
-        /// Gets or sets the custom text of the "Cut" ContextMenuStrip item.
-        /// </summary>
-        [Category("BuiltIn-ContextMenu"), DefaultValue(null), Localizable(true)]
-        public string CutMenuItemText { get; set; }
-
-        /// <summary>
-        /// Gets or sets the custom text of the "Paste" ContextMenuStrip item.
-        /// </summary>
-        [Category("BuiltIn-ContextMenu"), DefaultValue(null), Localizable(true)]
-        public string PasteMenuItemText { get; set; }
-
-        /// <summary>
-        /// Gets or sets the custom text of the "Select All" ContextMenuStrip item.
-        /// </summary>
-        [Category("BuiltIn-ContextMenu"), DefaultValue(null), Localizable(true)]
-        public string SelectAllMenuItemText { get; set; }
-
-        /// <summary>
-        /// Gets the text of the "Cut" ContextMenuStrip item.
-        /// </summary>
-        internal string CutMenuItemTextInternal
-        {
-            get { return !string.IsNullOrEmpty(CutMenuItemText) ? CutMenuItemText : "Cut"; }
-        }
-
-        /// <summary>
-        /// Gets the text of the "Copy" ContextMenuStrip item.
-        /// </summary>
-        internal string CopyMenuItemTextInternal
-        {
-            get { return !string.IsNullOrEmpty(CopyMenuItemText) ? CopyMenuItemText : "Copy"; }
-        }
-
-        /// <summary>
-        /// Gets the text of the "Paste" ContextMenuStrip item.
-        /// </summary>
-        internal string PasteMenuItemTextInternal
-        {
-            get { return !string.IsNullOrEmpty(PasteMenuItemText) ? PasteMenuItemText : "Paste"; }
-        }
-
-        /// <summary>
-        /// Gets the text of the "Select All" ContextMenuStrip item.
-        /// </summary>
-        internal string SelectAllMenuItemTextInternal
-        {
-            get { return !string.IsNullOrEmpty(SelectAllMenuItemText) ? SelectAllMenuItemText : "SelectAll"; }
-        }
-
-        /// <summary>
-        /// Gets or sets the image of the "Cut" ContextMenuStrip item.
-        /// </summary>
-        [Category("BuiltIn-ContextMenu"), DefaultValue(null)]
         public Image CutMenuItemImage { get; set; }
 
-        /// <summary>
-        /// Gets or sets the image of the "Copy" ContextMenuStrip item.
-        /// </summary>
-        [Category("BuiltIn-ContextMenu"), DefaultValue(null)]
         public Image CopyMenuItemImage { get; set; }
 
-        /// <summary>
-        /// Gets or sets the image of the "Paste" ContextMenuStrip item.
-        /// </summary>
-        [Category("BuiltIn-ContextMenu"), DefaultValue(null)]
         public Image PasteMenuItemImage { get; set; }
 
-        /// <summary>
-        /// Gets or sets the image of the "Select All" ContextMenuStrip item.
-        /// </summary>
-        [Category("BuiltIn-ContextMenu"), DefaultValue(null)]
         public Image SelectAllMenuItemImage { get; set; }
 
         #endregion
@@ -133,16 +66,14 @@ namespace SharpLib.WinForms.Controls
         #region Конструктор
 
         /// <summary>
-        /// Initializes a new instance of BuildInContextMenu class.
+        /// Конструктор
         /// </summary>
-        /// <param name="hexBox">the HexBox control</param>
         internal HexBoxContextMenu(HexBox hexBox)
         {
             SelectAllMenuItemImage = null;
             PasteMenuItemImage = null;
             CopyMenuItemImage = null;
             CutMenuItemImage = null;
-            SelectAllMenuItemText = null;
             _hexBox = hexBox;
             _hexBox.ByteProviderChanged += HexBox_ByteProviderChanged;
         }
@@ -162,7 +93,7 @@ namespace SharpLib.WinForms.Controls
         }
 
         /// <summary>
-        /// Assigns the ContextMenuStrip control to the HexBox control.
+        /// Построение контекстного меню
         /// </summary>
         private void CheckBuiltInContextMenu()
         {
@@ -173,21 +104,26 @@ namespace SharpLib.WinForms.Controls
 
             if (_contextMenuStrip == null)
             {
-                ContextMenuStrip cms = new ContextMenuStrip();
-                _cutToolStripMenuItem = new ToolStripMenuItem(CutMenuItemTextInternal, CutMenuItemImage, CutMenuItem_Click);
-                cms.Items.Add(_cutToolStripMenuItem);
-                _copyToolStripMenuItem = new ToolStripMenuItem(CopyMenuItemTextInternal, CopyMenuItemImage, CopyMenuItem_Click);
-                cms.Items.Add(_copyToolStripMenuItem);
-                _pasteToolStripMenuItem = new ToolStripMenuItem(PasteMenuItemTextInternal, PasteMenuItemImage, PasteMenuItem_Click);
-                cms.Items.Add(_pasteToolStripMenuItem);
+                var menu = new ContextMenuStrip();
+                _cutToolStripMenuItem = new ToolStripMenuItem("Вырезать", CutMenuItemImage, CutMenuItem_Click);
+                _copyToolStripMenuItem = new ToolStripMenuItem("Копировать", CopyMenuItemImage, CopyMenuItem_Click);
+                _pasteToolStripMenuItem = new ToolStripMenuItem("Вставить", PasteMenuItemImage, PasteMenuItem_Click);
+                _selectAllToolStripMenuItem = new ToolStripMenuItem("Выделить все", SelectAllMenuItemImage, SelectAllMenuItem_Click);
+                _addrAsHexToolStripMenuItem = new ToolStripMenuItem("Адрес в Hex-формате", SelectAllMenuItemImage, ShowAddrAsHex);
+                _addrAsHexToolStripMenuItem.CheckOnClick = true;
+                _addrAsHexToolStripMenuItem.Checked = _hexBox.ShowAddrAsHex;
 
-                cms.Items.Add(new ToolStripSeparator());
+                menu.Items.Add(_copyToolStripMenuItem);
+                menu.Items.Add(_cutToolStripMenuItem);
+                menu.Items.Add(_pasteToolStripMenuItem);
+                menu.Items.Add(new ToolStripSeparator());
+                menu.Items.Add(_selectAllToolStripMenuItem);
+                menu.Items.Add(new ToolStripSeparator());
+                menu.Items.Add(_addrAsHexToolStripMenuItem);
 
-                _selectAllToolStripMenuItem = new ToolStripMenuItem(SelectAllMenuItemTextInternal, SelectAllMenuItemImage, SelectAllMenuItem_Click);
-                cms.Items.Add(_selectAllToolStripMenuItem);
-                cms.Opening += BuildInContextMenuStrip_Opening;
+                menu.Opening += BuildInContextMenuStrip_Opening;
 
-                _contextMenuStrip = cms;
+                _contextMenuStrip = menu;
             }
 
             if (_hexBox.DataSource == null && _hexBox.ContextMenuStrip == _contextMenuStrip)
@@ -201,10 +137,8 @@ namespace SharpLib.WinForms.Controls
         }
 
         /// <summary>
-        /// Before opening the ContextMenuStrip, we manage the availability of the items.
+        /// Перед открытием меню установка Enable/Disable пунктов меню
         /// </summary>
-        /// <param name="sender">the sender object</param>
-        /// <param name="e">the event data</param>
         private void BuildInContextMenuStrip_Opening(object sender, CancelEventArgs e)
         {
             _cutToolStripMenuItem.Enabled = _hexBox.CanCut();
@@ -214,43 +148,43 @@ namespace SharpLib.WinForms.Controls
         }
 
         /// <summary>
-        /// The handler for the "Cut"-Click event
+        /// Обработчик события "Вырезать"
         /// </summary>
-        /// <param name="sender">the sender object</param>
-        /// <param name="e">the event data</param>
         private void CutMenuItem_Click(object sender, EventArgs e)
         {
             _hexBox.Cut();
         }
 
         /// <summary>
-        /// The handler for the "Copy"-Click event
+        /// Обработчик события "Копировать"
         /// </summary>
-        /// <param name="sender">the sender object</param>
-        /// <param name="e">the event data</param>
         private void CopyMenuItem_Click(object sender, EventArgs e)
         {
             _hexBox.Copy();
         }
 
         /// <summary>
-        /// The handler for the "Paste"-Click event
+        /// Обработчик события "Вставить"
         /// </summary>
-        /// <param name="sender">the sender object</param>
-        /// <param name="e">the event data</param>
         private void PasteMenuItem_Click(object sender, EventArgs e)
         {
             _hexBox.Paste();
         }
 
         /// <summary>
-        /// The handler for the "Select All"-Click event
+        /// Обработчик события "Выделить все"
         /// </summary>
-        /// <param name="sender">the sender object</param>
-        /// <param name="e">the event data</param>
         private void SelectAllMenuItem_Click(object sender, EventArgs e)
         {
             _hexBox.SelectAll();
+        }
+
+        /// <summary>
+        /// Обработчик события "Режим отображения адреса"
+        /// </summary>
+        private void ShowAddrAsHex(object sender, EventArgs eventArgs)
+        {
+            _hexBox.ShowAddrAsHex = _addrAsHexToolStripMenuItem.Checked;
         }
 
         #endregion

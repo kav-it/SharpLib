@@ -8,30 +8,35 @@
         #region Методы
 
         /// <summary>
-        /// Returns the character to display for the byte passed across.
+        /// Преобразование byte - char 
         /// </summary>
-        public virtual char ToChar(byte b)
+        public virtual char ToChar(byte value)
         {
-            return b > 0x1F && !(b > 0x7E && b < 0xA0) ? (char)b : '.';
+            // Диапазон отображаемых значений
+            // [0x20..0x7E] && [0xC0..0xFF] - char
+            // иное - '.'
+            if ((value >= 0x20 && value <= 0x7E) || (value >= 0xC0))
+            {
+                return (char)value;
+            }
+            
+            return '.';
         }
 
         /// <summary>
-        /// Returns the byte to use for the character passed across.
+        /// Преобразование char - byte
         /// </summary>
-        /// <param name="c"></param>
-        /// <returns></returns>
         public virtual byte ToByte(char c)
         {
             return (byte)c;
         }
 
         /// <summary>
-        /// Returns a description of the byte char provider.
+        /// Текстовое представление конвертора
         /// </summary>
-        /// <returns></returns>
         public override string ToString()
         {
-            return "ANSI (Default)";
+            return "Windows-1251 (Default)";
         }
 
         #endregion

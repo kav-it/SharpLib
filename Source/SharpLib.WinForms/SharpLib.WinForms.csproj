@@ -64,7 +64,6 @@
     <Compile Include="Source\Controls\HexBox\Classes\DataBlock\DataBlock.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\DataMap.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\Providers\HexBox.BufferDataSource.cs" />
-    <Compile Include="Source\Controls\HexBox\Classes\Converters\EbcdicByteCharProvider.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\Providers\HexBox.FileDataSource.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\DataBlock\DataBlock.File.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\FindOptions.cs" />

@@ -87,6 +87,16 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         private const string DEFAULT_INFO_BACKGROUND = "Gray";
 
+        /// <summary>
+        /// Начальное смещение адреса
+        /// </summary>
+        private const long DEFAULT_ADDR_OFFSET = 0;
+
+        /// <summary>
+        /// Отображать адреса в виде Hex (иначе как int)
+        /// </summary>
+        private const bool DEFAULT_SHOW_ADDR_AS_HEX = false;
+
         #endregion
 
         #region Свойства
@@ -293,24 +303,45 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Смещение информационной строки
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Смещение информационной строки")]
-        [DefaultValue((long)0)]
-        public long LineInfoOffset
+        [Category(CATEGORY_NAME), Description("Начальное смещение адреса")]
+        [DefaultValue(DEFAULT_ADDR_OFFSET)]
+        public long AddrOffset
         {
-            get { return _lineInfoOffset; }
+            get { return _addrOffset; }
             set
             {
-                if (_lineInfoOffset == value)
+                if (_addrOffset == value)
                 {
                     return;
                 }
 
-                _lineInfoOffset = value;
+                _addrOffset = value;
 
                 Invalidate();
             }
         }
 
+        /// <summary>
+        /// Смещение информационной строки
+        /// </summary>
+        [Category(CATEGORY_NAME), Description("true: Отображать адрес в формате Hex, иначе Int")]
+        [DefaultValue(DEFAULT_SHOW_ADDR_AS_HEX)]
+        public bool ShowAddrAsHex
+        {
+            get { return _showAddrAsHex; }
+            set
+            {
+                if (_showAddrAsHex == value)
+                {
+                    return;
+                }
+
+                _showAddrAsHex = value;
+
+                Invalidate(); 
+            }
+        }
+        
         /// <summary>
         /// Стиль рамки элемента
         /// </summary>
@@ -366,33 +397,6 @@ namespace SharpLib.WinForms.Controls
                 OnStringViewVisibleChanged(EventArgs.Empty);
 
                 UpdateRectanglePositioning();
-                Invalidate();
-            }
-        }
-
-        /// <summary>
-        /// Выбор отображения HEX-байт (upper или lower)
-        /// </summary>
-        [Category(CATEGORY_NAME), Description("Выбор отображения HEX-байт (upper или lower)")]
-        [DefaultValue(typeof(HexCasing), "Upper")]
-        public HexCasing HexCasing
-        {
-            get
-            {
-                return _hexStringFormat == "X" ? HexCasing.Upper : HexCasing.Lower;
-            }
-            set
-            {
-                var format = value == HexCasing.Upper ? "X" : "x";
-
-                if (_hexStringFormat == format)
-                {
-                    return;
-                }
-
-                _hexStringFormat = format;
-                OnHexCasingChanged(EventArgs.Empty);
-
                 Invalidate();
             }
         }
@@ -544,12 +548,6 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         [Category(CATEGORY_NAME), Description("Изменилось свойство ColumnWidth")]
         public event EventHandler GroupSizeChanged;
-
-        /// <summary>
-        /// Изменилось свойство HexCasingChanged
-        /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство HexCasingChanged")]
-        public event EventHandler HexCasingChanged;
 
         /// <summary>
         /// Изменилось свойство HorizontalByteCount

@@ -23,11 +23,11 @@ namespace SharpLib.WinForms.Controls
             switch (m.Msg)
             {
                 case NativeMethods.WM_KEYDOWN:
-                    return _keyInterpreter.PreProcessWmKeyDown(ref m);
+                    return _keyProcessor.PreProcessWmKeyDown(ref m);
                 case NativeMethods.WM_CHAR:
-                    return _keyInterpreter.PreProcessWmChar(ref m);
+                    return _keyProcessor.PreProcessWmChar(ref m);
                 case NativeMethods.WM_KEYUP:
-                    return _keyInterpreter.PreProcessWmKeyUp(ref m);
+                    return _keyProcessor.PreProcessWmKeyUp(ref m);
                 default:
                     return base.PreProcessMessage(ref m);
             }
@@ -331,18 +331,6 @@ namespace SharpLib.WinForms.Controls
             if (VScrollBarVisibleChanged != null)
             {
                 VScrollBarVisibleChanged(this, e);
-            }
-        }
-
-        /// <summary>
-        /// Raises the HexCasingChanged event.
-        /// </summary>
-        /// <param name="e">An EventArgs that contains the event data.</param>
-        protected virtual void OnHexCasingChanged(EventArgs e)
-        {
-            if (HexCasingChanged != null)
-            {
-                HexCasingChanged(this, e);
             }
         }
 

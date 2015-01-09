@@ -224,7 +224,7 @@ namespace SharpLib.WinForms.Controls
         /// <param name="index">the index of the byte</param>
         public void ScrollByteIntoView(long index)
         {
-            if (_dataSource == null || _keyInterpreter == null)
+            if (_dataSource == null || _keyProcessor == null)
             {
                 return;
             }

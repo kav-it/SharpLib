@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using System.Text;
+using System.IO;
 using System.Windows.Forms;
 
 using SharpLib.Native.Windows;
@@ -27,6 +27,11 @@ namespace SharpLib.WinForms.Controls
         #region Поля
 
         /// <summary>
+        /// Служебная информация о Border элемента
+        /// </summary>
+        private readonly HexBoxBorder _borderInfo;
+
+        /// <summary>
         /// Встроенное контекстное меню
         /// </summary>
         private readonly HexBoxContextMenu _builtInContextMenu;
@@ -45,6 +50,11 @@ namespace SharpLib.WinForms.Controls
         /// Contains true, if the find (Find method) should be aborted.
         /// </summary>
         private bool _abortFind;
+
+        /// <summary>
+        /// Начальное смещение адреса
+        /// </summary>
+        private long _addrOffset;
 
         private BorderStyle _borderStyle;
 
@@ -65,30 +75,47 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         private long _bytePos;
 
+        private int _bytesPerLine;
+
+        /// <summary>
+        /// Курсор ввода отображается
+        /// </summary>
+        private bool _caretVisible;
+
+        /// <summary>
+        /// Размер символа
+        /// </summary>
+        private SizeF _charSize;
+
+        /// <summary>
+        /// true: Отображается колонка адреса
+        /// </summary>
+        private bool _columnAddrVisible;
+
+        /// <summary>
+        /// true: Отображается колонка Ascii
+        /// </summary>
+        private bool _columnAsciiVisible;
+
+        /// <summary>
+        /// Текущий индекс строки
+        /// </summary>
+        private long _currentLine;
+
+        /// <summary>
+        /// Текущий индекс в строке
+        /// </summary>
+        private int _currentPositionInLine;
+
         /// <summary>
         /// Источник данных
         /// </summary>
         private IHexBoxDataSource _dataSource;
 
-        private int _bytesPerLine;
-
         /// <summary>
-        /// Contains True if caret is visible
+        /// Пустой объект обработчика ввода
         /// </summary>
-        private bool _caretVisible;
-
-        private SizeF _charSize;
-
-        private bool _headerOffsetVisible;
-
-        private long _currentLine;
-
-        private int _currentPositionInLine;
-
-        /// <summary>
-        /// Contains an empty key interpreter without functionality
-        /// </summary>
-        private EmptyKeyInterpreter _eki;
+        private EmptyKeyProcessor _emptyKeyProcessor;
 
         /// <summary>
         /// Индекс последнего видимого байта
@@ -104,10 +131,7 @@ namespace SharpLib.WinForms.Controls
 
         private int _groupSize;
 
-        /// <summary>
-        /// Contains string format information for hex values
-        /// </summary>
-        private string _hexStringFormat;
+        private bool _headerOffsetVisible;
 
         /// <summary>
         /// Contains the maximum of visible bytes.
@@ -135,32 +159,21 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Contains the current key interpreter
         /// </summary>
-        private IKeyInterpreter _keyInterpreter;
+        private IKeyProcessor _keyProcessor;
 
         /// <summary>
         /// Contains the default key interpreter
         /// </summary>
-        private KeyInterpreter _ki;
+        private KeyProcessor _ki;
 
         /// <summary>
         /// Contains the Enviroment.TickCount of the last refresh
         /// </summary>
         private int _lastThumbtrack;
 
-        private long _lineInfoOffset;
-
-        private bool _columnAddrVisible;
-
         private bool _readOnly;
 
-
-        /// <summary>
-        /// Служебная информация о Border элемента
-        /// </summary>
-        private readonly HexBoxBorder _borderInfo;
-
         private int _requiredWidth;
-
 
         private Color _selectionBackColor;
 
@@ -173,16 +186,19 @@ namespace SharpLib.WinForms.Controls
         private bool _shadowSelectionVisible;
 
         /// <summary>
+        /// Отображать адрес как Hex
+        /// </summary>
+        private bool _showAddrAsHex;
+
+        /// <summary>
         /// Contains the string key interpreter
         /// </summary>
-        private StringKeyInterpreter _ski;
+        private StringKeyProcessor _ski;
 
         /// <summary>
         /// Индекс первого видимого байта
         /// </summary>
         private long _startByte;
-
-        private bool _columnAsciiVisible;
 
         /// <summary>
         /// Contains the thumbtrack scrolling position
@@ -194,6 +210,14 @@ namespace SharpLib.WinForms.Controls
         #endregion
 
         #region Свойства
+
+        /// <summary>
+        /// true: Активна область выделения Ascii
+        /// </summary>
+        private bool IsAsciiActive
+        {
+            get { return (_keyProcessor != null && _keyProcessor.GetType() == typeof(StringKeyProcessor)); }
+        }
 
         /// <summary>
         /// Gets a value that indicates the current position during Find method execution.
@@ -497,6 +521,8 @@ namespace SharpLib.WinForms.Controls
             _columnAddrVisible = DEFAULT_COLUMN_ADDR_VISIBLE;
             _columnAsciiVisible = DEFAULT_COLUMN_ASCII_VISIBLE;
             _groupSize = DEFAULT_GROUP_SIZE;
+            _addrOffset = DEFAULT_ADDR_OFFSET;
+            _showAddrAsHex = DEFAULT_SHOW_ADDR_AS_HEX;
             _bytePos = -1;
             _bytesPerLine = DEFAULT_BYTE_PES_LINE;
             _selectionBackColor = Color.FromName(DEFAULT_SELECTION_BACKGROUND);
@@ -509,7 +535,6 @@ namespace SharpLib.WinForms.Controls
                 SystemInformation.Border3DSize.Width,
                 SystemInformation.Border3DSize.Height);
             _infoForeColor = Color.FromName(DEFAULT_INFO_BACKGROUND);
-            _hexStringFormat = "X";
             _thumbTrackTimer = new Timer();
             _borderStyle = BorderStyle.Fixed3D;
 
@@ -643,70 +668,70 @@ namespace SharpLib.WinForms.Controls
 
         private void ActivateEmptyKeyInterpreter()
         {
-            if (_eki == null)
+            if (_emptyKeyProcessor == null)
             {
-                _eki = new EmptyKeyInterpreter(this);
+                _emptyKeyProcessor = new EmptyKeyProcessor(this);
             }
 
-            if (_eki == _keyInterpreter)
+            if (_emptyKeyProcessor == _keyProcessor)
             {
                 return;
             }
 
-            if (_keyInterpreter != null)
+            if (_keyProcessor != null)
             {
-                _keyInterpreter.Deactivate();
+                _keyProcessor.Deactivate();
             }
 
-            _keyInterpreter = _eki;
-            _keyInterpreter.Activate();
+            _keyProcessor = _emptyKeyProcessor;
+            _keyProcessor.Activate();
         }
 
         private void ActivateKeyInterpreter()
         {
             if (_ki == null)
             {
-                _ki = new KeyInterpreter(this);
+                _ki = new KeyProcessor(this);
             }
 
-            if (_ki == _keyInterpreter)
+            if (_ki == _keyProcessor)
             {
                 return;
             }
 
-            if (_keyInterpreter != null)
+            if (_keyProcessor != null)
             {
-                _keyInterpreter.Deactivate();
+                _keyProcessor.Deactivate();
             }
 
-            _keyInterpreter = _ki;
-            _keyInterpreter.Activate();
+            _keyProcessor = _ki;
+            _keyProcessor.Activate();
         }
 
         private void ActivateStringKeyInterpreter()
         {
             if (_ski == null)
             {
-                _ski = new StringKeyInterpreter(this);
+                _ski = new StringKeyProcessor(this);
             }
 
-            if (_ski == _keyInterpreter)
+            if (_ski == _keyProcessor)
             {
                 return;
             }
 
-            if (_keyInterpreter != null)
+            if (_keyProcessor != null)
             {
-                _keyInterpreter.Deactivate();
+                _keyProcessor.Deactivate();
             }
 
-            _keyInterpreter = _ski;
-            _keyInterpreter.Activate();
+            _keyProcessor = _ski;
+            _keyProcessor.Activate();
         }
 
         private void CreateCaret()
         {
-            if (_dataSource == null || _keyInterpreter == null || _caretVisible || !Focused)
+            if (_dataSource == null || _keyProcessor == null || _caretVisible || !Focused)
             {
                 return;
             }
@@ -725,13 +750,13 @@ namespace SharpLib.WinForms.Controls
 
         private void UpdateCaret()
         {
-            if (_dataSource == null || _keyInterpreter == null)
+            if (_dataSource == null || _keyProcessor == null)
             {
                 return;
             }
 
             long byteIndex = _bytePos - _startByte;
-            PointF p = _keyInterpreter.GetCaretPointF(byteIndex);
+            PointF p = _keyProcessor.GetCaretPointF(byteIndex);
             p.X += _byteCharacterPos * _charSize.Width;
             NativeMethods.SetCaretPos((int)p.X, (int)p.Y);
         }
@@ -749,7 +774,7 @@ namespace SharpLib.WinForms.Controls
 
         private void SetCaretPosition(Point p)
         {
-            if (_dataSource == null || _keyInterpreter == null)
+            if (_dataSource == null || _keyProcessor == null)
             {
                 return;
             }
@@ -929,6 +954,9 @@ namespace SharpLib.WinForms.Controls
             _abortFind = true;
         }
 
+        /// <summary>
+        /// Чтение блока копирования
+        /// </summary>
         private byte[] GetCopyData()
         {
             if (!CanCopy())
@@ -936,20 +964,17 @@ namespace SharpLib.WinForms.Controls
                 return new byte[0];
             }
 
-            // put bytes into buffer
             byte[] buffer = new byte[_selectionLength];
             int id = -1;
             for (long i = _bytePos; i < _bytePos + _selectionLength; i++)
             {
-                id++;
-
-                buffer[id] = _dataSource.ReadByte(i);
+                buffer[++id] = _dataSource.ReadByte(i);
             }
             return buffer;
         }
 
         /// <summary>
-        /// Copies the current selection in the hex box to the Clipboard.
+        /// Копирование выделенного блока
         /// </summary>
         public void Copy()
         {
@@ -958,17 +983,17 @@ namespace SharpLib.WinForms.Controls
                 return;
             }
 
-            // put bytes into buffer
-            byte[] buffer = GetCopyData();
+            // Чтение выделенного блока
+            var buffer = GetCopyData();
+            var da = new DataObject();
 
-            DataObject da = new DataObject();
+            var copyText = IsAsciiActive 
+                ? ExtensionEncoding.Windows1251.GetString(buffer) 
+                : buffer.ToAsciiEx();
 
-            // set string buffer clipbard data
-            string sBuffer = System.Text.Encoding.ASCII.GetString(buffer, 0, buffer.Length);
-            da.SetData(typeof(string), sBuffer);
-
-            //set memorystream (BinaryData) clipboard data
-            System.IO.MemoryStream ms = new System.IO.MemoryStream(buffer, 0, buffer.Length, false, true);
+            // Формирование строки для установки в буфер обмена
+            da.SetData(typeof(string), copyText);
+            var ms = new MemoryStream(buffer, 0, buffer.Length, false, true);
             da.SetData("BinaryData", ms);
 
             Clipboard.SetDataObject(da, true);
@@ -1035,7 +1060,7 @@ namespace SharpLib.WinForms.Controls
         }
 
         /// <summary>
-        /// Replaces the current selection in the hex box with the contents of the Clipboard.
+        /// Вставка из буфера обмена
         /// </summary>
         public void Paste()
         {
@@ -1058,14 +1083,14 @@ namespace SharpLib.WinForms.Controls
 
             if (da.GetDataPresent("BinaryData"))
             {
-                System.IO.MemoryStream ms = (System.IO.MemoryStream)da.GetData("BinaryData");
+                var ms = (MemoryStream)da.GetData("BinaryData");
                 buffer = new byte[ms.Length];
                 ms.Read(buffer, 0, buffer.Length);
             }
             else if (da.GetDataPresent(typeof(string)))
             {
                 string sBuffer = (string)da.GetData(typeof(string));
-                buffer = System.Text.Encoding.ASCII.GetBytes(sBuffer);
+                buffer = ExtensionEncoding.Windows1251.GetBytes(sBuffer);
             }
             else
             {
@@ -1190,17 +1215,12 @@ namespace SharpLib.WinForms.Controls
                 return;
             }
 
-            // put bytes into buffer
             byte[] buffer = GetCopyData();
-
-            DataObject da = new DataObject();
-
-            // set string buffer clipbard data
-            string hexString = buffer.ToAsciiEx();
+            var da = new DataObject();
+            var hexString = buffer.ToAsciiEx();
             da.SetData(typeof(string), hexString);
 
-            //set memorystream (BinaryData) clipboard data
-            System.IO.MemoryStream ms = new System.IO.MemoryStream(buffer, 0, buffer.Length, false, true);
+            MemoryStream ms = new MemoryStream(buffer, 0, buffer.Length, false, true);
             da.SetData("BinaryData", ms);
 
             Clipboard.SetDataObject(da, true);
@@ -1211,14 +1231,9 @@ namespace SharpLib.WinForms.Controls
             OnCopiedHex(EventArgs.Empty);
         }
 
-
         private Color GetDefaultForeColor()
         {
-            if (Enabled)
-            {
-                return ForeColor;
-            }
-            return Color.Gray;
+            return Enabled ? ForeColor : Color.Gray;
         }
 
         /// <summary>
@@ -1491,7 +1506,6 @@ namespace SharpLib.WinForms.Controls
             OnVerticalByteCountChanged(EventArgs.Empty);
         }
 
-
         /// <summary>
         /// For high resolution screen support
         /// </summary>
@@ -1515,13 +1529,13 @@ namespace SharpLib.WinForms.Controls
 
         #endregion
 
-        #region Вложенный класс: EmptyKeyInterpreter
+        #region Вложенный класс: EmptyKeyProcessor
 
         /// <summary>
         /// Represents an empty input handler without any functionality.
         /// If is set DataSource to null, then this interpreter is used.
         /// </summary>
-        private class EmptyKeyInterpreter : IKeyInterpreter
+        private class EmptyKeyProcessor : IKeyProcessor
         {
             #region Поля
 
@@ -1531,7 +1545,7 @@ namespace SharpLib.WinForms.Controls
 
             #region Конструктор
 
-            public EmptyKeyInterpreter(HexBox hexBox)
+            public EmptyKeyProcessor(HexBox hexBox)
             {
                 _hexBox = hexBox;
             }
@@ -1573,51 +1587,43 @@ namespace SharpLib.WinForms.Controls
 
         #endregion
 
-        #region Вложенный класс: IKeyInterpreter
+        #region Вложенный класс: IKeyProcessor
 
         /// <summary>
-        /// Defines a user input handler such as for mouse and keyboard input
+        /// Процессор обработки клавиатуры и мыши
         /// </summary>
-        private interface IKeyInterpreter
+        private interface IKeyProcessor
         {
             #region Методы
 
             /// <summary>
-            /// Activates mouse events
+            /// Активация событий мыши
             /// </summary>
             void Activate();
 
             /// <summary>
-            /// Deactivate mouse events
+            /// Деактивация событий мыши
             /// </summary>
             void Deactivate();
 
             /// <summary>
-            /// Preprocesses WM_KEYUP window message.
+            /// Обработка windows-сообщения WM_KEYUP
             /// </summary>
-            /// <param name="m">the Message object to process.</param>
-            /// <returns>True, if the message was processed.</returns>
             bool PreProcessWmKeyUp(ref Message m);
 
             /// <summary>
-            /// Preprocesses WM_CHAR window message.
+            /// Обработка windows-сообщения WM_CHAR 
             /// </summary>
-            /// <param name="m">the Message object to process.</param>
-            /// <returns>True, if the message was processed.</returns>
             bool PreProcessWmChar(ref Message m);
 
             /// <summary>
-            /// Preprocesses WM_KEYDOWN window message.
+            /// Обработка windows-сообщения WM_KEYDOWN
             /// </summary>
-            /// <param name="m">the Message object to process.</param>
-            /// <returns>True, if the message was processed.</returns>
             bool PreProcessWmKeyDown(ref Message m);
 
             /// <summary>
-            /// Gives some information about where to place the caret.
+            /// Получение информации о позиции каретки ввода
             /// </summary>
-            /// <param name="byteIndex">the index of the byte</param>
-            /// <returns>the position where the caret is to place.</returns>
             PointF GetCaretPointF(long byteIndex);
 
             #endregion
@@ -1625,20 +1631,18 @@ namespace SharpLib.WinForms.Controls
 
         #endregion
 
-        #region Вложенный класс: KeyInterpreter
+        #region Вложенный класс: KeyProcessor
 
         /// <summary>
-        /// Handles user input such as mouse and keyboard input during hex view edit
+        /// Обработка клавиши и мыши при редактировании в Hex области
         /// </summary>
-        private class KeyInterpreter : IKeyInterpreter
+        private class KeyProcessor : IKeyProcessor
         {
             #region Делегаты
 
             /// <summary>
-            /// Delegate for key-down processing.
+            /// Обработка событий "KeyDown"
             /// </summary>
-            /// <param name="m">the message object contains key data information</param>
-            /// <returns>True, if the message was processed</returns>
             private delegate bool MessageDelegate(ref Message m);
 
             #endregion
@@ -1646,32 +1650,32 @@ namespace SharpLib.WinForms.Controls
             #region Поля
 
             /// <summary>
-            /// Contains the parent HexBox control
+            /// Родительский элемент
             /// </summary>
             protected readonly HexBox _hexBox;
 
             /// <summary>
-            /// Contains the current mouse selection position info
+            /// Информация о текущем выделении (мышью)
             /// </summary>
-            private BytePositionInfo _bpi;
+            private BytePositionInfo _bytePosInfo;
 
             /// <summary>
-            /// Contains the selection start position info
+            /// Начало выделения
             /// </summary>
-            private BytePositionInfo _bpiStart;
+            private BytePositionInfo _bytePosInfoStart;
 
             /// <summary>
-            /// Contains all message handlers of key interpreter key down message
+            /// Список всех обработчиков
             /// </summary>
             private Dictionary<Keys, MessageDelegate> _messageHandlers;
 
             /// <summary>
-            /// Contains True, if mouse is down
+            /// true: Клавиша мыши нажата (Left)
             /// </summary>
             private bool _mouseDown;
 
             /// <summary>
-            /// Contains True, if shift key is down
+            /// true: Клавиша Shift нажата
             /// </summary>
             private bool _shiftDown;
 
@@ -1714,7 +1718,7 @@ namespace SharpLib.WinForms.Controls
 
             #region Конструктор
 
-            public KeyInterpreter(HexBox hexBox)
+            public KeyProcessor(HexBox hexBox)
             {
                 _hexBox = hexBox;
             }
@@ -1748,7 +1752,7 @@ namespace SharpLib.WinForms.Controls
 
                 if (!_shiftDown)
                 {
-                    _bpiStart = new BytePositionInfo(_hexBox._bytePos, _hexBox._byteCharacterPos);
+                    _bytePosInfoStart = new BytePositionInfo(_hexBox._bytePos, _hexBox._byteCharacterPos);
                     _hexBox.ReleaseSelection();
                 }
                 else
@@ -1764,19 +1768,19 @@ namespace SharpLib.WinForms.Controls
                     return;
                 }
 
-                _bpi = GetBytePositionInfo(new Point(e.X, e.Y));
-                long selEnd = _bpi.Index;
+                _bytePosInfo = GetBytePositionInfo(new Point(e.X, e.Y));
+                long selEnd = _bytePosInfo.Index;
                 long realselStart;
                 long realselLength;
 
-                if (selEnd < _bpiStart.Index)
+                if (selEnd < _bytePosInfoStart.Index)
                 {
                     realselStart = selEnd;
-                    realselLength = _bpiStart.Index - selEnd;
+                    realselLength = _bytePosInfoStart.Index - selEnd;
                 }
-                else if (selEnd > _bpiStart.Index)
+                else if (selEnd > _bytePosInfoStart.Index)
                 {
-                    realselStart = _bpiStart.Index;
+                    realselStart = _bytePosInfoStart.Index;
                     realselLength = selEnd - realselStart;
                 }
                 else
@@ -1788,7 +1792,7 @@ namespace SharpLib.WinForms.Controls
                 if (realselStart != _hexBox._bytePos || realselLength != _hexBox._selectionLength)
                 {
                     _hexBox.InternalSelect(realselStart, realselLength);
-                    _hexBox.ScrollByteIntoView(_bpi.Index);
+                    _hexBox.ScrollByteIntoView(_bytePosInfo.Index);
                 }
             }
 
@@ -1972,7 +1976,7 @@ namespace SharpLib.WinForms.Controls
                     return true;
                 }
 
-                if (pos + sel <= _bpiStart.Index)
+                if (pos + sel <= _bytePosInfoStart.Index)
                 {
                     if (pos == 0)
                     {
@@ -1998,12 +2002,12 @@ namespace SharpLib.WinForms.Controls
                 long pos = _hexBox._bytePos;
                 long sel = _hexBox._selectionLength;
 
-                if (pos - _hexBox._iHexMaxHBytes < 0 && pos <= _bpiStart.Index)
+                if (pos - _hexBox._iHexMaxHBytes < 0 && pos <= _bytePosInfoStart.Index)
                 {
                     return true;
                 }
 
-                if (_bpiStart.Index >= pos + sel)
+                if (_bytePosInfoStart.Index >= pos + sel)
                 {
                     pos = pos - _hexBox._iHexMaxHBytes;
                     sel += _hexBox._iHexMaxHBytes;
@@ -2015,7 +2019,7 @@ namespace SharpLib.WinForms.Controls
                     sel -= _hexBox._iHexMaxHBytes;
                     if (sel < 0)
                     {
-                        pos = _bpiStart.Index + sel;
+                        pos = _bytePosInfoStart.Index + sel;
                         sel = -sel;
                         _hexBox.InternalSelect(pos, sel);
                         _hexBox.ScrollByteIntoView();
@@ -2041,7 +2045,7 @@ namespace SharpLib.WinForms.Controls
                     return true;
                 }
 
-                if (_bpiStart.Index <= pos)
+                if (_bytePosInfoStart.Index <= pos)
                 {
                     sel++;
                     _hexBox.InternalSelect(pos, sel);
@@ -2070,7 +2074,7 @@ namespace SharpLib.WinForms.Controls
                     return true;
                 }
 
-                if (_bpiStart.Index <= pos)
+                if (_bytePosInfoStart.Index <= pos)
                 {
                     sel += _hexBox._iHexMaxHBytes;
                     _hexBox.InternalSelect(pos, sel);
@@ -2081,7 +2085,7 @@ namespace SharpLib.WinForms.Controls
                     sel -= _hexBox._iHexMaxHBytes;
                     if (sel < 0)
                     {
-                        pos = _bpiStart.Index;
+                        pos = _bytePosInfoStart.Index;
                         sel = -sel;
                     }
                     else
@@ -2099,7 +2103,7 @@ namespace SharpLib.WinForms.Controls
 
             protected virtual bool PreProcessWmKeyDown_Tab(ref Message m)
             {
-                if (_hexBox._columnAsciiVisible && _hexBox._keyInterpreter.GetType() == typeof(KeyInterpreter))
+                if (_hexBox._columnAsciiVisible && _hexBox._keyProcessor.GetType() == typeof(KeyProcessor))
                 {
                     _hexBox.ActivateStringKeyInterpreter();
                     _hexBox.ScrollByteIntoView();
@@ -2119,7 +2123,7 @@ namespace SharpLib.WinForms.Controls
 
             protected virtual bool PreProcessWmKeyDown_ShiftTab(ref Message m)
             {
-                if (_hexBox._keyInterpreter is StringKeyInterpreter)
+                if (_hexBox._keyProcessor is StringKeyProcessor)
                 {
                     _shiftDown = false;
                     _hexBox.ActivateKeyInterpreter();
@@ -2263,7 +2267,7 @@ namespace SharpLib.WinForms.Controls
                     return true;
                 }
 
-                _bpiStart = new BytePositionInfo(_hexBox._bytePos, _hexBox._byteCharacterPos);
+                _bytePosInfoStart = new BytePositionInfo(_hexBox._bytePos, _hexBox._byteCharacterPos);
 
                 return true;
             }
@@ -2575,16 +2579,16 @@ namespace SharpLib.WinForms.Controls
 
         #endregion
 
-        #region Вложенный класс: StringKeyInterpreter
+        #region Вложенный класс: StringKeyProcessor
 
         /// <summary>
         /// Handles user input such as mouse and keyboard input during string view edit
         /// </summary>
-        private class StringKeyInterpreter : KeyInterpreter
+        private class StringKeyProcessor : KeyProcessor
         {
             #region Конструктор
 
-            public StringKeyInterpreter(HexBox hexBox)
+            public StringKeyProcessor(HexBox hexBox)
                 : base(hexBox)
             {
                 _hexBox._byteCharacterPos = 0;

@@ -31,7 +31,7 @@ namespace SharpLib
         /// <summary>
         /// Кодировка Windows-1251
         /// </summary>
-        public static Encoding Win1251
+        public static Encoding Windows1251
         {
             get { return _win1251 ?? (_win1251 = Encoding.GetEncoding(1251)); }
         }
