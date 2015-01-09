@@ -44,6 +44,7 @@
     <Compile Include="..\SharpLib.Version.cs">
       <Link>Source\SharpLib.Version.cs</Link>
     </Compile>
+    <Compile Include="Source\Controls\HexBox\HexBox.Utils.cs" />
     <Compile Include="Source\Controls\HexBox\HexBox.Border.cs" />
     <Compile Include="Source\Controls\HexBox\HexBox.Paint.cs">
       <SubType>Component</SubType>

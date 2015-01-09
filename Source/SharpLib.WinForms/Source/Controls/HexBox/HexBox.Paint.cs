@@ -14,12 +14,37 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         private const int ADDR_SIZE = 8;
 
+        /// <summary>
+        /// Размер отступа между колонкой адреса и hex-блоком (в пикселях)
+        /// </summary>
+        private const int SIZE_BETWEEN_ADDR_AND_HEX = 20;
+
         #region Поля
 
         /// <summary>
-        /// Содержит контент для всего текста (не включаются Scrollbar-ы)
+        /// Регион вывода всего текста (не включаются Scrollbar-ы)
         /// </summary>
         private Rectangle _recContent;
+
+        /// <summary>
+        /// Регион вывода Hex-данных
+        /// </summary>
+        private Rectangle _recHex;
+
+        /// <summary>
+        /// Регион вывода колонки адреса
+        /// </summary>
+        private Rectangle _recColumnAddr;
+
+        /// <summary>
+        /// Регион заголовка в котором отображаются смещения (0 1 2 3 и т.д.)
+        /// </summary>
+        private Rectangle _recHeader;
+
+        /// <summary>
+        /// Регион вывода Ascii
+        /// </summary>
+        private Rectangle _recAscii;
 
         #endregion
 
@@ -78,7 +103,7 @@ namespace SharpLib.WinForms.Controls
             if (_groupSeparatorVisible)
             {
                 // Отображения разделителей
-                PaintColumnSeparator(e.Graphics);
+                PaintGroupSeparator(e.Graphics);
             }
         }
 
@@ -109,41 +134,18 @@ namespace SharpLib.WinForms.Controls
                     ? new string('0', 8 - info.Length) + info 
                     : new string('~', 8);
 
-                g.DrawString(lineText, Font, brush, new PointF(_recLineInfo.X, bytePointF.Y), _stringFormat);
+                g.DrawString(lineText, Font, brush, new PointF(_recColumnAddr.X, bytePointF.Y), _stringFormat);
             }
         }
 
-        private void PaintHeaderRow(Graphics g)
-        {
-            Brush brush = new SolidBrush(InfoForeColor);
-            for (int col = 0; col < _iHexMaxHBytes; col++)
-            {
-                PaintColumnInfo(g, (byte)col, brush, col);
-            }
-        }
-
-        private void PaintColumnSeparator(Graphics g)
-        {
-            for (int col = GroupSize; col < _iHexMaxHBytes; col += GroupSize)
-            {
-                var pen = new Pen(new SolidBrush(InfoForeColor), 1);
-                PointF headerPointF = GetColumnInfoPointF(col);
-                headerPointF.X -= _charSize.Width / 2;
-                g.DrawLine(pen, headerPointF, new PointF(headerPointF.X, headerPointF.Y + _recColumnInfo.Height + _recHex.Height));
-                if (ColumnAsciiVisible)
-                {
-                    PointF byteStringPointF = GetByteStringPointF(new Point(col, 0));
-                    headerPointF.X -= 2;
-                    g.DrawLine(pen, new PointF(byteStringPointF.X, byteStringPointF.Y), new PointF(byteStringPointF.X, byteStringPointF.Y + _recHex.Height));
-                }
-            }
-        }
-
+        /// <summary>
+        /// Рисование блока Hex
+        /// </summary>
         private void PaintHex(Graphics g, long startByte, long endByte)
         {
-            Brush brush = new SolidBrush(GetDefaultForeColor());
-            Brush selBrush = new SolidBrush(_selectionForeColor);
-            Brush selBrushBack = new SolidBrush(_selectionBackColor);
+            var brush = new SolidBrush(GetDefaultForeColor());
+            var selBrush = new SolidBrush(_selectionForeColor);
+            var selBrushBack = new SolidBrush(_selectionBackColor);
 
             int counter = -1;
             long internEndByte = Math.Min(_dataSource.Length - 1, endByte + _iHexMaxHBytes);
@@ -169,26 +171,37 @@ namespace SharpLib.WinForms.Controls
             }
         }
 
-        private void PaintHexString(Graphics g, byte b, Brush brush, Point gridPoint)
+        private void PaintHeaderRow(Graphics g)
         {
-            PointF bytePointF = GetBytePointF(gridPoint);
-
-            string sB = ConvertByteToHex(b);
-
-            g.DrawString(sB.Substring(0, 1), Font, brush, bytePointF, _stringFormat);
-            bytePointF.X += _charSize.Width;
-            g.DrawString(sB.Substring(1, 1), Font, brush, bytePointF, _stringFormat);
+            Brush brush = new SolidBrush(InfoForeColor);
+            for (int col = 0; col < _iHexMaxHBytes; col++)
+            {
+                PaintHeader(g, (byte)col, brush, col);
+            }
         }
 
-        private void PaintColumnInfo(Graphics g, byte b, Brush brush, int col)
+       
+        /// <summary>
+        /// Рисование строки Hex
+        /// </summary>
+        private void PaintHexString(Graphics g, byte b, Brush brush, Point gridPoint)
         {
-            PointF headerPointF = GetColumnInfoPointF(col);
+            var bytePointF = GetBytePointF(gridPoint);
+            var text = HexBoxUtils.ConvertByteToHex(b);
 
-            string sB = ConvertByteToHex(b);
+            g.DrawString(text.Substring(0, 1), Font, brush, bytePointF, _stringFormat);
+            bytePointF.X += _charSize.Width;
+            g.DrawString(text.Substring(1, 1), Font, brush, bytePointF, _stringFormat);
+        }
 
-            g.DrawString(sB.Substring(0, 1), Font, brush, headerPointF, _stringFormat);
+        private void PaintHeader(Graphics g, byte b, Brush brush, int col)
+        {
+            PointF headerPointF = GetHeaderPointF(col);
+            var text = HexBoxUtils.ConvertByteToHex(b);
+
+            g.DrawString(text.Substring(0, 1), Font, brush, headerPointF, _stringFormat);
             headerPointF.X += _charSize.Width;
-            g.DrawString(sB.Substring(1, 1), Font, brush, headerPointF, _stringFormat);
+            g.DrawString(text.Substring(1, 1), Font, brush, headerPointF, _stringFormat);
         }
 
         private void PaintHexStringSelected(Graphics g, byte b, Brush brush, Brush brushBack, Point gridPoint)
@@ -226,7 +239,7 @@ namespace SharpLib.WinForms.Controls
             {
                 counter++;
                 Point gridPoint = GetGridBytePoint(counter);
-                PointF byteStringPointF = GetByteStringPointF(gridPoint);
+                PointF byteStringPointF = GetAsciiPointF(gridPoint);
                 byte b = _dataSource.ReadByte(i);
 
                 bool isSelectedByte = i >= _bytePos && i <= (_bytePos + _selectionLength - 1) && _selectionLength != 0;
@@ -263,24 +276,24 @@ namespace SharpLib.WinForms.Controls
                     if (_selectionLength == 0)
                     {
                         Point gp = GetGridBytePoint(_bytePos - _startByte);
-                        PointF pf = GetByteStringPointF(gp);
+                        PointF pf = GetAsciiPointF(gp);
                         Size s = new Size((int)_charSize.Width, (int)_charSize.Height);
                         Rectangle r = new Rectangle((int)pf.X, (int)pf.Y, s.Width, s.Height);
-                        if (r.IntersectsWith(_recStringView))
+                        if (r.IntersectsWith(_recAscii))
                         {
-                            r.Intersect(_recStringView);
+                            r.Intersect(_recAscii);
                             PaintCurrentByteSign(g, r);
                         }
                     }
                     else
                     {
-                        int lineWidth = (int)(_recStringView.Width - _charSize.Width);
+                        int lineWidth = (int)(_recAscii.Width - _charSize.Width);
 
                         Point startSelGridPoint = GetGridBytePoint(_bytePos - _startByte);
-                        PointF startSelPointF = GetByteStringPointF(startSelGridPoint);
+                        PointF startSelPointF = GetAsciiPointF(startSelGridPoint);
 
                         Point endSelGridPoint = GetGridBytePoint(_bytePos - _startByte + _selectionLength - 1);
-                        PointF endSelPointF = GetByteStringPointF(endSelGridPoint);
+                        PointF endSelPointF = GetAsciiPointF(endSelGridPoint);
 
                         int multiLine = endSelGridPoint.Y - startSelGridPoint.Y;
                         if (multiLine == 0)
@@ -290,9 +303,9 @@ namespace SharpLib.WinForms.Controls
                                 (int)startSelPointF.Y,
                                 (int)(endSelPointF.X - startSelPointF.X + _charSize.Width),
                                 (int)_charSize.Height);
-                            if (singleLine.IntersectsWith(_recStringView))
+                            if (singleLine.IntersectsWith(_recAscii))
                             {
-                                singleLine.Intersect(_recStringView);
+                                singleLine.Intersect(_recAscii);
                                 PaintCurrentByteSign(g, singleLine);
                             }
                         }
@@ -301,36 +314,36 @@ namespace SharpLib.WinForms.Controls
                             Rectangle firstLine = new Rectangle(
                                 (int)startSelPointF.X,
                                 (int)startSelPointF.Y,
-                                (int)(_recStringView.X + lineWidth - startSelPointF.X + _charSize.Width),
+                                (int)(_recAscii.X + lineWidth - startSelPointF.X + _charSize.Width),
                                 (int)_charSize.Height);
-                            if (firstLine.IntersectsWith(_recStringView))
+                            if (firstLine.IntersectsWith(_recAscii))
                             {
-                                firstLine.Intersect(_recStringView);
+                                firstLine.Intersect(_recAscii);
                                 PaintCurrentByteSign(g, firstLine);
                             }
 
                             if (multiLine > 1)
                             {
                                 Rectangle betweenLines = new Rectangle(
-                                    _recStringView.X,
+                                    _recAscii.X,
                                     (int)(startSelPointF.Y + _charSize.Height),
-                                    _recStringView.Width,
+                                    _recAscii.Width,
                                     (int)(_charSize.Height * (multiLine - 1)));
-                                if (betweenLines.IntersectsWith(_recStringView))
+                                if (betweenLines.IntersectsWith(_recAscii))
                                 {
-                                    betweenLines.Intersect(_recStringView);
+                                    betweenLines.Intersect(_recAscii);
                                     PaintCurrentByteSign(g, betweenLines);
                                 }
                             }
 
                             Rectangle lastLine = new Rectangle(
-                                _recStringView.X,
+                                _recAscii.X,
                                 (int)endSelPointF.Y,
-                                (int)(endSelPointF.X - _recStringView.X + _charSize.Width),
+                                (int)(endSelPointF.X - _recAscii.X + _charSize.Width),
                                 (int)_charSize.Height);
-                            if (lastLine.IntersectsWith(_recStringView))
+                            if (lastLine.IntersectsWith(_recAscii))
                             {
-                                lastLine.Intersect(_recStringView);
+                                lastLine.Intersect(_recAscii);
                                 PaintCurrentByteSign(g, lastLine);
                             }
                         }
@@ -432,6 +445,28 @@ namespace SharpLib.WinForms.Controls
             g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.GammaCorrected;
 
             g.DrawImage(myBitmap, rec.Left, rec.Top);
+        }
+
+        /// <summary>
+        /// Расование разделителей групп
+        /// </summary>
+        private void PaintGroupSeparator(Graphics g)
+        {
+            for (int col = GroupSize; col < _iHexMaxHBytes; col += GroupSize)
+            {
+                var pen = new Pen(new SolidBrush(InfoForeColor), 1);
+                PointF headerPointF = GetHeaderPointF(col);
+                headerPointF.X -= _charSize.Width / 2;
+                g.DrawLine(pen, headerPointF, new PointF(headerPointF.X, headerPointF.Y + _recHeader.Height + _recHex.Height));
+
+                // if (ColumnAsciiVisible)
+                if (false)
+                {
+                    PointF byteStringPointF = GetAsciiPointF(new Point(col, 0));
+                    headerPointF.X -= 2;
+                    g.DrawLine(pen, new PointF(byteStringPointF.X, byteStringPointF.Y), new PointF(byteStringPointF.X, byteStringPointF.Y + _recHex.Height));
+                }
+            }
         }
 
         #endregion

@@ -11,11 +11,11 @@ using SharpLib.Native.Windows;
 namespace SharpLib.WinForms.Controls
 {
     /// <summary>
-    /// Компонент "HexBox"
+    /// РљРѕРјРїРѕРЅРµРЅС‚ "HexBox"
     /// </summary>
     public partial class HexBox : Control
     {
-        #region Константы
+        #region РљРѕРЅСЃС‚Р°РЅС‚С‹
 
         /// <summary>
         /// Contains the thumptrack delay for scrolling in milliseconds.
@@ -24,10 +24,10 @@ namespace SharpLib.WinForms.Controls
 
         #endregion
 
-        #region Поля
+        #region РџРѕР»СЏ
 
         /// <summary>
-        /// Встроенное контекстное меню
+        /// Р’СЃС‚СЂРѕРµРЅРЅРѕРµ РєРѕРЅС‚РµРєСЃС‚РЅРѕРµ РјРµРЅСЋ
         /// </summary>
         private readonly HexBoxContextMenu _builtInContextMenu;
 
@@ -66,7 +66,7 @@ namespace SharpLib.WinForms.Controls
         private long _bytePos;
 
         /// <summary>
-        /// Источник данных
+        /// РСЃС‚РѕС‡РЅРёРє РґР°РЅРЅС‹С…
         /// </summary>
         private IHexBoxDataSource _dataSource;
 
@@ -91,7 +91,7 @@ namespace SharpLib.WinForms.Controls
         private EmptyKeyInterpreter _eki;
 
         /// <summary>
-        /// Индекс последнего видимого байта
+        /// РРЅРґРµРєСЃ РїРѕСЃР»РµРґРЅРµРіРѕ РІРёРґРёРјРѕРіРѕ Р±Р°Р№С‚Р°
         /// </summary>
         private long _endByte;
 
@@ -155,29 +155,9 @@ namespace SharpLib.WinForms.Controls
 
 
         /// <summary>
-        /// Служебная информация о Border элемента
+        /// РЎР»СѓР¶РµР±РЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ Border СЌР»РµРјРµРЅС‚Р°
         /// </summary>
         private readonly HexBoxBorder _borderInfo;
-
-        /// <summary>
-        /// Contains the column info header rectangle bounds
-        /// </summary>
-        private Rectangle _recColumnInfo;
-
-        /// <summary>
-        /// Contains the hex data bounds
-        /// </summary>
-        private Rectangle _recHex;
-
-        /// <summary>
-        /// Contains the line info bounds
-        /// </summary>
-        private Rectangle _recLineInfo;
-
-        /// <summary>
-        /// Contains the string view bounds
-        /// </summary>
-        private Rectangle _recStringView;
 
         private int _requiredWidth;
 
@@ -198,7 +178,7 @@ namespace SharpLib.WinForms.Controls
         private StringKeyInterpreter _ski;
 
         /// <summary>
-        /// Индекс первого видимого байта
+        /// РРЅРґРµРєСЃ РїРµСЂРІРѕРіРѕ РІРёРґРёРјРѕРіРѕ Р±Р°Р№С‚Р°
         /// </summary>
         private long _startByte;
 
@@ -213,7 +193,7 @@ namespace SharpLib.WinForms.Controls
 
         #endregion
 
-        #region Свойства
+        #region РЎРІРѕР№СЃС‚РІР°
 
         /// <summary>
         /// Gets a value that indicates the current position during Find method execution.
@@ -234,7 +214,7 @@ namespace SharpLib.WinForms.Controls
         }
 
         /// <summary>
-        /// Шрифт компонента
+        /// РЁСЂРёС„С‚ РєРѕРјРїРѕРЅРµРЅС‚Р°
         /// </summary>
         public override sealed Font Font
         {
@@ -248,7 +228,7 @@ namespace SharpLib.WinForms.Controls
         }
 
         /// <summary>
-        /// Базовое свойство Text не используется в дизайнере
+        /// Р‘Р°Р·РѕРІРѕРµ СЃРІРѕР№СЃС‚РІРѕ Text РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РІ РґРёР·Р°Р№РЅРµСЂРµ
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Bindable(false)]
@@ -259,7 +239,7 @@ namespace SharpLib.WinForms.Controls
         }
 
         /// <summary>
-        /// Базовое свойство не используется в дизайнере
+        /// Р‘Р°Р·РѕРІРѕРµ СЃРІРѕР№СЃС‚РІРѕ РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РІ РґРёР·Р°Р№РЅРµСЂРµ
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Bindable(false)]
@@ -503,7 +483,7 @@ namespace SharpLib.WinForms.Controls
 
         #endregion
 
-        #region Конструктор
+        #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
         /// <summary>
         /// Initializes a new instance of a HexBox class.
@@ -557,8 +537,8 @@ namespace SharpLib.WinForms.Controls
 
             if (DesignHelper.IsDesigntime)
             {
-                // В режиме дизайнера отображение небольшого блока данных для 
-                // удобной визуального настройки внешнего вида
+                // Р’ СЂРµР¶РёРјРµ РґРёР·Р°Р№РЅРµСЂР° РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ РЅРµР±РѕР»СЊС€РѕРіРѕ Р±Р»РѕРєР° РґР°РЅРЅС‹С… РґР»СЏ 
+                // СѓРґРѕР±РЅРѕР№ РІРёР·СѓР°Р»СЊРЅРѕРіРѕ РЅР°СЃС‚СЂРѕР№РєРё РІРЅРµС€РЅРµРіРѕ РІРёРґР°
                 var bytes = Rand.GetBuffer(300);
                 var provider = new HexBoxBufferDataSource(bytes);
                 DataSource = provider;
@@ -567,7 +547,7 @@ namespace SharpLib.WinForms.Controls
 
         #endregion
 
-        #region Методы
+        #region РњРµС‚РѕРґС‹
 
         private void ReleaseSelection()
         {
@@ -786,7 +766,7 @@ namespace SharpLib.WinForms.Controls
                 UpdateCaret();
                 Invalidate();
             }
-            else if (_recStringView.Contains(p))
+            else if (_recAscii.Contains(p))
             {
                 BytePositionInfo bpi = GetStringBytePositionInfo(p);
                 long pos = bpi.Index;
@@ -831,8 +811,8 @@ namespace SharpLib.WinForms.Controls
 
         private BytePositionInfo GetStringBytePositionInfo(Point p)
         {
-            float x = ((p.X - _recStringView.X) / _charSize.Width);
-            float y = ((p.Y - _recStringView.Y) / _charSize.Height);
+            float x = ((p.X - _recAscii.X) / _charSize.Width);
+            float y = ((p.Y - _recAscii.Y) / _charSize.Height);
             int iX = (int)x;
             int iY = (int)y;
 
@@ -1216,7 +1196,7 @@ namespace SharpLib.WinForms.Controls
             DataObject da = new DataObject();
 
             // set string buffer clipbard data
-            string hexString = ConvertBytesToHex(buffer);
+            string hexString = buffer.ToAsciiEx();
             da.SetData(typeof(string), hexString);
 
             //set memorystream (BinaryData) clipboard data
@@ -1242,7 +1222,7 @@ namespace SharpLib.WinForms.Controls
         }
 
         /// <summary>
-        /// Расчет диапазона видимости
+        /// Р Р°СЃС‡РµС‚ РґРёР°РїР°Р·РѕРЅР° РІРёРґРёРјРѕСЃС‚Рё
         /// </summary>
         private void UpdateVisibilityBytes()
         {
@@ -1256,11 +1236,11 @@ namespace SharpLib.WinForms.Controls
         }
 
         /// <summary>
-        /// Перерасчет размеров области рисования
+        /// РџРµСЂРµСЂР°СЃС‡РµС‚ СЂР°Р·РјРµСЂРѕРІ РѕР±Р»Р°СЃС‚Рё СЂРёСЃРѕРІР°РЅРёСЏ
         /// </summary>
         private void UpdateRectanglePositioning()
         {
-            // Расчет размера символа
+            // Р Р°СЃС‡РµС‚ СЂР°Р·РјРµСЂР° СЃРёРјРІРѕР»Р°
             SizeF charSize;
             using (CreateGraphics())
             {
@@ -1270,7 +1250,7 @@ namespace SharpLib.WinForms.Controls
 
             int requiredWidth = 0;
 
-            // Расчет границ контента
+            // Р Р°СЃС‡РµС‚ РіСЂР°РЅРёС† РєРѕРЅС‚РµРЅС‚Р°
             _recContent = ClientRectangle;
             _recContent.X += _borderInfo.Left;
             _recContent.Y += _borderInfo.Top;
@@ -1288,39 +1268,39 @@ namespace SharpLib.WinForms.Controls
 
             int marginLeft = 4;
 
-            // calc line info bounds
+            // Р Р°СЃС‡РµС‚ СЂР°Р·РјРµСЂРѕРІ СЂРµРіРёРѕРЅР° РєРѕР»РѕРЅРєРё Р°РґСЂРµСЃР°
             if (_columnAddrVisible)
             {
-                _recLineInfo = new Rectangle(_recContent.X + marginLeft,
+                _recColumnAddr = new Rectangle(_recContent.X + marginLeft,
                     _recContent.Y,
-                    (int)(_charSize.Width * 10),
+                    (int)(_charSize.Width * ADDR_SIZE + SIZE_BETWEEN_ADDR_AND_HEX),
                     _recContent.Height);
-                requiredWidth += _recLineInfo.Width;
+                requiredWidth += _recColumnAddr.Width;
             }
             else
             {
-                _recLineInfo = Rectangle.Empty;
-                _recLineInfo.X = marginLeft;
+                _recColumnAddr = Rectangle.Empty;
+                _recColumnAddr.X = marginLeft;
                 requiredWidth += marginLeft;
             }
 
-            // calc line info bounds
-            _recColumnInfo = new Rectangle(_recLineInfo.X + _recLineInfo.Width, _recContent.Y, _recContent.Width - _recLineInfo.Width, (int)charSize.Height + 4);
+            // Р Р°СЃС‡РµС‚ СЂР°Р·РјРµСЂР° Header (РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ СЃРјРµС‰РµРЅРёР№)
+            _recHeader = new Rectangle(_recColumnAddr.X + _recColumnAddr.Width, _recContent.Y, _recContent.Width - _recColumnAddr.Width, (int)charSize.Height + 4);
             if (_headerOffsetVisible)
             {
-                _recLineInfo.Y += (int)charSize.Height + 4;
-                _recLineInfo.Height -= (int)charSize.Height + 4;
+                _recColumnAddr.Y += (int)charSize.Height + 4;
+                _recColumnAddr.Height -= (int)charSize.Height + 4;
             }
             else
             {
-                _recColumnInfo.Height = 0;
+                _recHeader.Height = 0;
             }
 
-            // calc hex bounds and grid
-            _recHex = new Rectangle(_recLineInfo.X + _recLineInfo.Width,
-                _recLineInfo.Y,
-                _recContent.Width - _recLineInfo.Width,
-                _recContent.Height - _recColumnInfo.Height);
+            // Р Р°СЃС‡РµС‚ СЂР°Р·РјРµСЂР° РѕР±Р»Р°СЃС‚Рё Hex
+            _recHex = new Rectangle(_recColumnAddr.X + _recColumnAddr.Width,
+                _recColumnAddr.Y,
+                _recContent.Width - _recColumnAddr.Width,
+                _recContent.Height - _recHeader.Height);
 
             if (UseFixedBytesPerLine)
             {
@@ -1360,15 +1340,16 @@ namespace SharpLib.WinForms.Controls
 
             if (_columnAsciiVisible)
             {
-                _recStringView = new Rectangle(_recHex.X + _recHex.Width,
+                _recAscii = new Rectangle(
+                    _recHex.X + _recHex.Width,
                     _recHex.Y,
                     (int)(_charSize.Width * _iHexMaxHBytes),
                     _recHex.Height);
-                requiredWidth += _recStringView.Width;
+                requiredWidth += _recAscii.Width;
             }
             else
             {
-                _recStringView = Rectangle.Empty;
+                _recAscii = Rectangle.Empty;
             }
 
             RequiredWidth = requiredWidth;
@@ -1396,19 +1377,19 @@ namespace SharpLib.WinForms.Controls
             return new PointF(x, y);
         }
 
-        private PointF GetColumnInfoPointF(int col)
+        private PointF GetHeaderPointF(int col)
         {
             Point gp = GetGridBytePoint(col);
-            float x = (3 * _charSize.Width) * gp.X + _recColumnInfo.X;
-            float y = _recColumnInfo.Y;
+            float x = (3 * _charSize.Width) * gp.X + _recHeader.X;
+            float y = _recHeader.Y;
 
             return new PointF(x, y);
         }
 
-        private PointF GetByteStringPointF(Point gp)
+        private PointF GetAsciiPointF(Point gp)
         {
-            float x = (_charSize.Width) * gp.X + _recStringView.X;
-            float y = (gp.Y + 1) * _charSize.Height - _charSize.Height + _recStringView.Y;
+            float x = (_charSize.Width) * gp.X + _recAscii.X;
+            float y = (gp.Y + 1) * _charSize.Height - _charSize.Height + _recAscii.Y;
 
             return new PointF(x, y);
         }
@@ -1420,43 +1401,6 @@ namespace SharpLib.WinForms.Controls
 
             Point res = new Point(column, row);
             return res;
-        }
-
-        /// <summary>
-        /// Converts a byte array to a hex string. For example: {10,11} = "0A 0B"
-        /// </summary>
-        /// <param name="data">the byte array</param>
-        /// <returns>the hex string</returns>
-        private string ConvertBytesToHex(IEnumerable<byte> data)
-        {
-            var sb = new StringBuilder();
-            foreach (byte b in data)
-            {
-                string hex = ConvertByteToHex(b);
-                sb.Append(hex);
-                sb.Append(" ");
-            }
-            if (sb.Length > 0)
-            {
-                sb.Remove(sb.Length - 1, 1);
-            }
-            string result = sb.ToString();
-            return result;
-        }
-
-        /// <summary>
-        /// Converts the byte to a hex string. For example: "10" = "0A";
-        /// </summary>
-        /// <param name="b">the byte to format</param>
-        /// <returns>the hex string</returns>
-        private string ConvertByteToHex(byte b)
-        {
-            string sB = b.ToString(_hexStringFormat, System.Threading.Thread.CurrentThread.CurrentCulture);
-            if (sB.Length == 1)
-            {
-                sB = "0" + sB;
-            }
-            return sB;
         }
 
         /// <summary>
@@ -1571,7 +1515,7 @@ namespace SharpLib.WinForms.Controls
 
         #endregion
 
-        #region Вложенный класс: EmptyKeyInterpreter
+        #region Р’Р»РѕР¶РµРЅРЅС‹Р№ РєР»Р°СЃСЃ: EmptyKeyInterpreter
 
         /// <summary>
         /// Represents an empty input handler without any functionality.
@@ -1579,13 +1523,13 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         private class EmptyKeyInterpreter : IKeyInterpreter
         {
-            #region Поля
+            #region РџРѕР»СЏ
 
             private readonly HexBox _hexBox;
 
             #endregion
 
-            #region Конструктор
+            #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
             public EmptyKeyInterpreter(HexBox hexBox)
             {
@@ -1594,7 +1538,7 @@ namespace SharpLib.WinForms.Controls
 
             #endregion
 
-            #region Методы
+            #region РњРµС‚РѕРґС‹
 
             public void Activate()
             {
@@ -1629,14 +1573,14 @@ namespace SharpLib.WinForms.Controls
 
         #endregion
 
-        #region Вложенный класс: IKeyInterpreter
+        #region Р’Р»РѕР¶РµРЅРЅС‹Р№ РєР»Р°СЃСЃ: IKeyInterpreter
 
         /// <summary>
         /// Defines a user input handler such as for mouse and keyboard input
         /// </summary>
         private interface IKeyInterpreter
         {
-            #region Методы
+            #region РњРµС‚РѕРґС‹
 
             /// <summary>
             /// Activates mouse events
@@ -1681,14 +1625,14 @@ namespace SharpLib.WinForms.Controls
 
         #endregion
 
-        #region Вложенный класс: KeyInterpreter
+        #region Р’Р»РѕР¶РµРЅРЅС‹Р№ РєР»Р°СЃСЃ: KeyInterpreter
 
         /// <summary>
         /// Handles user input such as mouse and keyboard input during hex view edit
         /// </summary>
         private class KeyInterpreter : IKeyInterpreter
         {
-            #region Делегаты
+            #region Р”РµР»РµРіР°С‚С‹
 
             /// <summary>
             /// Delegate for key-down processing.
@@ -1699,7 +1643,7 @@ namespace SharpLib.WinForms.Controls
 
             #endregion
 
-            #region Поля
+            #region РџРѕР»СЏ
 
             /// <summary>
             /// Contains the parent HexBox control
@@ -1733,7 +1677,7 @@ namespace SharpLib.WinForms.Controls
 
             #endregion
 
-            #region Свойства
+            #region РЎРІРѕР№СЃС‚РІР°
 
             private Dictionary<Keys, MessageDelegate> MessageHandlers
             {
@@ -1768,7 +1712,7 @@ namespace SharpLib.WinForms.Controls
 
             #endregion
 
-            #region Конструктор
+            #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
             public KeyInterpreter(HexBox hexBox)
             {
@@ -1777,7 +1721,7 @@ namespace SharpLib.WinForms.Controls
 
             #endregion
 
-            #region Методы
+            #region РњРµС‚РѕРґС‹
 
             public virtual void Activate()
             {
@@ -2631,14 +2575,14 @@ namespace SharpLib.WinForms.Controls
 
         #endregion
 
-        #region Вложенный класс: StringKeyInterpreter
+        #region Р’Р»РѕР¶РµРЅРЅС‹Р№ РєР»Р°СЃСЃ: StringKeyInterpreter
 
         /// <summary>
         /// Handles user input such as mouse and keyboard input during string view edit
         /// </summary>
         private class StringKeyInterpreter : KeyInterpreter
         {
-            #region Конструктор
+            #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 
             public StringKeyInterpreter(HexBox hexBox)
                 : base(hexBox)
@@ -2648,7 +2592,7 @@ namespace SharpLib.WinForms.Controls
 
             #endregion
 
-            #region Методы
+            #region РњРµС‚РѕРґС‹
 
             public override bool PreProcessWmKeyDown(ref Message m)
             {
@@ -2758,7 +2702,7 @@ namespace SharpLib.WinForms.Controls
             public override PointF GetCaretPointF(long byteIndex)
             {
                 Point gp = _hexBox.GetGridBytePoint(byteIndex);
-                return _hexBox.GetByteStringPointF(gp);
+                return _hexBox.GetAsciiPointF(gp);
             }
 
             protected override BytePositionInfo GetBytePositionInfo(Point p)

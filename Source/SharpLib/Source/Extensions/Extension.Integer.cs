@@ -18,7 +18,7 @@ namespace SharpLib
             {
                 return value.ToString(CultureInfo.InvariantCulture);
             }
-            return String.Format("0x{0:X2}", value);
+            return String.Format("{0:X2}", value);
         }
 
         public static string ToStringEx(this UInt16 value, int radix = 10)
@@ -27,7 +27,7 @@ namespace SharpLib
             {
                 return value.ToString(CultureInfo.InvariantCulture);
             }
-            return String.Format("0x{0:X4}", value);
+            return String.Format("{0:X4}", value);
         }
 
         public static string ToStringEx(this UInt32 value, int radix = 10)
@@ -36,7 +36,7 @@ namespace SharpLib
             {
                 return value.ToString(CultureInfo.InvariantCulture);
             }
-            return String.Format("0x{0:X8}", value);
+            return String.Format("{0:X8}", value);
         }
 
         public static string ToStringEx(this UInt64 value, int radix = 10)
@@ -46,7 +46,7 @@ namespace SharpLib
                 return value.ToString(CultureInfo.InvariantCulture);
             }
 
-            return String.Format("0x{0:X16}", value);
+            return String.Format("{0:X16}", value);
         }
 
         public static byte[] ToBufferEx(this Byte value)
