@@ -8,7 +8,11 @@ namespace SharpLib.Native.Windows
     [SuppressUnmanagedCodeSecurity]
     public partial class NativeMethods
     {
+        #region Константы
+
         private const string DLLNAME_USER32 = "user32.dll";
+
+        #endregion
 
         #region Методы
 
@@ -106,6 +110,18 @@ namespace SharpLib.Native.Windows
 
         [DllImport(DLLNAME_USER32, CallingConvention = CallingConvention.StdCall, SetLastError = true), SuppressUnmanagedCodeSecurity]
         public static extern bool ReleaseDC(IntPtr windowHandle, IntPtr deviceContext);
+
+        [DllImport(DLLNAME_USER32, SetLastError = true)]
+        public static extern bool CreateCaret(IntPtr hWnd, IntPtr hBitmap, int nWidth, int nHeight);
+
+        [DllImport(DLLNAME_USER32, SetLastError = true)]
+        public static extern bool ShowCaret(IntPtr hWnd);
+
+        [DllImport(DLLNAME_USER32, SetLastError = true)]
+        public static extern bool DestroyCaret();
+
+        [DllImport(DLLNAME_USER32, SetLastError = true)]
+        public static extern bool SetCaretPos(int x, int y);
 
         #endregion
     }

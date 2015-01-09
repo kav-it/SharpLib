@@ -2,36 +2,43 @@ using System;
 
 namespace SharpLib.WinForms.Controls
 {
+    /// <summary>
+    /// Блок данных = Файл
+    /// </summary>
     internal sealed class FileDataBlock : DataBlock
     {
-        long _length;
-        long _fileOffset;
+        #region Поля
 
-        public FileDataBlock(long fileOffset, long length)
-        {
-            _fileOffset = fileOffset;
-            _length = length;
-        }
+        private long _length;
 
-        public long FileOffset
-        {
-            get
-            {
-                return _fileOffset;
-            }
-        }
+        #endregion
+
+        #region Свойства
+
+        public long FileOffset { get; private set; }
 
         public override long Length
         {
-            get
-            {
-                return _length;
-            }
+            get { return _length; }
         }
+
+        #endregion
+
+        #region Конструктор
+
+        public FileDataBlock(long fileOffset, long length)
+        {
+            FileOffset = fileOffset;
+            _length = length;
+        }
+
+        #endregion
+
+        #region Методы
 
         public void SetFileOffset(long value)
         {
-            _fileOffset = value;
+            FileOffset = value;
         }
 
         public void RemoveBytesFromEnd(long count)
@@ -51,7 +58,7 @@ namespace SharpLib.WinForms.Controls
                 throw new ArgumentOutOfRangeException("count");
             }
 
-            _fileOffset += count;
+            FileOffset += count;
             _length -= count;
         }
 
@@ -68,14 +75,14 @@ namespace SharpLib.WinForms.Controls
             }
 
             long prefixLength = position;
-            long prefixFileOffset = _fileOffset;
+            long prefixFileOffset = FileOffset;
 
             long suffixLength = _length - count - prefixLength;
-            long suffixFileOffset = _fileOffset + position + count;
+            long suffixFileOffset = FileOffset + position + count;
 
             if (prefixLength > 0 && suffixLength > 0)
             {
-                _fileOffset = prefixFileOffset;
+                FileOffset = prefixFileOffset;
                 _length = prefixLength;
                 _map.AddAfter(this, new FileDataBlock(suffixFileOffset, suffixLength));
                 return;
@@ -83,14 +90,16 @@ namespace SharpLib.WinForms.Controls
 
             if (prefixLength > 0)
             {
-                _fileOffset = prefixFileOffset;
+                FileOffset = prefixFileOffset;
                 _length = prefixLength;
             }
             else
             {
-                _fileOffset = suffixFileOffset;
+                FileOffset = suffixFileOffset;
                 _length = suffixLength;
             }
         }
+
+        #endregion
     }
 }

@@ -1,22 +1,41 @@
 using System;
 using System.Collections;
-using System.Text;
 
 namespace SharpLib.WinForms.Controls
 {
-    internal class DataMap : ICollection, IEnumerable
+    internal class DataMap : ICollection
     {
-        readonly object _syncRoot = new object();
-        internal int _count;
-        internal DataBlock _firstBlock;
+        #region Поля
+
         internal int _version;
+
+        #endregion
+
+        #region Свойства
+
+        public DataBlock FirstBlock { get; internal set; }
+
+        public int Count { get; internal set; }
+
+        public bool IsSynchronized
+        {
+            get { return false; }
+        }
+
+        public object SyncRoot { get; private set; }
+
+        #endregion
+
+        #region Конструктор
 
         public DataMap()
         {
+            SyncRoot = new object();
         }
 
         public DataMap(IEnumerable collection)
         {
+            SyncRoot = new object();
             if (collection == null)
             {
                 throw new ArgumentNullException("collection");
@@ -28,13 +47,9 @@ namespace SharpLib.WinForms.Controls
             }
         }
 
-        public DataBlock FirstBlock
-        {
-            get
-            {
-                return _firstBlock;
-            }
-        }
+        #endregion
+
+        #region Методы
 
         public void AddAfter(DataBlock block, DataBlock newBlock)
         {
@@ -48,19 +63,19 @@ namespace SharpLib.WinForms.Controls
 
         public void AddFirst(DataBlock block)
         {
-            if (_firstBlock == null)
+            if (FirstBlock == null)
             {
                 AddBlockToEmptyMap(block);
             }
             else
             {
-                AddBeforeInternal(_firstBlock, block);
+                AddBeforeInternal(FirstBlock, block);
             }
         }
 
         public void AddLast(DataBlock block)
         {
-            if (_firstBlock == null)
+            if (FirstBlock == null)
             {
                 AddBlockToEmptyMap(block);
             }
@@ -77,28 +92,28 @@ namespace SharpLib.WinForms.Controls
 
         public void RemoveFirst()
         {
-            if (_firstBlock == null)
+            if (FirstBlock == null)
             {
                 throw new InvalidOperationException("The collection is empty.");
             }
-            RemoveInternal(_firstBlock);
+            RemoveInternal(FirstBlock);
         }
 
         public void RemoveLast()
         {
-            if (_firstBlock == null)
+            if (FirstBlock == null)
             {
                 throw new InvalidOperationException("The collection is empty.");
             }
             RemoveInternal(GetLastBlock());
-		}
+        }
 
-		public DataBlock Replace(DataBlock block, DataBlock newBlock)
-		{
-			AddAfterInternal(block, newBlock);
-			RemoveInternal(block);
-			return newBlock;
-		}
+        public DataBlock Replace(DataBlock block, DataBlock newBlock)
+        {
+            AddAfterInternal(block, newBlock);
+            RemoveInternal(block);
+            return newBlock;
+        }
 
         public void Clear()
         {
@@ -109,12 +124,12 @@ namespace SharpLib.WinForms.Controls
                 InvalidateBlock(block);
                 block = nextBlock;
             }
-            _firstBlock = null;
-            _count = 0;
+            FirstBlock = null;
+            Count = 0;
             _version++;
         }
 
-        void AddAfterInternal(DataBlock block, DataBlock newBlock)
+        private void AddAfterInternal(DataBlock block, DataBlock newBlock)
         {
             newBlock._previousBlock = block;
             newBlock._nextBlock = block._nextBlock;
@@ -126,11 +141,11 @@ namespace SharpLib.WinForms.Controls
             }
             block._nextBlock = newBlock;
 
-            this._version++;
-            this._count++;
+            _version++;
+            Count++;
         }
 
-        void AddBeforeInternal(DataBlock block, DataBlock newBlock)
+        private void AddBeforeInternal(DataBlock block, DataBlock newBlock)
         {
             newBlock._nextBlock = block;
             newBlock._previousBlock = block._previousBlock;
@@ -142,15 +157,15 @@ namespace SharpLib.WinForms.Controls
             }
             block._previousBlock = newBlock;
 
-            if (_firstBlock == block)
+            if (FirstBlock == block)
             {
-                _firstBlock = newBlock;
+                FirstBlock = newBlock;
             }
-            this._version++;
-            this._count++;
+            _version++;
+            Count++;
         }
 
-        void RemoveInternal(DataBlock block)
+        private void RemoveInternal(DataBlock block)
         {
             DataBlock previousBlock = block._previousBlock;
             DataBlock nextBlock = block._nextBlock;
@@ -165,18 +180,18 @@ namespace SharpLib.WinForms.Controls
                 nextBlock._previousBlock = previousBlock;
             }
 
-            if (_firstBlock == block)
+            if (FirstBlock == block)
             {
-                _firstBlock = nextBlock;
+                FirstBlock = nextBlock;
             }
 
             InvalidateBlock(block);
 
-            _count--;
+            Count--;
             _version++;
         }
 
-        DataBlock GetLastBlock()
+        private DataBlock GetLastBlock()
         {
             DataBlock lastBlock = null;
             for (DataBlock block = FirstBlock; block != null; block = block.NextBlock)
@@ -186,25 +201,24 @@ namespace SharpLib.WinForms.Controls
             return lastBlock;
         }
 
-        void InvalidateBlock(DataBlock block)
+        private void InvalidateBlock(DataBlock block)
         {
             block._map = null;
             block._nextBlock = null;
             block._previousBlock = null;
         }
 
-        void AddBlockToEmptyMap(DataBlock block)
+        private void AddBlockToEmptyMap(DataBlock block)
         {
             block._map = this;
             block._nextBlock = null;
             block._previousBlock = null;
 
-            _firstBlock = block;
+            FirstBlock = block;
             _version++;
-            _count++;
+            Count++;
         }
 
-        #region ICollection Members
         public void CopyTo(Array array, int index)
         {
             DataBlock[] blockArray = array as DataBlock[];
@@ -214,53 +228,30 @@ namespace SharpLib.WinForms.Controls
             }
         }
 
-        public int Count
-        {
-            get
-            {
-                return _count;
-            }
-        }
-
-        public bool IsSynchronized
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        public object SyncRoot
-        {
-            get
-            {
-                return _syncRoot;
-            }
-        }
-        #endregion
-
-        #region IEnumerable Members
         public IEnumerator GetEnumerator()
         {
             return new Enumerator(this);
         }
+
         #endregion
 
-        #region Enumerator Nested Type
+        #region Вложенный класс: Enumerator
+
         internal class Enumerator : IEnumerator, IDisposable
         {
-            DataMap _map;
-            DataBlock _current;
-            int _index;
-            int _version;
+            #region Поля
 
-            internal Enumerator(DataMap map)
-            {
-                _map = map;
-                _version = map._version;
-                _current = null;
-                _index = -1;
-            }
+            private readonly DataMap _map;
+
+            private readonly int _version;
+
+            private DataBlock _current;
+
+            private int _index;
+
+            #endregion
+
+            #region Свойства
 
             object IEnumerator.Current
             {
@@ -274,9 +265,25 @@ namespace SharpLib.WinForms.Controls
                 }
             }
 
+            #endregion
+
+            #region Конструктор
+
+            internal Enumerator(DataMap map)
+            {
+                _map = map;
+                _version = map._version;
+                _current = null;
+                _index = -1;
+            }
+
+            #endregion
+
+            #region Методы
+
             public bool MoveNext()
             {
-                if (this._version != _map._version)
+                if (_version != _map._version)
                 {
                     throw new InvalidOperationException("Collection was modified after the enumerator was instantiated.");
                 }
@@ -300,19 +307,22 @@ namespace SharpLib.WinForms.Controls
 
             void IEnumerator.Reset()
             {
-                if (this._version != this._map._version)
+                if (_version != _map._version)
                 {
                     throw new InvalidOperationException("Collection was modified after the enumerator was instantiated.");
                 }
 
-                this._index = -1;
-                this._current = null;
+                _index = -1;
+                _current = null;
             }
 
             public void Dispose()
             {
             }
+
+            #endregion
         }
+
         #endregion
     }
 }

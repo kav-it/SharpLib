@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SharpLib">
+      <HintPath>..\..\SharpLib\bin\Debug\SharpLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -59,6 +62,10 @@
     <ProjectReference Include="..\..\SharpLib.Native\SharpLib.Native.csproj">
       <Project>{e9a3f6e0-d63a-4297-a59b-7e1357b443cc}</Project>
       <Name>SharpLib.Native</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SharpLib.WinForms\SharpLib.WinForms.csproj">
+      <Project>{342F03E6-7C91-4058-B749-0BF82821DA48}</Project>
+      <Name>SharpLib.WinForms</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

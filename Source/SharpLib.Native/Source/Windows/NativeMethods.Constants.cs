@@ -216,6 +216,12 @@ namespace SharpLib.Native.Windows
 
         public const UInt32 WAIT_TIMEOUT = 0x00000102;
 
+        public const int WM_CHAR = 0x102;
+
+        public const int WM_KEYDOWN = 0x100;
+
+        public const int WM_KEYUP = 0x101;
+
         #endregion
     }
 }

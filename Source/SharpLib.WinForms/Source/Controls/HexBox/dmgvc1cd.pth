@@ -18,9 +18,26 @@ namespace SharpLib.WinForms.Controls
         #region Константы
 
         /// <summary>
+        /// Количество байт в строке
+        /// </summary>
+        private const int BYTE_PES_LINE = 16;
+
+        /// <summary>
+        /// Цвет элемента Disable
+        /// </summary>
+        private const string DISABLE_COLOR_NAME = "WhiteSmoke";
+
+        /// <summary>
         /// Contains the thumptrack delay for scrolling in milliseconds.
         /// </summary>
         private const int THUMB_TRACK_DELAY = 50;
+
+        /// <summary>
+        /// Количество байт в группе
+        /// </summary>
+        private const int GROUP_SIZE = 4;
+
+        private const string CATEGORY_NAME = "SharpLib";
 
         #endregion
 
@@ -39,7 +56,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Contains a timer for thumbtrack scrolling
         /// </summary>
-        private readonly Timer _thumbTrackTimer;
+        private readonly Timer _thumbTrackTimer = new Timer();
 
         /// <summary>
         /// Contains a vertical scroll
@@ -51,7 +68,7 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         private bool _abortFind;
 
-        private BorderStyle _borderStyle;
+        private BorderStyle _borderStyle = BorderStyle.Fixed3D;
 
         private IByteCharConverter _byteCharConverter;
 
@@ -68,11 +85,11 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Contains the current byte position
         /// </summary>
-        private long _bytePos;
+        private long _bytePos = -1;
 
         private IByteProvider _byteProvider;
 
-        private int _bytesPerLine;
+        private int _bytesPerLine = BYTE_PES_LINE;
 
         /// <summary>
         /// Contains True if caret is visible
@@ -81,7 +98,7 @@ namespace SharpLib.WinForms.Controls
 
         private SizeF _charSize;
 
-        private bool _headerOffsetVisible;
+        private bool _columnInfoVisible;
 
         private long _currentLine;
 
@@ -104,12 +121,12 @@ namespace SharpLib.WinForms.Controls
 
         private bool _groupSeparatorVisible;
 
-        private int _groupSize;
+        private int _groupSize = GROUP_SIZE;
 
         /// <summary>
         /// Contains string format information for hex values
         /// </summary>
-        private string _hexStringFormat;
+        private string _hexStringFormat = "X";
 
         /// <summary>
         /// Contains the maximum of visible bytes.
@@ -126,7 +143,7 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         private int _iHexMaxVBytes;
 
-        private Color _infoForeColor;
+        private Color _infoForeColor = Color.Gray;
 
         /// <summary>
         /// Contains a state value about Insert or Write mode. When this value is true and the ByteProvider SupportsInsert is true
@@ -151,29 +168,29 @@ namespace SharpLib.WinForms.Controls
 
         private long _lineInfoOffset;
 
-        private bool _columnAddrVisible;
+        private bool _lineInfoVisible;
 
         private bool _readOnly;
 
         /// <summary>
         /// Contains the border bottom shift
         /// </summary>
-        private int _recBorderBottom;
+        private int _recBorderBottom = SystemInformation.Border3DSize.Height;
 
         /// <summary>
         /// Contains the borderґs left shift
         /// </summary>
-        private int _recBorderLeft;
+        private int _recBorderLeft = SystemInformation.Border3DSize.Width;
 
         /// <summary>
         /// Contains the borderґs right shift
         /// </summary>
-        private int _recBorderRight;
+        private int _recBorderRight = SystemInformation.Border3DSize.Width;
 
         /// <summary>
         /// Contains the borderґs top shift
         /// </summary>
-        private int _recBorderTop;
+        private int _recBorderTop = SystemInformation.Border3DSize.Height;
 
         /// <summary>
         /// Contains the column info header rectangle bounds
@@ -217,15 +234,15 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         private long _scrollVpos;
 
-        private Color _selectionBackColor;
+        private Color _selectionBackColor = Color.Blue;
 
-        private Color _selectionForeColor;
+        private Color _selectionForeColor = Color.White;
 
         private long _selectionLength;
 
-        private Color _shadowSelectionColor;
+        private Color _shadowSelectionColor = Color.FromArgb(100, 60, 188, 255);
 
-        private bool _shadowSelectionVisible;
+        private bool _shadowSelectionVisible = true;
 
         /// <summary>
         /// Contains the string key interpreter
@@ -237,7 +254,7 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         private long _startByte;
 
-        private bool _columnAsciiVisible;
+        private bool _stringViewVisible;
 
         /// <summary>
         /// Contains the thumbtrack scrolling position
@@ -288,7 +305,9 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Базовое свойство Text не используется в дизайнере
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [Bindable(false)]
         public override string Text
         {
@@ -299,12 +318,144 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Базовое свойство не используется в дизайнере
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [Bindable(false)]
         public override RightToLeft RightToLeft
         {
             get { return base.RightToLeft; }
             set { base.RightToLeft = value; }
+        }
+
+        /// <summary>
+        /// Цвет фона, когда элемент Disable
+        /// </summary>
+        [Category(CATEGORY_NAME), Description("Цвет фона, когда элемент Disable")]
+        [DefaultValue(typeof(Color), DISABLE_COLOR_NAME)]
+        public Color BackColorDisabled { get; set; }
+
+        /// <summary>
+        /// .....
+        /// </summary>
+        [Category(CATEGORY_NAME), Description(".....")]
+        [DefaultValue(false)]
+        public bool ReadOnly
+        {
+            get { return _readOnly; }
+            set
+            {
+                if (_readOnly == value)
+                {
+                    return;
+                }
+
+                _readOnly = value;
+                OnReadOnlyChanged(EventArgs.Empty);
+                Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Количество байт в одной строке
+        /// </summary>
+        [Category(CATEGORY_NAME), Description("Количество байт в одной строке")]
+        [DefaultValue(BYTE_PES_LINE)]
+        public int BytesPerLine
+        {
+            get { return _bytesPerLine; }
+            set
+            {
+                if (_bytesPerLine == value)
+                {
+                    return;
+                }
+
+                _bytesPerLine = value;
+                OnBytesPerLineChanged(EventArgs.Empty);
+
+                UpdateRectanglePositioning();
+                Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Количество байт в группе (используется если GroupSeparatorVisible = true)
+        /// </summary>
+        [Category(CATEGORY_NAME), Description("Количество байт в одной строке")]
+        [DefaultValue(GROUP_SIZE)]
+        public int GroupSize
+        {
+            get { return _groupSize; }
+            set
+            {
+                if (_groupSize == value)
+                {
+                    return;
+                }
+
+                _groupSize = value;
+                OnGroupSizeChanged(EventArgs.Empty);
+
+                UpdateRectanglePositioning();
+                Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// true: Количество байт в одной строке фиксировано
+        /// </summary>
+        [Category(CATEGORY_NAME), Description("true: Количество байт в одной строке фиксировано")]
+        [DefaultValue(false)]
+        public bool UseFixedBytesPerLine
+        {
+            get { return _useFixedBytesPerLine; }
+            set
+            {
+                if (_useFixedBytesPerLine == value)
+                {
+                    return;
+                }
+
+                _useFixedBytesPerLine = value;
+                OnUseFixedBytesPerLineChanged(EventArgs.Empty);
+
+                UpdateRectanglePositioning();
+                Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// true: Отображение вертикального ScrollBar
+        /// </summary>
+        [Category("SharpLib"), Description("true: Отображение вертикального ScrollBar")]
+        [DefaultValue(false)]
+        public bool VScrollBarVisible
+        {
+            get { return _vScrollBarVisible; }
+            set
+            {
+                if (_vScrollBarVisible == value)
+                {
+                    return;
+                }
+
+                _vScrollBarVisible = value;
+
+                if (_vScrollBarVisible)
+                {
+                    Controls.Add(_vScrollBar);
+                }
+                else
+                {
+                    Controls.Remove(_vScrollBar);
+                }
+
+                UpdateRectanglePositioning();
+                UpdateScrollSize();
+
+                OnVScrollBarVisibleChanged(EventArgs.Empty);
+            }
         }
 
         /// <summary>
@@ -379,6 +530,179 @@ namespace SharpLib.WinForms.Controls
         }
 
         /// <summary>
+        /// Gets or sets the visibility of the group separator.
+        /// </summary>
+        [DefaultValue(false), Category("Hex"), Description("Gets or sets the visibility of a separator vertical line.")]
+        public bool GroupSeparatorVisible
+        {
+            get { return _groupSeparatorVisible; }
+            set
+            {
+                if (_groupSeparatorVisible == value)
+                {
+                    return;
+                }
+
+                _groupSeparatorVisible = value;
+                OnGroupSeparatorVisibleChanged(EventArgs.Empty);
+
+                UpdateRectanglePositioning();
+                Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the visibility of the column info
+        /// </summary>
+        [DefaultValue(false), Category("Hex"), Description("Gets or sets the visibility of header row.")]
+        public bool ColumnInfoVisible
+        {
+            get { return _columnInfoVisible; }
+            set
+            {
+                if (_columnInfoVisible == value)
+                {
+                    return;
+                }
+
+                _columnInfoVisible = value;
+                OnColumnInfoVisibleChanged(EventArgs.Empty);
+
+                UpdateRectanglePositioning();
+                Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the visibility of a line info.
+        /// </summary>
+        [DefaultValue(false), Category("Hex"), Description("Gets or sets the visibility of a line info.")]
+        public bool LineInfoVisible
+        {
+            get { return _lineInfoVisible; }
+            set
+            {
+                if (_lineInfoVisible == value)
+                {
+                    return;
+                }
+
+                _lineInfoVisible = value;
+                OnLineInfoVisibleChanged(EventArgs.Empty);
+
+                UpdateRectanglePositioning();
+                Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the offset of a line info.
+        /// </summary>
+        [DefaultValue((long)0), Category("Hex"), Description("Gets or sets the offset of the line info.")]
+        public long LineInfoOffset
+        {
+            get { return _lineInfoOffset; }
+            set
+            {
+                if (_lineInfoOffset == value)
+                {
+                    return;
+                }
+
+                _lineInfoOffset = value;
+
+                Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the hex boxґs border style.
+        /// </summary>
+        [DefaultValue(typeof(BorderStyle), "Fixed3D"), Category("Hex"), Description("Gets or sets the hex boxґs border style.")]
+        public BorderStyle BorderStyle
+        {
+            get { return _borderStyle; }
+            set
+            {
+                if (_borderStyle == value)
+                {
+                    return;
+                }
+
+                _borderStyle = value;
+                switch (_borderStyle)
+                {
+                    case BorderStyle.None:
+                        _recBorderLeft = _recBorderTop = _recBorderRight = _recBorderBottom = 0;
+                        break;
+                    case BorderStyle.Fixed3D:
+                        _recBorderLeft = _recBorderRight = SystemInformation.Border3DSize.Width;
+                        _recBorderTop = _recBorderBottom = SystemInformation.Border3DSize.Height;
+                        break;
+                    case BorderStyle.FixedSingle:
+                        _recBorderLeft = _recBorderTop = _recBorderRight = _recBorderBottom = 1;
+                        break;
+                }
+
+                UpdateRectanglePositioning();
+
+                OnBorderStyleChanged(EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the visibility of the string view.
+        /// </summary>
+        [DefaultValue(false), Category("Hex"), Description("Gets or sets the visibility of the string view.")]
+        public bool StringViewVisible
+        {
+            get { return _stringViewVisible; }
+            set
+            {
+                if (_stringViewVisible == value)
+                {
+                    return;
+                }
+
+                _stringViewVisible = value;
+                OnStringViewVisibleChanged(EventArgs.Empty);
+
+                UpdateRectanglePositioning();
+                Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets whether the HexBox control displays the hex characters in upper or lower case.
+        /// </summary>
+        [DefaultValue(typeof(HexCasing), "Upper"), Category("Hex"), Description("Gets or sets whether the HexBox control displays the hex characters in upper or lower case.")]
+        public HexCasing HexCasing
+        {
+            get
+            {
+                if (_hexStringFormat == "X")
+                {
+                    return HexCasing.Upper;
+                }
+                return HexCasing.Lower;
+            }
+            set
+            {
+                var format = value == HexCasing.Upper ? "X" : "x";
+
+                if (_hexStringFormat == format)
+                {
+                    return;
+                }
+
+                _hexStringFormat = format;
+                OnHexCasingChanged(EventArgs.Empty);
+
+                Invalidate();
+            }
+        }
+
+        /// <summary>
         /// Gets and sets the starting point of the bytes selected in the hex box.
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -409,9 +733,88 @@ namespace SharpLib.WinForms.Controls
         }
 
         /// <summary>
+        /// Gets or sets the info color used for column info and line info. When this property is null, then ForeColor property is
+        /// used.
+        /// </summary>
+        [DefaultValue(typeof(Color), "Gray"), Category("Hex"), Description("Gets or sets the line info color. When this property is null, then ForeColor property is used.")]
+        public Color InfoForeColor
+        {
+            get { return _infoForeColor; }
+            set
+            {
+                _infoForeColor = value;
+                Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the background color for the selected bytes.
+        /// </summary>
+        [DefaultValue(typeof(Color), "Blue"), Category("Hex"), Description("Gets or sets the background color for the selected bytes.")]
+        public Color SelectionBackColor
+        {
+            get { return _selectionBackColor; }
+            set
+            {
+                _selectionBackColor = value;
+                Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the foreground color for the selected bytes.
+        /// </summary>
+        [DefaultValue(typeof(Color), "White"), Category("Hex"), Description("Gets or sets the foreground color for the selected bytes.")]
+        public Color SelectionForeColor
+        {
+            get { return _selectionForeColor; }
+            set
+            {
+                _selectionForeColor = value;
+                Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the visibility of a shadow selection.
+        /// </summary>
+        [DefaultValue(true), Category("Hex"), Description("Gets or sets the visibility of a shadow selection.")]
+        public bool ShadowSelectionVisible
+        {
+            get { return _shadowSelectionVisible; }
+            set
+            {
+                if (_shadowSelectionVisible == value)
+                {
+                    return;
+                }
+                _shadowSelectionVisible = value;
+                Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the color of the shadow selection.
+        /// </summary>
+        /// <remarks>
+        /// A alpha component must be given!
+        /// Default alpha = 100
+        /// </remarks>
+        [Category("Hex"), Description("Gets or sets the color of the shadow selection.")]
+        public Color ShadowSelectionColor
+        {
+            get { return _shadowSelectionColor; }
+            set
+            {
+                _shadowSelectionColor = value;
+                Invalidate();
+            }
+        }
+
+        /// <summary>
         /// Contains the size of a single character in pixel
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SizeF CharSize
         {
             get { return _charSize; }
@@ -432,8 +835,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Gets the width required for the content
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [DefaultValue(0)]
+        [DefaultValue(0), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int RequiredWidth
         {
             get { return _requiredWidth; }
@@ -515,7 +917,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Gets or sets the built-in context menu.
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         internal HexBoxContextMenu BuiltInContextMenu
         {
             get { return _builtInContextMenu; }
@@ -541,6 +943,148 @@ namespace SharpLib.WinForms.Controls
 
         #endregion
 
+        #region События
+
+        /// <summary>
+        /// Occurs, when the value of BorderStyle property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of BorderStyle property has changed.")]
+        public event EventHandler BorderStyleChanged;
+
+        /// <summary>
+        /// Occurs, when the value of ByteProvider property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of ByteProvider property has changed.")]
+        public event EventHandler ByteProviderChanged;
+
+        /// <summary>
+        /// Occurs, when the value of BytesPerLine property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of BytesPerLine property has changed.")]
+        public event EventHandler BytesPerLineChanged;
+
+        /// <summary>
+        /// Occurs, when the CharSize property has changed
+        /// </summary>
+        [Description("Occurs, when the CharSize property has changed")]
+        public event EventHandler CharSizeChanged;
+
+        /// <summary>
+        /// Occurs, when the value of ColumnInfoVisibleChanged property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of ColumnInfoVisibleChanged property has changed.")]
+        public event EventHandler ColumnInfoVisibleChanged;
+
+        /// <summary>
+        /// Occurs, when Copy method was invoked and ClipBoardData changed.
+        /// </summary>
+        [Description("Occurs, when Copy method was invoked and ClipBoardData changed.")]
+        public event EventHandler Copied;
+
+        /// <summary>
+        /// Occurs, when CopyHex method was invoked and ClipBoardData changed.
+        /// </summary>
+        [Description("Occurs, when CopyHex method was invoked and ClipBoardData changed.")]
+        public event EventHandler CopiedHex;
+
+        /// <summary>
+        /// Occurs, when the value of CurrentLine property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of CurrentLine property has changed.")]
+        public event EventHandler CurrentLineChanged;
+
+        /// <summary>
+        /// Occurs, when the value of CurrentPositionInLine property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of CurrentPositionInLine property has changed.")]
+        public event EventHandler CurrentPositionInLineChanged;
+
+        /// <summary>
+        /// Occurs, when the value of GroupSeparatorVisibleChanged property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of GroupSeparatorVisibleChanged property has changed.")]
+        public event EventHandler GroupSeparatorVisibleChanged;
+
+        /// <summary>
+        /// Occurs, when the value of ColumnWidth property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of GroupSize property has changed.")]
+        public event EventHandler GroupSizeChanged;
+
+        /// <summary>
+        /// Occurs, when the value of HexCasing property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of HexCasing property has changed.")]
+        public event EventHandler HexCasingChanged;
+
+        /// <summary>
+        /// Occurs, when the value of HorizontalByteCount property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of HorizontalByteCount property has changed.")]
+        public event EventHandler HorizontalByteCountChanged;
+
+        /// <summary>
+        /// Occurs, when the value of InsertActive property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of InsertActive property has changed.")]
+        public event EventHandler InsertActiveChanged;
+
+        /// <summary>
+        /// Occurs, when the value of LineInfoVisible property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of LineInfoVisible property has changed.")]
+        public event EventHandler LineInfoVisibleChanged;
+
+        /// <summary>
+        /// Occurs, when the value of ReadOnly property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of ReadOnly property has changed.")]
+        public event EventHandler ReadOnlyChanged;
+
+        /// <summary>
+        /// Occurs, when the RequiredWidth property changes
+        /// </summary>
+        [Description("Occurs, when the RequiredWidth property changes")]
+        public event EventHandler RequiredWidthChanged;
+
+        /// <summary>
+        /// Occurs, when the value of SelectionLength property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of SelectionLength property has changed.")]
+        public event EventHandler SelectionLengthChanged;
+
+        /// <summary>
+        /// Occurs, when the value of SelectionStart property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of SelectionStart property has changed.")]
+        public event EventHandler SelectionStartChanged;
+
+        /// <summary>
+        /// Occurs, when the value of StringViewVisible property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of StringViewVisible property has changed.")]
+        public event EventHandler StringViewVisibleChanged;
+
+        /// <summary>
+        /// Occurs, when the value of UseFixedBytesPerLine property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of UseFixedBytesPerLine property has changed.")]
+        public event EventHandler UseFixedBytesPerLineChanged;
+
+        /// <summary>
+        /// Occurs, when the value of VScrollBarVisible property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of VScrollBarVisible property has changed.")]
+        public event EventHandler VScrollBarVisibleChanged;
+
+        /// <summary>
+        /// Occurs, when the value of VerticalByteCount property has changed.
+        /// </summary>
+        [Description("Occurs, when the value of VerticalByteCount property has changed.")]
+        public event EventHandler VerticalByteCountChanged;
+
+        #endregion
+
         #region Конструктор
 
         /// <summary>
@@ -548,29 +1092,7 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         public HexBox()
         {
-            _readOnly = DEFAULT_READ_ONLY;
-            _useFixedBytesPerLine = DEFAULT_USE_FIXED_BYTES_PER_LINE;
-            _groupSeparatorVisible = DEFAULT_GROUP_SEPARATOR_VISIBLE;
-            _headerOffsetVisible = DEFAULT_HEADER_OFFSET_VISIBLE;
-            _columnAddrVisible = DEFAULT_COLUMN_ADDR_VISIBLE;
-            _vScrollBarVisible = DEFAULT_VSCROLL_BAR_VISIBLE;
-            _bytePos = -1;
-            _bytesPerLine = DEFAULT_BYTE_PES_LINE;
-            _selectionBackColor = Color.Blue;
-            _selectionForeColor = Color.White;
-            _shadowSelectionColor = Color.FromArgb(100, 60, 188, 255);
-            _shadowSelectionVisible = true;
-            _recBorderBottom = SystemInformation.Border3DSize.Height;
-            _recBorderLeft = SystemInformation.Border3DSize.Width;
-            _recBorderRight = SystemInformation.Border3DSize.Width;
-            _recBorderTop = SystemInformation.Border3DSize.Height;
-            _infoForeColor = Color.Gray;
-            _groupSize = DEFAULT_GROUP_SIZE;
-            _hexStringFormat = "X";
-            _thumbTrackTimer = new Timer();
-            _borderStyle = BorderStyle.Fixed3D;
-
-            BackColorDisabled = Color.FromName(DEFAULT_DISABLE_COLOR_NAME);
+            BackColorDisabled = Color.FromName(DISABLE_COLOR_NAME);
             _vScrollBar = new VScrollBar();
             _vScrollBar.Scroll += ScrollBarOnScroll;
 
@@ -590,15 +1112,6 @@ namespace SharpLib.WinForms.Controls
 
             _thumbTrackTimer.Interval = THUMB_TRACK_DELAY;
             _thumbTrackTimer.Tick += ThumbTrackTimerOnTick;
-
-            if (DesignHelper.IsDesigntime)
-            {
-                // В режиме дизайнера отображение небольшого блока данных для 
-                // удобной визуального настройки внешнего вида
-                var bytes = Rand.GetBuffer(300);
-                var provider = new HexBoxBufferProvider(bytes);
-                ByteProvider = provider;
-            }
         }
 
         #endregion
@@ -607,6 +1120,8 @@ namespace SharpLib.WinForms.Controls
 
         private void UpdateScrollSize()
         {
+            System.Diagnostics.Debug.WriteLine("UpdateScrollSize()", "HexBox");
+
             // calc scroll bar info
             if (VScrollBarVisible && _byteProvider != null && _byteProvider.Length > 0 && _iHexMaxHBytes != 0)
             {
@@ -647,6 +1162,8 @@ namespace SharpLib.WinForms.Controls
 
         private void UpdateVScroll()
         {
+            System.Diagnostics.Debug.WriteLine("UpdateVScroll()", "HexBox");
+
             int max = ToScrollMax(_scrollVmax);
 
             if (max > 0)
@@ -772,6 +1289,8 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         public void ScrollByteIntoView()
         {
+            System.Diagnostics.Debug.WriteLine("ScrollByteIntoView()", "HexBox");
+
             ScrollByteIntoView(_bytePos);
         }
 
@@ -781,6 +1300,8 @@ namespace SharpLib.WinForms.Controls
         /// <param name="index">the index of the byte</param>
         public void ScrollByteIntoView(long index)
         {
+            System.Diagnostics.Debug.WriteLine("ScrollByteIntoView(long index)", "HexBox");
+
             if (_byteProvider == null || _keyInterpreter == null)
             {
                 return;
@@ -801,6 +1322,8 @@ namespace SharpLib.WinForms.Controls
 
         private void ReleaseSelection()
         {
+            System.Diagnostics.Debug.WriteLine("ReleaseSelection()", "HexBox");
+
             if (_selectionLength == 0)
             {
                 return;
@@ -961,6 +1484,8 @@ namespace SharpLib.WinForms.Controls
                 return;
             }
 
+            System.Diagnostics.Debug.WriteLine("CreateCaret()", "HexBox");
+
             // define the caret width depending on InsertActive mode
             int caretWidth = (InsertActive) ? 1 : (int)_charSize.Width;
             int caretHeight = (int)_charSize.Height;
@@ -980,6 +1505,8 @@ namespace SharpLib.WinForms.Controls
                 return;
             }
 
+            System.Diagnostics.Debug.WriteLine("UpdateCaret()", "HexBox");
+
             long byteIndex = _bytePos - _startByte;
             PointF p = _keyInterpreter.GetCaretPointF(byteIndex);
             p.X += _byteCharacterPos * _charSize.Width;
@@ -993,12 +1520,16 @@ namespace SharpLib.WinForms.Controls
                 return;
             }
 
+            System.Diagnostics.Debug.WriteLine("DestroyCaret()", "HexBox");
+
             NativeMethods.DestroyCaret();
             _caretVisible = false;
         }
 
         private void SetCaretPosition(Point p)
         {
+            System.Diagnostics.Debug.WriteLine("SetCaretPosition()", "HexBox");
+
             if (_byteProvider == null || _keyInterpreter == null)
             {
                 return;
@@ -1032,6 +1563,8 @@ namespace SharpLib.WinForms.Controls
 
         private BytePositionInfo GetHexBytePositionInfo(Point p)
         {
+            System.Diagnostics.Debug.WriteLine("GetHexBytePositionInfo()", "HexBox");
+
             float x = ((p.X - _recHex.X) / _charSize.Width);
             float y = ((p.Y - _recHex.Y) / _charSize.Height);
             int iX = (int)x;
@@ -1061,6 +1594,8 @@ namespace SharpLib.WinForms.Controls
 
         private BytePositionInfo GetStringBytePositionInfo(Point p)
         {
+            System.Diagnostics.Debug.WriteLine("GetStringBytePositionInfo()", "HexBox");
+
             float x = ((p.X - _recStringView.X) / _charSize.Width);
             float y = ((p.Y - _recStringView.Y) / _charSize.Height);
             int iX = (int)x;
@@ -1276,7 +1811,7 @@ namespace SharpLib.WinForms.Controls
             {
                 return false;
             }
-            if (_selectionLength < 1 || !_byteProvider.IsCanDeleteBytes)
+            if (_selectionLength < 1 || !_byteProvider.SupportsDeleteBytes())
             {
                 return false;
             }
@@ -1301,11 +1836,6 @@ namespace SharpLib.WinForms.Controls
 
             byte[] buffer;
             var da = Clipboard.GetDataObject();
-            if (da == null)
-            {
-                return;
-            }
-
             if (da.GetDataPresent("BinaryData"))
             {
                 System.IO.MemoryStream ms = (System.IO.MemoryStream)da.GetData("BinaryData");
@@ -1342,21 +1872,17 @@ namespace SharpLib.WinForms.Controls
                 return false;
             }
 
-            if (_byteProvider == null || !_byteProvider.IsCanInsertBytes)
+            if (_byteProvider == null || !_byteProvider.SupportsInsertBytes())
             {
                 return false;
             }
 
-            if (!_byteProvider.IsCanDeleteBytes && _selectionLength > 0)
+            if (!_byteProvider.SupportsDeleteBytes() && _selectionLength > 0)
             {
                 return false;
             }
 
-            var da = Clipboard.GetDataObject();
-            if (da == null)
-            {
-                return false;
-            }
+            IDataObject da = Clipboard.GetDataObject();
             if (da.GetDataPresent("BinaryData"))
             {
                 return true;
@@ -1509,7 +2035,7 @@ namespace SharpLib.WinForms.Controls
                 PointF headerPointF = GetColumnInfoPointF(col);
                 headerPointF.X -= _charSize.Width / 2;
                 g.DrawLine(pen, headerPointF, new PointF(headerPointF.X, headerPointF.Y + _recColumnInfo.Height + _recHex.Height));
-                if (ColumnAsciiVisible)
+                if (StringViewVisible)
                 {
                     PointF byteStringPointF = GetByteStringPointF(new Point(col, 0));
                     headerPointF.X -= 2;
@@ -1864,7 +2390,7 @@ namespace SharpLib.WinForms.Controls
             int marginLeft = 4;
 
             // calc line info bounds
-            if (_columnAddrVisible)
+            if (_lineInfoVisible)
             {
                 _recLineInfo = new Rectangle(_recContent.X + marginLeft,
                     _recContent.Y,
@@ -1881,7 +2407,7 @@ namespace SharpLib.WinForms.Controls
 
             // calc line info bounds
             _recColumnInfo = new Rectangle(_recLineInfo.X + _recLineInfo.Width, _recContent.Y, _recContent.Width - _recLineInfo.Width, (int)charSize.Height + 4);
-            if (_headerOffsetVisible)
+            if (_columnInfoVisible)
             {
                 _recLineInfo.Y += (int)charSize.Height + 4;
                 _recLineInfo.Height -= (int)charSize.Height + 4;
@@ -1906,7 +2432,7 @@ namespace SharpLib.WinForms.Controls
             else
             {
                 int hmax = (int)Math.Floor(_recHex.Width / (double)_charSize.Width);
-                if (_columnAsciiVisible)
+                if (_stringViewVisible)
                 {
                     hmax -= 2;
                     if (hmax > 1)
@@ -1933,7 +2459,7 @@ namespace SharpLib.WinForms.Controls
                 requiredWidth += _recHex.Width;
             }
 
-            if (_columnAsciiVisible)
+            if (_stringViewVisible)
             {
                 _recStringView = new Rectangle(_recHex.X + _recHex.Width,
                     _recHex.Y,
@@ -2068,7 +2594,7 @@ namespace SharpLib.WinForms.Controls
 
         private bool ConvertHexToByte(string hex, out byte b)
         {
-            bool isByte = byte.TryParse(hex, NumberStyles.HexNumber, System.Threading.Thread.CurrentThread.CurrentCulture, out b);
+            bool isByte = byte.TryParse(hex, System.Globalization.NumberStyles.HexNumber, System.Threading.Thread.CurrentThread.CurrentCulture, out b);
             return isByte;
         }
 
@@ -2407,6 +2933,8 @@ namespace SharpLib.WinForms.Controls
 
             private void BeginMouseSelection(object sender, MouseEventArgs e)
             {
+                System.Diagnostics.Debug.WriteLine("BeginMouseSelection()", "KeyInterpreter");
+
                 if (e.Button != MouseButtons.Left)
                 {
                     return;
@@ -2467,6 +2995,8 @@ namespace SharpLib.WinForms.Controls
 
             public virtual bool PreProcessWmKeyDown(ref Message m)
             {
+                System.Diagnostics.Debug.WriteLine("PreProcessWmKeyDown(ref Message m)", "KeyInterpreter");
+
                 Keys vc = (Keys)m.WParam.ToInt32();
 
                 Keys keyData = vc | ModifierKeys;
@@ -2767,7 +3297,7 @@ namespace SharpLib.WinForms.Controls
 
             protected virtual bool PreProcessWmKeyDown_Tab(ref Message m)
             {
-                if (_hexBox._columnAsciiVisible && _hexBox._keyInterpreter.GetType() == typeof(KeyInterpreter))
+                if (_hexBox._stringViewVisible && _hexBox._keyInterpreter.GetType() == typeof(KeyInterpreter))
                 {
                     _hexBox.ActivateStringKeyInterpreter();
                     _hexBox.ScrollByteIntoView();
@@ -2808,7 +3338,7 @@ namespace SharpLib.WinForms.Controls
 
             protected virtual bool PreProcessWmKeyDown_Back(ref Message m)
             {
-                if (!_hexBox._byteProvider.IsCanDeleteBytes)
+                if (!_hexBox._byteProvider.SupportsDeleteBytes())
                 {
                     return true;
                 }
@@ -2845,7 +3375,7 @@ namespace SharpLib.WinForms.Controls
 
             protected virtual bool PreProcessWmKeyDown_Delete(ref Message m)
             {
-                if (!_hexBox._byteProvider.IsCanDeleteBytes)
+                if (!_hexBox._byteProvider.SupportsDeleteBytes())
                 {
                     return true;
                 }
@@ -2961,9 +3491,9 @@ namespace SharpLib.WinForms.Controls
                     return _hexBox.BasePreProcessMessage(ref m);
                 }
 
-                bool sw = _hexBox._byteProvider.IsCanWriteByte;
-                bool si = _hexBox._byteProvider.IsCanInsertBytes;
-                bool sd = _hexBox._byteProvider.IsCanDeleteBytes;
+                bool sw = _hexBox._byteProvider.SupportsWriteByte();
+                bool si = _hexBox._byteProvider.SupportsInsertBytes();
+                bool sd = _hexBox._byteProvider.SupportsDeleteBytes();
 
                 long pos = _hexBox._bytePos;
                 long sel = _hexBox._selectionLength;
@@ -3053,6 +3583,8 @@ namespace SharpLib.WinForms.Controls
 
             public virtual bool PreProcessWmKeyUp(ref Message m)
             {
+                System.Diagnostics.Debug.WriteLine("PreProcessWmKeyUp(ref Message m)", "KeyInterpreter");
+
                 Keys vc = (Keys)m.WParam.ToInt32();
 
                 Keys keyData = vc | ModifierKeys;
@@ -3230,6 +3762,8 @@ namespace SharpLib.WinForms.Controls
 
             public virtual PointF GetCaretPointF(long byteIndex)
             {
+                System.Diagnostics.Debug.WriteLine("GetCaretPointF()", "KeyInterpreter");
+
                 return _hexBox.GetBytePointF(byteIndex);
             }
 
@@ -3307,9 +3841,9 @@ namespace SharpLib.WinForms.Controls
                     return _hexBox.BasePreProcessMessage(ref m);
                 }
 
-                bool sw = _hexBox._byteProvider.IsCanWriteByte;
-                bool si = _hexBox._byteProvider.IsCanInsertBytes;
-                bool sd = _hexBox._byteProvider.IsCanDeleteBytes;
+                bool sw = _hexBox._byteProvider.SupportsWriteByte();
+                bool si = _hexBox._byteProvider.SupportsInsertBytes();
+                bool sd = _hexBox._byteProvider.SupportsDeleteBytes();
 
                 long pos = _hexBox._bytePos;
                 long sel = _hexBox._selectionLength;
@@ -3369,6 +3903,8 @@ namespace SharpLib.WinForms.Controls
 
             public override PointF GetCaretPointF(long byteIndex)
             {
+                System.Diagnostics.Debug.WriteLine("GetCaretPointF()", "StringKeyInterpreter");
+
                 Point gp = _hexBox.GetGridBytePoint(byteIndex);
                 return _hexBox.GetByteStringPointF(gp);
             }

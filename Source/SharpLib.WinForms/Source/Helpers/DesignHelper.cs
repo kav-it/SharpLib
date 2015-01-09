@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace SharpLib.WinForms
@@ -42,9 +43,29 @@ namespace SharpLib.WinForms
         static DesignHelper()
         {
             // Подробности: http://dotnetfacts.blogspot.ru/2009/01/identifying-run-time-and-design-mode.html
-            _isDesigntime =
-                (LicenseManager.UsageMode == LicenseUsageMode.Designtime) |
-                (Process.GetCurrentProcess().ProcessName == "devenv");
+            _isDesigntime = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+
+            if (_isDesigntime)
+            {
+                // Определен режим "Design". Дальнейший анализ не требуется
+                return;
+            }
+
+            var designerHosts = new List<string>
+            {
+                "devenv",
+                "vcsexpress",
+                "vbexpress",
+                "vcexpress",
+                "sharpdevelop"
+            };
+
+            using (var process = Process.GetCurrentProcess())
+            {
+                var processName = process.ProcessName.ToLower();
+                _isDesigntime = designerHosts.Contains(processName);
+            }
+
         }
 
         #endregion
