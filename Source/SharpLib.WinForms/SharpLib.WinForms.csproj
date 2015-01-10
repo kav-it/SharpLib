@@ -74,7 +74,7 @@
     <Compile Include="Source\Controls\HexBox\Classes\Providers\HexBox.BufferDataSource.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\Providers\HexBox.FileDataSource.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\DataBlock\DataBlock.File.cs" />
-    <Compile Include="Source\Controls\HexBox\Classes\FindOptions.cs" />
+    <Compile Include="Source\Controls\HexBox\Classes\HexBoxFindOptions.cs" />
     <Compile Include="Source\Controls\HexBox\Enums\FindType.cs" />
     <Compile Include="Source\Controls\HexBox\HexBox.cs">
       <SubType>Component</SubType>

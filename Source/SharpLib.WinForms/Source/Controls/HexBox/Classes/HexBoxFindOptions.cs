@@ -5,7 +5,7 @@ namespace SharpLib.WinForms.Controls
     /// <summary>
     /// Defines all state information nee
     /// </summary>
-    public class FindOptions
+    public class HexBoxFindOptions
     {
         #region Поля
 

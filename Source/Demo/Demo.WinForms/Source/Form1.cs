@@ -31,8 +31,8 @@ namespace Demo.Winforms
         private void InitHexBox()
         {
             // var data = Mem.Fill(1024, 0xDC);
-            // var data = Rand.GetBuffer(1024);
-            // hexBox1.DataSource = new HexBoxBufferDataSource(data);
+            var data = Rand.GetBuffer(16 * 1024);
+            hexBox1.DataSource = new HexBoxBufferDataSource(data);
         }
     }
 }

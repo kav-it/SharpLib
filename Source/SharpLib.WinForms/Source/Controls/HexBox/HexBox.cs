@@ -59,17 +59,17 @@ namespace SharpLib.WinForms.Controls
         private BorderStyle _borderStyle;
 
         /// <summary>
-        /// Contains the current char position in one byte
+        /// Текущая позиция в байта (0 или 1)
         /// </summary>
         /// <example>
         /// "1A"
-        /// "1" = char position of 0
-        /// "A" = char position of 1
+        /// "1" = позиция 0
+        /// "A" = позиция 1
         /// </example>
         private int _byteCharacterPos;
 
         /// <summary>
-        /// Contains the current byte position
+        /// Текущая позиция курсора в массиве
         /// </summary>
         private long _bytePos;
 
@@ -837,7 +837,7 @@ namespace SharpLib.WinForms.Controls
         /// -1 if there is no match
         /// -2 if Find was aborted.
         /// </returns>
-        public long Find(FindOptions options)
+        public long Find(HexBoxFindOptions options)
         {
             var startIndex = SelectionStart + SelectionLength;
             int match = 0;
@@ -1206,6 +1206,35 @@ namespace SharpLib.WinForms.Controls
             Invalidate();
 
             OnCopiedHex(EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Переход на указанноую позицию (ввод из диалога)
+        /// </summary>
+        internal void Goto()
+        {
+            using (var dialog = new HexBoxGotoDialog())
+            {
+                dialog.ShowDialog(this);
+
+                Goto(dialog.Addr);
+            }
+        }
+
+        /// <summary>
+        /// Переход по указанному адресу
+        /// </summary>
+        public void Goto(int addr)
+        {
+            if (addr < 0 || addr > DataSource.Length)
+            {
+                return;
+            }
+
+            SetPosition(addr, 0);
+            ScrollByteIntoView();
+            UpdateCaret();
+            Invalidate();
         }
 
         private Color GetDefaultForeColor()
@@ -1686,6 +1715,7 @@ namespace SharpLib.WinForms.Controls
                         _messageHandlers.Add(Keys.C | Keys.Control, PreProcessWmKeyDown_ControlC); // copy 
                         _messageHandlers.Add(Keys.X | Keys.Control, PreProcessWmKeyDown_ControlX); // cut
                         _messageHandlers.Add(Keys.V | Keys.Control, PreProcessWmKeyDown_ControlV); // paste
+                        _messageHandlers.Add(Keys.G | Keys.Control, PreProcessWmKeyDown_ControlG); // goto
                     }
                     return _messageHandlers;
                 }
@@ -2264,6 +2294,12 @@ namespace SharpLib.WinForms.Controls
             protected virtual bool PreProcessWmKeyDown_ControlV(ref Message m)
             {
                 _hexBox.Paste();
+                return true;
+            }
+
+            protected virtual bool PreProcessWmKeyDown_ControlG(ref Message m)
+            {
+                _hexBox.Goto();
                 return true;
             }
 

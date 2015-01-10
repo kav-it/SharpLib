@@ -219,9 +219,8 @@ namespace SharpLib.WinForms.Controls
         }
 
         /// <summary>
-        /// Scrolls the specific byte into view
+        /// Скролл к указанной позиции байта в источнике данных
         /// </summary>
-        /// <param name="index">the index of the byte</param>
         public void ScrollByteIntoView(long index)
         {
             if (_dataSource == null || _keyProcessor == null)

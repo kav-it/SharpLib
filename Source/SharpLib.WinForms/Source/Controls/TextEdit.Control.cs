@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -81,6 +82,19 @@ namespace SharpLib.WinForms.Controls
             if (m.Msg == WM_PAINT)
             {
                 WatermarkPaint();
+            }
+        }
+
+        /// <summary>
+        /// Обработка удаления последнего символа для вновь отображения Watermark
+        /// </summary>
+        protected override void OnTextChanged(EventArgs e)
+        {
+            base.OnTextChanged(e);
+
+            if (Text.IsNotValid())
+            {
+                Refresh();
             }
         }
 

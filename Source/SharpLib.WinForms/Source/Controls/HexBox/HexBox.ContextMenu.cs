@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace SharpLib.WinForms.Controls
@@ -40,6 +39,11 @@ namespace SharpLib.WinForms.Controls
         private ToolStripMenuItem _cutToolStripMenuItem;
 
         /// <summary>
+        /// Элемент меню "Перейти"
+        /// </summary>
+        private ToolStripMenuItem _gotoToolStripMenuItem;
+
+        /// <summary>
         /// Элемент меню "Вставить"
         /// </summary>
         private ToolStripMenuItem _pasteToolStripMenuItem;
@@ -51,18 +55,6 @@ namespace SharpLib.WinForms.Controls
 
         #endregion
 
-        #region Свойства
-
-        public Image CutMenuItemImage { get; set; }
-
-        public Image CopyMenuItemImage { get; set; }
-
-        public Image PasteMenuItemImage { get; set; }
-
-        public Image SelectAllMenuItemImage { get; set; }
-
-        #endregion
-
         #region Конструктор
 
         /// <summary>
@@ -70,10 +62,6 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         internal HexBoxContextMenu(HexBox hexBox)
         {
-            SelectAllMenuItemImage = null;
-            PasteMenuItemImage = null;
-            CopyMenuItemImage = null;
-            CutMenuItemImage = null;
             _hexBox = hexBox;
             _hexBox.ByteProviderChanged += HexBox_ByteProviderChanged;
         }
@@ -105,18 +93,20 @@ namespace SharpLib.WinForms.Controls
             if (_contextMenuStrip == null)
             {
                 var menu = new ContextMenuStrip();
-                _cutToolStripMenuItem = new ToolStripMenuItem("Вырезать", CutMenuItemImage, CutMenuItem_Click);
-                _copyToolStripMenuItem = new ToolStripMenuItem("Копировать", CopyMenuItemImage, CopyMenuItem_Click);
-                _pasteToolStripMenuItem = new ToolStripMenuItem("Вставить", PasteMenuItemImage, PasteMenuItem_Click);
-                _selectAllToolStripMenuItem = new ToolStripMenuItem("Выделить все", SelectAllMenuItemImage, SelectAllMenuItem_Click);
-                _addrAsHexToolStripMenuItem = new ToolStripMenuItem("Адрес в Hex-формате", SelectAllMenuItemImage, ShowAddrAsHex);
+                _cutToolStripMenuItem = new ToolStripMenuItem("Вырезать", null, CutMenuItemClick);
+                _copyToolStripMenuItem = new ToolStripMenuItem("Копировать", null, CopyMenuItemClick);
+                _pasteToolStripMenuItem = new ToolStripMenuItem("Вставить", null, PasteMenuItemClick);
+                _selectAllToolStripMenuItem = new ToolStripMenuItem("Выделить все", null, SelectAllMenuItemClick);
+                _gotoToolStripMenuItem = new ToolStripMenuItem("Перейти ...", null, GotoMenuItemClick);
+                _addrAsHexToolStripMenuItem = new ToolStripMenuItem("Адрес в Hex-формате", null, ShowAddrAsHex);
                 _addrAsHexToolStripMenuItem.CheckOnClick = true;
                 _addrAsHexToolStripMenuItem.Checked = _hexBox.ShowAddrAsHex;
 
+                menu.Items.Add(_gotoToolStripMenuItem);
+                menu.Items.Add(new ToolStripSeparator());
                 menu.Items.Add(_copyToolStripMenuItem);
                 menu.Items.Add(_cutToolStripMenuItem);
                 menu.Items.Add(_pasteToolStripMenuItem);
-                menu.Items.Add(new ToolStripSeparator());
                 menu.Items.Add(_selectAllToolStripMenuItem);
                 menu.Items.Add(new ToolStripSeparator());
                 menu.Items.Add(_addrAsHexToolStripMenuItem);
@@ -150,7 +140,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Обработчик события "Вырезать"
         /// </summary>
-        private void CutMenuItem_Click(object sender, EventArgs e)
+        private void CutMenuItemClick(object sender, EventArgs e)
         {
             _hexBox.Cut();
         }
@@ -158,7 +148,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Обработчик события "Копировать"
         /// </summary>
-        private void CopyMenuItem_Click(object sender, EventArgs e)
+        private void CopyMenuItemClick(object sender, EventArgs e)
         {
             _hexBox.Copy();
         }
@@ -166,7 +156,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Обработчик события "Вставить"
         /// </summary>
-        private void PasteMenuItem_Click(object sender, EventArgs e)
+        private void PasteMenuItemClick(object sender, EventArgs e)
         {
             _hexBox.Paste();
         }
@@ -174,7 +164,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Обработчик события "Выделить все"
         /// </summary>
-        private void SelectAllMenuItem_Click(object sender, EventArgs e)
+        private void SelectAllMenuItemClick(object sender, EventArgs e)
         {
             _hexBox.SelectAll();
         }
@@ -185,6 +175,14 @@ namespace SharpLib.WinForms.Controls
         private void ShowAddrAsHex(object sender, EventArgs eventArgs)
         {
             _hexBox.ShowAddrAsHex = _addrAsHexToolStripMenuItem.Checked;
+        }
+
+        /// <summary>
+        /// Обработка события "Перейти"
+        /// </summary>
+        private void GotoMenuItemClick(object sender, EventArgs eventArgs)
+        {
+            _hexBox.Goto();
         }
 
         #endregion
