@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -43,6 +44,13 @@
   <ItemGroup>
     <Compile Include="..\SharpLib.Version.cs">
       <Link>Source\SharpLib.Version.cs</Link>
+    </Compile>
+    <Compile Include="Source\Controls\Controls.Const.cs" />
+    <Compile Include="Source\Controls\HexBox\Dialogs\HexBox.Dialog.Goto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Controls\HexBox\Dialogs\HexBox.Dialog.Goto.Designer.cs">
+      <DependentUpon>HexBox.Dialog.Goto.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Controls\HexBox\HexBox.Utils.cs" />
     <Compile Include="Source\Controls\HexBox\HexBox.Border.cs" />
@@ -78,6 +86,9 @@
     <Compile Include="Source\Controls\HexBox\Interfaces\IByteCharConverter.cs" />
     <Compile Include="Source\Controls\HexBox\Interfaces\IHexBoxDataSource.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\DataBlock\DataBlock.Memory.cs" />
+    <Compile Include="Source\Controls\TextEdit.Control.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Source\Controls\TreeView\TreeViewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -103,6 +114,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <EmbeddedResource Include="Source\Controls\HexBox\Dialogs\HexBox.Dialog.Goto.resx">
+      <DependentUpon>HexBox.Dialog.Goto.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Source\Controls\TreeView\TreeViewControl.resx">
       <DependentUpon>TreeViewControl.cs</DependentUpon>
     </EmbeddedResource>

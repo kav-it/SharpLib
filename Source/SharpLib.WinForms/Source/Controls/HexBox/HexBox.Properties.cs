@@ -13,11 +13,6 @@ namespace SharpLib.WinForms.Controls
         #region Константы
 
         /// <summary>
-        /// Название категории в которого отображаются свойства
-        /// </summary>
-        private const string CATEGORY_NAME = "SharpLib";
-
-        /// <summary>
         /// Стиль рамки элемента по умолчанию
         /// </summary>
         private const string DEFAULT_BORDER_STYLE = "Fixed3D";
@@ -104,14 +99,14 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Цвет фона, когда элемент Disable
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Цвет фона, когда элемент Disable")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Цвет фона, когда элемент Disable")]
         [DefaultValue(typeof(Color), DEFAULT_DISABLE_COLOR_NAME)]
         public Color BackColorDisabled { get; set; }
 
         /// <summary>
         /// Режим "Только чтение"
         /// </summary>
-        [Category(CATEGORY_NAME), Description("true: Только чтение")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("true: Только чтение")]
         [DefaultValue(DEFAULT_READ_ONLY)]
         public bool ReadOnly
         {
@@ -132,7 +127,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Количество байт в одной строке
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Количество байт в одной строке")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Количество байт в одной строке")]
         [DefaultValue(DEFAULT_BYTE_PES_LINE)]
         public int BytesPerLine
         {
@@ -155,7 +150,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Количество байт в группе (используется если GroupSeparatorVisible = true)
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Количество байт в одной строке")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Количество байт в одной строке")]
         [DefaultValue(DEFAULT_GROUP_SIZE)]
         public int GroupSize
         {
@@ -178,7 +173,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// true: Количество байт в одной строке фиксировано
         /// </summary>
-        [Category(CATEGORY_NAME), Description("true: Количество байт в одной строке фиксировано")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("true: Количество байт в одной строке фиксировано")]
         [DefaultValue(DEFAULT_USE_FIXED_BYTES_PER_LINE)]
         public bool UseFixedBytesPerLine
         {
@@ -201,7 +196,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// true: Отображение вертикального ScrollBar
         /// </summary>
-        [Category(CATEGORY_NAME), Description("true: Отображение вертикального ScrollBar")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("true: Отображение вертикального ScrollBar")]
         [DefaultValue(DEFAULT_VSCROLL_BAR_VISIBLE)]
         public bool VScrollBarVisible
         {
@@ -234,7 +229,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// true: Отображается разделитель групп
         /// </summary>
-        [Category(CATEGORY_NAME), Description("true: Отображается разделитель групп")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("true: Отображается разделитель групп")]
         [DefaultValue(DEFAULT_GROUP_SEPARATOR_VISIBLE)]
         public bool GroupSeparatorVisible
         {
@@ -257,7 +252,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// true: Отображается информация о колонке
         /// </summary>
-        [Category(CATEGORY_NAME), Description("true: Отображается верняя линия смещения байт")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("true: Отображается верняя линия смещения байт")]
         [DefaultValue(DEFAULT_HEADER_OFFSET_VISIBLE)]
         public bool HeaderOffsetVisible
         {
@@ -280,7 +275,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// true: Отображается информация о строке
         /// </summary>
-        [Category(CATEGORY_NAME), Description("true: Отображается информация о строке")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("true: Отображается информация о строке")]
         [DefaultValue(DEFAULT_COLUMN_ADDR_VISIBLE)]
         public bool ColumnAddrVisible
         {
@@ -303,7 +298,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Смещение информационной строки
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Начальное смещение адреса")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Начальное смещение адреса")]
         [DefaultValue(DEFAULT_ADDR_OFFSET)]
         public long AddrOffset
         {
@@ -324,7 +319,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Смещение информационной строки
         /// </summary>
-        [Category(CATEGORY_NAME), Description("true: Отображать адрес в формате Hex, иначе Int")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("true: Отображать адрес в формате Hex, иначе Int")]
         [DefaultValue(DEFAULT_SHOW_ADDR_AS_HEX)]
         public bool ShowAddrAsHex
         {
@@ -345,7 +340,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Стиль рамки элемента
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Стиль рамки элемента")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Стиль рамки элемента")]
         [DefaultValue(typeof(BorderStyle), DEFAULT_BORDER_STYLE)]
         public BorderStyle BorderStyle
         {
@@ -381,7 +376,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// true: Отображается вид строки
         /// </summary>
-        [Category(CATEGORY_NAME), Description("true: Отображается колонка 'Ascii'")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("true: Отображается колонка 'Ascii'")]
         [DefaultValue(DEFAULT_COLUMN_ASCII_VISIBLE)]
         public bool ColumnAsciiVisible
         {
@@ -404,7 +399,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Цвет поля информации
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Цвет поля информации")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Цвет поля информации")]
         [DefaultValue(typeof(Color), DEFAULT_INFO_BACKGROUND)]
         public Color InfoForeColor
         {
@@ -419,7 +414,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Цвет фона выбранных байт
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Цвет фона выбранных байт")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Цвет фона выбранных байт")]
         [DefaultValue(typeof(Color), DEFAULT_SELECTION_BACKGROUND)]
         public Color SelectionBackColor
         {
@@ -434,7 +429,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Цвет текста выбранных байт
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Цвет фона выбранных байт")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Цвет фона выбранных байт")]
         [DefaultValue(typeof(Color), DEFAULT_SELECTION_FOREGROUND)]
         public Color SelectionForeColor
         {
@@ -449,7 +444,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// true: Отображается тень выделения
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Отображается тень выделения")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Отображается тень выделения")]
         [DefaultValue(true)]
         public bool ShadowSelectionVisible
         {
@@ -468,7 +463,7 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Цвет тени выделения (должен использоваться alpha-канал)
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Цвет тени выделения")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Цвет тени выделения")]
         public Color ShadowSelectionColor
         {
             get { return _shadowSelectionColor; }
@@ -486,133 +481,133 @@ namespace SharpLib.WinForms.Controls
         /// <summary>
         /// Изменилось свойство BorderStyle
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство BorderStyle")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство BorderStyle")]
         public event EventHandler BorderStyleChanged;
 
         /// <summary>
         /// Изменилось свойство DataSource
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство DataSource")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство DataSource")]
         public event EventHandler ByteProviderChanged;
 
         /// <summary>
         /// Изменилось свойство BytesPerLine
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство BytesPerLine")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство BytesPerLine")]
         public event EventHandler BytesPerLineChanged;
 
         /// <summary>
         /// Изменилось свойство CharSize
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство CharSize")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство CharSize")]
         public event EventHandler CharSizeChanged;
 
         /// <summary>
         /// Изменилось свойство ColumnInfoVisibleChanged
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство ColumnInfoVisibleChanged")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство ColumnInfoVisibleChanged")]
         public event EventHandler ColumnInfoVisibleChanged;
 
         /// <summary>
         /// Метод Copy сгенерировал событие ClipBoardData
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Метод Copy сгенерировал событие ClipBoardData")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Метод Copy сгенерировал событие ClipBoardData")]
         public event EventHandler Copied;
 
         /// <summary>
         /// Метод Copy в Hex-редакторе
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Метод Copy в Hex-редакторе")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Метод Copy в Hex-редакторе")]
         public event EventHandler CopiedHex;
 
         /// <summary>
         /// Изменилось свойство CurrentLineChanged
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство CurrentLineChanged")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство CurrentLineChanged")]
         public event EventHandler CurrentLineChanged;
 
         /// <summary>
         /// Изменилось свойство CurrentPositionInLineChanged
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство CurrentPositionInLineChanged")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство CurrentPositionInLineChanged")]
         public event EventHandler CurrentPositionInLineChanged;
 
         /// <summary>
         /// Изменилось свойство GroupSeparatorVisibleChanged
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство GroupSeparatorVisibleChanged")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство GroupSeparatorVisibleChanged")]
         public event EventHandler GroupSeparatorVisibleChanged;
 
         /// <summary>
         /// Изменилось свойство ColumnWidth
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство ColumnWidth")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство ColumnWidth")]
         public event EventHandler GroupSizeChanged;
 
         /// <summary>
         /// Изменилось свойство HorizontalByteCount
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство HorizontalByteCount")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство HorizontalByteCount")]
         public event EventHandler HorizontalByteCountChanged;
 
         /// <summary>
         /// Изменилось свойство InsertActive
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство InsertActive")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство InsertActive")]
         public event EventHandler InsertActiveChanged;
 
         /// <summary>
         /// Изменилось свойство ColumnAddrVisible
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство ColumnAddrVisible")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство ColumnAddrVisible")]
         public event EventHandler LineInfoVisibleChanged;
 
         /// <summary>
         /// Изменилось свойство ReadOnly
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство ReadOnly")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство ReadOnly")]
         public event EventHandler ReadOnlyChanged;
 
         /// <summary>
         /// Изменилось свойство RequiredWidth
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство RequiredWidth")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство RequiredWidth")]
         public event EventHandler RequiredWidthChanged;
 
         /// <summary>
         /// Изменилось свойство SelectionLength
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство SelectionLength")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство SelectionLength")]
         public event EventHandler SelectionLengthChanged;
 
         /// <summary>
         /// Изменилось свойство SelectionStart
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство SelectionStart")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство SelectionStart")]
         public event EventHandler SelectionStartChanged;
 
         /// <summary>
         /// Изменилось свойство ColumnAsciiVisible
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство ColumnAsciiVisible")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство ColumnAsciiVisible")]
         public event EventHandler StringViewVisibleChanged;
 
         /// <summary>
         /// Изменилось свойство UseFixedBytesPerLine
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство UseFixedBytesPerLine")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство UseFixedBytesPerLine")]
         public event EventHandler UseFixedBytesPerLineChanged;
 
         /// <summary>
         /// Изменилось свойство VScrollBarVisible
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство VScrollBarVisible")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство VScrollBarVisible")]
         public event EventHandler VScrollBarVisibleChanged;
 
         /// <summary>
         /// Изменилось свойство VerticalByteCount
         /// </summary>
-        [Category(CATEGORY_NAME), Description("Изменилось свойство VerticalByteCount")]
+        [Category(ControlsConst.CATEGORY_NAME), Description("Изменилось свойство VerticalByteCount")]
         public event EventHandler VerticalByteCountChanged;
 
         #endregion
