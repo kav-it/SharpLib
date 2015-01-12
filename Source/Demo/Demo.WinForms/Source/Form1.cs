@@ -21,6 +21,7 @@ namespace Demo.Winforms
 
             InitOpenGL();
             InitHexBox();
+            InitMemoBox();
         }
 
         private void InitOpenGL()
@@ -31,8 +32,20 @@ namespace Demo.Winforms
         private void InitHexBox()
         {
             // var data = Mem.Fill(1024, 0xDC);
-            var data = Rand.GetBuffer(16 * 1024);
-            hexBox1.DataSource = new HexBoxBufferDataSource(data);
+            // var data = Rand.GetBuffer(16 * 1024);
+            // hexBox1.DataSource = new HexBoxBufferDataSource(data);
+        }
+
+        private void InitMemoBox()
+        {
+            var lines = new List<string>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                lines.Add("Строка " + i);
+            }
+
+            memoControl1.Lines.AddRange(lines);
         }
     }
 }

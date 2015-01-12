@@ -15,6 +15,11 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         internal int Addr { get; private set; }
 
+        /// <summary>
+        /// Направление перехода
+        /// </summary>
+        internal SearchDirection Direction { get; private set; }
+
         #endregion
 
         #region Конструктор
@@ -24,6 +29,7 @@ namespace SharpLib.WinForms.Controls
             InitializeComponent();
 
             Addr = -1;
+            Direction = SearchDirection.Unknown;
 
             ShowIcon = false;
             ShowInTaskbar = false;
@@ -64,6 +70,9 @@ namespace SharpLib.WinForms.Controls
             }
         }
 
+        /// <summary>
+        /// Обработка нажатия "ОК"
+        /// </summary>
         private void button1_Click(object sender, System.EventArgs e)
         {
             Addr = Parse(textEdit1.Text);
@@ -73,9 +82,23 @@ namespace SharpLib.WinForms.Controls
             Close();
         }
 
+        /// <summary>
+        /// Разбор введенного адреса
+        /// </summary>
         private int Parse(string text)
         {
             text = text.ToLower();
+
+            if (text.StartsWith("+"))
+            {
+                Direction = SearchDirection.Forward;
+                text = text.TrimStartEx("+");
+            }
+            else if (text.StartsWith("-"))
+            {
+                Direction = SearchDirection.Backward;
+                text = text.TrimStartEx("-");
+            }
 
             if (text.EndsWith("k"))
             {

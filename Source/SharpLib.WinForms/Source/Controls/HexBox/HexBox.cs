@@ -1217,7 +1217,25 @@ namespace SharpLib.WinForms.Controls
             {
                 dialog.ShowDialog(this);
 
-                Goto(dialog.Addr);
+                var addr = dialog.Addr;
+
+                if (addr == -1)
+                {
+                    return;
+                }
+
+                // Переход со смещением
+                // Определение текущей позиции
+                if (dialog.Direction == SearchDirection.Forward)
+                {
+                    addr = (int)_bytePos + dialog.Addr;
+                }
+                else if (dialog.Direction == SearchDirection.Backward)
+                { 
+                    addr = (int)_bytePos - dialog.Addr;
+                }
+
+                Goto(addr);
             }
         }
 
@@ -1226,9 +1244,20 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         public void Goto(int addr)
         {
-            if (addr < 0 || addr > DataSource.Length)
+            if (addr < 0)
             {
-                return;
+                addr = 0;
+            }
+            else if (addr > DataSource.Length)
+            {
+                if (DataSource.Length == 0)
+                {
+                    addr = 0;
+                }
+                else
+                {
+                    addr = (int)DataSource.Length - 1;    
+                }
             }
 
             SetPosition(addr, 0);

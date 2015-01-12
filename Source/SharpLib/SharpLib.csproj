@@ -45,6 +45,7 @@
     </Compile>
     <Compile Include="Source\AssemblyInfo.cs" />
     <Compile Include="Source\Constants\Constants.TimeStamp.cs" />
+    <Compile Include="Source\Enums\SearchDirection.cs" />
     <Compile Include="Source\Enums\Endianess.cs" />
     <Compile Include="Source\Events\EventArgs{T}.Cancel.cs" />
     <Compile Include="Source\Events\EventArgs{T}.Changing.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Source\Extensions\Extension.String.cs" />
     <Compile Include="Source\Extensions\Extension.StringArray.cs" />
     <Compile Include="Source\Helpers\Bootstrap\Application.cs" />
+    <Compile Include="Source\Helpers\BufferRange.cs" />
     <Compile Include="Source\Helpers\ByteList.cs" />
     <Compile Include="Source\Helpers\Crypto\Aes.cs" />
     <Compile Include="Source\Helpers\Crypto\Sha.cs" />

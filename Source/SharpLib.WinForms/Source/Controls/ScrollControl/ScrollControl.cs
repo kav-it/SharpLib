@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace SharpLib.WinForms.Controls
 {
@@ -11,6 +12,11 @@ namespace SharpLib.WinForms.Controls
         protected ScrollBarInfo ScrollBarX { get; private set; }
 
         protected ScrollBarInfo ScrollBarY { get; private set; }
+
+        public bool IsReadOnly
+        {
+            get { return true; }
+        }
 
         #endregion
 
@@ -139,6 +145,55 @@ namespace SharpLib.WinForms.Controls
             }
 
             base.OnMouseDown(e);
+        }
+
+        /// <summary>
+        /// Событие "Paint"
+        /// </summary>
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs args)
+        {
+            if (TextBoxRenderer.IsSupported)
+            {
+                VisualStyleElement state = VisualStyleElement.TextBox.TextEdit.Normal;
+                Color backColor = BackColor;
+
+                if (Enabled)
+                {
+                    if (IsReadOnly)
+                    {
+                        state = VisualStyleElement.TextBox.TextEdit.ReadOnly;
+                    }
+                    else if (Focused)
+                    {
+                        state = VisualStyleElement.TextBox.TextEdit.Focused;
+                    }
+                }
+                else
+                {
+                    state = VisualStyleElement.TextBox.TextEdit.Disabled;
+                    backColor = Color.WhiteSmoke;
+                }
+
+                VisualStyleRenderer vsr = new VisualStyleRenderer(state);
+                vsr.DrawBackground(args.Graphics, ClientRectangle);
+
+                Rectangle rectContent = vsr.GetBackgroundContentRectangle(args.Graphics, ClientRectangle);
+                args.Graphics.FillRectangle(new SolidBrush(backColor), rectContent);
+            }
+            else
+            {
+                // draw background
+                args.Graphics.FillRectangle(new SolidBrush(BackColor), ClientRectangle);
+
+                // draw default border
+                ControlPaint.DrawBorder3D(args.Graphics, ClientRectangle, Border3DStyle.Sunken);
+            }
+
         }
 
         #endregion
