@@ -47,9 +47,14 @@ namespace SharpLib.WinForms.Controls
         private readonly Timer _thumbTrackTimer;
 
         /// <summary>
-        /// Contains true, if the find (Find method) should be aborted.
+        /// true, поиск должен быть остановлен
         /// </summary>
         private bool _abortFind;
+
+        /// <summary>
+        /// Блок данных поиска
+        /// </summary>
+        private byte[] _findData;
 
         /// <summary>
         /// Начальное смещение адреса
@@ -119,11 +124,6 @@ namespace SharpLib.WinForms.Controls
         /// Индекс последнего видимого байта
         /// </summary>
         private long _endByte;
-
-        /// <summary>
-        /// Contains a value of the current finding position.
-        /// </summary>
-        private long _findingPos;
 
         private bool _groupSeparatorVisible;
 
@@ -220,15 +220,6 @@ namespace SharpLib.WinForms.Controls
         private bool IsAsciiActive
         {
             get { return (_keyProcessor != null && _keyProcessor.GetType() == typeof(StringKeyProcessor)); }
-        }
-
-        /// <summary>
-        /// Gets a value that indicates the current position during Find method execution.
-        /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public long CurrentFindingPosition
-        {
-            get { return _findingPos; }
         }
 
         ///// <summary>
@@ -829,101 +820,6 @@ namespace SharpLib.WinForms.Controls
         }
 
         /// <summary>
-        /// Searches the current DataSource
-        /// </summary>
-        /// <param name="options">contains all find options</param>
-        /// <returns>
-        /// the SelectionStart property value if find was successfull or
-        /// -1 if there is no match
-        /// -2 if Find was aborted.
-        /// </returns>
-        public long Find(HexBoxFindOptions options)
-        {
-            var startIndex = SelectionStart + SelectionLength;
-            int match = 0;
-
-            byte[] buffer1 = null;
-            byte[] buffer2 = null;
-            if (options.Type == FindType.Text && options.MatchCase)
-            {
-                if (options.FindBuffer == null || options.FindBuffer.Length == 0)
-                {
-                    throw new ArgumentException("FindBuffer can not be null when Type: Text and MatchCase: false");
-                }
-                buffer1 = options.FindBuffer;
-            }
-            else if (options.Type == FindType.Text && !options.MatchCase)
-            {
-                if (options.FindBufferLowerCase == null || options.FindBufferLowerCase.Length == 0)
-                {
-                    throw new ArgumentException("FindBufferLowerCase can not be null when Type is Text and MatchCase is true");
-                }
-                if (options.FindBufferUpperCase == null || options.FindBufferUpperCase.Length == 0)
-                {
-                    throw new ArgumentException("FindBufferUpperCase can not be null when Type is Text and MatchCase is true");
-                }
-                if (options.FindBufferLowerCase.Length != options.FindBufferUpperCase.Length)
-                {
-                    throw new ArgumentException("FindBufferUpperCase and FindBufferUpperCase must have the same size when Type is Text and MatchCase is true");
-                }
-                buffer1 = options.FindBufferLowerCase;
-                buffer2 = options.FindBufferUpperCase;
-            }
-            else if (options.Type == FindType.Hex)
-            {
-                if (options.Hex == null || options.Hex.Length == 0)
-                {
-                    throw new ArgumentException("Hex can not be null when Type is Hex");
-                }
-                buffer1 = options.Hex;
-            }
-
-            int buffer1Length = buffer1.Length;
-
-            _abortFind = false;
-
-            for (long pos = startIndex; pos < _dataSource.Length; pos++)
-            {
-                if (_abortFind)
-                {
-                    return -2;
-                }
-
-                if (pos % 1000 == 0) // for performance reasons: DoEvents only 1 times per 1000 loops
-                {
-                    Application.DoEvents();
-                }
-
-                byte compareByte = _dataSource.ReadByte(pos);
-                bool buffer1Match = compareByte == buffer1[match];
-                bool hasBuffer2 = buffer2 != null;
-                bool buffer2Match = hasBuffer2 && compareByte == buffer2[match];
-                bool isMatch = buffer1Match || buffer2Match;
-                if (!isMatch)
-                {
-                    pos -= match;
-                    match = 0;
-                    _findingPos = pos;
-                    continue;
-                }
-
-                match++;
-
-                if (match == buffer1Length)
-                {
-                    long bytePos = pos - buffer1Length + 1;
-                    Select(bytePos, buffer1Length);
-                    ScrollByteIntoView(_bytePos + _selectionLength);
-                    ScrollByteIntoView(_bytePos);
-
-                    return bytePos;
-                }
-            }
-
-            return -1;
-        }
-
-        /// <summary>
         /// Aborts a working Find method.
         /// </summary>
         public void AbortFind()
@@ -1236,6 +1132,90 @@ namespace SharpLib.WinForms.Controls
                 }
 
                 Goto(addr);
+            }
+        }
+
+        /// <summary>
+        /// Поиск буфера в данных
+        /// </summary>
+        /// <returns>
+        /// -1 = не найдено
+        /// -2 = поиск прерван пользователем
+        /// </returns>
+        private long Find(long startPosition, byte[] data)
+        {
+            _abortFind = false;
+            int matchIndex = 0;
+
+            for (long pos = startPosition; pos < _dataSource.Length; pos++)
+            {
+                if (_abortFind)
+                {
+                    return -2;
+                }
+
+                if (pos % 1000 == 0)
+                {
+                    // На каждые 1000 циклов передача обработки событий приложению. 
+                    // (для возможности обработки нажатия клавиши Esc, чтобы прервать поиск)
+                    Application.DoEvents();
+                }
+
+                byte compareByte = _dataSource.ReadByte(pos);
+                bool isMatch = compareByte == data[matchIndex];
+
+                if (isMatch)
+                {
+                    if (++matchIndex == data.Length)
+                    {
+                        // Найден весь буфер
+                        return pos - data.Length + 1;
+                    }
+                }
+                else
+                {
+                    matchIndex = 0;
+                }
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// Поиск в данных (с вызовом диалога)
+        /// </summary>
+        internal void Find()
+        {
+            using (var dialog = new HexBoxFindDialog())
+            {
+                dialog.ShowDialog(this);
+
+                var text = dialog.Data;
+
+                if (text.IsNotValid())
+                {
+                    return;
+                }
+
+                _findData = ByteCharConverter.ToBuffer(text);
+
+                FindNext();
+            }
+        }
+
+        /// <summary>
+        /// Поиск следующего элемента (контекст поиска установлен при вызове диалога поиска)
+        /// </summary>
+        internal void FindNext()
+        {
+            var startPos = SelectionLength > 0 ? SelectionStart + _findData.Length : SelectionStart;
+            var findPos = Find(startPos, _findData);
+
+            if (findPos >= 0)
+            {
+                Select(findPos, _findData.Length);
+                ScrollByteIntoView(_bytePos + _selectionLength);
+                ScrollByteIntoView(_bytePos);
             }
         }
 
@@ -1745,6 +1725,8 @@ namespace SharpLib.WinForms.Controls
                         _messageHandlers.Add(Keys.X | Keys.Control, PreProcessWmKeyDown_ControlX); // cut
                         _messageHandlers.Add(Keys.V | Keys.Control, PreProcessWmKeyDown_ControlV); // paste
                         _messageHandlers.Add(Keys.G | Keys.Control, PreProcessWmKeyDown_ControlG); // goto
+                        _messageHandlers.Add(Keys.F | Keys.Control, PreProcessWmKeyDown_ControlF); // find
+                        _messageHandlers.Add(Keys.F3, PreProcessWmKeyDown_F3); // find next
                     }
                     return _messageHandlers;
                 }
@@ -2329,6 +2311,18 @@ namespace SharpLib.WinForms.Controls
             protected virtual bool PreProcessWmKeyDown_ControlG(ref Message m)
             {
                 _hexBox.Goto();
+                return true;
+            }
+
+            protected virtual bool PreProcessWmKeyDown_ControlF(ref Message m)
+            {
+                _hexBox.Find();
+                return true;
+            }
+
+            protected virtual bool PreProcessWmKeyDown_F3(ref Message m)
+            {
+                _hexBox.FindNext();
                 return true;
             }
 

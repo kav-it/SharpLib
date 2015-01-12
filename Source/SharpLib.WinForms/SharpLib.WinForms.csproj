@@ -46,6 +46,12 @@
       <Link>Source\SharpLib.Version.cs</Link>
     </Compile>
     <Compile Include="Source\Controls\Controls.Const.cs" />
+    <Compile Include="Source\Controls\HexBox\Dialogs\HexBox.Dialog.Find.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Controls\HexBox\Dialogs\HexBox.Dialog.Find.Designer.cs">
+      <DependentUpon>HexBox.Dialog.Find.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Controls\HexBox\Dialogs\HexBox.Dialog.Goto.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,15 +80,12 @@
     <Compile Include="Source\Controls\HexBox\Classes\Providers\HexBox.BufferDataSource.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\Providers\HexBox.FileDataSource.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\DataBlock\DataBlock.File.cs" />
-    <Compile Include="Source\Controls\HexBox\Classes\HexBoxFindOptions.cs" />
-    <Compile Include="Source\Controls\HexBox\Enums\FindType.cs" />
     <Compile Include="Source\Controls\HexBox\HexBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Source\Controls\HexBox\HexBox.EventHandlers.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Source\Controls\HexBox\Enums\HexCasing.cs" />
     <Compile Include="Source\Controls\HexBox\Interfaces\IByteCharConverter.cs" />
     <Compile Include="Source\Controls\HexBox\Interfaces\IHexBoxDataSource.cs" />
     <Compile Include="Source\Controls\HexBox\Classes\DataBlock\DataBlock.Memory.cs" />
@@ -122,6 +125,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <EmbeddedResource Include="Source\Controls\HexBox\Dialogs\HexBox.Dialog.Find.resx">
+      <DependentUpon>HexBox.Dialog.Find.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Source\Controls\HexBox\Dialogs\HexBox.Dialog.Goto.resx">
       <DependentUpon>HexBox.Dialog.Goto.cs</DependentUpon>
     </EmbeddedResource>

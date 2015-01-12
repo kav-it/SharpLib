@@ -44,6 +44,11 @@ namespace SharpLib.WinForms.Controls
         private ToolStripMenuItem _gotoToolStripMenuItem;
 
         /// <summary>
+        /// Элемент меню "Поиск"
+        /// </summary>
+        private ToolStripMenuItem _findToolStripMenuItem;
+
+        /// <summary>
         /// Элемент меню "Вставить"
         /// </summary>
         private ToolStripMenuItem _pasteToolStripMenuItem;
@@ -98,11 +103,13 @@ namespace SharpLib.WinForms.Controls
                 _pasteToolStripMenuItem = new ToolStripMenuItem("Вставить", null, PasteMenuItemClick);
                 _selectAllToolStripMenuItem = new ToolStripMenuItem("Выделить все", null, SelectAllMenuItemClick);
                 _gotoToolStripMenuItem = new ToolStripMenuItem("Перейти ...", null, GotoMenuItemClick);
+                _findToolStripMenuItem = new ToolStripMenuItem("Поиск ...", null, FindMenuItemClick);
                 _addrAsHexToolStripMenuItem = new ToolStripMenuItem("Адрес в Hex-формате", null, ShowAddrAsHex);
                 _addrAsHexToolStripMenuItem.CheckOnClick = true;
                 _addrAsHexToolStripMenuItem.Checked = _hexBox.ShowAddrAsHex;
 
                 menu.Items.Add(_gotoToolStripMenuItem);
+                menu.Items.Add(_findToolStripMenuItem);
                 menu.Items.Add(new ToolStripSeparator());
                 menu.Items.Add(_copyToolStripMenuItem);
                 menu.Items.Add(_cutToolStripMenuItem);
@@ -183,6 +190,14 @@ namespace SharpLib.WinForms.Controls
         private void GotoMenuItemClick(object sender, EventArgs eventArgs)
         {
             _hexBox.Goto();
+        }
+
+        /// <summary>
+        /// Обработка события "Поиск"
+        /// </summary>
+        private void FindMenuItemClick(object sender, EventArgs eventArgs)
+        {
+            _hexBox.Find();
         }
 
         #endregion
