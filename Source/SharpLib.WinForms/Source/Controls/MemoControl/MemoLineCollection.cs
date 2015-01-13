@@ -139,6 +139,11 @@ namespace SharpLib.WinForms.Controls
 
         public void AddRange(IEnumerable<string> values)
         {
+            if (values == null)
+            {
+                return;
+            }
+
             _lines.AddRange(values);
 
             Refresh();

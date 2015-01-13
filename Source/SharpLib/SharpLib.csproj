@@ -72,6 +72,7 @@
     <Compile Include="Source\Extensions\Extension.String.cs" />
     <Compile Include="Source\Extensions\Extension.StringArray.cs" />
     <Compile Include="Source\Helpers\Bootstrap\Application.cs" />
+    <Compile Include="Source\Helpers\WideInt.cs" />
     <Compile Include="Source\Helpers\BufferRange.cs" />
     <Compile Include="Source\Helpers\ByteList.cs" />
     <Compile Include="Source\Helpers\Crypto\Aes.cs" />
