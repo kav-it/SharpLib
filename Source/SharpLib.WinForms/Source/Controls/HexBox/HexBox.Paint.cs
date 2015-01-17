@@ -464,14 +464,6 @@ namespace SharpLib.WinForms.Controls
                 PointF headerPointF = GetHeaderPointF(col);
                 headerPointF.X -= _charSize.Width / 2;
                 g.DrawLine(pen, headerPointF, new PointF(headerPointF.X, headerPointF.Y + _recHeader.Height + _recHex.Height));
-
-                // if (ColumnAsciiVisible)
-                if (false)
-                {
-                    PointF byteStringPointF = GetAsciiPointF(new Point(col, 0));
-                    headerPointF.X -= 2;
-                    g.DrawLine(pen, new PointF(byteStringPointF.X, byteStringPointF.Y), new PointF(byteStringPointF.X, byteStringPointF.Y + _recHex.Height));
-                }
             }
         }
 

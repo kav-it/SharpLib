@@ -13,11 +13,9 @@ namespace SharpLib
         /// <summary>
         /// Признак сборки в отладочной конфигурации
         /// </summary>
-        /// <param name="assembly"></param>
-        /// <returns></returns>
-        public static bool IsDebugEx(this Assembly assembly)
+        public static bool IsDebugEx(this Assembly self)
         {
-            var result = assembly
+            var result = self
                 .GetCustomAttributes(false)
                 .OfType<DebuggableAttribute>()
                 .Select(debuggableAttribute => debuggableAttribute.IsJITTrackingEnabled)
@@ -29,9 +27,9 @@ namespace SharpLib
         /// <summary>
         /// Дата/время создания сборки
         /// </summary>
-        public static DateTime GetTimeEx(this Assembly assembly)
+        public static DateTime GetTimeEx(this Assembly self)
         {
-            var fileInfo = new FileInfo(assembly.Location);
+            var fileInfo = new FileInfo(self.Location);
             var result = fileInfo.LastWriteTime;
 
             return result;
@@ -40,9 +38,9 @@ namespace SharpLib
         /// <summary>
         /// Версия сборки
         /// </summary>
-        public static Version GetVersionEx(this Assembly assembly)
+        public static Version GetVersionEx(this Assembly self)
         {
-            var attr = assembly.GetAssemblyAttributeEx<AssemblyFileVersionAttribute>();
+            var attr = self.GetAssemblyAttributeEx<AssemblyFileVersionAttribute>();
 
             return new Version(attr.Version);
         }
@@ -50,9 +48,9 @@ namespace SharpLib
         /// <summary>
         /// Название сборки
         /// </summary>
-        public static string GetTitleEx(this Assembly assembly)
+        public static string GetTitleEx(this Assembly self)
         {
-            var attr = assembly.GetAssemblyAttributeEx<AssemblyTitleAttribute>();
+            var attr = self.GetAssemblyAttributeEx<AssemblyTitleAttribute>();
 
             return attr.Title;
         }
@@ -60,9 +58,9 @@ namespace SharpLib
         /// <summary>
         /// Чтение атрибута из сборки
         /// </summary>
-        public static T GetAssemblyAttributeEx<T>(this Assembly assembly) where T : Attribute
+        public static T GetAssemblyAttributeEx<T>(this Assembly self) where T : Attribute
         {
-            var attributes = assembly.GetCustomAttributes(typeof(T), false);
+            var attributes = self.GetCustomAttributes(typeof(T), false);
             if (attributes.Length == 0)
             {
                 return null;
@@ -73,7 +71,7 @@ namespace SharpLib
         /// <summary>
         /// Чтение Embedded-ресурсов как строку
         /// </summary>
-        /// <param name="assembly">Сборка</param>
+        /// <param name="self">Сборка</param>
         /// <param name="uriEmbeddedResource">Путь к ресурсам</param>
         /// <returns></returns>
         /// <example>
@@ -84,13 +82,13 @@ namespace SharpLib
         ///   + Assets
         ///     + Config.xml      // Расположение файла в директории проекта
         /// </example>
-        public static string GetEmbeddedTextEx(this Assembly assembly, string uriEmbeddedResource)
+        public static string GetResourcesEmbeddedEx(this Assembly self, string uriEmbeddedResource)
         {
             var result = string.Empty;
 
-            var pathInResources = string.Format("{0}.{1}", assembly.GetName().Name, uriEmbeddedResource);
+            var pathInResources = string.Format("{0}.{1}", self.GetName().Name, uriEmbeddedResource);
 
-            using (var stream = assembly.GetManifestResourceStream(pathInResources))
+            using (var stream = self.GetManifestResourceStream(pathInResources))
             {
                 if (stream != null)
                 {

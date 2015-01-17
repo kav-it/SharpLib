@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib", "SharpLib\SharpLib.csproj", "{9CDEC0B8-2232-45D1-815C-90880E1F8595}"
 EndProject
@@ -24,6 +24,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A8882717-57A0-4AD1-9C85-1691AB894F9B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.Tests", "SharpLib.Tests\SharpLib.Tests.csproj", "{208555F6-8889-4AFA-9D78-AD1C0D1726F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.Web", "SharpLib.Web\SharpLib.Web.csproj", "{D219E23F-E54F-4AC5-B763-D389B99074E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{208555F6-8889-4AFA-9D78-AD1C0D1726F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{208555F6-8889-4AFA-9D78-AD1C0D1726F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{208555F6-8889-4AFA-9D78-AD1C0D1726F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D219E23F-E54F-4AC5-B763-D389B99074E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D219E23F-E54F-4AC5-B763-D389B99074E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D219E23F-E54F-4AC5-B763-D389B99074E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D219E23F-E54F-4AC5-B763-D389B99074E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

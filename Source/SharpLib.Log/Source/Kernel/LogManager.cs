@@ -229,8 +229,13 @@ namespace SharpLib.Log
             return GetLogger(new LoggerCacheKey(typeof(Logger), name));
         }
 
-        public void LoadConfigFromResource(Assembly assembly, string pathInResources)
+        public void LoadConfigFromResource(string pathInResources, Assembly assembly = null)
         {
+            if (assembly == null)
+            {
+                assembly = Assembly.GetEntryAssembly();
+            }
+
             pathInResources = string.Format("{0}.{1}", assembly.GetName().Name, pathInResources);
 
             using (var stream = assembly.GetManifestResourceStream(pathInResources))
