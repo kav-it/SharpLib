@@ -7,6 +7,8 @@
 
 xcopy /Y "..\Source\SharpLib\bin\Debug\SharpLib.dll" "..\BuildResult\"
 xcopy /Y "..\Source\SharpLib\bin\Debug\SharpLib.pdb" "..\BuildResult\"
+xcopy /Y "..\Source\SharpLib.Dialogs\bin\Debug\SharpLib.Dialogs.dll" "..\BuildResult\"
+xcopy /Y "..\Source\SharpLib.Dialogs\bin\Debug\SharpLib.Dialogs.pdb" "..\BuildResult\"
 xcopy /Y "..\Source\SharpLib.Native\bin\Debug\SharpLib.Native.dll" "..\BuildResult\"
 xcopy /Y "..\Source\SharpLib.Native\bin\Debug\SharpLib.Native.pdb" "..\BuildResult\"
 xcopy /Y "..\Source\SharpLib.WinForms\bin\Debug\SharpLib.WinForms.dll" "..\BuildResult\"

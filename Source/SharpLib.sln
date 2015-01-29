@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.Tests", "SharpLib.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.Web", "SharpLib.Web\SharpLib.Web.csproj", "{D219E23F-E54F-4AC5-B763-D389B99074E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.Dialogs", "SharpLib.Dialogs\SharpLib.Dialogs.csproj", "{04313FF5-0A58-45BD-B6CA-6D324E021232}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{D219E23F-E54F-4AC5-B763-D389B99074E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D219E23F-E54F-4AC5-B763-D389B99074E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D219E23F-E54F-4AC5-B763-D389B99074E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04313FF5-0A58-45BD-B6CA-6D324E021232}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04313FF5-0A58-45BD-B6CA-6D324E021232}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04313FF5-0A58-45BD-B6CA-6D324E021232}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04313FF5-0A58-45BD-B6CA-6D324E021232}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

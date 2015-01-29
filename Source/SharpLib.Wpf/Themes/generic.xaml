@@ -17,5 +17,6 @@
         <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/ListViewEx.xaml" />
         <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/TabControlEx.xaml" />
         <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/TextEdit.xaml" />
+        <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/TreeListEx.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

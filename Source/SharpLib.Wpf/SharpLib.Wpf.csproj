@@ -72,6 +72,20 @@
     <Compile Include="Source\Controls\Classes\Label.cs" />
     <Compile Include="Source\Controls\Classes\PasswordEdit.cs" />
     <Compile Include="Source\Controls\Classes\TextEdit.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.EditTextBox.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.CollapsedConverter.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListExNode.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.ExtensionMethods.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.Flattener.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.GeneralAdorner.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.GridView.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.InsertMarker.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.LinesRenderer.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.Traversal.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.ViewItem.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListExNodeCollection.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListExNodeView.cs" />
     <Compile Include="Source\Controls\FlipPanel.cs" />
     <Compile Include="Source\Controls\User\Memo\MemoEx.ContextMenu.cs" />
     <Compile Include="Source\Controls\User\Memo\MemoEx.xaml.cs">
@@ -160,6 +174,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Source\Controls\Styles\TreeListEx.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Source\Controls\User\Memo\MemoEx.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -179,6 +197,7 @@
       <Name>SharpLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
