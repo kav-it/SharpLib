@@ -84,6 +84,8 @@
     <Compile Include="Source\Converters\Converter.StringToBool.cs" />
     <Compile Include="Source\Extensions\Extension.Application.cs" />
     <Compile Include="Source\Extensions\Extension.DependencyObject.cs" />
+    <Compile Include="Source\Extensions\Extension.Vector.cs" />
+    <Compile Include="Source\Extensions\Extension.Size.cs" />
     <Compile Include="Source\Extensions\Extension.WinForms.cs" />
     <Compile Include="Source\Helpers\UI.cs" />
     <Compile Include="Source\Helpers\ResourcesWpf.cs" />

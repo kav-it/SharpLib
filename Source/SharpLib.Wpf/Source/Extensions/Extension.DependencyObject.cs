@@ -4,7 +4,7 @@ using System.Windows;
 
 namespace SharpLib.Wpf
 {
-    public static class DependencyObjectExtension
+    public static class ExtensionDependencyObject
     {
         public static bool IsDesignMode(this DependencyObject value)
         {

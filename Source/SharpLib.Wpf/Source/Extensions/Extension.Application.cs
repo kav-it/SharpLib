@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace SharpLib.Wpf
 {
-    public static class ApplicationExtension
+    public static class ExtensionApplication
     {
         #region Методы
 
