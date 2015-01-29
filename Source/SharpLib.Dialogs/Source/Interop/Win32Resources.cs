@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ookii.Dialogs.Wpf.Interop
+namespace SharpLib.Wpf.Dialogs.Interop
 {
     class Win32Resources : IDisposable
     {
@@ -13,7 +13,7 @@ namespace Ookii.Dialogs.Wpf.Interop
 
         public Win32Resources(string module)
         {
-            _moduleHandle = NativeMethods.LoadLibraryEx(module, IntPtr.Zero, NativeMethods.LoadLibraryExFlags.LoadLibraryAsDatafile);
+            _moduleHandle = DialogNativeMethods.LoadLibraryEx(module, IntPtr.Zero, DialogNativeMethods.LoadLibraryExFlags.LoadLibraryAsDatafile);
             if( _moduleHandle.IsInvalid )
                 throw new System.ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
         }
@@ -23,7 +23,7 @@ namespace Ookii.Dialogs.Wpf.Interop
             CheckDisposed();
 
             StringBuilder buffer = new StringBuilder(_bufferSize);
-            if( NativeMethods.LoadString(_moduleHandle, id, buffer, buffer.Capacity + 1) == 0 )
+            if( DialogNativeMethods.LoadString(_moduleHandle, id, buffer, buffer.Capacity + 1) == 0 )
                 throw new System.ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
             return buffer.ToString();
         }
@@ -36,12 +36,12 @@ namespace Ookii.Dialogs.Wpf.Interop
             string source = LoadString(id);
 
             // For some reason FORMAT_MESSAGE_FROM_HMODULE doesn't work so we use this way.
-            NativeMethods.FormatMessageFlags flags = NativeMethods.FormatMessageFlags.FORMAT_MESSAGE_ALLOCATE_BUFFER | NativeMethods.FormatMessageFlags.FORMAT_MESSAGE_ARGUMENT_ARRAY | NativeMethods.FormatMessageFlags.FORMAT_MESSAGE_FROM_STRING;
+            DialogNativeMethods.FormatMessageFlags flags = DialogNativeMethods.FormatMessageFlags.FORMAT_MESSAGE_ALLOCATE_BUFFER | DialogNativeMethods.FormatMessageFlags.FORMAT_MESSAGE_ARGUMENT_ARRAY | DialogNativeMethods.FormatMessageFlags.FORMAT_MESSAGE_FROM_STRING;
 
             IntPtr sourcePtr = System.Runtime.InteropServices.Marshal.StringToHGlobalAuto(source);
             try
             {
-                if( NativeMethods.FormatMessage(flags, sourcePtr, id, 0, ref buffer, 0, args) == 0 )
+                if( DialogNativeMethods.FormatMessage(flags, sourcePtr, id, 0, ref buffer, 0, args) == 0 )
                     throw new System.ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
             }
             finally

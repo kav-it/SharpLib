@@ -1,19 +1,9 @@
 using System;
 
-namespace Ookii.Dialogs.Wpf
+namespace SharpLib.Wpf.Dialogs
 {
     internal class VistaFileDialogEvents : Interop.IFileDialogEvents, Interop.IFileDialogControlEvents
     {
-        #region Константы
-
-        private const uint E_NOTIMPL = 0x80004001;
-
-        private const uint S_FALSE = 1;
-
-        private const uint S_OK = 0;
-
-        #endregion
-
         #region Поля
 
         private readonly VistaFileDialog _dialog;
@@ -22,7 +12,7 @@ namespace Ookii.Dialogs.Wpf
 
         #region Конструктор
 
-        public VistaFileDialogEvents(VistaFileDialog dialog)
+        internal VistaFileDialogEvents(VistaFileDialog dialog)
         {
             if (dialog == null)
             {
@@ -54,18 +44,18 @@ namespace Ookii.Dialogs.Wpf
         {
         }
 
-        public void OnShareViolation(Interop.IFileDialog pfd, Interop.IShellItem psi, out NativeMethods.FDE_SHAREVIOLATION_RESPONSE pResponse)
+        public void OnShareViolation(Interop.IFileDialog pfd, Interop.IShellItem psi, out DialogNativeMethods.FDE_SHAREVIOLATION_RESPONSE pResponse)
         {
-            pResponse = NativeMethods.FDE_SHAREVIOLATION_RESPONSE.FDESVR_DEFAULT;
+            pResponse = DialogNativeMethods.FDE_SHAREVIOLATION_RESPONSE.FDESVR_DEFAULT;
         }
 
         public void OnTypeChange(Interop.IFileDialog pfd)
         {
         }
 
-        public void OnOverwrite(Interop.IFileDialog pfd, Interop.IShellItem psi, out NativeMethods.FDE_OVERWRITE_RESPONSE pResponse)
+        public void OnOverwrite(Interop.IFileDialog pfd, Interop.IShellItem psi, out DialogNativeMethods.FDE_OVERWRITE_RESPONSE pResponse)
         {
-            pResponse = NativeMethods.FDE_OVERWRITE_RESPONSE.FDEOR_DEFAULT;
+            pResponse = DialogNativeMethods.FDE_OVERWRITE_RESPONSE.FDEOR_DEFAULT;
         }
 
         public void OnItemSelected(Interop.IFileDialogCustomize pfdc, int dwIDCtl, int dwIDItem)

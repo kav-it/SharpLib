@@ -14,13 +14,9 @@
         <Label Grid.Column="0" Margin="8,8,4,0"  Name="_dialogLabel" VerticalAlignment="Top" HorizontalAlignment="Left">_Dialog:</Label>
         <ComboBox Grid.Column="1" SelectedIndex="0" Margin="4,8,4,0" Height="23"  Name="_dialogComboBox" VerticalAlignment="Top">
             <ComboBox.Items>
-                <ComboBoxItem>Task Dialog</ComboBoxItem>
-                <ComboBoxItem>Task Dialog with command links</ComboBoxItem>
-                <ComboBoxItem>Progress Dialog</ComboBoxItem>
-                <ComboBoxItem>Credential Dialog</ComboBoxItem>
-                <ComboBoxItem>Vista-style Folder Browser Dialog</ComboBoxItem>
-                <ComboBoxItem>Vista-style Open File Dialog</ComboBoxItem>
-                <ComboBoxItem>Vista-style Save File Dialog</ComboBoxItem>
+                <ComboBoxItem>Folder Browser Dialog</ComboBoxItem>
+                <ComboBoxItem>Open File Dialog</ComboBoxItem>
+                <ComboBoxItem>Save File Dialog</ComboBoxItem>
             </ComboBox.Items>
         </ComboBox>
         <Button Grid.Column="2" Height="23" Margin="4,8,8,0" Padding="8,0" HorizontalAlignment="Right" Name="_showDialogButton" VerticalAlignment="Top" IsDefault="True" Click="_showDialogButton_Click">_Show dialog</Button>

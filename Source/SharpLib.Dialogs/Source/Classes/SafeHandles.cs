@@ -1,46 +1,68 @@
 // Copyright © Sven Groot (Ookii.org) 2009
 // BSD license; see license.txt for details.
-using Microsoft.Win32.SafeHandles;
-using System.Security.Permissions;
-using System;
-using System.Runtime.InteropServices;
-using System.Runtime.ConstrainedExecution;
 
-namespace Ookii.Dialogs.Wpf
+using System;
+using System.Runtime.ConstrainedExecution;
+using System.Runtime.InteropServices;
+using System.Security.Permissions;
+
+using Microsoft.Win32.SafeHandles;
+
+namespace SharpLib.Wpf.Dialogs
 {
     [SecurityPermission(SecurityAction.Demand, UnmanagedCode = true)]
-    class SafeModuleHandle : SafeHandle
+    internal class SafeModuleHandle : SafeHandle
     {
-        public SafeModuleHandle()
-            : base(IntPtr.Zero, true)
-        {
-        }
+        #region Свойства
 
         public override bool IsInvalid
         {
             get { return handle == IntPtr.Zero; }
         }
 
+        #endregion
+
+        #region Конструктор
+
+        public SafeModuleHandle()
+            : base(IntPtr.Zero, true)
+        {
+        }
+
+        #endregion
+
+        #region Методы
+
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         protected override bool ReleaseHandle()
         {
-            return NativeMethods.FreeLibrary(handle);
+            return DialogNativeMethods.FreeLibrary(handle);
         }
+
+        #endregion
     }
 
     [SecurityPermission(SecurityAction.Demand, UnmanagedCode = true)]
-    class ActivationContextSafeHandle : SafeHandleZeroOrMinusOneIsInvalid
+    internal class ActivationContextSafeHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
+        #region Конструктор
+
         public ActivationContextSafeHandle()
             : base(true)
         {
         }
 
+        #endregion
+
+        #region Методы
+
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         protected override bool ReleaseHandle()
         {
-            NativeMethods.ReleaseActCtx(handle);
+            DialogNativeMethods.ReleaseActCtx(handle);
             return true;
         }
+
+        #endregion
     }
 }

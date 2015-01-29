@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Ookii.Dialogs.Wpf.Interop
+namespace SharpLib.Wpf.Dialogs.Interop
 {
     // Dummy base interface for CommonFileDialog coclasses
     internal interface NativeCommonFileDialog
@@ -15,21 +15,21 @@ namespace Ookii.Dialogs.Wpf.Interop
     // straightforward way. Behind the scenes, the C# compiler
     // morphs all 'new CoClass()' calls to 'new CoClassWrapper()'
     [ComImport,
-    Guid(IIDGuid.IFileOpenDialog), 
+    Guid(IidGuid.IFileOpenDialog), 
     CoClass(typeof(FileOpenDialogRCW))]
     internal interface NativeFileOpenDialog : IFileOpenDialog
     {
     }
 
     [ComImport,
-    Guid(IIDGuid.IFileSaveDialog),
+    Guid(IidGuid.IFileSaveDialog),
     CoClass(typeof(FileSaveDialogRCW))]
     internal interface NativeFileSaveDialog : IFileSaveDialog
     {
     }
 
     [ComImport,
-    Guid(IIDGuid.IKnownFolderManager),
+    Guid(IidGuid.IKnownFolderManager),
     CoClass(typeof(KnownFolderManagerRCW))]
     internal interface KnownFolderManager : IKnownFolderManager
     {
@@ -40,7 +40,7 @@ namespace Ookii.Dialogs.Wpf.Interop
     [ComImport,
     ClassInterface(ClassInterfaceType.None),
     TypeLibType(TypeLibTypeFlags.FCanCreate),
-    Guid(CLSIDGuid.FileOpenDialog)]
+    Guid(ClsidGuid.FileOpenDialog)]
     internal class FileOpenDialogRCW
     {
     }
@@ -48,7 +48,7 @@ namespace Ookii.Dialogs.Wpf.Interop
     [ComImport,
     ClassInterface(ClassInterfaceType.None),
     TypeLibType(TypeLibTypeFlags.FCanCreate),
-    Guid(CLSIDGuid.FileSaveDialog)]
+    Guid(ClsidGuid.FileSaveDialog)]
     internal class FileSaveDialogRCW
     {
     }
@@ -56,7 +56,7 @@ namespace Ookii.Dialogs.Wpf.Interop
     [ComImport,
     ClassInterface(ClassInterfaceType.None),
     TypeLibType(TypeLibTypeFlags.FCanCreate),
-    Guid(CLSIDGuid.KnownFolderManager)]
+    Guid(ClsidGuid.KnownFolderManager)]
     internal class KnownFolderManagerRCW
     {
     }

@@ -48,68 +48,22 @@
     <Compile Include="..\SharpLib.Version.cs">
       <Link>Source\Version\SharpLib.Version.cs</Link>
     </Compile>
-    <Compile Include="Source\Classes\AnimationResource.cs" />
-    <Compile Include="Source\Classes\ButtonType.cs" />
-    <Compile Include="Source\Classes\ComCtlv6ActivationContext.cs" />
-    <Compile Include="Source\CredentialDialog.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Source\CredentialDialog.designer.cs">
-      <DependentUpon>CredentialDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Source\Classes\CredentialException.cs" />
-    <Compile Include="Source\Classes\DownlevelTextMode.cs" />
-    <Compile Include="Source\Classes\ExpandButtonClickedEventArgs.cs" />
-    <Compile Include="Source\Classes\GlobalSuppressions.cs" />
-    <Compile Include="Source\Classes\HyperlinkClickedEventArgs.cs" />
+    <Compile Include="Source\Dialog.cs" />
     <Compile Include="Source\Interop\ComDlgResources.cs" />
-    <Compile Include="Source\Interop\COMGuids.cs" />
+    <Compile Include="Source\Interop\ComGuids.cs" />
     <Compile Include="Source\Interop\ErrorHelper.cs" />
     <Compile Include="Source\Interop\IProgressDialog.cs" />
     <Compile Include="Source\Interop\ShellComInterfaces.cs" />
     <Compile Include="Source\Interop\ShellWrapperDefinitions.cs" />
     <Compile Include="Source\Interop\Win32Resources.cs" />
-    <Compile Include="Source\NativeMethods.cs" />
-    <Compile Include="Source\Classes\ProgressBarState.cs" />
-    <Compile Include="Source\Classes\ProgressBarStyle.cs" />
-    <Compile Include="Source\ProgressDialog.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Source\ProgressDialog.designer.cs">
-      <DependentUpon>ProgressDialog.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Source\Classes\DialogNativeMethods.cs" />
     <Compile Include="Source\Classes\SafeHandles.cs" />
-    <Compile Include="Source\Classes\ShellAnimation.cs" />
-    <Compile Include="Source\TaskDialog.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Source\TaskDialog.designer.cs">
-      <DependentUpon>TaskDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Source\Classes\TaskDialogButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Source\Classes\TaskDialogButtonStyle.cs" />
-    <Compile Include="Source\Classes\TaskDialogDesigner.cs" />
-    <Compile Include="Source\Classes\TaskDialogIcon.cs" />
-    <Compile Include="Source\Classes\TaskDialogItem.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Source\Classes\TaskDialogItem.designer.cs">
-      <DependentUpon>TaskDialogItem.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Source\Classes\TaskDialogItemClickedEventArgs.cs" />
-    <Compile Include="Source\Classes\TaskDialogItemCollection.cs" />
-    <Compile Include="Source\Classes\TaskDialogRadioButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Source\Classes\TimerEventArgs.cs" />
     <Compile Include="Source\Version\AssemblyInfo.cs" />
-    <Compile Include="Source\VistaFileDialog.cs" />
+    <Compile Include="Source\Classes\VistaFileDialog.cs" />
     <Compile Include="Source\Classes\VistaFileDialogEvents.cs" />
-    <Compile Include="Source\VistaFolderBrowserDialog.cs" />
-    <Compile Include="Source\VistaOpenFileDialog.cs" />
-    <Compile Include="Source\VistaSaveFileDialog.cs" />
+    <Compile Include="Source\Classes\VistaFolderBrowserDialog.cs" />
+    <Compile Include="Source\Classes\VistaOpenFileDialog.cs" />
+    <Compile Include="Source\Classes\VistaSaveFileDialog.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpLib\SharpLib.csproj">
@@ -124,11 +78,6 @@
     <EmbeddedResource Include="Source\Assets\VistaFolderBrowserDialog.bmp" />
     <EmbeddedResource Include="Source\Assets\VistaOpenFileDialog.bmp" />
     <EmbeddedResource Include="Source\Assets\VistaSaveFileDialog.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Source\ProgressDialog.resx">
-      <DependentUpon>ProgressDialog.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

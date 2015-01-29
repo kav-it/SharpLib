@@ -1,20 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Ookii.Dialogs.Wpf.Interop
+namespace SharpLib.Wpf.Dialogs.Interop
 {
-    [ComImport]
-    [Guid(CLSIDGuid.ProgressDialog)]
+    [ComImport, Guid(ClsidGuid.ProgressDialog)]
     internal class ProgressDialogRCW
     {
     }
 
-    [ComImport,
-    Guid(IIDGuid.IProgressDialog),
-    CoClass(typeof(ProgressDialogRCW))]
+    [ComImport, CoClass(typeof(ProgressDialogRCW))]
+    [Guid(IidGuid.IProgressDialog)]
     internal interface ProgressDialog : IProgressDialog
     {
     }
@@ -23,26 +18,30 @@ namespace Ookii.Dialogs.Wpf.Interop
     internal enum ProgressDialogFlags : uint
     {
         Normal = 0x00000000,
+
         Modal = 0x00000001,
+
         AutoTime = 0x00000002,
+
         NoTime = 0x00000004,
+
         NoMinimize = 0x00000008,
+
         NoProgressBar = 0x00000010,
+
         MarqueeProgress = 0x00000020,
+
         NoCancel = 0x00000040
     }
 
-    [ComImport]
-    [Guid(IIDGuid.IProgressDialog)]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IidGuid.IProgressDialog)]
     internal interface IProgressDialog
     {
-
         [PreserveSig]
         void StartProgressDialog(
             IntPtr hwndParent,
-            [MarshalAs(UnmanagedType.IUnknown)]
-			object punkEnableModless,
+            [MarshalAs(UnmanagedType.IUnknown)] object punkEnableModless,
             ProgressDialogFlags dwFlags,
             IntPtr pvResevered
             );
@@ -52,8 +51,7 @@ namespace Ookii.Dialogs.Wpf.Interop
 
         [PreserveSig]
         void SetTitle(
-            [MarshalAs(UnmanagedType.LPWStr)]
-			string pwzTitle
+            [MarshalAs(UnmanagedType.LPWStr)] string pwzTitle
             );
 
         [PreserveSig]
@@ -71,6 +69,7 @@ namespace Ookii.Dialogs.Wpf.Interop
             uint dwCompleted,
             uint dwTotal
             );
+
         [PreserveSig]
         void SetProgress64(
             ulong ullCompleted,
@@ -80,17 +79,14 @@ namespace Ookii.Dialogs.Wpf.Interop
         [PreserveSig]
         void SetLine(
             uint dwLineNum,
-            [MarshalAs(UnmanagedType.LPWStr)]
-			string pwzString,
-            [MarshalAs(UnmanagedType.VariantBool)]
-			bool fCompactPath,
+            [MarshalAs(UnmanagedType.LPWStr)] string pwzString,
+            [MarshalAs(UnmanagedType.VariantBool)] bool fCompactPath,
             IntPtr pvResevered
             );
 
         [PreserveSig]
         void SetCancelMsg(
-            [MarshalAs(UnmanagedType.LPWStr)]
-			string pwzCancelMsg,
+            [MarshalAs(UnmanagedType.LPWStr)] string pwzCancelMsg,
             object pvResevered
             );
 
@@ -99,7 +95,5 @@ namespace Ookii.Dialogs.Wpf.Interop
             uint dwTimerAction,
             object pvResevered
             );
-
     }
-
 }
