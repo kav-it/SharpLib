@@ -55,6 +55,9 @@
     <Compile Include="..\..\SharpLib.Version.cs">
       <Link>Source\Version\SharpLib.Version.cs</Link>
     </Compile>
+    <Compile Include="Source\Tabs\TabAudio.xaml.cs">
+      <DependentUpon>TabAudio.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Source\Tabs\TabDialogs.xaml.cs">
       <DependentUpon>TabDialogs.xaml</DependentUpon>
     </Compile>
@@ -92,6 +95,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Source\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Tabs\TabAudio.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -133,6 +140,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SharpLib.Audio\SharpLib.Audio.csproj">
+      <Project>{a821afda-4e31-4448-a23b-0584867de4f0}</Project>
+      <Name>SharpLib.Audio</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SharpLib.Json\SharpLib.Json.csproj">
       <Project>{893AAF6E-AC29-402A-B2FB-356CB417E562}</Project>
       <Name>SharpLib.Json</Name>
@@ -149,6 +160,9 @@
       <Project>{9cdec0b8-2232-45d1-815c-90880e1f8595}</Project>
       <Name>SharpLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Source\Assets\Music.mp3" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

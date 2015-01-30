@@ -6,6 +6,9 @@ using System.Reflection;
 
 namespace SharpLib
 {
+    /// <summary>
+    /// Класс расширения для "Assembly"
+    /// </summary>
     public static class ExtensionAssembly
     {
         #region Методы
@@ -56,6 +59,14 @@ namespace SharpLib
         }
 
         /// <summary>
+        /// Директория расположения сборки
+        /// </summary>
+        public static string GetDirectoryEx(this Assembly self)
+        {
+            return Path.GetDirectoryName(self.Location);
+        }
+
+        /// <summary>
         /// Чтение атрибута из сборки
         /// </summary>
         public static T GetAssemblyAttributeEx<T>(this Assembly self) where T : Attribute
@@ -82,13 +93,11 @@ namespace SharpLib
         ///   + Assets
         ///     + Config.xml      // Расположение файла в директории проекта
         /// </example>
-        public static string GetResourcesEmbeddedEx(this Assembly self, string uriEmbeddedResource)
+        public static string GetEmbeddedResourceAsStringEx(this Assembly self, string uriEmbeddedResource)
         {
             var result = string.Empty;
 
-            var pathInResources = string.Format("{0}.{1}", self.GetName().Name, uriEmbeddedResource);
-
-            using (var stream = self.GetManifestResourceStream(pathInResources))
+            using (var stream = self.GetEmbeddedResourceAsStreamEx(uriEmbeddedResource))
             {
                 if (stream != null)
                 {
@@ -100,6 +109,48 @@ namespace SharpLib
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Чтение потока данных из Embedded ресурсов
+        /// </summary>
+        public static Stream GetEmbeddedResourceAsStreamEx(this Assembly self, string uriPath)
+        {
+            var pathInResources = string.Format("{0}/{1}", self.GetName().Name, uriPath);
+            var uri = new EmbeddedResourceUri(pathInResources);
+
+            using (var stream = self.GetManifestResourceStream(uri.DotPath))
+            {
+                return stream;
+            }
+        }
+
+        /// <summary>
+        /// Извлечение Embedded ресурсов в файл
+        /// </summary>
+        public static void CopyEmbeddedResourceToFileEx(this Assembly self, string uriPath, bool rewrite = true, string filePath = null)
+        {
+            var pathInResources = string.Format("{0}/{1}", self.GetName().Name, uriPath);
+            var uri = new EmbeddedResourceUri(pathInResources);
+
+            using (var stream = self.GetManifestResourceStream(uri.DotPath))
+            {
+                if (stream != null)
+                {
+                    // Есть путь не указан, файл будет скопирование в директорию сборки
+                    if (filePath.IsNotValid())
+                    {
+                        filePath = self.GetDirectoryEx();
+                        filePath = PathEx.Combine(filePath, uri.Name);
+                    }
+
+                    // Сохранение ресурса в файл
+                    if (rewrite || !File.Exists(filePath))
+                    {
+                        stream.WriteToFileEx(filePath);    
+                    }
+                }
+            }
         }
 
         #endregion

@@ -75,6 +75,8 @@
     <Compile Include="Source\Helpers\Env.cs" />
     <Compile Include="Source\Helpers\Diag.cs" />
     <Compile Include="Source\Helpers\Position.cs" />
+    <Compile Include="Source\Helpers\Resources\EmbeddedResourceUri.cs" />
+    <Compile Include="Source\Helpers\Resources\EmbeddedResources.cs" />
     <Compile Include="Source\Helpers\WideInt.cs" />
     <Compile Include="Source\Helpers\BufferRange.cs" />
     <Compile Include="Source\Helpers\ByteList.cs" />

@@ -30,8 +30,11 @@
             <TabItem Header="TreeList" >
                 <local:TabTreeList />
             </TabItem>
-            <TabItem Header="Dialogs" IsSelected="True" >
+            <TabItem Header="Dialogs" >
                 <local:TabDialogs />
+            </TabItem>
+            <TabItem Header="Audio" IsSelected="True" >
+                <local:TabAudio />
             </TabItem>
 
         </TabControl>

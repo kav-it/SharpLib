@@ -2,6 +2,9 @@
 
 namespace SharpLib
 {
+    /// <summary>
+    /// Метод расширения класса "Stream"
+    /// </summary>
     public static class ExtensionStream
     {
         #region Методы
@@ -41,6 +44,40 @@ namespace SharpLib
             var memStream = buffer.ToMemoryStreamEx();
 
             return memStream;
+        }
+
+        /// <summary>
+        /// Сохранение потока в файл
+        /// </summary>
+        public static bool WriteToFileEx(this Stream stream, string filename)
+        {
+            if (stream == null || filename.IsValid() == false)
+            {
+                return false;
+            }
+
+            if (stream.Length != 0)
+            {
+                // Создание директории файла
+                var destPath = Files.GetDirectory(filename);
+                if (Directory.Exists(destPath) == false)
+                {
+                    Files.CreateDirectory(destPath);
+                }
+
+                using (var fileStream = File.Create(filename, (int)stream.Length))
+                {
+                    // Создание и заполнение массива данными из потокаwith the stream data
+                    var bytesInStream = new byte[stream.Length];
+                    stream.Position = 0;
+                    stream.Read(bytesInStream, 0, bytesInStream.Length);
+
+                    // Запись в поток
+                    fileStream.Write(bytesInStream, 0, bytesInStream.Length);
+                }
+            }
+
+            return true;
         }
 
         #endregion

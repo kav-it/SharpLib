@@ -5,8 +5,6 @@ namespace SharpLib
 {
     public static class Files
     {
-        public static FileError LastError { get; set; }
-
         public const string PATH_SEPARATOR = @"\";
 
         /// <summary>
@@ -29,6 +27,9 @@ namespace SharpLib
             return path;
         }
 
+        /// <summary>
+        /// Формирование относительного пути
+        /// </summary>
         public static string GetPathRelative(string path1, string path2)
         {
             path1 = AddPathSeparator(path1);
@@ -80,7 +81,7 @@ namespace SharpLib
         /// <remarks>
         /// C:/1.txt => C:/
         /// </remarks>
-        public static string GetDirectoryName(string location)
+        public static string GetDirectory(string location)
         {
             if (IsDirectory(location))
             {
@@ -93,11 +94,11 @@ namespace SharpLib
         /// <summary>
         /// Чтение родительской директории
         /// </summary>
-        public static string GetParent(string location)
+        public static string GetDirectoryParent(string location)
         {
             try
             {
-                location = GetDirectoryName(location);
+                location = GetDirectory(location);
 
                 var parent = Directory.GetParent(location);
 
@@ -110,10 +111,26 @@ namespace SharpLib
         }
 
         /// <summary>
+        /// Создание каталога
+        /// </summary>
+        public static bool CreateDirectory(string location)
+        {
+            try
+            {
+                Directory.CreateDirectory(location);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Проверка является ли путь директорией
         /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
         public static bool IsDirectory(string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -158,19 +175,16 @@ namespace SharpLib
         /// <returns>Текстовое содержимого файла</returns>
         public static string ReadText(string filename)
         {
-            LastError = FileError.None;
-
             try
             {
                 string text = File.ReadAllText(filename);
 
                 return text;
             }
-            catch (Exception ex)
+            catch
             {
-                SetLastError(ex);
             }
-
+            
             return null;
         }
 
@@ -179,51 +193,26 @@ namespace SharpLib
         /// </summary>
         public static bool WriteText(string filename, string text)
         {
-            LastError = FileError.None;
-
             try
             {
                 File.WriteAllText(filename, text);
 
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
-                SetLastError(ex);
             }
 
             return false;
         }
 
-        private static void SetLastError(Exception ex)
+        /// <summary>
+        /// Сохранение потока в файл
+        /// </summary>
+        public static bool WriteStream(Stream stream, string filename)
         {
-            if (ex is ArgumentException)
-            {
-                LastError = FileError.WrongFormat;
-            }
-            else if (ex is PathTooLongException)
-            {
-                LastError = FileError.WrongFormat;
-            }
-            else if (ex is DirectoryNotFoundException)
-            {
-                LastError = FileError.DirNotFound;
-            }
-            else if (ex is FileNotFoundException)
-            {
-                LastError = FileError.FileNotFound;
-            }
-            else if (ex is IOException)
-            {
-                LastError = FileError.IoException;
-            }
-            else
-            {
-                LastError = FileError.Unknow;
-            }
+            return stream.WriteToFileEx(filename);
         }
-
-
 
     }
 }
