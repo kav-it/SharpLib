@@ -6,7 +6,7 @@
              mc:Ignorable="d"
              d:DesignHeight="247.802" d:DesignWidth="764.272">
     <Grid>
-       <Button Content="Play" Margin="10,10,664,218" Click="ButtonPlay_Click" />
-       <Button Content="Stop" Margin="120,10,554,218" Click="ButtonStop_Click" />
+        <Button Content="Play" Margin="10,10,0,0" Click="ButtonPlay_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90" />
+        <Button Content="Stop" Margin="120,10,0,0" Click="ButtonStop_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90" />
     </Grid>
 </UserControl>
