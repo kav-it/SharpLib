@@ -3,14 +3,25 @@ using System.Text;
 
 namespace NAudio.Wave
 {
-    /// <summary>
-    /// Holds information about a RIFF file chunk
-    /// </summary>
-    public class RiffChunk
+    internal class RiffChunk
     {
-        /// <summary>
-        /// Creates a RiffChunk object
-        /// </summary>
+        #region Свойства
+
+        public int Identifier { get; private set; }
+
+        public string IdentifierAsString
+        {
+            get { return Encoding.UTF8.GetString(BitConverter.GetBytes(Identifier)); }
+        }
+
+        public int Length { get; private set; }
+
+        public long StreamPosition { get; private set; }
+
+        #endregion
+
+        #region Конструктор
+
         public RiffChunk(int identifier, int length, long streamPosition)
         {
             Identifier = identifier;
@@ -18,30 +29,6 @@ namespace NAudio.Wave
             StreamPosition = streamPosition;
         }
 
-        /// <summary>
-        /// The chunk identifier
-        /// </summary>
-        public int Identifier { get; private set; }
-
-        /// <summary>
-        /// The chunk identifier converted to a string
-        /// </summary>
-        public string IdentifierAsString
-        {
-            get
-            {
-                return Encoding.UTF8.GetString(BitConverter.GetBytes(Identifier));
-            }
-        }
-
-        /// <summary>
-        /// The chunk length
-        /// </summary>
-        public int Length { get; private set; }
-
-        /// <summary>
-        /// The stream position this chunk is located at
-        /// </summary>
-        public long StreamPosition { get; private set; }
+        #endregion
     }
 }

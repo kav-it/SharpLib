@@ -1,43 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NAudio.Wave.SampleProviders
+﻿namespace NAudio.Wave.SampleProviders
 {
-    /// <summary>
-    /// Sample Provider to allow fading in and out
-    /// </summary>
-    public class FadeInOutSampleProvider : ISampleProvider
+    internal class FadeInOutSampleProvider : ISampleProvider
     {
-        enum FadeState
+        #region Перечисления
+
+        private enum FadeState
         {
             Silence,
+
             FadingIn,
+
             FullVolume,
+
             FadingOut,
         }
 
+        #endregion
+
+        #region Поля
+
         private readonly object lockObject = new object();
+
         private readonly ISampleProvider source;
-        private int fadeSamplePosition;
+
         private int fadeSampleCount;
+
+        private int fadeSamplePosition;
+
         private FadeState fadeState;
 
-        /// <summary>
-        /// Creates a new FadeInOutSampleProvider
-        /// </summary>
-        /// <param name="source">The source stream with the audio to be faded in or out</param>
-        /// <param name="initiallySilent">If true, we start faded out</param>
+        #endregion
+
+        #region Свойства
+
+        public WaveFormat WaveFormat
+        {
+            get { return source.WaveFormat; }
+        }
+
+        #endregion
+
+        #region Конструктор
+
         public FadeInOutSampleProvider(ISampleProvider source, bool initiallySilent = false)
         {
             this.source = source;
-            this.fadeState = initiallySilent ? FadeState.Silence : FadeState.FullVolume;
+            fadeState = initiallySilent ? FadeState.Silence : FadeState.FullVolume;
         }
 
-        /// <summary>
-        /// Requests that a fade-in begins (will start on the next call to Read)
-        /// </summary>
-        /// <param name="fadeDurationInMilliseconds">Duration of fade in milliseconds</param>
+        #endregion
+
+        #region Методы
+
         public void BeginFadeIn(double fadeDurationInMilliseconds)
         {
             lock (lockObject)
@@ -48,10 +62,6 @@ namespace NAudio.Wave.SampleProviders
             }
         }
 
-        /// <summary>
-        /// Requests that a fade-out begins (will start on the next call to Read)
-        /// </summary>
-        /// <param name="fadeDurationInMilliseconds">Duration of fade in milliseconds</param>
         public void BeginFadeOut(double fadeDurationInMilliseconds)
         {
             lock (lockObject)
@@ -62,13 +72,6 @@ namespace NAudio.Wave.SampleProviders
             }
         }
 
-        /// <summary>
-        /// Reads samples from this sample provider
-        /// </summary>
-        /// <param name="buffer">Buffer to read into</param>
-        /// <param name="offset">Offset within buffer to write to</param>
-        /// <param name="count">Number of samples desired</param>
-        /// <returns>Number of samples read</returns>
         public int Read(float[] buffer, int offset, int count)
         {
             int sourceSamplesRead = source.Read(buffer, offset, count);
@@ -112,7 +115,7 @@ namespace NAudio.Wave.SampleProviders
                 if (fadeSamplePosition > fadeSampleCount)
                 {
                     fadeState = FadeState.Silence;
-                    // clear out the end
+
                     ClearBuffer(buffer, sample + offset, sourceSamplesRead - sample);
                     break;
                 }
@@ -133,18 +136,12 @@ namespace NAudio.Wave.SampleProviders
                 if (fadeSamplePosition > fadeSampleCount)
                 {
                     fadeState = FadeState.FullVolume;
-                    // no need to multiply any more
+
                     break;
                 }
             }
         }
 
-        /// <summary>
-        /// WaveFormat of this SampleProvider
-        /// </summary>
-        public WaveFormat WaveFormat
-        {
-            get { return source.WaveFormat; }
-        }
+        #endregion
     }
 }

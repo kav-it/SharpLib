@@ -8,7 +8,7 @@ namespace NAudio.Mixer
     /// <summary>
     /// Represents a mixer control
     /// </summary>
-    public abstract class MixerControl
+    internal abstract class MixerControl
     {
         internal MixerInterop.MIXERCONTROL mixerControl;
         internal MixerInterop.MIXERCONTROLDETAILS mixerControlDetails;

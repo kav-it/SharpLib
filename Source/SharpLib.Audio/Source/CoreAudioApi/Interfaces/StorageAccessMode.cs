@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NAudio.CoreAudioApi.Interfaces
+﻿namespace NAudio.CoreAudioApi.Interfaces
 {
-    /// <summary>
-    /// MMDevice STGM enumeration
-    /// </summary>
-    enum StorageAccessMode
+    internal enum StorageAccessMode
     {
         Read,
+
         Write,
+
         ReadWrite
     }
 }

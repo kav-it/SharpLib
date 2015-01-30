@@ -1,24 +1,32 @@
-﻿using System;
-using System.Linq;
-using NAudio.Dsp;
+﻿using NAudio.Dsp;
 
 namespace NAudio.Wave.SampleProviders
 {
-    /// <summary>
-    /// Fully managed resampling sample provider, based on the WDL Resampler
-    /// </summary>
-    public class WdlResamplingSampleProvider : ISampleProvider
+    internal class WdlResamplingSampleProvider : ISampleProvider
     {
-        private readonly WdlResampler resampler;
-        private readonly WaveFormat outFormat;
-        private readonly ISampleProvider source;
+        #region Поля
+
         private readonly int channels;
 
-        /// <summary>
-        /// Constructs a new resampler
-        /// </summary>
-        /// <param name="source">Source to resample</param>
-        /// <param name="newSampleRate">Desired output sample rate</param>
+        private readonly WaveFormat outFormat;
+
+        private readonly WdlResampler resampler;
+
+        private readonly ISampleProvider source;
+
+        #endregion
+
+        #region Свойства
+
+        public WaveFormat WaveFormat
+        {
+            get { return outFormat; }
+        }
+
+        #endregion
+
+        #region Конструктор
+
         public WdlResamplingSampleProvider(ISampleProvider source, int newSampleRate)
         {
             channels = source.WaveFormat.Channels;
@@ -28,13 +36,14 @@ namespace NAudio.Wave.SampleProviders
             resampler = new WdlResampler();
             resampler.SetMode(true, 2, false);
             resampler.SetFilterParms();
-            resampler.SetFeedMode(false); // output driven
+            resampler.SetFeedMode(false);
             resampler.SetRates(source.WaveFormat.SampleRate, newSampleRate);
         }
 
-        /// <summary>
-        /// Reads from this sample provider
-        /// </summary>
+        #endregion
+
+        #region Методы
+
         public int Read(float[] buffer, int offset, int count)
         {
             float[] inBuffer;
@@ -46,12 +55,6 @@ namespace NAudio.Wave.SampleProviders
             return outAvailable * channels;
         }
 
-        /// <summary>
-        /// Output WaveFormat
-        /// </summary>
-        public WaveFormat WaveFormat
-        {
-            get { return outFormat; }
-        }
+        #endregion
     }
 }

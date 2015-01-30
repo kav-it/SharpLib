@@ -1,41 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NAudio.Wave
 {
-    /// <summary>
-    /// Event Args for WaveInStream event
-    /// </summary>
-    public class WaveInEventArgs : EventArgs
+    internal class WaveInEventArgs : EventArgs
     {
-        private byte[] buffer;
-        private int bytes;
+        #region Поля
 
-        /// <summary>
-        /// Creates new WaveInEventArgs
-        /// </summary>
+        private readonly byte[] buffer;
+
+        private readonly int bytes;
+
+        #endregion
+
+        #region Свойства
+
+        public byte[] Buffer
+        {
+            get { return buffer; }
+        }
+
+        public int BytesRecorded
+        {
+            get { return bytes; }
+        }
+
+        #endregion
+
+        #region Конструктор
+
         public WaveInEventArgs(byte[] buffer, int bytes)
         {
             this.buffer = buffer;
             this.bytes = bytes;
         }
 
-        /// <summary>
-        /// Buffer containing recorded data. Note that it might not be completely
-        /// full. <seealso cref="BytesRecorded"/>
-        /// </summary>
-        public byte[] Buffer
-        {
-            get { return buffer; }
-        }
-
-        /// <summary>
-        /// The number of recorded bytes in Buffer. <seealso cref="Buffer"/>
-        /// </summary>
-        public int BytesRecorded
-        {
-            get { return bytes; }
-        }
+        #endregion
     }
 }

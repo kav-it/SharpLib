@@ -1,23 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+
 using NAudio.Utils;
 
 namespace NAudio.Wave
 {
-    /// <summary>
-    /// Converts from mono to stereo, allowing freedom to route all, some, or none of the incoming signal to left or right channels
-    /// </summary>
-    public class MonoToStereoProvider16 : IWaveProvider
+    internal class MonoToStereoProvider16 : IWaveProvider
     {
-        private IWaveProvider sourceProvider;
-        private WaveFormat outputFormat;
+        #region Поля
+
+        private readonly WaveFormat outputFormat;
+
+        private readonly IWaveProvider sourceProvider;
+
         private byte[] sourceBuffer;
 
-        /// <summary>
-        /// Creates a new stereo waveprovider based on a mono input
-        /// </summary>
-        /// <param name="sourceProvider">Mono 16 bit PCM input</param>
+        #endregion
+
+        #region Свойства
+
+        public float LeftVolume { get; set; }
+
+        public float RightVolume { get; set; }
+
+        public WaveFormat WaveFormat
+        {
+            get { return outputFormat; }
+        }
+
+        #endregion
+
+        #region Конструктор
+
         public MonoToStereoProvider16(IWaveProvider sourceProvider)
         {
             if (sourceProvider.WaveFormat.Encoding != WaveFormatEncoding.Pcm)
@@ -33,36 +46,19 @@ namespace NAudio.Wave
                 throw new ArgumentException("Source must be 16 bit");
             }
             this.sourceProvider = sourceProvider;
-            this.outputFormat = new WaveFormat(sourceProvider.WaveFormat.SampleRate, 2);
+            outputFormat = new WaveFormat(sourceProvider.WaveFormat.SampleRate, 2);
             RightVolume = 1.0f;
             LeftVolume = 1.0f;
         }
 
-        /// <summary>
-        /// 1.0 to copy the mono stream to the left channel without adjusting volume
-        /// </summary>
-        public float LeftVolume { get; set; }
+        #endregion
 
-        /// <summary>
-        /// 1.0 to copy the mono stream to the right channel without adjusting volume
-        /// </summary>
-        public float RightVolume { get; set; }
+        #region Методы
 
-        /// <summary>
-        /// Output Wave Format
-        /// </summary>
-        public WaveFormat WaveFormat
-        {
-            get { return this.outputFormat; }
-        }
-
-        /// <summary>
-        /// Reads bytes from this WaveProvider
-        /// </summary>
         public int Read(byte[] buffer, int offset, int count)
-        {            
+        {
             int sourceBytesRequired = count / 2;
-            this.sourceBuffer = BufferHelpers.Ensure(this.sourceBuffer, sourceBytesRequired);
+            sourceBuffer = BufferHelpers.Ensure(sourceBuffer, sourceBytesRequired);
             WaveBuffer sourceWaveBuffer = new WaveBuffer(sourceBuffer);
             WaveBuffer destWaveBuffer = new WaveBuffer(buffer);
 
@@ -78,5 +74,6 @@ namespace NAudio.Wave
             return samplesRead * 4;
         }
 
+        #endregion
     }
 }

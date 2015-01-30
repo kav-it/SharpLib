@@ -379,7 +379,7 @@
     <Compile Include="Source\Wave\WaveOutputs\IWaveProvider.cs" />
     <Compile Include="Source\Wave\WaveOutputs\IWaveProviderFloat.cs" />
     <Compile Include="Source\Wave\WaveOutputs\MediaFoundationEncoder.cs" />
-    <Compile Include="Source\Wave\WaveOutputs\PlaybackState.cs" />
+    <Compile Include="Source\Enums\PlaybackState.cs" />
     <Compile Include="Source\Wave\WaveOutputs\StoppedEventArgs.cs" />
     <Compile Include="Source\Wave\WaveOutputs\WasapiOut.cs" />
     <Compile Include="Source\Wave\WaveOutputs\WaveBuffer.cs" />

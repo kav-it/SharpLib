@@ -2,16 +2,10 @@
 
 namespace NAudio.Wave.SampleProviders
 {
-    /// <summary>
-    /// Helper class turning an already 64 bit floating point IWaveProvider
-    /// into an ISampleProvider - hopefully not needed for most applications
-    /// </summary>
-    public class WaveToSampleProvider64 : SampleProviderConverterBase
+    internal class WaveToSampleProvider64 : SampleProviderConverterBase
     {
-        /// <summary>
-        /// Initializes a new instance of the WaveToSampleProvider class
-        /// </summary>
-        /// <param name="source">Source wave provider, must be IEEE float</param>
+        #region Конструктор
+
         public WaveToSampleProvider64(IWaveProvider source)
             : base(source)
         {
@@ -21,9 +15,10 @@ namespace NAudio.Wave.SampleProviders
             }
         }
 
-        /// <summary>
-        /// Reads from this provider
-        /// </summary>
+        #endregion
+
+        #region Методы
+
         public override int Read(float[] buffer, int offset, int count)
         {
             int bytesNeeded = count * 8;
@@ -38,5 +33,7 @@ namespace NAudio.Wave.SampleProviders
             }
             return samplesRead;
         }
+
+        #endregion
     }
 }

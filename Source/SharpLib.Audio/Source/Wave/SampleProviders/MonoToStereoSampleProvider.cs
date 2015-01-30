@@ -2,20 +2,29 @@
 
 namespace NAudio.Wave.SampleProviders
 {
-    /// <summary>
-    /// No nonsense mono to stereo provider, no volume adjustment,
-    /// just copies input to left and right. 
-    /// </summary>
-    public class MonoToStereoSampleProvider : ISampleProvider
+    internal class MonoToStereoSampleProvider : ISampleProvider
     {
+        #region Поля
+
         private readonly ISampleProvider source;
+
         private readonly WaveFormat waveFormat;
+
         private float[] sourceBuffer;
 
-        /// <summary>
-        /// Initializes a new instance of MonoToStereoSampleProvider
-        /// </summary>
-        /// <param name="source">Source sample provider</param>
+        #endregion
+
+        #region Свойства
+
+        public WaveFormat WaveFormat
+        {
+            get { return waveFormat; }
+        }
+
+        #endregion
+
+        #region Конструктор
+
         public MonoToStereoSampleProvider(ISampleProvider source)
         {
             if (source.WaveFormat.Channels != 1)
@@ -23,24 +32,13 @@ namespace NAudio.Wave.SampleProviders
                 throw new ArgumentException("Source must be mono");
             }
             this.source = source;
-            this.waveFormat = WaveFormat.CreateIeeeFloatWaveFormat(source.WaveFormat.SampleRate, 2);
+            waveFormat = WaveFormat.CreateIeeeFloatWaveFormat(source.WaveFormat.SampleRate, 2);
         }
 
-        /// <summary>
-        /// WaveFormat of this provider
-        /// </summary>
-        public WaveFormat WaveFormat
-        {
-            get { return this.waveFormat; }
-        }
+        #endregion
 
-        /// <summary>
-        /// Reads samples from this provider
-        /// </summary>
-        /// <param name="buffer">Sample buffer</param>
-        /// <param name="offset">Offset into sample buffer</param>
-        /// <param name="count">Number of samples required</param>
-        /// <returns>Number of samples read</returns>
+        #region Методы
+
         public int Read(float[] buffer, int offset, int count)
         {
             int sourceSamplesRequired = count / 2;
@@ -57,10 +55,12 @@ namespace NAudio.Wave.SampleProviders
 
         private void EnsureSourceBuffer(int count)
         {
-            if (this.sourceBuffer == null || this.sourceBuffer.Length < count)
+            if (sourceBuffer == null || sourceBuffer.Length < count)
             {
-                this.sourceBuffer = new float[count];
+                sourceBuffer = new float[count];
             }
         }
+
+        #endregion
     }
 }

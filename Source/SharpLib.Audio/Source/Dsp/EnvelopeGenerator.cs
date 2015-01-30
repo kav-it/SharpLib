@@ -1,60 +1,112 @@
 ﻿using System;
-using System.Linq;
 
 namespace NAudio.Dsp
 {
-    // C# ADSR based on work by Nigel Redmon, EarLevel Engineering: earlevel.com
-    // http://www.earlevel.com/main/2013/06/03/envelope-generators-adsr-code/
-    /// <summary>
-    /// Envelope generator (ADSR)
-    /// </summary>
-    public class EnvelopeGenerator
+    internal class EnvelopeGenerator
     {
-        private EnvelopeState state;
-        private float output;
-        private float attackRate;
-        private float decayRate;
-        private float releaseRate;
-        private float attackCoef;
-        private float decayCoef;
-        private float releaseCoef;
-        private float sustainLevel;
-        private float targetRatioAttack;
-        private float targetRatioDecayRelease;
-        private float attackBase;
-        private float decayBase;
-        private float releaseBase;
+        #region Перечисления
 
-        /// <summary>
-        /// Envelope State
-        /// </summary>
         public enum EnvelopeState
         {
-            /// <summary>
-            /// Idle
-            /// </summary>
             Idle = 0,
-            /// <summary>
-            /// Attack
-            /// </summary>
+
             Attack,
-            /// <summary>
-            /// Decay
-            /// </summary>
+
             Decay,
-            /// <summary>
-            /// Sustain
-            /// </summary>
+
             Sustain,
-            /// <summary>
-            /// Release
-            /// </summary>
+
             Release
         };
 
-        /// <summary>
-        /// Creates and Initializes an Envelope Generator
-        /// </summary>
+        #endregion
+
+        #region Поля
+
+        private float attackBase;
+
+        private float attackCoef;
+
+        private float attackRate;
+
+        private float decayBase;
+
+        private float decayCoef;
+
+        private float decayRate;
+
+        private float output;
+
+        private float releaseBase;
+
+        private float releaseCoef;
+
+        private float releaseRate;
+
+        private EnvelopeState state;
+
+        private float sustainLevel;
+
+        private float targetRatioAttack;
+
+        private float targetRatioDecayRelease;
+
+        #endregion
+
+        #region Свойства
+
+        public float AttackRate
+        {
+            get { return attackRate; }
+            set
+            {
+                attackRate = value;
+                attackCoef = CalcCoef(value, targetRatioAttack);
+                attackBase = (1.0f + targetRatioAttack) * (1.0f - attackCoef);
+            }
+        }
+
+        public float DecayRate
+        {
+            get { return decayRate; }
+            set
+            {
+                decayRate = value;
+                decayCoef = CalcCoef(value, targetRatioDecayRelease);
+                decayBase = (sustainLevel - targetRatioDecayRelease) * (1.0f - decayCoef);
+            }
+        }
+
+        public float ReleaseRate
+        {
+            get { return releaseRate; }
+            set
+            {
+                releaseRate = value;
+                releaseCoef = CalcCoef(value, targetRatioDecayRelease);
+                releaseBase = -targetRatioDecayRelease * (1.0f - releaseCoef);
+            }
+        }
+
+        public float SustainLevel
+        {
+            get { return sustainLevel; }
+            set
+            {
+                sustainLevel = value;
+                decayBase = (sustainLevel - targetRatioDecayRelease) * (1.0f - decayCoef);
+            }
+        }
+
+        public EnvelopeState State
+        {
+            get { return state; }
+        }
+
+        #endregion
+
+        #region Конструктор
+
         public EnvelopeGenerator()
         {
             Reset();
@@ -66,105 +118,36 @@ namespace NAudio.Dsp
             SetTargetRatioDecayRelease(0.0001f);
         }
 
-        /// <summary>
-        /// Attack Rate (seconds * SamplesPerSecond)
-        /// </summary>
-        public float AttackRate
-        {
-            get
-            {
-                return attackRate;
-            }
-            set
-            {
-                attackRate = value;
-                attackCoef = CalcCoef(value, targetRatioAttack);
-                attackBase = (1.0f + targetRatioAttack) * (1.0f - attackCoef);
-            }
-        }
+        #endregion
 
-        /// <summary>
-        /// Decay Rate (seconds * SamplesPerSecond)
-        /// </summary>
-        public float DecayRate
-        {
-            get
-            {
-                return decayRate;
-            }
-            set
-            {
-                decayRate = value;
-                decayCoef = CalcCoef(value, targetRatioDecayRelease);
-                decayBase = (sustainLevel - targetRatioDecayRelease) * (1.0f - decayCoef);
-            }
-        }
-
-        /// <summary>
-        /// Release Rate (seconds * SamplesPerSecond)
-        /// </summary>
-        public float ReleaseRate
-        {
-            get
-            {
-                return releaseRate;
-            }
-            set
-            {
-                releaseRate = value;
-                releaseCoef = CalcCoef(value, targetRatioDecayRelease);
-                releaseBase = -targetRatioDecayRelease * (1.0f - releaseCoef);
-            }
-        }
+        #region Методы
 
         private static float CalcCoef(float rate, float targetRatio)
         {
             return (float)Math.Exp(-Math.Log((1.0f + targetRatio) / targetRatio) / rate);
         }
 
-        /// <summary>
-        /// Sustain Level (1 = 100%)
-        /// </summary>
-        public float SustainLevel
-        {
-            get
-            {
-                return sustainLevel;
-            }
-            set
-            {
-                sustainLevel = value;
-                decayBase = (sustainLevel - targetRatioDecayRelease) * (1.0f - decayCoef);
-            }
-        }
-
-        /// <summary>
-        /// Sets the attack curve
-        /// </summary>
-        void SetTargetRatioAttack(float targetRatio)
+        private void SetTargetRatioAttack(float targetRatio)
         {
             if (targetRatio < 0.000000001f)
-                targetRatio = 0.000000001f;  // -180 dB
+            {
+                targetRatio = 0.000000001f;
+            }
             targetRatioAttack = targetRatio;
             attackBase = (1.0f + targetRatioAttack) * (1.0f - attackCoef);
         }
 
-        /// <summary>
-        /// Sets the decay release curve
-        /// </summary>
-        void SetTargetRatioDecayRelease(float targetRatio)
+        private void SetTargetRatioDecayRelease(float targetRatio)
         {
             if (targetRatio < 0.000000001f)
-                targetRatio = 0.000000001f;  // -180 dB
+            {
+                targetRatio = 0.000000001f;
+            }
             targetRatioDecayRelease = targetRatio;
             decayBase = (sustainLevel - targetRatioDecayRelease) * (1.0f - decayCoef);
             releaseBase = -targetRatioDecayRelease * (1.0f - releaseCoef);
         }
 
-        /// <summary>
-        /// Read the next volume multiplier from the envelope generator
-        /// </summary>
-        /// <returns>A volume multiplier</returns>
         public float Process()
         {
             switch (state)
@@ -201,44 +184,29 @@ namespace NAudio.Dsp
             return output;
         }
 
-        /// <summary>
-        /// Trigger the gate
-        /// </summary>
-        /// <param name="gate">If true, enter attack phase, if false enter release phase (unless already idle)</param>
         public void Gate(bool gate)
         {
             if (gate)
-                state = EnvelopeState.Attack;
-            else if (state != EnvelopeState.Idle)
-                state = EnvelopeState.Release;
-        }
-
-        /// <summary>
-        /// Current envelope state
-        /// </summary>
-        public EnvelopeState State
-        {
-            get
             {
-                return state;
+                state = EnvelopeState.Attack;
+            }
+            else if (state != EnvelopeState.Idle)
+            {
+                state = EnvelopeState.Release;
             }
         }
 
-        /// <summary>
-        /// Reset to idle state
-        /// </summary>
         public void Reset()
         {
             state = EnvelopeState.Idle;
             output = 0.0f;
         }
 
-        /// <summary>
-        /// Get the current output level
-        /// </summary>
         public float GetOutput()
         {
             return output;
         }
+
+        #endregion
     }
 }

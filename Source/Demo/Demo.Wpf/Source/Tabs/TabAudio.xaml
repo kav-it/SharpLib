@@ -6,7 +6,12 @@
              mc:Ignorable="d"
              d:DesignHeight="247.802" d:DesignWidth="764.272">
     <Grid>
-        <Button Content="Play" Margin="10,10,0,0" Click="ButtonPlay_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90" />
-        <Button Content="Stop" Margin="120,10,0,0" Click="ButtonStop_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90" />
+        <Button Content="Play" Name="PART_buttonPlay" Margin="10,10,0,0" Click="ButtonPlay_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90" />
+        <Button Content="Pause" Name="PART_buttonPause" Margin="120,10,0,0" Click="ButtonPause_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90" />
+        <Button Content="Stop" Name="PART_buttonStop" Margin="230,10,0,0" Click="ButtonStop_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90" />
+        <Label Content="Громкость" Margin="10,45,689,176"></Label>
+        <Slider HorizontalAlignment="Left" Margin="30,72,0,0" VerticalAlignment="Top" Width="20" Orientation="Vertical" Height="128"/>
+        <Slider HorizontalAlignment="Left" Margin="120,54,0,0" VerticalAlignment="Top" Width="595"/>
+        <Label Name="PART_labelTime" Content="00:00:00/00:00:00" HorizontalAlignment="Left" Margin="120,77,0,0" VerticalAlignment="Top"/>
     </Grid>
 </UserControl>

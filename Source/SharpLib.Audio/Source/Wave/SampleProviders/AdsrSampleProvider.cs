@@ -1,25 +1,60 @@
 ﻿using System;
-using System.Linq;
+
 using NAudio.Dsp;
 
 namespace NAudio.Wave.SampleProviders
 {
-    /// <summary>
-    /// ADSR sample provider allowing you to specify attack, decay, sustain and release values
-    /// </summary>
-    public class AdsrSampleProvider : ISampleProvider
+    internal class AdsrSampleProvider : ISampleProvider
     {
-        private readonly ISampleProvider source;
+        #region Поля
+
         private readonly EnvelopeGenerator adsr;
+
+        private readonly ISampleProvider source;
+
         private float attackSeconds;
+
         private float releaseSeconds;
 
-        /// <summary>
-        /// Creates a new AdsrSampleProvider with default values
-        /// </summary>
+        #endregion
+
+        #region Свойства
+
+        public float AttackSeconds
+        {
+            get { return attackSeconds; }
+            set
+            {
+                attackSeconds = value;
+                adsr.AttackRate = attackSeconds * WaveFormat.SampleRate;
+            }
+        }
+
+        public float ReleaseSeconds
+        {
+            get { return releaseSeconds; }
+            set
+            {
+                releaseSeconds = value;
+                adsr.ReleaseRate = releaseSeconds * WaveFormat.SampleRate;
+            }
+        }
+
+        public WaveFormat WaveFormat
+        {
+            get { return source.WaveFormat; }
+        }
+
+        #endregion
+
+        #region Конструктор
+
         public AdsrSampleProvider(ISampleProvider source)
         {
-            if (source.WaveFormat.Channels > 1) throw new ArgumentException("Currently only supports mono inputs");
+            if (source.WaveFormat.Channels > 1)
+            {
+                throw new ArgumentException("Currently only supports mono inputs");
+            }
             this.source = source;
             adsr = new EnvelopeGenerator();
             AttackSeconds = 0.01f;
@@ -29,44 +64,16 @@ namespace NAudio.Wave.SampleProviders
             adsr.Gate(true);
         }
 
-        /// <summary>
-        /// Attack time in seconds
-        /// </summary>
-        public float AttackSeconds
-        {
-            get
-            {
-                return attackSeconds;
-            }
-            set
-            {
-                attackSeconds = value;
-                adsr.AttackRate = attackSeconds * WaveFormat.SampleRate;
-            }
-        }
+        #endregion
 
-        /// <summary>
-        /// Release time in seconds
-        /// </summary>
-        public float ReleaseSeconds
-        {
-            get
-            {
-                return releaseSeconds;
-            }
-            set
-            {
-                releaseSeconds = value;
-                adsr.ReleaseRate = releaseSeconds * WaveFormat.SampleRate;
-            }
-        }
+        #region Методы
 
-        /// <summary>
-        /// Reads audio from this sample provider
-        /// </summary>
         public int Read(float[] buffer, int offset, int count)
         {
-            if (adsr.State == EnvelopeGenerator.EnvelopeState.Idle) return 0; // we've finished
+            if (adsr.State == EnvelopeGenerator.EnvelopeState.Idle)
+            {
+                return 0;
+            }
             var samples = source.Read(buffer, offset, count);
             for (int n = 0; n < samples; n++)
             {
@@ -75,17 +82,11 @@ namespace NAudio.Wave.SampleProviders
             return samples;
         }
 
-        /// <summary>
-        /// Enters the Release phase
-        /// </summary>
         public void Stop()
         {
             adsr.Gate(false);
         }
 
-        /// <summary>
-        /// The output WaveFormat
-        /// </summary>
-        public WaveFormat WaveFormat { get { return source.WaveFormat; } }
+        #endregion
     }
 }

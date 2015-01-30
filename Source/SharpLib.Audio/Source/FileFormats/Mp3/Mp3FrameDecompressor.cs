@@ -1,24 +1,35 @@
 ﻿using System;
+
 using NAudio.Wave.Compression;
 
 namespace NAudio.Wave
 {
-    /// <summary>
-    /// MP3 Frame Decompressor using ACM
-    /// </summary>
-    public class AcmMp3FrameDecompressor : IMp3FrameDecompressor
+    internal class AcmMp3FrameDecompressor : IMp3FrameDecompressor
     {
+        #region Поля
+
         private readonly AcmStream conversionStream;
+
         private readonly WaveFormat pcmFormat;
+
         private bool disposed;
 
-        /// <summary>
-        /// Creates a new ACM frame decompressor
-        /// </summary>
-        /// <param name="sourceFormat">The MP3 source format</param>
+        #endregion
+
+        #region Свойства
+
+        public WaveFormat OutputFormat
+        {
+            get { return pcmFormat; }
+        }
+
+        #endregion
+
+        #region Конструктор
+
         public AcmMp3FrameDecompressor(WaveFormat sourceFormat)
         {
-            this.pcmFormat = AcmStream.SuggestPcmFormat(sourceFormat);
+            pcmFormat = AcmStream.SuggestPcmFormat(sourceFormat);
             try
             {
                 conversionStream = new AcmStream(sourceFormat, pcmFormat);
@@ -31,18 +42,16 @@ namespace NAudio.Wave
             }
         }
 
-        /// <summary>
-        /// Output format (PCM)
-        /// </summary>
-        public WaveFormat OutputFormat { get { return pcmFormat; } }
+        ~AcmMp3FrameDecompressor()
+        {
+            System.Diagnostics.Debug.Assert(false, "AcmMp3FrameDecompressor Dispose was not called");
+            Dispose();
+        }
 
-        /// <summary>
-        /// Decompresses a frame
-        /// </summary>
-        /// <param name="frame">The MP3 frame</param>
-        /// <param name="dest">destination buffer</param>
-        /// <param name="destOffset">Offset within destination buffer</param>
-        /// <returns>Bytes written into destination buffer</returns>
+        #endregion
+
+        #region Методы
+
         public int DecompressFrame(Mp3Frame frame, byte[] dest, int destOffset)
         {
             if (frame == null)
@@ -61,35 +70,24 @@ namespace NAudio.Wave
             return converted;
         }
 
-        /// <summary>
-        /// Resets the MP3 Frame Decompressor after a reposition operation
-        /// </summary>
         public void Reset()
         {
             conversionStream.Reposition();
         }
 
-        /// <summary>
-        /// Disposes of this MP3 frame decompressor
-        /// </summary>
         public void Dispose()
         {
             if (!disposed)
             {
                 disposed = true;
-				if(conversionStream != null)
-					conversionStream.Dispose();
+                if (conversionStream != null)
+                {
+                    conversionStream.Dispose();
+                }
                 GC.SuppressFinalize(this);
             }
         }
 
-        /// <summary>
-        /// Finalizer ensuring that resources get released properly
-        /// </summary>
-        ~AcmMp3FrameDecompressor()
-        {
-            System.Diagnostics.Debug.Assert(false, "AcmMp3FrameDecompressor Dispose was not called");
-            Dispose();
-        }
+        #endregion
     }
 }

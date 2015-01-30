@@ -2,64 +2,48 @@ using System;
 
 namespace NAudio.Wave
 {
-    /// <summary>
-    /// Represents the interface to a device that can play a WaveFile
-    /// </summary>
-    public interface IWavePlayer : IDisposable
+    internal interface IWavePlayer : IDisposable
     {
-        /// <summary>
-        /// Begin playback
-        /// </summary>
-        void Play();
+        #region Свойства
 
-        /// <summary>
-        /// Stop playback
-        /// </summary>
-        void Stop();
-
-        /// <summary>
-        /// Pause Playback
-        /// </summary>
-        void Pause();
-
-        /// <summary>
-        /// Initialise playback
-        /// </summary>
-        /// <param name="waveProvider">The waveprovider to be played</param>
-        void Init(IWaveProvider waveProvider);
-
-        /// <summary>
-        /// Current playback state
-        /// </summary>
         PlaybackState PlaybackState { get; }
 
-        /// <summary>
-        /// The volume 1.0 is full scale
-        /// </summary>
         [Obsolete("Not intending to keep supporting this going forward: set the volume on your input WaveProvider instead")]
         float Volume { get; set; }
 
-        /// <summary>
-        /// Indicates that playback has gone into a stopped state due to 
-        /// reaching the end of the input stream or an error has been encountered during playback
-        /// </summary>
+        #endregion
+
+        #region События
+
         event EventHandler<StoppedEventArgs> PlaybackStopped;
+
+        #endregion
+
+        #region Методы
+
+        void Play();
+
+        void Stop();
+
+        void Pause();
+
+        void Init(IWaveProvider waveProvider);
+
+        #endregion
     }
 
-    /// <summary>
-    /// Interface for IWavePlayers that can report position
-    /// </summary>
-    public interface IWavePosition
+    internal interface IWavePosition
     {
-        /// <summary>
-        /// Position (in terms of bytes played - does not necessarily)
-        /// </summary>
-        /// <returns>Position in bytes</returns>
+        #region Свойства
+
+        WaveFormat OutputWaveFormat { get; }
+
+        #endregion
+
+        #region Методы
+
         long GetPosition();
 
-        /// <summary>
-        /// Gets a <see cref="Wave.WaveFormat"/> instance indicating the format the hardware is using.
-        /// </summary>
-        WaveFormat OutputWaveFormat { get; }
+        #endregion
     }
 }

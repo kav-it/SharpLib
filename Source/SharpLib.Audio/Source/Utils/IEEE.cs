@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NAudio.Utils
 {
-    /// <summary>
-    /// Methods for converting between IEEE 80-bit extended double precision
-    /// and standard C# double precision.
-    /// </summary>
-    public static class IEEE
+    internal static class IEEE
     {
-        #region Helper Methods
+        #region Методы
+
         private static double UnsignedToFloat(ulong u)
         {
-            return (((double)((long)(u - 2147483647L - 1))) + 2147483648.0);
+            return ((long)(u - 2147483647L - 1) + 2147483648.0);
         }
 
         private static double ldexp(double x, int exp)
@@ -31,15 +26,7 @@ namespace NAudio.Utils
         {
             return ((ulong)(((long)(f - 2147483648.0)) + 2147483647L) + 1);
         }
-        #endregion
 
-        #region ConvertToIeeeExtended
-        /// <summary>
-        /// Converts a C# double precision number to an 80-bit
-        /// IEEE extended double precision number (occupying 10 bytes).
-        /// </summary>
-        /// <param name="num">The double precision number to convert to IEEE extended.</param>
-        /// <returns>An array of 10 bytes containing the IEEE extended number.</returns>
         public static byte[] ConvertToIeeeExtended(double num)
         {
             int sign;
@@ -59,20 +46,24 @@ namespace NAudio.Utils
 
             if (num == 0)
             {
-                expon = 0; hiMant = 0; loMant = 0;
+                expon = 0;
+                hiMant = 0;
+                loMant = 0;
             }
             else
             {
                 fMant = frexp(num, out expon);
                 if ((expon > 16384) || !(fMant < 1))
-                {   //  Infinity or NaN 
-                    expon = sign | 0x7FFF; hiMant = 0; loMant = 0; // infinity 
+                {
+                    expon = sign | 0x7FFF;
+                    hiMant = 0;
+                    loMant = 0;
                 }
                 else
-                {    // Finite 
+                {
                     expon += 16382;
                     if (expon < 0)
-                    {    // denormalized
+                    {
                         fMant = ldexp(fMant, expon);
                         expon = 0;
                     }
@@ -101,18 +92,13 @@ namespace NAudio.Utils
 
             return bytes;
         }
-        #endregion
 
-        #region ConvertFromIeeeExtended
-        /// <summary>
-        /// Converts an IEEE 80-bit extended precision number to a
-        /// C# double precision number.
-        /// </summary>
-        /// <param name="bytes">The 80-bit IEEE extended number (as an array of 10 bytes).</param>
-        /// <returns>A C# double precision number that is a close representation of the IEEE extended number.</returns>
         public static double ConvertFromIeeeExtended(byte[] bytes)
         {
-            if (bytes.Length != 10) throw new Exception("Incorrect length for IEEE extended.");
+            if (bytes.Length != 10)
+            {
+                throw new Exception("Incorrect length for IEEE extended.");
+            }
             double f;
             int expon;
             uint hiMant, loMant;
@@ -127,7 +113,7 @@ namespace NAudio.Utils
             }
             else
             {
-                if (expon == 0x7FFF)    /* Infinity or NaN */
+                if (expon == 0x7FFF)
                 {
                     f = double.NaN;
                 }
@@ -139,9 +125,13 @@ namespace NAudio.Utils
                 }
             }
 
-            if ((bytes[0] & 0x80) == 0x80) return -f;
-            else return f;
+            if ((bytes[0] & 0x80) == 0x80)
+            {
+                return -f;
+            }
+            return f;
         }
+
         #endregion
     }
 }

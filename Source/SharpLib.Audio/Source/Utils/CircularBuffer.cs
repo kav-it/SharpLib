@@ -3,34 +3,48 @@ using System.Diagnostics;
 
 namespace NAudio.Utils
 {
-    /// <summary>
-    /// A very basic circular buffer implementation
-    /// </summary>
-    public class CircularBuffer
+    internal class CircularBuffer
     {
+        #region Поля
+
         private readonly byte[] buffer;
+
         private readonly object lockObject;
-        private int writePosition;
-        private int readPosition;
+
         private int byteCount;
 
-        /// <summary>
-        /// Create a new circular buffer
-        /// </summary>
-        /// <param name="size">Max buffer size in bytes</param>
+        private int readPosition;
+
+        private int writePosition;
+
+        #endregion
+
+        #region Свойства
+
+        public int MaxLength
+        {
+            get { return buffer.Length; }
+        }
+
+        public int Count
+        {
+            get { return byteCount; }
+        }
+
+        #endregion
+
+        #region Конструктор
+
         public CircularBuffer(int size)
         {
             buffer = new byte[size];
             lockObject = new object();
         }
 
-        /// <summary>
-        /// Write data to the buffer
-        /// </summary>
-        /// <param name="data">Data to write</param>
-        /// <param name="offset">Offset into data</param>
-        /// <param name="count">Number of bytes to write</param>
-        /// <returns>number of bytes written</returns>
+        #endregion
+
+        #region Методы
+
         public int Write(byte[] data, int offset, int count)
         {
             lock (lockObject)
@@ -40,7 +54,7 @@ namespace NAudio.Utils
                 {
                     count = buffer.Length - byteCount;
                 }
-                // write to end
+
                 int writeToEnd = Math.Min(buffer.Length - writePosition, count);
                 Array.Copy(data, offset, buffer, writePosition, writeToEnd);
                 writePosition += writeToEnd;
@@ -49,7 +63,7 @@ namespace NAudio.Utils
                 if (bytesWritten < count)
                 {
                     Debug.Assert(writePosition == 0);
-                    // must have wrapped round. Write to start
+
                     Array.Copy(data, offset + bytesWritten, buffer, writePosition, count - bytesWritten);
                     writePosition += (count - bytesWritten);
                     bytesWritten = count;
@@ -59,13 +73,6 @@ namespace NAudio.Utils
             }
         }
 
-        /// <summary>
-        /// Read from the buffer
-        /// </summary>
-        /// <param name="data">Buffer to read into</param>
-        /// <param name="offset">Offset into read buffer</param>
-        /// <param name="count">Bytes to read</param>
-        /// <returns>Number of bytes actually read</returns>
         public int Read(byte[] data, int offset, int count)
         {
             lock (lockObject)
@@ -83,7 +90,6 @@ namespace NAudio.Utils
 
                 if (bytesRead < count)
                 {
-                    // must have wrapped round. Read from start
                     Debug.Assert(readPosition == 0);
                     Array.Copy(buffer, readPosition, data, offset + bytesRead, count - bytesRead);
                     readPosition += (count - bytesRead);
@@ -96,25 +102,6 @@ namespace NAudio.Utils
             }
         }
 
-        /// <summary>
-        /// Maximum length of this circular buffer
-        /// </summary>
-        public int MaxLength
-        {
-            get { return buffer.Length; }
-        }
-
-        /// <summary>
-        /// Number of bytes currently stored in the circular buffer
-        /// </summary>
-        public int Count
-        {
-            get { return byteCount; }
-        }
-
-        /// <summary>
-        /// Resets the buffer
-        /// </summary>
         public void Reset()
         {
             byteCount = 0;
@@ -122,10 +109,6 @@ namespace NAudio.Utils
             writePosition = 0;
         }
 
-        /// <summary>
-        /// Advances the buffer, discarding bytes
-        /// </summary>
-        /// <param name="count">Bytes to advance</param>
         public void Advance(int count)
         {
             if (count >= byteCount)
@@ -139,5 +122,7 @@ namespace NAudio.Utils
                 readPosition %= MaxLength;
             }
         }
+
+        #endregion
     }
 }

@@ -1,81 +1,47 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
+
 using NAudio.Utils;
 
 namespace NAudio.Wave
 {
-    /// <summary>
-    /// Helper stream that lets us read from compressed audio files with large block alignment
-    /// as though we could read any amount and reposition anywhere
-    /// </summary>
-    public class BlockAlignReductionStream : WaveStream
+    internal class BlockAlignReductionStream : WaveStream
     {
-        private WaveStream sourceStream;
-        private long position;
+        #region Поля
+
         private readonly CircularBuffer circularBuffer;
-        private long bufferStartPosition;
-        private byte[] sourceBuffer;
+
         private readonly object lockObject = new object();
 
-        /// <summary>
-        /// Creates a new BlockAlignReductionStream
-        /// </summary>
-        /// <param name="sourceStream">the input stream</param>
-        public BlockAlignReductionStream(WaveStream sourceStream)
-        {
-            this.sourceStream = sourceStream;
-            circularBuffer = new CircularBuffer(sourceStream.WaveFormat.AverageBytesPerSecond * 4);
-        }
+        private long bufferStartPosition;
 
-        private byte[] GetSourceBuffer(int size)
-        {
-            if (sourceBuffer == null || sourceBuffer.Length < size)
-            {
-                // let's give ourselves some leeway
-                sourceBuffer = new byte[size * 2];
-            }
-            return sourceBuffer;
-        }
+        private long position;
 
-        /// <summary>
-        /// Block alignment of this stream
-        /// </summary>
+        private byte[] sourceBuffer;
+
+        private WaveStream sourceStream;
+
+        #endregion
+
+        #region Свойства
+
         public override int BlockAlign
         {
-            get
-            {
-                // can position to sample level
-                return (WaveFormat.BitsPerSample / 8) * WaveFormat.Channels;
-            }
+            get { return (WaveFormat.BitsPerSample / 8) * WaveFormat.Channels; }
         }
 
-        /// <summary>
-        /// Wave Format
-        /// </summary>
         public override WaveFormat WaveFormat
         {
             get { return sourceStream.WaveFormat; }
         }
 
-        /// <summary>
-        /// Length of this Stream
-        /// </summary>
         public override long Length
         {
             get { return sourceStream.Length; }
         }
 
-        /// <summary>
-        /// Current position within stream
-        /// </summary>
         public override long Position
         {
-            get
-            {
-                return position;
-            }
+            get { return position; }
             set
             {
                 lock (lockObject)
@@ -83,7 +49,9 @@ namespace NAudio.Wave
                     if (position != value)
                     {
                         if (position % BlockAlign != 0)
+                        {
                             throw new ArgumentException("Position must be block aligned");
+                        }
                         long sourcePosition = value - (value % sourceStream.BlockAlign);
                         if (sourceStream.Position != sourcePosition)
                         {
@@ -99,16 +67,32 @@ namespace NAudio.Wave
 
         private long BufferEndPosition
         {
-            get
-            {
-
-                return bufferStartPosition + circularBuffer.Count;
-            }
+            get { return bufferStartPosition + circularBuffer.Count; }
         }
 
-        /// <summary>
-        /// Disposes this WaveStream
-        /// </summary>
+        #endregion
+
+        #region Конструктор
+
+        public BlockAlignReductionStream(WaveStream sourceStream)
+        {
+            this.sourceStream = sourceStream;
+            circularBuffer = new CircularBuffer(sourceStream.WaveFormat.AverageBytesPerSecond * 4);
+        }
+
+        #endregion
+
+        #region Методы
+
+        private byte[] GetSourceBuffer(int size)
+        {
+            if (sourceBuffer == null || sourceBuffer.Length < size)
+            {
+                sourceBuffer = new byte[size * 2];
+            }
+            return sourceBuffer;
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -126,18 +110,10 @@ namespace NAudio.Wave
             base.Dispose(disposing);
         }
 
-        /// <summary>
-        /// Reads data from this stream
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="offset"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
         public override int Read(byte[] buffer, int offset, int count)
         {
             lock (lockObject)
             {
-                // 1. attempt to fill the circular buffer with enough data to meet our request
                 while (BufferEndPosition < position + count)
                 {
                     int sourceReadCount = count;
@@ -150,29 +126,25 @@ namespace NAudio.Wave
                     circularBuffer.Write(GetSourceBuffer(sourceReadCount), 0, sourceRead);
                     if (sourceRead == 0)
                     {
-                        // assume we have run out of data
                         break;
                     }
                 }
 
-                // 2. discard any unnecessary stuff from the start
                 if (bufferStartPosition < position)
                 {
                     circularBuffer.Advance((int)(position - bufferStartPosition));
                     bufferStartPosition = position;
                 }
 
-                // 3. now whatever is in the buffer we can return
                 int bytesRead = circularBuffer.Read(buffer, offset, count);
                 position += bytesRead;
-                // anything left in buffer is at start position
+
                 bufferStartPosition = position;
 
                 return bytesRead;
             }
         }
+
+        #endregion
     }
-
-
-
 }

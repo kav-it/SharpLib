@@ -2,27 +2,24 @@
 
 namespace NAudio.CoreAudioApi
 {
-    /// <summary>
-    /// PROPERTYKEY is defined in wtypes.h
-    /// </summary>
-    public struct PropertyKey
+    internal struct PropertyKey
     {
-        /// <summary>
-        /// Format ID
-        /// </summary>
+        #region Поля
+
         public Guid formatId;
-        /// <summary>
-        /// Property ID
-        /// </summary>
+
         public int propertyId;
-        /// <summary>
-        /// <param name="formatId"></param>
-        /// <param name="propertyId"></param>
-        /// </summary>
+
+        #endregion
+
+        #region Конструктор
+
         public PropertyKey(Guid formatId, int propertyId)
         {
             this.formatId = formatId;
             this.propertyId = propertyId;
         }
+
+        #endregion
     }
 }

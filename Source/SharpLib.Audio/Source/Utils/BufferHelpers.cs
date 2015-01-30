@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NAudio.Utils
+﻿namespace NAudio.Utils
 {
-    /// <summary>
-    /// Helper methods for working with audio buffers
-    /// </summary>
-    public static class BufferHelpers
+    internal static class BufferHelpers
     {
-        /// <summary>
-        /// Ensures the buffer is big enough
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="bytesRequired"></param>
-        /// <returns></returns>
+        #region Методы
+
         public static byte[] Ensure(byte[] buffer, int bytesRequired)
         {
             if (buffer == null || buffer.Length < bytesRequired)
@@ -24,12 +13,6 @@ namespace NAudio.Utils
             return buffer;
         }
 
-        /// <summary>
-        /// Ensures the buffer is big enough
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="samplesRequired"></param>
-        /// <returns></returns>
         public static float[] Ensure(float[] buffer, int samplesRequired)
         {
             if (buffer == null || buffer.Length < samplesRequired)
@@ -38,5 +21,7 @@ namespace NAudio.Utils
             }
             return buffer;
         }
+
+        #endregion
     }
 }

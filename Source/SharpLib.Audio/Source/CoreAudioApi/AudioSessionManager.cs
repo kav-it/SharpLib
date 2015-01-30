@@ -1,36 +1,23 @@
-﻿// -----------------------------------------
-// milligan22963 - implemented to work with nAudio
-// 12/2014
-// -----------------------------------------
+﻿using System;
 
-using System;
-using System.Runtime.InteropServices;
 using NAudio.CoreAudioApi.Interfaces;
 
 namespace NAudio.CoreAudioApi
 {
-    /// <summary>
-    /// AudioSessionManager
-    /// 
-    /// Designed to manage audio sessions and in particuar the
-    /// SimpleAudioVolume interface to adjust a session volume
-    /// </summary>
-    public class AudioSessionManager
+    internal class AudioSessionManager
     {
-        private IAudioSessionManager audioSessionInterface;
+        #region Поля
 
-        private SimpleAudioVolume simpleAudioVolume = null;
-        private AudioSessionControl audioSessionControl = null;
+        private readonly IAudioSessionManager audioSessionInterface;
 
-        internal AudioSessionManager(IAudioSessionManager audioSessionManager)
-        {
-            audioSessionInterface = audioSessionManager;
-        }
+        private AudioSessionControl audioSessionControl;
 
-        /// <summary>
-        /// SimpleAudioVolume object
-        /// for adjusting the volume for the user session
-        /// </summary>
+        private SimpleAudioVolume simpleAudioVolume;
+
+        #endregion
+
+        #region Свойства
+
         public SimpleAudioVolume SimpleAudioVolume
         {
             get
@@ -47,10 +34,6 @@ namespace NAudio.CoreAudioApi
             }
         }
 
-        /// <summary>
-        /// AudioSessionControl object
-        /// for registring for callbacks and other session information
-        /// </summary>
         public AudioSessionControl AudioSessionControl
         {
             get
@@ -66,5 +49,16 @@ namespace NAudio.CoreAudioApi
                 return audioSessionControl;
             }
         }
+
+        #endregion
+
+        #region Конструктор
+
+        internal AudioSessionManager(IAudioSessionManager audioSessionManager)
+        {
+            audioSessionInterface = audioSessionManager;
+        }
+
+        #endregion
     }
 }

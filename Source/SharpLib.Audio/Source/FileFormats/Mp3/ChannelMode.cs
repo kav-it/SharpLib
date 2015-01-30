@@ -1,30 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NAudio.Wave
+﻿namespace NAudio.Wave
 {
-    /// <summary>
-    /// Channel Mode
-    /// </summary>
-    public enum ChannelMode
+    internal enum ChannelMode
     {
-        /// <summary>
-        /// Stereo
-        /// </summary>
         Stereo,
-        /// <summary>
-        /// Joint Stereo
-        /// </summary>
+
         JointStereo,
-        /// <summary>
-        /// Dual Channel
-        /// </summary>
+
         DualChannel,
-        /// <summary>
-        /// Mono
-        /// </summary>
+
         Mono
     }
-
 }

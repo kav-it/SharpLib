@@ -1,57 +1,47 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 
 namespace NAudio.Midi
 {
-    /// <summary>
-    /// Represents a Sequencer Specific event
-    /// </summary>
-    public class SequencerSpecificEvent : MetaEvent
+    internal class SequencerSpecificEvent : MetaEvent
     {
+        #region Поля
+
         private byte[] data;
 
-        /// <summary>
-        /// Reads a new sequencer specific event from a MIDI stream
-        /// </summary>
-        /// <param name="br">The MIDI stream</param>
-        /// <param name="length">The data length</param>
-        public SequencerSpecificEvent(BinaryReader br, int length)
+        #endregion
+
+        #region Свойства
+
+        public byte[] Data
         {
-            this.data = br.ReadBytes(length);
+            get { return data; }
+            set
+            {
+                data = value;
+                metaDataLength = data.Length;
+            }
         }
 
-        /// <summary>
-        /// Creates a new Sequencer Specific event
-        /// </summary>
-        /// <param name="data">The sequencer specific data</param>
-        /// <param name="absoluteTime">Absolute time of this event</param>
+        #endregion
+
+        #region Конструктор
+
+        public SequencerSpecificEvent(BinaryReader br, int length)
+        {
+            data = br.ReadBytes(length);
+        }
+
         public SequencerSpecificEvent(byte[] data, long absoluteTime)
             : base(MetaEventType.SequencerSpecific, data.Length, absoluteTime)
         {
             this.data = data;
         }
 
-        /// <summary>
-        /// The contents of this sequencer specific
-        /// </summary>
-        public byte[] Data
-        {
-            get
-            {
-                return this.data;
-            }
-            set
-            {
-                this.data = value;
-                this.metaDataLength = this.data.Length;
-            }
-        }
+        #endregion
 
-        /// <summary>
-        /// Describes this MIDI text event
-        /// </summary>
-        /// <returns>A string describing this event</returns>
+        #region Методы
+
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
@@ -65,15 +55,12 @@ namespace NAudio.Midi
             return sb.ToString();
         }
 
-        /// <summary>
-        /// Calls base class export first, then exports the data 
-        /// specific to this event
-        /// <seealso cref="MidiEvent.Export">MidiEvent.Export</seealso>
-        /// </summary>
         public override void Export(ref long absoluteTime, BinaryWriter writer)
         {
             base.Export(ref absoluteTime, writer);
             writer.Write(data);
         }
+
+        #endregion
     }
 }

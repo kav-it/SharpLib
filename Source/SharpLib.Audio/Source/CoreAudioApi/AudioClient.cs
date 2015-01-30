@@ -1,30 +1,29 @@
 ﻿using System;
-using NAudio.CoreAudioApi.Interfaces;
 using System.Runtime.InteropServices;
+
+using NAudio.CoreAudioApi.Interfaces;
 using NAudio.Wave;
 
 namespace NAudio.CoreAudioApi
 {
-    /// <summary>
-    /// Windows CoreAudio AudioClient
-    /// </summary>
-    public class AudioClient : IDisposable
+    internal class AudioClient : IDisposable
     {
-        private IAudioClient audioClientInterface;
-        private WaveFormat mixFormat;
-        private AudioRenderClient audioRenderClient;
+        #region Поля
+
         private AudioCaptureClient audioCaptureClient;
+
+        private IAudioClient audioClientInterface;
+
         private AudioClockClient audioClockClient;
 
-        internal AudioClient(IAudioClient audioClientInterface)
-        {
-            this.audioClientInterface = audioClientInterface;
-        }
+        private AudioRenderClient audioRenderClient;
 
-        /// <summary>
-        /// Retrieves the stream format that the audio engine uses for its internal processing of shared-mode streams.
-        /// Can be called before initialize
-        /// </summary>
+        private WaveFormat mixFormat;
+
+        #endregion
+
+        #region Свойства
+
         public WaveFormat MixFormat
         {
             get
@@ -41,55 +40,21 @@ namespace NAudio.CoreAudioApi
             }
         }
 
-        /// <summary>
-        /// Initializes the Audio Client
-        /// </summary>
-        /// <param name="shareMode">Share Mode</param>
-        /// <param name="streamFlags">Stream Flags</param>
-        /// <param name="bufferDuration">Buffer Duration</param>
-        /// <param name="periodicity">Periodicity</param>
-        /// <param name="waveFormat">Wave Format</param>
-        /// <param name="audioSessionGuid">Audio Session GUID (can be null)</param>
-        public void Initialize(AudioClientShareMode shareMode,
-            AudioClientStreamFlags streamFlags,
-            long bufferDuration,
-            long periodicity,
-            WaveFormat waveFormat,
-            Guid audioSessionGuid)
-        {
-            int hresult = audioClientInterface.Initialize(shareMode, streamFlags, bufferDuration, periodicity, waveFormat, ref audioSessionGuid);
-            Marshal.ThrowExceptionForHR(hresult);
-            // may have changed the mix format so reset it
-            mixFormat = null;
-        }
-
-        /// <summary>
-        /// Retrieves the size (maximum capacity) of the audio buffer associated with the endpoint. (must initialize first)
-        /// </summary>
         public int BufferSize
         {
             get
             {
                 uint bufferSize;
                 Marshal.ThrowExceptionForHR(audioClientInterface.GetBufferSize(out bufferSize));
-                return (int) bufferSize;
+                return (int)bufferSize;
             }
         }
 
-        /// <summary>
-        /// Retrieves the maximum latency for the current stream and can be called any time after the stream has been initialized.
-        /// </summary>
         public long StreamLatency
         {
-            get
-            {
-                return audioClientInterface.GetStreamLatency();
-            }
+            get { return audioClientInterface.GetStreamLatency(); }
         }
 
-        /// <summary>
-        /// Retrieves the number of frames of padding in the endpoint buffer (must initialize first)
-        /// </summary>
         public int CurrentPadding
         {
             get
@@ -100,10 +65,6 @@ namespace NAudio.CoreAudioApi
             }
         }
 
-        /// <summary>
-        /// Retrieves the length of the periodic interval separating successive processing passes by the audio engine on the data in the endpoint buffer.
-        /// (can be called before initialize)
-        /// </summary>
         public long DefaultDevicePeriod
         {
             get
@@ -115,10 +76,6 @@ namespace NAudio.CoreAudioApi
             }
         }
 
-        /// <summary>
-        /// Gets the minimum device period 
-        /// (can be called before initialize)
-        /// </summary>
         public long MinimumDevicePeriod
         {
             get
@@ -130,15 +87,6 @@ namespace NAudio.CoreAudioApi
             }
         }
 
-        // TODO: GetService:
-        // IID_IAudioSessionControl
-        // IID_IAudioStreamVolume
-        // IID_IChannelAudioVolume
-        // IID_ISimpleAudioVolume
-
-        /// <summary>
-        /// Gets the AudioClockClient service
-        /// </summary>
         public AudioClockClient AudioClockClient
         {
             get
@@ -153,10 +101,7 @@ namespace NAudio.CoreAudioApi
                 return audioClockClient;
             }
         }
-        
-        /// <summary>
-        /// Gets the AudioRenderClient service
-        /// </summary>
+
         public AudioRenderClient AudioRenderClient
         {
             get
@@ -172,9 +117,6 @@ namespace NAudio.CoreAudioApi
             }
         }
 
-        /// <summary>
-        /// Gets the AudioCaptureClient service
-        /// </summary>
         public AudioCaptureClient AudioCaptureClient
         {
             get
@@ -190,12 +132,32 @@ namespace NAudio.CoreAudioApi
             }
         }
 
-        /// <summary>
-        /// Determines whether if the specified output format is supported
-        /// </summary>
-        /// <param name="shareMode">The share mode.</param>
-        /// <param name="desiredFormat">The desired format.</param>
-        /// <returns>True if the format is supported</returns>
+        #endregion
+
+        #region Конструктор
+
+        internal AudioClient(IAudioClient audioClientInterface)
+        {
+            this.audioClientInterface = audioClientInterface;
+        }
+
+        #endregion
+
+        #region Методы
+
+        public void Initialize(AudioClientShareMode shareMode,
+            AudioClientStreamFlags streamFlags,
+            long bufferDuration,
+            long periodicity,
+            WaveFormat waveFormat,
+            Guid audioSessionGuid)
+        {
+            int hresult = audioClientInterface.Initialize(shareMode, streamFlags, bufferDuration, periodicity, waveFormat, ref audioSessionGuid);
+            Marshal.ThrowExceptionForHR(hresult);
+
+            mixFormat = null;
+        }
+
         public bool IsFormatSupported(AudioClientShareMode shareMode,
             WaveFormat desiredFormat)
         {
@@ -203,20 +165,12 @@ namespace NAudio.CoreAudioApi
             return IsFormatSupported(shareMode, desiredFormat, out closestMatchFormat);
         }
 
-        /// <summary>
-        /// Determines if the specified output format is supported in shared mode
-        /// </summary>
-        /// <param name="shareMode">Share Mode</param>
-        /// <param name="desiredFormat">Desired Format</param>
-        /// <param name="closestMatchFormat">Output The closest match format.</param>
-        /// <returns>True if the format is supported</returns>
         public bool IsFormatSupported(AudioClientShareMode shareMode, WaveFormat desiredFormat, out WaveFormatExtensible closestMatchFormat)
         {
             int hresult = audioClientInterface.IsFormatSupported(shareMode, desiredFormat, out closestMatchFormat);
-            // S_OK is 0, S_FALSE = 1
+
             if (hresult == 0)
             {
-                // directly supported
                 return true;
             }
             if (hresult == 1)
@@ -228,51 +182,30 @@ namespace NAudio.CoreAudioApi
                 return false;
             }
             Marshal.ThrowExceptionForHR(hresult);
-            // shouldn't get here
+
             throw new NotSupportedException("Unknown hresult " + hresult);
         }
 
-        /// <summary>
-        /// Starts the audio stream
-        /// </summary>
         public void Start()
         {
             audioClientInterface.Start();
         }
 
-        /// <summary>
-        /// Stops the audio stream.
-        /// </summary>
         public void Stop()
         {
             audioClientInterface.Stop();
         }
 
-        /// <summary>
-        /// Set the Event Handle for buffer synchro.
-        /// </summary>
-        /// <param name="eventWaitHandle">The Wait Handle to setup</param>
         public void SetEventHandle(IntPtr eventWaitHandle)
         {
             audioClientInterface.SetEventHandle(eventWaitHandle);
         }
 
-        /// <summary>
-        /// Resets the audio stream
-        /// Reset is a control method that the client calls to reset a stopped audio stream. 
-        /// Resetting the stream flushes all pending data and resets the audio clock stream 
-        /// position to 0. This method fails if it is called on a stream that is not stopped
-        /// </summary>
         public void Reset()
         {
             audioClientInterface.Reset();
         }
 
-        #region IDisposable Members
-
-        /// <summary>
-        /// Dispose
-        /// </summary>
         public void Dispose()
         {
             if (audioClientInterface != null)

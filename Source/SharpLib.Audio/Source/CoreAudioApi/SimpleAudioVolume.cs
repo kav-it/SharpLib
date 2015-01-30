@@ -1,54 +1,20 @@
-﻿// -----------------------------------------
-// milligan22963 - implemented to work with nAudio
-// 12/2014
-// -----------------------------------------
-
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
+
 using NAudio.CoreAudioApi.Interfaces;
 
 namespace NAudio.CoreAudioApi
 {
-    /// <summary>
-    /// Windows CoreAudio SimpleAudioVolume
-    /// </summary>
-    public class SimpleAudioVolume : IDisposable
+    internal class SimpleAudioVolume : IDisposable
     {
+        #region Поля
+
         private readonly ISimpleAudioVolume simpleAudioVolume;
-
-        /// <summary>
-        /// Creates a new Audio endpoint volume
-        /// </summary>
-        /// <param name="realSimpleVolume">ISimpleAudioVolume COM interface</param>
-        internal SimpleAudioVolume(ISimpleAudioVolume realSimpleVolume)
-        {
-            simpleAudioVolume = realSimpleVolume;
-        }
-
-        #region IDisposable Members
-
-        /// <summary>
-        /// Dispose
-        /// </summary>
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-        }
-        
-        /// <summary>
-        /// Finalizer
-        /// </summary>
-        ~SimpleAudioVolume()
-        {
-            Dispose();
-        }
 
         #endregion
 
-        /// <summary>
-        /// Allows the user to adjust the volume from
-        /// 0.0 to 1.0
-        /// </summary>
+        #region Свойства
+
         public float Volume
         {
             get
@@ -63,27 +29,45 @@ namespace NAudio.CoreAudioApi
                 {
                     Marshal.ThrowExceptionForHR(simpleAudioVolume.SetMasterVolume(value, Guid.Empty));
                 }
-                // should throw something if out of range
             }
         }
 
-        /// <summary>
-        /// Mute
-        /// </summary>
         public bool Mute
         {
             get
             {
                 bool result;
-                
+
                 Marshal.ThrowExceptionForHR(simpleAudioVolume.GetMute(out result));
-               
+
                 return result;
             }
-            set
-            {
-                Marshal.ThrowExceptionForHR(simpleAudioVolume.SetMute(value, Guid.Empty));
-            }
+            set { Marshal.ThrowExceptionForHR(simpleAudioVolume.SetMute(value, Guid.Empty)); }
         }
+
+        #endregion
+
+        #region Конструктор
+
+        internal SimpleAudioVolume(ISimpleAudioVolume realSimpleVolume)
+        {
+            simpleAudioVolume = realSimpleVolume;
+        }
+
+        ~SimpleAudioVolume()
+        {
+            Dispose();
+        }
+
+        #endregion
+
+        #region Методы
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }

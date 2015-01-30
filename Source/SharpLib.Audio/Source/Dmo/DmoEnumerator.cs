@@ -1,42 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace NAudio.Dmo
 {
-    /// <summary>
-    /// DirectX Media Object Enumerator
-    /// </summary>
-    public class DmoEnumerator
+    internal class DmoEnumerator
     {
-        /// <summary>
-        /// Get audio effect names
-        /// </summary>
-        /// <returns>Audio effect names</returns>
+        #region Методы
+
         public static IEnumerable<DmoDescriptor> GetAudioEffectNames()
         {
             return GetDmos(DmoGuids.DMOCATEGORY_AUDIO_EFFECT);
         }
 
-        /// <summary>
-        /// Get audio encoder names
-        /// </summary>
-        /// <returns>Audio encoder names</returns>
         public static IEnumerable<DmoDescriptor> GetAudioEncoderNames()
         {
             return GetDmos(DmoGuids.DMOCATEGORY_AUDIO_ENCODER);
         }
 
-        /// <summary>
-        /// Get audio decoder names
-        /// </summary>
-        /// <returns>Audio decoder names</returns>
         public static IEnumerable<DmoDescriptor> GetAudioDecoderNames()
         {
             return GetDmos(DmoGuids.DMOCATEGORY_AUDIO_DECODER);
         }
-        
+
         private static IEnumerable<DmoDescriptor> GetDmos(Guid category)
         {
             IEnumDmo enumDmo;
@@ -57,5 +43,7 @@ namespace NAudio.Dmo
                 }
             } while (itemsFetched > 0);
         }
+
+        #endregion
     }
 }

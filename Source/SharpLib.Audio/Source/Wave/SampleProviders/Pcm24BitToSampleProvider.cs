@@ -1,30 +1,18 @@
-﻿using System;
-
-namespace NAudio.Wave.SampleProviders
+﻿namespace NAudio.Wave.SampleProviders
 {
-    /// <summary>
-    /// Converts an IWaveProvider containing 24 bit PCM to an
-    /// ISampleProvider
-    /// </summary>
-    public class Pcm24BitToSampleProvider : SampleProviderConverterBase
+    internal class Pcm24BitToSampleProvider : SampleProviderConverterBase
     {
-        /// <summary>
-        /// Initialises a new instance of Pcm24BitToSampleProvider
-        /// </summary>
-        /// <param name="source">Source Wave Provider</param>
+        #region Конструктор
+
         public Pcm24BitToSampleProvider(IWaveProvider source)
             : base(source)
         {
-            
         }
 
-        /// <summary>
-        /// Reads floating point samples from this sample provider
-        /// </summary>
-        /// <param name="buffer">sample buffer</param>
-        /// <param name="offset">offset within sample buffer to write to</param>
-        /// <param name="count">number of samples required</param>
-        /// <returns>number of samples provided</returns>
+        #endregion
+
+        #region Методы
+
         public override int Read(float[] buffer, int offset, int count)
         {
             int sourceBytesRequired = count * 3;
@@ -37,5 +25,7 @@ namespace NAudio.Wave.SampleProviders
             }
             return bytesRead / 3;
         }
+
+        #endregion
     }
 }

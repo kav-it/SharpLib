@@ -51,6 +51,7 @@
     <Compile Include="Source\Events\EventArgs{T}.Changing.cs" />
     <Compile Include="Source\Events\EventArgs{T}.cs" />
     <Compile Include="Source\Extensions\Extension.Byte.cs" />
+    <Compile Include="Source\Extensions\Extension.TimeSpan.cs" />
     <Compile Include="Source\Extensions\Extension.StringBuilder.cs" />
     <Compile Include="Source\Extensions\Extension.Exception.cs" />
     <Compile Include="Source\Extensions\Extension.Guid.cs" />

@@ -1,36 +1,53 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Text;
 
 namespace NAudio.FileFormats.Map
 {
-    /// <summary>
-    /// Represents a Cakewalk Drum Map file (.map)
-    /// </summary>
-    public class CakewalkMapFile
+    internal class CakewalkMapFile
     {
-        private int mapEntryCount;
+        #region Поля
+
         private readonly List<CakewalkDrumMapping> drumMappings;
+
         private MapBlockHeader fileHeader1;
+
         private MapBlockHeader fileHeader2;
-        private MapBlockHeader mapNameHeader;
-        private MapBlockHeader outputs1Header;
-        private MapBlockHeader outputs2Header;
-        private MapBlockHeader outputs3Header;
-        int outputs1Count;
-        int outputs2Count;
-        int outputs3Count;
+
+        private int mapEntryCount;
 
         private string mapName;
 
-        /// <summary>
-        /// Parses a Cakewalk Drum Map file
-        /// </summary>
-        /// <param name="filename">Path of the .map file</param>
+        private MapBlockHeader mapNameHeader;
+
+        private int outputs1Count;
+
+        private MapBlockHeader outputs1Header;
+
+        private int outputs2Count;
+
+        private MapBlockHeader outputs2Header;
+
+        private int outputs3Count;
+
+        private MapBlockHeader outputs3Header;
+
+        #endregion
+
+        #region Свойства
+
+        public List<CakewalkDrumMapping> DrumMappings
+        {
+            get { return drumMappings; }
+        }
+
+        #endregion
+
+        #region Конструктор
+
         public CakewalkMapFile(string filename)
         {
-            using (var reader = new BinaryReader(File.OpenRead(filename),Encoding.Unicode))
+            using (var reader = new BinaryReader(File.OpenRead(filename), Encoding.Unicode))
             {
                 drumMappings = new List<CakewalkDrumMapping>();
                 ReadMapHeader(reader);
@@ -41,23 +58,22 @@ namespace NAudio.FileFormats.Map
                 ReadMapName(reader);
                 ReadOutputsSection1(reader);
                 if (reader.BaseStream.Position == reader.BaseStream.Length)
+                {
                     return;
+                }
                 ReadOutputsSection2(reader);
                 if (reader.BaseStream.Position == reader.BaseStream.Length)
+                {
                     return;
+                }
                 ReadOutputsSection3(reader);
                 System.Diagnostics.Debug.Assert(reader.BaseStream.Position == reader.BaseStream.Length);
             }
         }
 
-        /// <summary>
-        /// The drum mappings in this drum map
-        /// </summary>
-        public List<CakewalkDrumMapping> DrumMappings
-        {
-            get { return drumMappings; }
-        }
+        #endregion
 
+        #region Методы
 
         private void ReadMapHeader(BinaryReader reader)
         {
@@ -69,14 +85,14 @@ namespace NAudio.FileFormats.Map
         private CakewalkDrumMapping ReadMapEntry(BinaryReader reader)
         {
             var mapping = new CakewalkDrumMapping();
-            reader.ReadInt32(); // unknown
+            reader.ReadInt32();
             mapping.InNote = reader.ReadInt32();
-            reader.ReadInt32(); // unknown
-            reader.ReadInt32(); // unknown
-            reader.ReadInt32(); // unknown
-            reader.ReadInt32(); // unknown
-            reader.ReadInt32(); // unknown
-            reader.ReadInt32(); // unknown
+            reader.ReadInt32();
+            reader.ReadInt32();
+            reader.ReadInt32();
+            reader.ReadInt32();
+            reader.ReadInt32();
+            reader.ReadInt32();
             mapping.VelocityScale = reader.ReadSingle();
             mapping.Channel = reader.ReadInt32();
             mapping.OutNote = reader.ReadInt32();
@@ -87,12 +103,13 @@ namespace NAudio.FileFormats.Map
             for (nameLength = 0; nameLength < name.Length; nameLength++)
             {
                 if (name[nameLength] == 0)
+                {
                     break;
+                }
             }
             mapping.NoteName = new string(name, 0, nameLength);
             return mapping;
         }
-
 
         private void ReadMapName(BinaryReader reader)
         {
@@ -102,10 +119,12 @@ namespace NAudio.FileFormats.Map
             for (nameLength = 0; nameLength < name.Length; nameLength++)
             {
                 if (name[nameLength] == 0)
+                {
                     break;
+                }
             }
-            mapName = new string(name,0,nameLength);
-            reader.ReadBytes(98); // unknown
+            mapName = new string(name, 0, nameLength);
+            reader.ReadBytes(98);
         }
 
         private void ReadOutputsSection1(BinaryReader reader)
@@ -114,7 +133,7 @@ namespace NAudio.FileFormats.Map
             outputs1Count = reader.ReadInt32();
             for (int n = 0; n < outputs1Count; n++)
             {
-                reader.ReadBytes(20); // data
+                reader.ReadBytes(20);
             }
         }
 
@@ -124,10 +143,10 @@ namespace NAudio.FileFormats.Map
             outputs2Count = reader.ReadInt32();
             for (int n = 0; n < outputs2Count; n++)
             {
-                reader.ReadBytes(24); // data
+                reader.ReadBytes(24);
             }
         }
-        
+
         private void ReadOutputsSection3(BinaryReader reader)
         {
             outputs3Header = MapBlockHeader.Read(reader);
@@ -136,14 +155,11 @@ namespace NAudio.FileFormats.Map
                 outputs3Count = reader.ReadInt32();
                 for (int n = 0; n < outputs3Count; n++)
                 {
-                    reader.ReadBytes(36); // data
+                    reader.ReadBytes(36);
                 }
             }
         }
 
-        /// <summary>
-        /// Describes this drum map
-        /// </summary>
         public override string ToString()
         {
             var sb = new StringBuilder();
@@ -161,7 +177,7 @@ namespace NAudio.FileFormats.Map
             sb.AppendFormat("Outputs3Header: {0} Count: {1}\r\n", outputs3Header, outputs3Count);
             return sb.ToString();
         }
+
+        #endregion
     }
-
-
 }

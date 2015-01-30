@@ -1,30 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 
 namespace NAudio.Wave
 {
-    /// <summary>
-    /// A wave file writer that adds cue support
-    /// </summary>
-    public class CueWaveFileWriter : WaveFileWriter
+    internal class CueWaveFileWriter : WaveFileWriter
     {
-        private CueList cues = null;
+        #region Поля
 
-        /// <summary>
-        /// Writes a wave file, including a cues chunk
-        /// </summary>
+        private CueList cues;
+
+        #endregion
+
+        #region Конструктор
+
         public CueWaveFileWriter(string fileName, WaveFormat waveFormat)
-            : base (fileName, waveFormat)
+            : base(fileName, waveFormat)
         {
         }
 
-        /// <summary>
-        /// Adds a cue to the Wave file
-        /// </summary>
-        /// <param name="position">Sample position</param>
-        /// <param name="label">Label text</param>
+        #endregion
+
+        #region Методы
+
         public void AddCue(int position, string label)
         {
             if (cues == null)
@@ -36,7 +32,6 @@ namespace NAudio.Wave
 
         private void WriteCues(BinaryWriter w)
         {
-            // write the cue chunks to the end of the stream
             if (cues != null)
             {
                 byte[] cueChunks = cues.GetRIFFChunks();
@@ -48,14 +43,12 @@ namespace NAudio.Wave
             }
         }
 
-        /// <summary>
-        /// Updates the header, and writes the cues out
-        /// </summary>
         protected override void UpdateHeader(BinaryWriter writer)
         {
             base.UpdateHeader(writer);
             WriteCues(writer);
         }
+
+        #endregion
     }
 }
-

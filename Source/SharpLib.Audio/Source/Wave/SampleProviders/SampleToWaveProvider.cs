@@ -1,21 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NAudio.Wave.SampleProviders
 {
-    /// <summary>
-    /// Helper class for when you need to convert back to an IWaveProvider from
-    /// an ISampleProvider. Keeps it as IEEE float
-    /// </summary>
-    public class SampleToWaveProvider : IWaveProvider
+    internal class SampleToWaveProvider : IWaveProvider
     {
-        private ISampleProvider source;
+        #region Поля
 
-        /// <summary>
-        /// Initializes a new instance of the WaveProviderFloatToWaveProvider class
-        /// </summary>
-        /// <param name="source">Source wave provider</param>
+        private readonly ISampleProvider source;
+
+        #endregion
+
+        #region Свойства
+
+        public WaveFormat WaveFormat
+        {
+            get { return source.WaveFormat; }
+        }
+
+        #endregion
+
+        #region Конструктор
+
         public SampleToWaveProvider(ISampleProvider source)
         {
             if (source.WaveFormat.Encoding != WaveFormatEncoding.IeeeFloat)
@@ -25,9 +30,10 @@ namespace NAudio.Wave.SampleProviders
             this.source = source;
         }
 
-        /// <summary>
-        /// Reads from this provider
-        /// </summary>
+        #endregion
+
+        #region Методы
+
         public int Read(byte[] buffer, int offset, int count)
         {
             int samplesNeeded = count / 4;
@@ -36,12 +42,6 @@ namespace NAudio.Wave.SampleProviders
             return samplesRead * 4;
         }
 
-        /// <summary>
-        /// The waveformat of this WaveProvider (same as the source)
-        /// </summary>
-        public WaveFormat WaveFormat
-        {
-            get { return source.WaveFormat; }
-        }
+        #endregion
     }
 }

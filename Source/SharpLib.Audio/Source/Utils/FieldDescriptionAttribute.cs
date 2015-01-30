@@ -2,32 +2,31 @@
 
 namespace NAudio.Utils
 {
-    /// <summary>
-    /// Allows us to add descriptions to interop members
-    /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
-    public class FieldDescriptionAttribute : Attribute
+    internal class FieldDescriptionAttribute : Attribute
     {
-        /// <summary>
-        /// The description
-        /// </summary>
+        #region Свойства
+
         public string Description { get; private set; }
 
-        /// <summary>
-        /// Field description
-        /// </summary>
+        #endregion
+
+        #region Конструктор
+
         public FieldDescriptionAttribute(string description)
         {
             Description = description;
         }
 
-        /// <summary>
-        /// String representation
-        /// </summary>
-        /// <returns></returns>
+        #endregion
+
+        #region Методы
+
         public override string ToString()
         {
             return Description;
         }
+
+        #endregion
     }
 }

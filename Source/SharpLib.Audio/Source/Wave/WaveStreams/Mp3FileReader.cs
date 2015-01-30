@@ -1,166 +1,226 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 
 namespace NAudio.Wave
 {
-    class Mp3Index
+    internal class Mp3Index
     {
+        #region Свойства
+
         public long FilePosition { get; set; }
+
         public long SamplePosition { get; set; }
+
         public int SampleCount { get; set; }
+
         public int ByteCount { get; set; }
+
+        #endregion
     }
 
-    /// <summary>
-    /// Class for reading from MP3 files
-    /// </summary>
-    public class Mp3FileReader : WaveStream
+    internal class Mp3FileReader : WaveStream
     {
-        private readonly WaveFormat waveFormat;
-        private Stream mp3Stream;
-        private readonly long mp3DataLength;
-        private readonly long dataStartPosition;
-        
-        /// <summary>
-        /// The MP3 wave format (n.b. NOT the output format of this stream - see the WaveFormat property)
-        /// </summary>
+        #region Делегаты
+
+        public delegate IMp3FrameDecompressor FrameDecompressorBuilder(WaveFormat mp3Format);
+
+        #endregion
+
+        #region Поля
+
+        private readonly int _bytesPerSample;
+
+        private readonly long _dataStartPosition;
+
+        private readonly byte[] _decompressBuffer;
+
+        private readonly byte[] _id3V1Tag;
+
+        private readonly Id3v2Tag _id3V2Tag;
+
+        private readonly long _mp3DataLength;
+
+        private readonly bool _ownInputStream;
+
+        private readonly object _repositionLock;
+
+        private readonly WaveFormat _waveFormat;
+
+        private readonly XingHeader _xingHeader;
+
+        private int _decompressBufferOffset;
+
+        private int _decompressLeftovers;
+
+        private IMp3FrameDecompressor _decompressor;
+
+        private Stream _mp3Stream;
+
+        private bool _repositionedFlag;
+
+        private List<Mp3Index> _tableOfContents;
+
+        private int _tocIndex;
+
+        private long _totalSamples;
+
+        #endregion
+
+        #region Свойства
+
         public Mp3WaveFormat Mp3WaveFormat { get; private set; }
 
-        private readonly Id3v2Tag id3v2Tag;
-        private readonly XingHeader xingHeader;
-        private readonly byte[] id3v1Tag;
-        private readonly bool ownInputStream;
-
-        private List<Mp3Index> tableOfContents;
-        private int tocIndex;
-
-        private long totalSamples;
-        private readonly int bytesPerSample;
-
-        private IMp3FrameDecompressor decompressor;
-        
-        private readonly byte[] decompressBuffer;
-        private int decompressBufferOffset;
-        private int decompressLeftovers;
-        private bool repositionedFlag;
-
-        private readonly object repositionLock = new object();
-
-        /// <summary>Supports opening a MP3 file</summary>
-        public Mp3FileReader(string mp3FileName) 
-            : this(File.OpenRead(mp3FileName))
+        public Id3v2Tag Id3V2Tag
         {
-            ownInputStream = true;
+            get { return _id3V2Tag; }
         }
 
-        /// <summary>Supports opening a MP3 file</summary>
-        /// <param name="mp3FileName">MP3 File name</param>
-        /// <param name="frameDecompressorBuilder">Factory method to build a frame decompressor</param>
+        public byte[] Id3V1Tag
+        {
+            get { return _id3V1Tag; }
+        }
+
+        public override long Length
+        {
+            get { return _totalSamples * _bytesPerSample; }
+        }
+
+        public override WaveFormat WaveFormat
+        {
+            get { return _waveFormat; }
+        }
+
+        public override long Position
+        {
+            get
+            {
+                if (_tocIndex >= _tableOfContents.Count)
+                {
+                    return Length;
+                }
+                return (_tableOfContents[_tocIndex].SamplePosition * _bytesPerSample) + _decompressBufferOffset;
+            }
+            set
+            {
+                lock (_repositionLock)
+                {
+                    value = Math.Max(Math.Min(value, Length), 0);
+                    var samplePosition = value / _bytesPerSample;
+                    Mp3Index mp3Index = null;
+                    for (int index = 0; index < _tableOfContents.Count; index++)
+                    {
+                        if (_tableOfContents[index].SamplePosition >= samplePosition)
+                        {
+                            mp3Index = _tableOfContents[index];
+                            _tocIndex = index;
+                            break;
+                        }
+                    }
+                    if (mp3Index != null)
+                    {
+                        _mp3Stream.Position = mp3Index.FilePosition;
+                    }
+                    else
+                    {
+                        _mp3Stream.Position = _mp3DataLength + _dataStartPosition;
+                    }
+                    _decompressBufferOffset = 0;
+                    _decompressLeftovers = 0;
+                    _repositionedFlag = true;
+                }
+            }
+        }
+
+        public XingHeader XingHeader
+        {
+            get { return _xingHeader; }
+        }
+
+        #endregion
+
+        #region Конструктор
+
+        public Mp3FileReader(string mp3FileName)
+            : this(File.OpenRead(mp3FileName))
+        {
+            _ownInputStream = true;
+        }
+
         public Mp3FileReader(string mp3FileName, FrameDecompressorBuilder frameDecompressorBuilder)
             : this(File.OpenRead(mp3FileName), frameDecompressorBuilder)
         {
-            ownInputStream = true;
+            _ownInputStream = true;
         }
 
-        /// <summary>
-        /// Opens MP3 from a stream rather than a file
-        /// Will not dispose of this stream itself
-        /// </summary>
-        /// <param name="inputStream">The incoming stream containing MP3 data</param>
         public Mp3FileReader(Stream inputStream)
-            : this (inputStream, CreateAcmFrameDecompressor)
+            : this(inputStream, CreateAcmFrameDecompressor)
         {
-            
         }
-        
-        /// <summary>
-        /// Opens MP3 from a stream rather than a file
-        /// Will not dispose of this stream itself
-        /// </summary>
-        /// <param name="inputStream">The incoming stream containing MP3 data</param>
-        /// <param name="frameDecompressorBuilder">Factory method to build a frame decompressor</param>
+
         public Mp3FileReader(Stream inputStream, FrameDecompressorBuilder frameDecompressorBuilder)
         {
-            // Calculated as a double to minimize rounding errors
+            _repositionLock = new object();
+            _mp3Stream = inputStream;
+            _id3V2Tag = Id3v2Tag.ReadTag(_mp3Stream);
 
-            mp3Stream = inputStream;
-            id3v2Tag = Id3v2Tag.ReadTag(mp3Stream);
-
-            dataStartPosition = mp3Stream.Position;
-            var firstFrame = Mp3Frame.LoadFromStream(mp3Stream);
+            _dataStartPosition = _mp3Stream.Position;
+            var firstFrame = Mp3Frame.LoadFromStream(_mp3Stream);
             double bitRate = firstFrame.BitRate;
-            xingHeader = XingHeader.LoadXingHeader(firstFrame);
-            // If the header exists, we can skip over it when decoding the rest of the file
-            if (xingHeader != null) dataStartPosition = mp3Stream.Position;
+            _xingHeader = XingHeader.LoadXingHeader(firstFrame);
 
-            // workaround for a longstanding issue with some files failing to load
-            // because they report a spurious sample rate change
-            var secondFrame = Mp3Frame.LoadFromStream(mp3Stream);
-            if (secondFrame != null && 
-                (secondFrame.SampleRate != firstFrame.SampleRate ||
-                secondFrame.ChannelMode != firstFrame.ChannelMode))
+            if (_xingHeader != null)
             {
-                // assume that the first frame was some kind of VBR/LAME header that we failed to recognise properly
-                dataStartPosition = secondFrame.FileOffset;
-                // forget about the first frame, the second one is the first one we really care about
+                _dataStartPosition = _mp3Stream.Position;
+            }
+
+            var secondFrame = Mp3Frame.LoadFromStream(_mp3Stream);
+            if (secondFrame != null &&
+                (secondFrame.SampleRate != firstFrame.SampleRate ||
+                 secondFrame.ChannelMode != firstFrame.ChannelMode))
+            {
+                _dataStartPosition = secondFrame.FileOffset;
+
                 firstFrame = secondFrame;
             }
 
-            this.mp3DataLength = mp3Stream.Length - dataStartPosition;
+            _mp3DataLength = _mp3Stream.Length - _dataStartPosition;
 
-            // try for an ID3v1 tag as well
-            mp3Stream.Position = mp3Stream.Length - 128;
+            _mp3Stream.Position = _mp3Stream.Length - 128;
             byte[] tag = new byte[128];
-            mp3Stream.Read(tag, 0, 128);
+            _mp3Stream.Read(tag, 0, 128);
             if (tag[0] == 'T' && tag[1] == 'A' && tag[2] == 'G')
             {
-                id3v1Tag = tag;
-                this.mp3DataLength -= 128;
+                _id3V1Tag = tag;
+                _mp3DataLength -= 128;
             }
 
-            mp3Stream.Position = dataStartPosition;
-            
-            // create a temporary MP3 format before we know the real bitrate
-            this.Mp3WaveFormat = new Mp3WaveFormat(firstFrame.SampleRate, firstFrame.ChannelMode == ChannelMode.Mono ? 1 : 2, firstFrame.FrameLength, (int)bitRate);
-            
+            _mp3Stream.Position = _dataStartPosition;
+
+            Mp3WaveFormat = new Mp3WaveFormat(firstFrame.SampleRate, firstFrame.ChannelMode == ChannelMode.Mono ? 1 : 2, firstFrame.FrameLength, (int)bitRate);
+
             CreateTableOfContents();
-            this.tocIndex = 0;
+            _tocIndex = 0;
 
-            // [Bit rate in Kilobits/sec] = [Length in kbits] / [time in seconds] 
-            //                            = [Length in bits ] / [time in milliseconds]
-            
-            // Note: in audio, 1 kilobit = 1000 bits.
-            bitRate = (mp3DataLength * 8.0 / TotalSeconds());
+            bitRate = (_mp3DataLength * 8.0 / TotalSeconds());
 
-            mp3Stream.Position = dataStartPosition;
+            _mp3Stream.Position = _dataStartPosition;
 
-            // now we know the real bitrate we can create an accurate 
-            this.Mp3WaveFormat = new Mp3WaveFormat(firstFrame.SampleRate, firstFrame.ChannelMode == ChannelMode.Mono ? 1 : 2, firstFrame.FrameLength, (int)bitRate);
-            decompressor = frameDecompressorBuilder(Mp3WaveFormat); 
-            this.waveFormat = decompressor.OutputFormat;
-            this.bytesPerSample = (decompressor.OutputFormat.BitsPerSample) / 8 * decompressor.OutputFormat.Channels;
-            // no MP3 frames have more than 1152 samples in them
-            // some MP3s I seem to get double
-            this.decompressBuffer = new byte[1152 * bytesPerSample * 2];
+            Mp3WaveFormat = new Mp3WaveFormat(firstFrame.SampleRate, firstFrame.ChannelMode == ChannelMode.Mono ? 1 : 2, firstFrame.FrameLength, (int)bitRate);
+            _decompressor = frameDecompressorBuilder(Mp3WaveFormat);
+            _waveFormat = _decompressor.OutputFormat;
+            _bytesPerSample = (_decompressor.OutputFormat.BitsPerSample) / 8 * _decompressor.OutputFormat.Channels;
+
+            _decompressBuffer = new byte[1152 * _bytesPerSample * 2];
         }
 
-        /// <summary>
-        /// Function that can create an MP3 Frame decompressor
-        /// </summary>
-        /// <param name="mp3Format">A WaveFormat object describing the MP3 file format</param>
-        /// <returns>An MP3 Frame decompressor</returns>
-        public delegate IMp3FrameDecompressor FrameDecompressorBuilder(WaveFormat mp3Format);
+        #endregion
 
-        /// <summary>
-        /// Creates an ACM MP3 Frame decompressor. This is the default with NAudio
-        /// </summary>
-        /// <param name="mp3Format">A WaveFormat object based </param>
-        /// <returns></returns>
+        #region Методы
+
         public static IMp3FrameDecompressor CreateAcmFrameDecompressor(WaveFormat mp3Format)
         {
-            // new DmoMp3FrameDecompressor(this.Mp3WaveFormat); 
             return new AcmMp3FrameDecompressor(mp3Format);
         }
 
@@ -168,30 +228,27 @@ namespace NAudio.Wave
         {
             try
             {
-                // Just a guess at how many entries we'll need so the internal array need not resize very much
-                // 400 bytes per frame is probably a good enough approximation.
-                tableOfContents = new List<Mp3Index>((int)(mp3DataLength / 400));
-                Mp3Frame frame = null;
+                _tableOfContents = new List<Mp3Index>((int)(_mp3DataLength / 400));
+                Mp3Frame frame;
                 do
                 {
                     var index = new Mp3Index();
-                    index.FilePosition = mp3Stream.Position;
-                    index.SamplePosition = totalSamples;
+                    index.FilePosition = _mp3Stream.Position;
+                    index.SamplePosition = _totalSamples;
                     frame = ReadNextFrame(false);
                     if (frame != null)
                     {
                         ValidateFrameFormat(frame);
 
-                        totalSamples += frame.SampleCount;
+                        _totalSamples += frame.SampleCount;
                         index.SampleCount = frame.SampleCount;
-                        index.ByteCount = (int)(mp3Stream.Position - index.FilePosition);
-                        tableOfContents.Add(index);
+                        index.ByteCount = (int)(_mp3Stream.Position - index.FilePosition);
+                        _tableOfContents.Add(index);
                     }
                 } while (frame != null);
             }
             catch (EndOfStreamException)
             {
-                // not necessarily a problem
             }
         }
 
@@ -216,152 +273,50 @@ namespace NAudio.Wave
             }
         }
 
-        /// <summary>
-        /// Gets the total length of this file in milliseconds.
-        /// </summary>
         private double TotalSeconds()
         {
-            return (double)this.totalSamples / Mp3WaveFormat.SampleRate;
+            return (double)_totalSamples / Mp3WaveFormat.SampleRate;
         }
 
-        /// <summary>
-        /// ID3v2 tag if present
-        /// </summary>
-        public Id3v2Tag Id3v2Tag
-        {
-            get { return id3v2Tag; }
-        }
-
-        /// <summary>
-        /// ID3v1 tag if present
-        /// </summary>
-        public byte[] Id3v1Tag
-        {
-            get { return id3v1Tag; }
-        }
-
-        /// <summary>
-        /// Reads the next mp3 frame
-        /// </summary>
-        /// <returns>Next mp3 frame, or null if EOF</returns>
         public Mp3Frame ReadNextFrame()
         {
             return ReadNextFrame(true);
         }
 
-        /// <summary>
-        /// Reads the next mp3 frame
-        /// </summary>
-        /// <returns>Next mp3 frame, or null if EOF</returns>
         private Mp3Frame ReadNextFrame(bool readData)
         {
             Mp3Frame frame = null;
             try
             {
-                frame = Mp3Frame.LoadFromStream(mp3Stream, readData);
+                frame = Mp3Frame.LoadFromStream(_mp3Stream, readData);
                 if (frame != null)
                 {
-                    tocIndex++;
+                    _tocIndex++;
                 }
             }
             catch (EndOfStreamException)
             {
-                // suppress for now - it means we unexpectedly got to the end of the stream
-                // half way through
             }
             return frame;
         }
 
-        /// <summary>
-        /// This is the length in bytes of data available to be read out from the Read method
-        /// (i.e. the decompressed MP3 length)
-        /// n.b. this may return 0 for files whose length is unknown
-        /// </summary>
-        public override long Length
-        {
-            get
-            {
-                return this.totalSamples * this.bytesPerSample; // assume converting to 16 bit (n.b. may have to check if this includes) //length;
-            }
-        }
-
-        /// <summary>
-        /// <see cref="WaveStream.WaveFormat"/>
-        /// </summary>
-        public override WaveFormat WaveFormat
-        {
-            get { return waveFormat; }
-        }
-
-        /// <summary>
-        /// <see cref="Stream.Position"/>
-        /// </summary>
-        public override long Position
-        {
-            get
-            {
-                if (tocIndex >= tableOfContents.Count)
-                {
-                    return this.Length;
-                }
-                else
-                {
-                    return (tableOfContents[tocIndex].SamplePosition * this.bytesPerSample) + decompressBufferOffset;
-                }
-            }
-            set
-            {
-                lock (repositionLock)
-                {
-                    value = Math.Max(Math.Min(value, Length), 0);
-                    var samplePosition = value / this.bytesPerSample;
-                    Mp3Index mp3Index = null;
-                    for (int index = 0; index < tableOfContents.Count; index++)
-                    {
-                        if (tableOfContents[index].SamplePosition >= samplePosition)
-                        {
-                            mp3Index = tableOfContents[index];
-                            tocIndex = index;
-                            break;
-                        }
-                    }
-                    if (mp3Index != null)
-                    {
-                        // perform the reposition
-                        mp3Stream.Position = mp3Index.FilePosition;
-                    }
-                    else
-                    {
-                        // we are repositioning to the end of the data
-                        mp3Stream.Position = mp3DataLength + dataStartPosition;
-                    }
-                    decompressBufferOffset = 0;
-                    decompressLeftovers = 0;
-                    repositionedFlag = true;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Reads decompressed PCM data from our MP3 file.
-        /// </summary>
         public override int Read(byte[] sampleBuffer, int offset, int numBytes)
         {
             int bytesRead = 0;
-            lock (repositionLock)
+            lock (_repositionLock)
             {
-                if (decompressLeftovers != 0)
+                if (_decompressLeftovers != 0)
                 {
-                    int toCopy = Math.Min(decompressLeftovers, numBytes);
-                    Array.Copy(decompressBuffer, decompressBufferOffset, sampleBuffer, offset, toCopy);
-                    decompressLeftovers -= toCopy;
-                    if (decompressLeftovers == 0)
+                    int toCopy = Math.Min(_decompressLeftovers, numBytes);
+                    Array.Copy(_decompressBuffer, _decompressBufferOffset, sampleBuffer, offset, toCopy);
+                    _decompressLeftovers -= toCopy;
+                    if (_decompressLeftovers == 0)
                     {
-                        decompressBufferOffset = 0;
+                        _decompressBufferOffset = 0;
                     }
                     else
                     {
-                        decompressBufferOffset += toCopy;
+                        _decompressBufferOffset += toCopy;
                     }
                     bytesRead += toCopy;
                     offset += toCopy;
@@ -372,25 +327,24 @@ namespace NAudio.Wave
                     Mp3Frame frame = ReadNextFrame();
                     if (frame != null)
                     {
-                        if (repositionedFlag)
+                        if (_repositionedFlag)
                         {
-                            decompressor.Reset();
-                            repositionedFlag = false;
+                            _decompressor.Reset();
+                            _repositionedFlag = false;
                         }
-                        int decompressed = decompressor.DecompressFrame(frame, decompressBuffer, 0);
-                        
+                        int decompressed = _decompressor.DecompressFrame(frame, _decompressBuffer, 0);
+
                         int toCopy = Math.Min(decompressed, numBytes - bytesRead);
-                        Array.Copy(decompressBuffer, 0, sampleBuffer, offset, toCopy);
+                        Array.Copy(_decompressBuffer, 0, sampleBuffer, offset, toCopy);
                         if (toCopy < decompressed)
                         {
-                            decompressBufferOffset = toCopy;
-                            decompressLeftovers = decompressed - toCopy;
+                            _decompressBufferOffset = toCopy;
+                            _decompressLeftovers = decompressed - toCopy;
                         }
                         else
                         {
-                            // no lefovers
-                            decompressBufferOffset = 0;
-                            decompressLeftovers = 0;
+                            _decompressBufferOffset = 0;
+                            _decompressLeftovers = 0;
                         }
                         offset += toCopy;
                         bytesRead += toCopy;
@@ -405,36 +359,27 @@ namespace NAudio.Wave
             return bytesRead;
         }
 
-        /// <summary>
-        /// Xing header if present
-        /// </summary>
-        public XingHeader XingHeader
-        {
-            get { return xingHeader; }
-        }
-
-        /// <summary>
-        /// Disposes this WaveStream
-        /// </summary>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (mp3Stream != null)
+                if (_mp3Stream != null)
                 {
-                    if (ownInputStream)
+                    if (_ownInputStream)
                     {
-                        mp3Stream.Dispose();
+                        _mp3Stream.Dispose();
                     }
-                    mp3Stream = null;
+                    _mp3Stream = null;
                 }
-                if (decompressor != null)
+                if (_decompressor != null)
                 {
-                    decompressor.Dispose();
-                    decompressor = null;
+                    _decompressor.Dispose();
+                    _decompressor = null;
                 }
             }
             base.Dispose(disposing);
         }
+
+        #endregion
     }
 }

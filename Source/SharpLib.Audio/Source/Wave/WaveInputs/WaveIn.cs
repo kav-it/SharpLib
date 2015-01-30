@@ -1,57 +1,68 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 using System.Threading;
+
 using NAudio.Mixer;
 
 namespace NAudio.Wave
 {
-    /// <summary>
-    /// Allows recording using the Windows waveIn APIs
-    /// Events are raised as recorded buffers are made available
-    /// </summary>
-    public class WaveIn : IWaveIn
+    internal class WaveIn : IWaveIn
     {
-        private IntPtr waveInHandle;
-        private volatile bool recording;
-        private WaveInBuffer[] buffers;
+        #region Поля
+
         private readonly WaveInterop.WaveCallback callback;
-        private WaveCallbackInfo callbackInfo;
+
         private readonly SynchronizationContext syncContext;
+
+        private WaveInBuffer[] buffers;
+
+        private WaveCallbackInfo callbackInfo;
+
         private int lastReturnedBufferIndex;
-        /// <summary>
-        /// Indicates recorded data is available 
-        /// </summary>
+
+        private volatile bool recording;
+
+        private IntPtr waveInHandle;
+
+        #endregion
+
+        #region Свойства
+
+        public static int DeviceCount
+        {
+            get { return WaveInterop.waveInGetNumDevs(); }
+        }
+
+        public int BufferMilliseconds { get; set; }
+
+        public int NumberOfBuffers { get; set; }
+
+        public int DeviceNumber { get; set; }
+
+        public WaveFormat WaveFormat { get; set; }
+
+        #endregion
+
+        #region События
+
         public event EventHandler<WaveInEventArgs> DataAvailable;
 
-        /// <summary>
-        /// Indicates that all recorded data has now been received.
-        /// </summary>
         public event EventHandler<StoppedEventArgs> RecordingStopped;
 
-        /// <summary>
-        /// Prepares a Wave input device for recording
-        /// </summary>
+        #endregion
+
+        #region Конструктор
+
         public WaveIn()
             : this(WaveCallbackInfo.NewWindow())
         {
-
         }
 
-        /// <summary>
-        /// Creates a WaveIn device using the specified window handle for callbacks
-        /// </summary>
-        /// <param name="windowHandle">A valid window handle</param>
         public WaveIn(IntPtr windowHandle)
             : this(WaveCallbackInfo.ExistingWindow(windowHandle))
         {
-
         }
 
-        /// <summary>
-        /// Prepares a Wave input device for recording
-        /// </summary>
         public WaveIn(WaveCallbackInfo callbackInfo)
         {
             syncContext = SynchronizationContext.Current;
@@ -69,22 +80,10 @@ namespace NAudio.Wave
             callbackInfo.Connect(callback);
         }
 
-        /// <summary>
-        /// Returns the number of Wave In devices available in the system
-        /// </summary>
-        public static int DeviceCount
-        {
-            get
-            {
-                return WaveInterop.waveInGetNumDevs();
-            }
-        }
+        #endregion
 
-        /// <summary>
-        /// Retrieves the capabilities of a waveIn device
-        /// </summary>
-        /// <param name="devNumber">Device to test</param>
-        /// <returns>The WaveIn device capabilities</returns>
+        #region Методы
+
         public static WaveInCapabilities GetCapabilities(int devNumber)
         {
             var caps = new WaveInCapabilities();
@@ -93,24 +92,8 @@ namespace NAudio.Wave
             return caps;
         }
 
-        /// <summary>
-        /// Milliseconds for the buffer. Recommended value is 100ms
-        /// </summary>
-        public int BufferMilliseconds { get; set; }
-
-        /// <summary>
-        /// Number of Buffers to use (usually 2 or 3)
-        /// </summary>
-        public int NumberOfBuffers { get; set; }
-
-        /// <summary>
-        /// The device number to use
-        /// </summary>
-        public int DeviceNumber { get; set; }
-
         private void CreateBuffers()
         {
-            // Default to three buffers of 100ms each
             int bufferSize = BufferMilliseconds * WaveFormat.AverageBytesPerSecond / 1000;
             if (bufferSize % WaveFormat.BlockAlign != 0)
             {
@@ -124,9 +107,6 @@ namespace NAudio.Wave
             }
         }
 
-        /// <summary>
-        /// Called when we get a new buffer of recorded data
-        /// </summary>
         private void Callback(IntPtr waveInHandle, WaveInterop.WaveMessage message, IntPtr userData, WaveHeader waveHeader, IntPtr reserved)
         {
             if (message == WaveInterop.WaveMessage.WaveInData)
@@ -135,8 +115,11 @@ namespace NAudio.Wave
                 {
                     var hBuffer = (GCHandle)waveHeader.userData;
                     var buffer = (WaveInBuffer)hBuffer.Target;
-                    if (buffer == null) return;
-                
+                    if (buffer == null)
+                    {
+                        return;
+                    }
+
                     lastReturnedBufferIndex = Array.IndexOf(buffers, buffer);
                     RaiseDataAvailable(buffer);
                     try
@@ -149,7 +132,6 @@ namespace NAudio.Wave
                         RaiseRecordingStopped(e);
                     }
                 }
-                
             }
         }
 
@@ -167,13 +149,13 @@ namespace NAudio.Wave
             var handler = RecordingStopped;
             if (handler != null)
             {
-                if (this.syncContext == null)
+                if (syncContext == null)
                 {
                     handler(this, new StoppedEventArgs(e));
                 }
                 else
                 {
-                    this.syncContext.Post(state => handler(this, new StoppedEventArgs(e)), null);
+                    syncContext.Post(state => handler(this, new StoppedEventArgs(e)), null);
                 }
             }
         }
@@ -186,9 +168,6 @@ namespace NAudio.Wave
             CreateBuffers();
         }
 
-        /// <summary>
-        /// Start recording
-        /// </summary>
         public void StartRecording()
         {
             if (recording)
@@ -212,19 +191,16 @@ namespace NAudio.Wave
             }
         }
 
-        /// <summary>
-        /// Stop recording
-        /// </summary>
         public void StopRecording()
         {
             if (recording)
             {
                 recording = false;
                 MmException.Try(WaveInterop.waveInStop(waveInHandle), "waveInStop");
-                // report the last buffers, sometimes more than one, so taking care to report them in the right order
+
                 for (int n = 0; n < buffers.Length; n++)
                 {
-                    int index = (n + lastReturnedBufferIndex + 1)%buffers.Length;
+                    int index = (n + lastReturnedBufferIndex + 1) % buffers.Length;
                     var buffer = buffers[index];
                     if (buffer.Done)
                     {
@@ -233,24 +209,16 @@ namespace NAudio.Wave
                 }
                 RaiseRecordingStopped(null);
             }
-            //MmException.Try(WaveInterop.waveInReset(waveInHandle), "waveInReset");      
-            // Don't actually close yet so we get the last buffer
         }
 
-        /// <summary>
-        /// WaveFormat we are recording in
-        /// </summary>
-        public WaveFormat WaveFormat { get; set; }
-        
-        /// <summary>
-        /// Dispose pattern
-        /// </summary>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
                 if (recording)
+                {
                     StopRecording();
+                }
                 CloseWaveInDevice();
                 if (callbackInfo != null)
                 {
@@ -262,8 +230,11 @@ namespace NAudio.Wave
 
         private void CloseWaveInDevice()
         {
-            if (waveInHandle == IntPtr.Zero) return;
-            // Some drivers need the reset to properly release buffers
+            if (waveInHandle == IntPtr.Zero)
+            {
+                return;
+            }
+
             WaveInterop.waveInReset(waveInHandle);
             if (buffers != null)
             {
@@ -275,19 +246,14 @@ namespace NAudio.Wave
             }
             WaveInterop.waveInClose(waveInHandle);
             waveInHandle = IntPtr.Zero;
-
         }
 
-        /// <summary>
-        /// Microphone Level
-        /// </summary>
         public MixerLine GetMixerLine()
         {
-            // TODO use mixerGetID instead to see if this helps with XP
             MixerLine mixerLine;
             if (waveInHandle != IntPtr.Zero)
             {
-                mixerLine = new MixerLine(this.waveInHandle, 0, MixerFlags.WaveInHandle);
+                mixerLine = new MixerLine(waveInHandle, 0, MixerFlags.WaveInHandle);
             }
             else
             {
@@ -296,13 +262,12 @@ namespace NAudio.Wave
             return mixerLine;
         }
 
-        /// <summary>
-        /// Dispose method
-        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        #endregion
     }
 }

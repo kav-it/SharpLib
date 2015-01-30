@@ -2,26 +2,21 @@ using System;
 
 namespace NAudio.Dsp
 {
-    /// <summary>
-    /// Summary description for FastFourierTransform.
-    /// </summary>
-    public static class FastFourierTransform
+    internal static class FastFourierTransform
     {
-        /// <summary>
-        /// This computes an in-place complex-to-complex FFT 
-        /// x and y are the real and imaginary arrays of 2^m points.
-        /// </summary>
+        #region Ìועמהû
+
         public static void FFT(bool forward, int m, Complex[] data)
         {
             int n, i, i1, j, k, i2, l, l1, l2;
             float c1, c2, tx, ty, t1, t2, u1, u2, z;
 
-            // Calculate the number of points
             n = 1;
             for (i = 0; i < m; i++)
+            {
                 n *= 2;
+            }
 
-            // Do the bit reversal
             i2 = n >> 1;
             j = 0;
             for (i = 0; i < n - 1; i++)
@@ -45,7 +40,6 @@ namespace NAudio.Dsp
                 j += k;
             }
 
-            // Compute the FFT 
             c1 = -1.0f;
             c2 = 0.0f;
             l2 = 1;
@@ -73,11 +67,12 @@ namespace NAudio.Dsp
                 }
                 c2 = (float)Math.Sqrt((1.0f - c1) / 2.0f);
                 if (forward)
+                {
                     c2 = -c2;
+                }
                 c1 = (float)Math.Sqrt((1.0f + c1) / 2.0f);
             }
 
-            // Scaling for forward transform 
             if (forward)
             {
                 for (i = 0; i < n; i++)
@@ -87,38 +82,23 @@ namespace NAudio.Dsp
                 }
             }
         }
-        
-        /// <summary>
-        /// Applies a Hamming Window
-        /// </summary>
-        /// <param name="n">Index into frame</param>
-        /// <param name="frameSize">Frame size (e.g. 1024)</param>
-        /// <returns>Multiplier for Hamming window</returns>
+
         public static double HammingWindow(int n, int frameSize)
         {
             return 0.54 - 0.46 * Math.Cos((2 * Math.PI * n) / (frameSize - 1));
         }
 
-        /// <summary>
-        /// Applies a Hann Window
-        /// </summary>
-        /// <param name="n">Index into frame</param>
-        /// <param name="frameSize">Frame size (e.g. 1024)</param>
-        /// <returns>Multiplier for Hann window</returns>
         public static double HannWindow(int n, int frameSize)
         {
             return 0.5 * (1 - Math.Cos((2 * Math.PI * n) / (frameSize - 1)));
         }
 
-        /// <summary>
-        /// Applies a Blackman-Harris Window
-        /// </summary>
-        /// <param name="n">Index into frame</param>
-        /// <param name="frameSize">Frame size (e.g. 1024)</param>
-        /// <returns>Multiplier for Blackmann-Harris window</returns>
         public static double BlackmannHarrisWindow(int n, int frameSize)
         {
-            return 0.35875 - (0.48829 * Math.Cos((2 * Math.PI * n) / (frameSize - 1))) + (0.14128 * Math.Cos((4 * Math.PI * n) / (frameSize - 1))) - (0.01168 * Math.Cos((6 * Math.PI * n) / (frameSize - 1)));
+            return 0.35875 - (0.48829 * Math.Cos((2 * Math.PI * n) / (frameSize - 1))) + (0.14128 * Math.Cos((4 * Math.PI * n) / (frameSize - 1))) -
+                   (0.01168 * Math.Cos((6 * Math.PI * n) / (frameSize - 1)));
         }
+
+        #endregion
     }
 }

@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace NAudio.Utils
 {
-    /// <summary>
-    /// Helper to get descriptions
-    /// </summary>
-    public static class FieldDescriptionHelper
+    internal static class FieldDescriptionHelper
     {
-        /// <summary>
-        /// Describes the Guid  by looking for a FieldDescription attribute on the specified class
-        /// </summary>
+        #region Методы
+
         public static string Describe(Type t, Guid guid)
         {
-            // when we go to .NET 3.5, use LINQ for this
             foreach (var f in t
 #if NETFX_CORE
                 .GetRuntimeFields())
@@ -23,7 +16,7 @@ namespace NAudio.Utils
                 .GetFields(BindingFlags.Static | BindingFlags.Public))
 #endif
             {
-                if (f.IsPublic && f.IsStatic && f.FieldType == typeof (Guid) && (Guid) f.GetValue(null) == guid)
+                if (f.IsPublic && f.IsStatic && f.FieldType == typeof(Guid) && (Guid)f.GetValue(null) == guid)
                 {
                     foreach (var a in f.GetCustomAttributes(false))
                     {
@@ -33,11 +26,13 @@ namespace NAudio.Utils
                             return d.Description;
                         }
                     }
-                    // no attribute, return the name
+
                     return f.Name;
                 }
             }
             return guid.ToString();
         }
+
+        #endregion
     }
 }

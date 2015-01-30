@@ -1,67 +1,45 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
+
 using NAudio.Dsp;
 
 namespace NAudio.Wave
 {
-    /// <summary>
-    /// A simple compressor
-    /// </summary>
-    public class SimpleCompressorStream : WaveStream
+    internal class SimpleCompressorStream : WaveStream
     {
-        private WaveStream sourceStream;
-        private readonly SimpleCompressor simpleCompressor;
-        private byte[] sourceBuffer; // buffer used by Read function
-        private bool enabled;
-        private readonly int channels;
+        #region Поля
+
         private readonly int bytesPerSample;
+
+        private readonly int channels;
+
         private readonly object lockObject = new object();
 
-        /// <summary>
-        /// Create a new simple compressor stream
-        /// </summary>
-        /// <param name="sourceStream">Source stream</param>
-        public SimpleCompressorStream(WaveStream sourceStream)
-        {
-            this.sourceStream = sourceStream;
-            this.channels = sourceStream.WaveFormat.Channels;
-            this.bytesPerSample = sourceStream.WaveFormat.BitsPerSample / 8;
-            simpleCompressor = new SimpleCompressor(5.0, 10.0, sourceStream.WaveFormat.SampleRate);
-            simpleCompressor.Threshold = 16;
-            simpleCompressor.Ratio = 6;
-            simpleCompressor.MakeUpGain = 16;
+        private readonly SimpleCompressor simpleCompressor;
 
-        }
+        private byte[] sourceBuffer;
 
-        /// <summary>
-        /// Make-up Gain
-        /// </summary>
+        private WaveStream sourceStream;
+
+        #endregion
+
+        #region Свойства
+
         public double MakeUpGain
         {
-            get 
-            { 
-                return simpleCompressor.MakeUpGain; 
-            }
-            set 
+            get { return simpleCompressor.MakeUpGain; }
+            set
             {
                 lock (lockObject)
                 {
                     simpleCompressor.MakeUpGain = value;
-                } 
+                }
             }
         }
 
-        /// <summary>
-        /// Threshold
-        /// </summary>
         public double Threshold
         {
-            get 
-            { 
-                return simpleCompressor.Threshold; 
-            }
-            set 
+            get { return simpleCompressor.Threshold; }
+            set
             {
                 lock (lockObject)
                 {
@@ -70,16 +48,10 @@ namespace NAudio.Wave
             }
         }
 
-        /// <summary>
-        /// Ratio
-        /// </summary>
         public double Ratio
         {
-            get 
-            { 
-                return simpleCompressor.Ratio; 
-            }
-            set 
+            get { return simpleCompressor.Ratio; }
+            set
             {
                 lock (lockObject)
                 {
@@ -88,15 +60,9 @@ namespace NAudio.Wave
             }
         }
 
-        /// <summary>
-        /// Attack time
-        /// </summary>
         public double Attack
         {
-            get
-            {
-                return simpleCompressor.Attack;
-            }
+            get { return simpleCompressor.Attack; }
             set
             {
                 lock (lockObject)
@@ -106,15 +72,9 @@ namespace NAudio.Wave
             }
         }
 
-        /// <summary>
-        /// Release time
-        /// </summary>
         public double Release
         {
-            get
-            {
-                return simpleCompressor.Release;
-            }
+            get { return simpleCompressor.Release; }
             set
             {
                 lock (lockObject)
@@ -124,54 +84,16 @@ namespace NAudio.Wave
             }
         }
 
+        public bool Enabled { get; set; }
 
-        /// <summary>
-        /// Determine whether the stream has the required amount of data.
-        /// </summary>
-        /// <param name="count">Number of bytes of data required from the stream.</param>
-        /// <returns>Flag indicating whether the required amount of data is avialable.</returns>
-        public override bool HasData(int count)
-        {
-            return sourceStream.HasData(count);
-        }
-
-
-        /// <summary>
-        /// Turns gain on or off
-        /// </summary>
-        public bool Enabled
-        {
-            get
-            {
-                return enabled;
-            }
-            set
-            {
-                enabled = value;
-            }
-        }
-
-
-        /// <summary>
-        /// Returns the stream length
-        /// </summary>
         public override long Length
         {
-            get
-            {
-                return sourceStream.Length;
-            }
+            get { return sourceStream.Length; }
         }
 
-        /// <summary>
-        /// Gets or sets the current position in the stream
-        /// </summary>
         public override long Position
         {
-            get
-            {
-                return sourceStream.Position;
-            }
+            get { return sourceStream.Position; }
             set
             {
                 lock (lockObject)
@@ -181,15 +103,38 @@ namespace NAudio.Wave
             }
         }
 
-        /// <summary>
-        /// Gets the WaveFormat of this stream
-        /// </summary>
         public override WaveFormat WaveFormat
         {
-            get
-            {
-                return sourceStream.WaveFormat;
-            }
+            get { return sourceStream.WaveFormat; }
+        }
+
+        public override int BlockAlign
+        {
+            get { return sourceStream.BlockAlign; }
+        }
+
+        #endregion
+
+        #region Конструктор
+
+        public SimpleCompressorStream(WaveStream sourceStream)
+        {
+            this.sourceStream = sourceStream;
+            channels = sourceStream.WaveFormat.Channels;
+            bytesPerSample = sourceStream.WaveFormat.BitsPerSample / 8;
+            simpleCompressor = new SimpleCompressor(5.0, 10.0, sourceStream.WaveFormat.SampleRate);
+            simpleCompressor.Threshold = 16;
+            simpleCompressor.Ratio = 6;
+            simpleCompressor.MakeUpGain = 16;
+        }
+
+        #endregion
+
+        #region Методы
+
+        public override bool HasData(int count)
+        {
+            return sourceStream.HasData(count);
         }
 
         private void ReadSamples(byte[] buffer, int start, out double left, out double right)
@@ -244,13 +189,6 @@ namespace NAudio.Wave
             }
         }
 
-        /// <summary>
-        /// Reads bytes from this stream
-        /// </summary>
-        /// <param name="array">Buffer to read into</param>
-        /// <param name="offset">Offset in array to read into</param>
-        /// <param name="count">Number of bytes to read</param>
-        /// <returns>Number of bytes read</returns>
         public override int Read(byte[] array, int offset, int count)
         {
             lock (lockObject)
@@ -258,7 +196,9 @@ namespace NAudio.Wave
                 if (Enabled)
                 {
                     if (sourceBuffer == null || sourceBuffer.Length < count)
+                    {
                         sourceBuffer = new byte[count];
+                    }
                     int sourceBytesRead = sourceStream.Read(sourceBuffer, 0, count);
                     int sampleCount = sourceBytesRead / (bytesPerSample * channels);
                     for (int sample = 0; sample < sampleCount; sample++)
@@ -272,46 +212,24 @@ namespace NAudio.Wave
                     }
                     return count;
                 }
-                else
-                {
-                    return sourceStream.Read(array, offset, count);
-                }
+                return sourceStream.Read(array, offset, count);
             }
-
         }
 
-        /// <summary>
-        /// Disposes this stream
-        /// </summary>
-        /// <param name="disposing">true if the user called this</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                // Release managed resources.
                 if (sourceStream != null)
                 {
                     sourceStream.Dispose();
                     sourceStream = null;
                 }
             }
-            // Release unmanaged resources.
-            // Set large fields to null.
-            // Call Dispose on your base class.
+
             base.Dispose(disposing);
         }
 
-        /// <summary>
-        /// Gets the block alignment for this stream
-        /// </summary>
-        public override int BlockAlign
-        {
-            get
-            {
-                // TODO: investigate forcing 20ms
-                return sourceStream.BlockAlign;
-            }
-        }
+        #endregion
     }
 }
-

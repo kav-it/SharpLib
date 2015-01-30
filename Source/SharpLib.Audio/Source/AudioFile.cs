@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 using NAudio.Wave;
@@ -11,6 +12,11 @@ namespace SharpLib.Audio
     public class AudioFile: IDisposable
     {
         #region Поля
+
+        /// <summary>
+        /// Был вызван явный Dispose
+        /// </summary>
+        private bool _isDisposed;
 
         /// <summary>
         /// Провайдер поток данных
@@ -39,12 +45,37 @@ namespace SharpLib.Audio
         /// </summary>
         public string Location { get; private set; }
 
+        /// <summary>
+        /// Текущее время воспроизведения
+        /// </summary>
+        public TimeSpan CurrentTime
+        {
+            get { return _reader.CurrentTime; }
+        }
+
+        /// <summary>
+        /// Общее время воспроизведения
+        /// </summary>
+        public TimeSpan TotalTime
+        {
+            get { return _reader.TotalTime; }
+        }
+
+        /// <summary>
+        /// Громкость 
+        /// </summary>
+        public float Volume
+        {
+            get { return _reader.Volume; }
+        }
+
         #endregion
 
         #region Конструктор
 
         public AudioFile(string location)
         {
+            _isDisposed = false;
             Location = location;
 
             if (File.Exists(location) == false)
@@ -53,29 +84,34 @@ namespace SharpLib.Audio
             }
 
             _reader = new AudioFileReader(location);
-            _waveOutDevice = new WaveOut();
+            _waveOutDevice = new WaveOutEvent();
             _waveOutDevice.Init(_reader);
         }
 
         ~AudioFile()
         {
-            Dispose();
+            Debug.Assert(false, "AudioFile Dispose was not called");
+            // ReSharper disable HeuristicUnreachableCode
+            DisposeAll();
+            // ReSharper restore HeuristicUnreachableCode
         }
 
         #endregion
 
         #region Методы
 
-        /// <summary>
-        /// Освобождение элемента
-        /// </summary>
-        public void Dispose()
+        private void DisposeAll()
         {
+            if (_isDisposed)
+            {
+                return;
+            }
+
             if (_waveOutDevice != null)
             {
                 _waveOutDevice.Stop();
-            
             }
+
             if (_reader != null)
             {
                 _reader.Dispose();
@@ -87,6 +123,17 @@ namespace SharpLib.Audio
                 _waveOutDevice.Dispose();
                 _waveOutDevice = null;
             }
+
+            _isDisposed = true;
+        }
+
+        /// <summary>
+        /// Освобождение элемента
+        /// </summary>
+        public void Dispose()
+        {
+            DisposeAll();
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -137,7 +184,9 @@ namespace SharpLib.Audio
                 return;
             }
 
+            // _waveOutDevice.Pause();
             _waveOutDevice.Stop();
+            _reader.Position = 0;
         }
 
         #endregion

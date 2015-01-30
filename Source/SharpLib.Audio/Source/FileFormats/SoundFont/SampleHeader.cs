@@ -1,61 +1,38 @@
-using System;
-
-namespace NAudio.SoundFont 
+namespace NAudio.SoundFont
 {
-	/// <summary>
-	/// A SoundFont Sample Header
-	/// </summary>
-	public class SampleHeader 
-	{
-		/// <summary>
-		/// The sample name
-		/// </summary>
-		public string SampleName;
-		/// <summary>
-		/// Start offset
-		/// </summary>
-		public uint Start;
-		/// <summary>
-		/// End offset
-		/// </summary>
-		public uint End;
-		/// <summary>
-		/// Start loop point
-		/// </summary>
-		public uint StartLoop;
-		/// <summary>
-		/// End loop point
-		/// </summary>
-		public uint EndLoop;
-		/// <summary>
-		/// Sample Rate
-		/// </summary>
-		public uint SampleRate;
-		/// <summary>
-		/// Original pitch
-		/// </summary>
-		public byte OriginalPitch;
-		/// <summary>
-		/// Pitch correction
-		/// </summary>
-		public sbyte PitchCorrection;
-		/// <summary>
-		/// Sample Link
-		/// </summary>
-		public ushort SampleLink;
-		/// <summary>
-		/// SoundFont Sample Link Type
-		/// </summary>
-		public SFSampleLink SFSampleLink;
+    internal class SampleHeader
+    {
+        #region Поля
 
-		/// <summary>
-		/// <see cref="Object.ToString"/>
-		/// </summary>
-		public override string ToString()
-		{
-			return SampleName;
-		}
-		
-	}
+        public uint End;
+
+        public uint EndLoop;
+
+        public byte OriginalPitch;
+
+        public sbyte PitchCorrection;
+
+        public SFSampleLink SFSampleLink;
+
+        public ushort SampleLink;
+
+        public string SampleName;
+
+        public uint SampleRate;
+
+        public uint Start;
+
+        public uint StartLoop;
+
+        #endregion
+
+        #region Методы
+
+        public override string ToString()
+        {
+            return SampleName;
+        }
+
+        #endregion
+    }
 }
-

@@ -1,33 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+
 using NAudio.Utils;
 
 namespace NAudio.Wave.SampleProviders
 {
-    /// <summary>
-    /// Allows any number of inputs to be patched to outputs
-    /// Uses could include swapping left and right channels, turning mono into stereo,
-    /// feeding different input sources to different soundcard outputs etc
-    /// </summary>
-    public class MultiplexingSampleProvider : ISampleProvider
+    internal class MultiplexingSampleProvider : ISampleProvider
     {
-        private readonly IList<ISampleProvider> inputs;
-        private readonly WaveFormat waveFormat;
-        private readonly int outputChannelCount;
+        #region Поля
+
         private readonly int inputChannelCount;
+
+        private readonly IList<ISampleProvider> inputs;
+
         private readonly List<int> mappings;
 
-        /// <summary>
-        /// Creates a multiplexing sample provider, allowing re-patching of input channels to different
-        /// output channels
-        /// </summary>
-        /// <param name="inputs">Input sample providers. Must all be of the same sample rate, but can have any number of channels</param>
-        /// <param name="numberOfOutputChannels">Desired number of output channels.</param>
+        private readonly int outputChannelCount;
+
+        private readonly WaveFormat waveFormat;
+
+        private float[] inputBuffer;
+
+        #endregion
+
+        #region Свойства
+
+        public WaveFormat WaveFormat
+        {
+            get { return waveFormat; }
+        }
+
+        public int InputChannelCount
+        {
+            get { return inputChannelCount; }
+        }
+
+        public int OutputChannelCount
+        {
+            get { return outputChannelCount; }
+        }
+
+        #endregion
+
+        #region Конструктор
+
         public MultiplexingSampleProvider(IEnumerable<ISampleProvider> inputs, int numberOfOutputChannels)
         {
             this.inputs = new List<ISampleProvider>(inputs);
-            this.outputChannelCount = numberOfOutputChannels;
+            outputChannelCount = numberOfOutputChannels;
 
             if (this.inputs.Count == 0)
             {
@@ -39,21 +59,21 @@ namespace NAudio.Wave.SampleProviders
             }
             foreach (var input in this.inputs)
             {
-                if (this.waveFormat == null)
+                if (waveFormat == null)
                 {
                     if (input.WaveFormat.Encoding != WaveFormatEncoding.IeeeFloat)
                     {
                         throw new ArgumentException("Only 32 bit float is supported");
                     }
-                    this.waveFormat = WaveFormat.CreateIeeeFloatWaveFormat(input.WaveFormat.SampleRate, numberOfOutputChannels);
+                    waveFormat = WaveFormat.CreateIeeeFloatWaveFormat(input.WaveFormat.SampleRate, numberOfOutputChannels);
                 }
                 else
                 {
-                    if (input.WaveFormat.BitsPerSample != this.waveFormat.BitsPerSample)
+                    if (input.WaveFormat.BitsPerSample != waveFormat.BitsPerSample)
                     {
                         throw new ArgumentException("All inputs must have the same bit depth");
                     }
-                    if (input.WaveFormat.SampleRate != this.waveFormat.SampleRate)
+                    if (input.WaveFormat.SampleRate != waveFormat.SampleRate)
                     {
                         throw new ArgumentException("All inputs must have the same sample rate");
                     }
@@ -68,28 +88,20 @@ namespace NAudio.Wave.SampleProviders
             }
         }
 
-        /// <summary>
-        /// persistent temporary buffer to prevent creating work for garbage collector
-        /// </summary>
-        private float[] inputBuffer;
+        #endregion
 
-        /// <summary>
-        /// Reads samples from this sample provider
-        /// </summary>
-        /// <param name="buffer">Buffer to be filled with sample data</param>
-        /// <param name="offset">Offset into buffer to start writing to, usually 0</param>
-        /// <param name="count">Number of samples required</param>
-        /// <returns>Number of samples read</returns>
+        #region Методы
+
         public int Read(float[] buffer, int offset, int count)
         {
             int sampleFramesRequested = count / outputChannelCount;
             int inputOffset = 0;
             int sampleFramesRead = 0;
-            // now we must read from all inputs, even if we don't need their data, so they stay in sync
+
             foreach (var input in inputs)
             {
                 int samplesRequired = sampleFramesRequested * input.WaveFormat.Channels;
-                this.inputBuffer = BufferHelpers.Ensure(this.inputBuffer, samplesRequired);
+                inputBuffer = BufferHelpers.Ensure(inputBuffer, samplesRequired);
                 int samplesRead = input.Read(inputBuffer, 0, samplesRequired);
                 sampleFramesRead = Math.Max(sampleFramesRead, samplesRead / input.WaveFormat.Channels);
 
@@ -110,7 +122,7 @@ namespace NAudio.Wave.SampleProviders
                                 inputBufferOffset += input.WaveFormat.Channels;
                                 sample++;
                             }
-                            // clear the end
+
                             while (sample < sampleFramesRequested)
                             {
                                 buffer[outputBufferOffset] = 0;
@@ -126,19 +138,6 @@ namespace NAudio.Wave.SampleProviders
             return sampleFramesRead * outputChannelCount;
         }
 
-        /// <summary>
-        /// The output WaveFormat for this SampleProvider
-        /// </summary>
-        public WaveFormat WaveFormat
-        {
-            get { return waveFormat; }
-        }
-
-        /// <summary>
-        /// Connects a specified input channel to an output channel
-        /// </summary>
-        /// <param name="inputChannel">Input Channel index (zero based). Must be less than InputChannelCount</param>
-        /// <param name="outputChannel">Output Channel index (zero based). Must be less than OutputChannelCount</param>
         public void ConnectInputToOutput(int inputChannel, int outputChannel)
         {
             if (inputChannel < 0 || inputChannel >= InputChannelCount)
@@ -152,21 +151,6 @@ namespace NAudio.Wave.SampleProviders
             mappings[outputChannel] = inputChannel;
         }
 
-        /// <summary>
-        /// The number of input channels. Note that this is not the same as the number of input wave providers. If you pass in
-        /// one stereo and one mono input provider, the number of input channels is three.
-        /// </summary>
-        public int InputChannelCount
-        {
-            get { return inputChannelCount; }
-        }
-
-        /// <summary>
-        /// The number of output channels, as specified in the constructor.
-        /// </summary>
-        public int OutputChannelCount
-        {
-            get { return outputChannelCount; }
-        }
+        #endregion
     }
 }

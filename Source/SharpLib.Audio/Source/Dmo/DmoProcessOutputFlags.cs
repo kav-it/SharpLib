@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NAudio.Dmo
 {
-    /// <summary>
-    /// DMO Process Output Flags
-    /// </summary>
     [Flags]
-    public enum DmoProcessOutputFlags
+    internal enum DmoProcessOutputFlags
     {
-        /// <summary>
-        /// None
-        /// </summary>
         None,
-        /// <summary>
-        /// DMO_PROCESS_OUTPUT_DISCARD_WHEN_NO_BUFFER
-        /// </summary>
+
         DiscardWhenNoBuffer = 0x00000001
     }
 }

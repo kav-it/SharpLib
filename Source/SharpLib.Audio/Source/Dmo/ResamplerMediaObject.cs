@@ -1,36 +1,40 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+
 using NAudio.CoreAudioApi.Interfaces;
 
 namespace NAudio.Dmo
 {
-    /// <summary>
-    /// From wmcodecsdp.h
-    /// Implements:
-    /// - IMediaObject 
-    /// - IMFTransform (Media foundation - we will leave this for now as there is loads of MF stuff)
-    /// - IPropertyStore 
-    /// - IWMResamplerProps 
-    /// Can resample PCM or IEEE
-    /// </summary>
     [ComImport, Guid("f447b69e-1884-4a7e-8055-346f74d6edb3")]
-    class ResamplerMediaComObject
+    internal class ResamplerMediaComObject
     {
     }
 
-    /// <summary>
-    /// DMO Resampler
-    /// </summary>
-    public class DmoResampler : IDisposable
+    internal class DmoResampler : IDisposable
     {
-        MediaObject mediaObject;
-        IPropertyStore propertyStoreInterface;
-        IWMResamplerProps resamplerPropsInterface;
-        ResamplerMediaComObject mediaComObject;
+        #region Поля
 
-        /// <summary>
-        /// Creates a new Resampler based on the DMO Resampler
-        /// </summary>
+        private ResamplerMediaComObject mediaComObject;
+
+        private MediaObject mediaObject;
+
+        private IPropertyStore propertyStoreInterface;
+
+        private IWMResamplerProps resamplerPropsInterface;
+
+        #endregion
+
+        #region Свойства
+
+        public MediaObject MediaObject
+        {
+            get { return mediaObject; }
+        }
+
+        #endregion
+
+        #region Конструктор
+
         public DmoResampler()
         {
             mediaComObject = new ResamplerMediaComObject();
@@ -39,33 +43,18 @@ namespace NAudio.Dmo
             resamplerPropsInterface = (IWMResamplerProps)mediaComObject;
         }
 
-        /// <summary>
-        /// Media Object
-        /// </summary>
-        public MediaObject MediaObject
-        {
-            get
-            {
-                return mediaObject;
-            }
-        }
+        #endregion
 
+        #region Методы
 
-        #region IDisposable Members
-
-        /// <summary>
-        /// Dispose code - experimental at the moment
-        /// Was added trying to track down why Resampler crashes NUnit
-        /// This code not currently being called by ResamplerDmoStream
-        /// </summary>
         public void Dispose()
         {
-            if(propertyStoreInterface != null)
+            if (propertyStoreInterface != null)
             {
                 Marshal.ReleaseComObject(propertyStoreInterface);
                 propertyStoreInterface = null;
             }
-            if(resamplerPropsInterface != null)
+            if (resamplerPropsInterface != null)
             {
                 Marshal.ReleaseComObject(resamplerPropsInterface);
                 resamplerPropsInterface = null;
