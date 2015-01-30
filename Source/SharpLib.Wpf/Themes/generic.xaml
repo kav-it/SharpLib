@@ -14,7 +14,6 @@
         <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/RadioButtonEx.xaml" />
         <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/RadioGroupEx.xaml" />
         <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/RichTextBoxEx.xaml" />
-        <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/ListViewEx.xaml" />
         <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/TabControlEx.xaml" />
         <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/TextEdit.xaml" />
         <ResourceDictionary Source="/SharpLib.Wpf;component/Source/Controls/Styles/TreeListEx.xaml" />

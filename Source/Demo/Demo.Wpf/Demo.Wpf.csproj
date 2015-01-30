@@ -133,10 +133,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SharpLib.Dialogs\SharpLib.Dialogs.csproj">
-      <Project>{04313FF5-0A58-45BD-B6CA-6D324E021232}</Project>
-      <Name>SharpLib.Dialogs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\SharpLib.Json\SharpLib.Json.csproj">
       <Project>{893AAF6E-AC29-402A-B2FB-356CB417E562}</Project>
       <Name>SharpLib.Json</Name>

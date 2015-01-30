@@ -72,10 +72,7 @@ namespace SharpLib.Wpf.Controls
             get { return _modelParent; }
         }
 
-        public virtual object Text
-        {
-            get { return null; }
-        }
+        public abstract object Text { get; }
 
         public virtual Brush Foreground
         {

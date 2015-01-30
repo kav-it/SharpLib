@@ -23,9 +23,8 @@
 			x:Name="PART_listView2" BorderBrush="Red" BorderThickness="1"
 			HorizontalAlignment="Left" Margin="320,10,0,0" VerticalAlignment="Top" Height="195" Width="320">
             <controls:ListViewEx.Columns>
-                <controls:ListViewColumn Title="123" Width="80" FieldName="Value1"/>
-                <controls:ListViewColumn Title="456" Width="80" FieldName="Value2"/>
-                <controls:ListViewColumn Title="789" Width="80" FieldName="Value3"/>
+                <controls:ListViewExColumn Title="123" Width="80" DisplayMemberBinding="{Binding Value1}"/>
+                <controls:ListViewExColumn Title="234" Width="80" DisplayMemberBinding="{Binding Value2}"/>
             </controls:ListViewEx.Columns>
         </controls:ListViewEx>
     </Grid>
