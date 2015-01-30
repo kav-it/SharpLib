@@ -4,14 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:SharpLib.Wpf.Controls"
-             x:Name="listViewExControlName"
+             x:Name="PART_listViewExControlName"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
 
     <!--Ресурсы-->
     <UserControl.Resources>
         <!--Конвертор подстветки-->
-        <controls:ListViewExBackgroundConvertor x:Key="listViewExBackgroundConvertor" />
+        <controls:ListViewExBackgroundConvertor x:Key="KeylistViewExBackgroundConvertor" />
         <!--Шаблон "Сортировка по возрастанию"-->
         <DataTemplate x:Key="HeaderTemplateArrowUp">
             <DockPanel>
@@ -113,14 +113,14 @@
                     <!--Фоновая заливка строк (поочередно)-->
                     <Setter Property="Background">
                         <Setter.Value>
-                            <MultiBinding Converter="{StaticResource listViewExBackgroundConvertor}">
-                                <Binding ElementName="listViewExControlName" Path="ShowPairLines" />
+                            <MultiBinding Converter="{StaticResource KeylistViewExBackgroundConvertor}">
+                                <Binding ElementName="PART_listViewExControlName" Path="ShowPairLines" />
                                 <Binding RelativeSource="{RelativeSource Self}" />
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>
                     <!--Другие характеристики элементов-->
-                    <Setter Property="Height" Value="{Binding ElementName=listViewExControlName, Path=HeightLines}" />
+                    <Setter Property="Height" Value="{Binding ElementName=PART_listViewExControlName, Path=HeightLines}" />
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="VerticalContentAlignment" Value="Center" />
                     <EventSetter Event="MouseDoubleClick" Handler="HandleDoubleClick" />
@@ -132,7 +132,7 @@
                    Grid.Row="2"
                    Height="25">
             <TextBlock Text="Количество элементов: " />
-            <TextBlock Text="{Binding ElementName=listViewExControlName, Path=Items.Count}" />
+            <TextBlock Text="{Binding ElementName=PART_listViewExControlName, Path=Items.Count}" />
         </StatusBar>
     </Grid>
 </UserControl>

@@ -65,6 +65,51 @@ namespace SharpLib
         }
 
         /// <summary>
+        /// Чтение расширения файла (без '.'. Например: avi)
+        /// </summary>
+        public static string GetExtension(string filepath)
+        {
+            // ReSharper disable PossibleNullReferenceException
+            return Path.GetExtension(filepath).TrimStart('.');
+            // ReSharper restore PossibleNullReferenceException
+        }
+
+        /// <summary>
+        /// Чтение директории файла (для директории возвращает ее саму)
+        /// </summary>
+        /// <remarks>
+        /// C:/1.txt => C:/
+        /// </remarks>
+        public static string GetDirectoryName(string location)
+        {
+            if (IsDirectory(location))
+            {
+                return location;
+            }
+
+            return Path.GetDirectoryName(location);
+        }
+
+        /// <summary>
+        /// Чтение родительской директории
+        /// </summary>
+        public static string GetParent(string location)
+        {
+            try
+            {
+                location = GetDirectoryName(location);
+
+                var parent = Directory.GetParent(location);
+
+                return parent.FullName;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Проверка является ли путь директорией
         /// </summary>
         /// <param name="path"></param>

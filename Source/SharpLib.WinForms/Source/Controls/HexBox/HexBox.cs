@@ -292,13 +292,13 @@ namespace SharpLib.WinForms.Controls
 
                 if (_dataSource != null)
                 {
-                    _dataSource.LengthChanged -= DataSourceLengthChanged;
+                    // _dataSource.LengthChanged -= DataSourceLengthChanged;
                 }
 
                 _dataSource = value;
                 if (_dataSource != null)
                 {
-                    _dataSource.LengthChanged += DataSourceLengthChanged;
+                    // _dataSource.LengthChanged += DataSourceLengthChanged;
                 }
 
                 OnByteProviderChanged(EventArgs.Empty);

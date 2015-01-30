@@ -43,11 +43,6 @@ namespace SharpLib.WinForms.Controls
         /// </summary>
         event EventHandler Changed;
 
-        /// <summary>
-        /// Событие "Размер данных изменен"
-        /// </summary>
-        event EventHandler LengthChanged;
-
         #endregion
 
         #region Методы

@@ -15,6 +15,7 @@ using System.Windows.Media;
 
 namespace SharpLib.Wpf.Controls
 {
+
     #region Класс ListViewEx
 
     public partial class ListViewEx
@@ -25,25 +26,17 @@ namespace SharpLib.Wpf.Controls
 
         public static readonly DependencyProperty ShowPairLinesProperty;
 
-        private ListViewExGroup _group;
-
         private ContextMenu _headerMenu;
 
         private ListSortDirection _lastDirection;
 
         private GridViewColumnHeader _lastHeaderClicked;
 
-        private ListViewExSorter _sorter;
-
         #endregion
 
         #region Свойства
 
-        public ListViewExGroup Group
-        {
-            get { return _group; }
-            set { _group = value; }
-        }
+        public ListViewExGroup Group { get; set; }
 
         public GridViewColumnCollection Columns
         {
@@ -93,11 +86,7 @@ namespace SharpLib.Wpf.Controls
 
         public Double RowHeight { get; set; }
 
-        public ListViewExSorter Sorter
-        {
-            get { return _sorter; }
-            set { _sorter = value; }
-        }
+        public ListViewExSorter Sorter { get; set; }
 
         public bool ShowPairLines
         {
@@ -128,7 +117,7 @@ namespace SharpLib.Wpf.Controls
                 if (visible != Visibility.Visible)
                 {
                     // Фильтр скрыт: Отключение фильтрации данных
-                    FilterText = "";
+                    FilterText = string.Empty;
                 }
             }
         }
@@ -171,7 +160,7 @@ namespace SharpLib.Wpf.Controls
             RowHeight = Double.NaN;
             _lastHeaderClicked = null;
             _lastDirection = ListSortDirection.Ascending;
-            _sorter = null;
+            Sorter = null;
 
             PART_listView.Loaded += ListViewLoaded;
             PART_listView.SelectionChanged += HandleSelectedItem;
@@ -180,7 +169,7 @@ namespace SharpLib.Wpf.Controls
 
         #endregion
 
-        #region Компонент загружен
+        #region Методы
 
         private void ListViewLoaded(object sender, RoutedEventArgs e)
         {
@@ -188,19 +177,11 @@ namespace SharpLib.Wpf.Controls
             OnCreateContextMenu();
         }
 
-        #endregion Компонент загружен
-
-        #region Визуальное обновление
-
         public void Refresh()
         {
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemsSource);
             view.Refresh();
         }
-
-        #endregion Визуальное обновление
-
-        #region Загрузка/Сохранение конфигурации
 
         private ListViewExConfig GetConfig()
         {
@@ -239,7 +220,7 @@ namespace SharpLib.Wpf.Controls
                 {
                     if (i == item.Index)
                     {
-                        ListViewExColumn column = (ListViewExColumn)PART_gridView.Columns[i];
+                        var column = (ListViewExColumn)PART_gridView.Columns[i];
 
                         if (item.Visible)
                         {
@@ -257,10 +238,6 @@ namespace SharpLib.Wpf.Controls
             } // end foreach (перебор текущих колонок)
         }
 
-        #endregion Загрузка/Сохранение конфигурации
-
-        #region Работа с контекстным меню "HeaderContextMenu"
-
         private void OnCreateContextMenu()
         {
             _headerMenu = new ContextMenu();
@@ -269,12 +246,12 @@ namespace SharpLib.Wpf.Controls
                 var column = (ListViewExColumn)gridViewColumn;
 
                 var item = new MenuItem
-                    {
-                        Header = column.Header,
-                        IsCheckable = true,
-                        IsChecked = column.Visible,
-                        Tag = column
-                    };
+                {
+                    Header = column.Header,
+                    IsCheckable = true,
+                    IsChecked = column.Visible,
+                    Tag = column
+                };
                 item.Click += OnHeaderMenuClick;
 
                 _headerMenu.Items.Add(item);
@@ -285,14 +262,12 @@ namespace SharpLib.Wpf.Controls
 
         private void OnHeaderMenuClick(object sender, RoutedEventArgs e)
         {
-            MenuItem item = sender as MenuItem;
+            var item = sender as MenuItem;
 
             if (item != null)
             {
-                ListViewExColumn column = (ListViewExColumn)item.Tag;
-
+                var column = (ListViewExColumn)item.Tag;
                 column.Visible = item.IsChecked;
-
                 e.Handled = true;
             }
         }
@@ -311,29 +286,23 @@ namespace SharpLib.Wpf.Controls
             }
         }
 
-        #endregion Работа с контекстным меню "HeaderContextMenu"
-
-        #region Реализация "Группы"
-
         private void UpdateGroup()
         {
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemsSource);
 
             if (view != null)
             {
-                if (_group != null)
+                if (Group != null)
                 {
                     view.GroupDescriptions.Clear();
 
-                    if (_group.GroupName != "")
-                        view.GroupDescriptions.Add(new PropertyGroupDescription(_group.GroupName));
+                    if (Group.GroupName != "")
+                    {
+                        view.GroupDescriptions.Add(new PropertyGroupDescription(Group.GroupName));
+                    }
                 }
             }
         }
-
-        #endregion Реализация "Группы"
-
-        #region Реализация "Автоскролл"
 
         /// <summary>
         /// Изменилась коллекция
@@ -344,13 +313,11 @@ namespace SharpLib.Wpf.Controls
             {
                 // Включен режим "Автоскролл"
                 if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems.Count > 0)
+                {
                     PART_listView.ScrollIntoView(e.NewItems[0]);
+                }
             }
         }
-
-        #endregion Реализация "Автоскролл"
-
-        #region Событие "SelectedItem"
 
         private void HandleSelectedItem(object sender, SelectionChangedEventArgs e)
         {
@@ -362,10 +329,6 @@ namespace SharpLib.Wpf.Controls
             }
         }
 
-        #endregion Событие "SelectedItem"
-
-        #region Событие "DoubleClick"
-
         private void HandleDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (OnDoubleClickItem != null)
@@ -373,13 +336,11 @@ namespace SharpLib.Wpf.Controls
                 object item = ((FrameworkElement)e.OriginalSource).DataContext;
 
                 if (item != null)
+                {
                     OnDoubleClickItem(item, e);
+                }
             }
         }
-
-        #endregion Событие "DoubleClick"
-
-        #region Событие "DragThumb"
 
         private void ListViewDragDelta(object sender, DragDeltaEventArgs e)
         {
@@ -390,7 +351,10 @@ namespace SharpLib.Wpf.Controls
             }
 
             var header = senderAsThumb.TemplatedParent as GridViewColumnHeader;
-            if (header == null) return;
+            if (header == null)
+            {
+                return;
+            }
             var column = header.Column as ListViewExColumn;
 
             if (column != null)
@@ -401,20 +365,20 @@ namespace SharpLib.Wpf.Controls
                 if (Double.IsNaN(minWidth) == false)
                 {
                     if (header.Column.ActualWidth < minWidth)
+                    {
                         header.Column.Width = minWidth;
+                    }
                 }
 
                 if (Double.IsNaN(maxWidth) == false)
                 {
                     if (header.Column.ActualWidth > maxWidth)
+                    {
                         header.Column.Width = maxWidth;
+                    }
                 }
             }
         }
-
-        #endregion Событие "DragThumb"
-
-        #region Событие "Сортировка"
 
         private void ColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
         {
@@ -423,19 +387,23 @@ namespace SharpLib.Wpf.Controls
             if (headerClicked != null)
             {
                 if (_lastHeaderClicked != null)
+                {
                     _lastHeaderClicked.Column.HeaderTemplate = null;
+                }
 
                 ListSortDirection direction;
                 if (headerClicked != _lastHeaderClicked)
+                {
                     direction = ListSortDirection.Ascending;
+                }
                 else
                 {
-                    direction = _lastDirection == ListSortDirection.Ascending 
-                        ? ListSortDirection.Descending 
+                    direction = _lastDirection == ListSortDirection.Ascending
+                        ? ListSortDirection.Descending
                         : ListSortDirection.Ascending;
                 }
 
-                ListViewExColumn column = headerClicked.Column as ListViewExColumn;
+                var column = headerClicked.Column as ListViewExColumn;
 
                 if (column != null)
                 {
@@ -443,13 +411,11 @@ namespace SharpLib.Wpf.Controls
 
                     if (direction == ListSortDirection.Ascending)
                     {
-                        headerClicked.Column.HeaderTemplate =
-                            Resources["HeaderTemplateArrowUp"] as DataTemplate;
+                        headerClicked.Column.HeaderTemplate = Resources["HeaderTemplateArrowUp"] as DataTemplate;
                     }
                     else
                     {
-                        headerClicked.Column.HeaderTemplate =
-                            Resources["HeaderTemplateArrowDown"] as DataTemplate;
+                        headerClicked.Column.HeaderTemplate = Resources["HeaderTemplateArrowDown"] as DataTemplate;
                     }
 
                     _lastHeaderClicked = headerClicked;
@@ -460,30 +426,26 @@ namespace SharpLib.Wpf.Controls
 
         private void ColumnSort(ListViewExColumn column, ListSortDirection direction)
         {
-            if (_sorter != null)
+            if (Sorter != null)
             {
-                _sorter.Direction = direction;
-                _sorter.ColumnName = column.Name;
-                ListCollectionView view = (ListCollectionView)CollectionViewSource.GetDefaultView(PART_listView.ItemsSource);
-                view.CustomSort = _sorter;
+                Sorter.Direction = direction;
+                Sorter.ColumnName = column.Name;
+                var view = (ListCollectionView)CollectionViewSource.GetDefaultView(PART_listView.ItemsSource);
+                view.CustomSort = Sorter;
                 view.Refresh();
             }
             else
             {
-                ICollectionView view = CollectionViewSource.GetDefaultView(PART_listView.ItemsSource);
+                var view = CollectionViewSource.GetDefaultView(PART_listView.ItemsSource);
                 if (view != null)
                 {
                     view.SortDescriptions.Clear();
-                    SortDescription sortDesc = new SortDescription(column.Header as string, direction);
+                    var sortDesc = new SortDescription(column.Header as string, direction);
                     view.SortDescriptions.Add(sortDesc);
                     view.Refresh();
                 }
             }
         }
-
-        #endregion Событие "Сортировка"
-
-        #region Событие "Фильтрация"
 
         private void PART_textEdit_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -505,10 +467,14 @@ namespace SharpLib.Wpf.Controls
             string filter = FilterText;
 
             if (value == null)
+            {
                 return false;
+            }
 
             if (String.IsNullOrEmpty(filter))
+            {
                 return true;
+            }
 
             bool result = FilterInProperties(value, filter);
 
@@ -517,32 +483,34 @@ namespace SharpLib.Wpf.Controls
 
         private bool FilterInProperties(object value, string filter)
         {
-            Type type = value.GetType();
-            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var type = value.GetType();
+            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
             foreach (PropertyInfo item in properties)
             {
                 object s = item.GetValue(value, null);
-                if (s == null) continue;
+                if (s == null)
+                {
+                    continue;
+                }
 
                 int index = s.ToString().IndexOf(filter, 0, StringComparison.InvariantCultureIgnoreCase);
 
-                if (index > -1) return true;
+                if (index > -1)
+                {
+                    return true;
+                }
             }
 
             return false;
         }
-
-        #endregion Событие "Фильтрация"
-
-        #region Управление выделением
 
         public void SelectedAll()
         {
             PART_listView.SelectAll();
         }
 
-        #endregion Управление выделением
+        #endregion
     }
 
     #endregion Класс ListViewEx
@@ -555,8 +523,6 @@ namespace SharpLib.Wpf.Controls
         #region Поля
 
         public static readonly DependencyProperty NameProperty;
-
-        private Double _saveWidth;
 
         private bool _visible;
 
@@ -580,10 +546,12 @@ namespace SharpLib.Wpf.Controls
                     _visible = value;
 
                     if (value)
-                        Width = _saveWidth;
+                    {
+                        Width = SaveWidth;
+                    }
                     else
                     {
-                        _saveWidth = ActualWidth;
+                        SaveWidth = ActualWidth;
                         Width = 0;
                     }
                 }
@@ -592,15 +560,11 @@ namespace SharpLib.Wpf.Controls
 
         public string Title
         {
-            get { return (String)Header; }
+            get { return (string)Header; }
             set { Header = value; }
         }
 
-        public Double SaveWidth
-        {
-            get { return _saveWidth; }
-            set { _saveWidth = value; }
-        }
+        public double SaveWidth { get; set; }
 
         public Double MinWidth { get; set; }
 
@@ -625,7 +589,7 @@ namespace SharpLib.Wpf.Controls
 
         public ListViewExColumn()
         {
-            _saveWidth = Double.NaN;
+            SaveWidth = Double.NaN;
             _visible = true;
             MinWidth = 10;
             MaxWidth = Double.NaN;
@@ -716,9 +680,9 @@ namespace SharpLib.Wpf.Controls
     {
         #region Поля
 
-        public string ColumnName;
+        public string ColumnName { get; internal set; }
 
-        public ListSortDirection Direction;
+        public ListSortDirection Direction { get; internal set; }
 
         #endregion
 
@@ -727,14 +691,14 @@ namespace SharpLib.Wpf.Controls
         protected ListViewExSorter()
         {
             Direction = ListSortDirection.Ascending;
-            ColumnName = "";
+            ColumnName = string.Empty;
         }
 
         #endregion
 
         #region Методы
 
-        public abstract int CompareByColumn(object x, object y, string columnName);
+        public abstract int CompareByColumn(ListViewExSorterArgs args);
 
         protected int CompareString(object x, object y)
         {
@@ -754,10 +718,18 @@ namespace SharpLib.Wpf.Controls
 
         public int Compare(object x, object y)
         {
-            int result = CompareByColumn(x, y, ColumnName);
+            var args = new ListViewExSorterArgs(Direction, ColumnName, x, y);
+            int result = CompareByColumn(args);
+
+            if (args.IsHandledDirection)
+            {
+                return result;
+            }
 
             if (Direction == ListSortDirection.Descending)
+            {
                 result *= (-1);
+            }
 
             return result;
         }
@@ -767,6 +739,32 @@ namespace SharpLib.Wpf.Controls
 
     #endregion Класс ListViewExSorter
 
+    #region Класс ListViewExSorterArgs
+
+    public class ListViewExSorterArgs
+    {
+        public bool IsHandledDirection { get; set; }
+
+        public ListSortDirection Direction { get; private set; }
+
+        public object X { get; private set; }
+
+        public object Y { get; private set; }
+
+        public string ColumnName { get; private set; }
+
+        public ListViewExSorterArgs(ListSortDirection direction, string columnName, object x, object y)
+        {
+            IsHandledDirection = false;
+            Direction = direction;
+            ColumnName = columnName;
+            X = x;
+            Y = y;
+        }
+    }
+
+    #endregion Класс ListViewExSorterArgs
+
     #region Класс ListViewExBackgroundConvertor
 
     internal sealed class ListViewExBackgroundConvertor : IMultiValueConverter
@@ -774,6 +772,10 @@ namespace SharpLib.Wpf.Controls
         #region Поля
 
         private readonly SolidColorBrush _lightBlueBrush;
+
+        #endregion
+
+        #region Конструктор
 
         public ListViewExBackgroundConvertor()
         {
@@ -784,9 +786,9 @@ namespace SharpLib.Wpf.Controls
 
         #region Методы
 
-        public object Convert(Object[] values, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            bool show = (Boolean)values[0];
+            bool show = (bool)values[0];
 
             if (show)
             {
