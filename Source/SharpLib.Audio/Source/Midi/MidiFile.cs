@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-using NAudio.Utils;
+using SharpLib.Audio.Utils;
 
-namespace NAudio.Midi
+namespace SharpLib.Audio.Midi
 {
     internal class MidiFile
     {

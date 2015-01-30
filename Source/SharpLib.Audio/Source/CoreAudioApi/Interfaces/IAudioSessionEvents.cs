@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace NAudio.CoreAudioApi.Interfaces
+namespace SharpLib.Audio.CoreAudioApi.Interfaces
 {
     internal enum AudioSessionState
     {

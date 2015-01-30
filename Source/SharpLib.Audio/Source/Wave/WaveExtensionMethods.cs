@@ -1,6 +1,6 @@
-﻿using NAudio.Wave.SampleProviders;
+﻿using SharpLib.Audio.Wave.SampleProviders;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal static class WaveExtensionMethods
     {

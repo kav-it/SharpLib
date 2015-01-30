@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace NAudio.Midi
+namespace SharpLib.Audio.Midi
 {
     internal class MidiOut : IDisposable
     {

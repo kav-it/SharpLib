@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NAudio.MediaFoundation
+namespace SharpLib.Audio.MediaFoundation
 {
     [Flags]
     internal enum _MFT_PROCESS_OUTPUT_FLAGS

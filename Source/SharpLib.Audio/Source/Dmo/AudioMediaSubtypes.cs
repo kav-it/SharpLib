@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace NAudio.Dmo
+namespace SharpLib.Audio.Dmo
 {
     class AudioMediaSubtypes
     {

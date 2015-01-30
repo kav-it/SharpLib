@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace NAudio.Wave 
+namespace SharpLib.Audio.Wave 
 {
     /// <summary>
     /// A buffer of Wave samples for streaming to a Wave Output device

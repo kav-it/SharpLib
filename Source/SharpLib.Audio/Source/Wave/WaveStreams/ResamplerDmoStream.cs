@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 
-using NAudio.Dmo;
+using SharpLib.Audio.Dmo;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class ResamplerDmoStream : WaveStream
     {

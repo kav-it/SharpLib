@@ -1,6 +1,6 @@
 using System;
 
-namespace NAudio
+namespace SharpLib.Audio
 {
     internal class MmException : Exception
     {

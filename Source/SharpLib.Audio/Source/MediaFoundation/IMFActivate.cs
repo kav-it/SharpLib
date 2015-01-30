@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-using NAudio.CoreAudioApi.Interfaces;
+using SharpLib.Audio.CoreAudioApi.Interfaces;
 
-namespace NAudio.MediaFoundation
+namespace SharpLib.Audio.MediaFoundation
 {
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("7FEE9E9A-4A89-47a6-899C-B6A53A70FB67")]
     internal interface IMFActivate : IMFAttributes

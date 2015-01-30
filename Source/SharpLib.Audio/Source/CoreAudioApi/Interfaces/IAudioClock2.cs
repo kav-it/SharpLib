@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace NAudio.CoreAudioApi.Interfaces
+namespace SharpLib.Audio.CoreAudioApi.Interfaces
 {
     [Guid("CD63314F-3FBA-4a1b-812C-EF96358728E7"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IAudioClock

@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace NAudio.Wave.Compression
+namespace SharpLib.Audio.Wave.Compression
 {
     /// <summary>
     /// Interop structure for ACM driver details (ACMDRIVERDETAILS)

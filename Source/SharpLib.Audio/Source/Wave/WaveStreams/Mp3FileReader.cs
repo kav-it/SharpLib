@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class Mp3Index
     {

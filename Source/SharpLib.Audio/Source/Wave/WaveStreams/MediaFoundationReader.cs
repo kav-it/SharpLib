@@ -2,10 +2,10 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-using NAudio.CoreAudioApi.Interfaces;
-using NAudio.MediaFoundation;
+using SharpLib.Audio.CoreAudioApi.Interfaces;
+using SharpLib.Audio.MediaFoundation;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class MediaFoundationReader : WaveStream
     {

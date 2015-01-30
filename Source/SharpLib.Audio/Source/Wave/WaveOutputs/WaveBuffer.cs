@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     [StructLayout(LayoutKind.Explicit, Pack = 2)]
     internal class WaveBuffer : IWaveBuffer

@@ -1,8 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
-using NAudio.Wave;
+using SharpLib.Audio.Wave;
 
-namespace NAudio.Midi
+namespace SharpLib.Audio.Midi
 {
     internal class MidiInterop
     {

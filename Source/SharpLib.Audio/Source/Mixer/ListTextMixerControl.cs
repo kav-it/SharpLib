@@ -1,6 +1,6 @@
 using System;
 
-namespace NAudio.Mixer
+namespace SharpLib.Audio.Mixer
 {
     internal class ListTextMixerControl : MixerControl
     {

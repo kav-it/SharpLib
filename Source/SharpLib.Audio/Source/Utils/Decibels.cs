@@ -1,6 +1,6 @@
 using System;
 
-namespace NAudio.Utils
+namespace SharpLib.Audio.Utils
 {
     internal class Decibels
     {

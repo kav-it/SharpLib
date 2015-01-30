@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace NAudio.SoundFont 
+namespace SharpLib.Audio.SoundFont 
 {
 	class ZoneBuilder : StructureBuilder<Zone>
 	{

@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class RiffChunk
     {

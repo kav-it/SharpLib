@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace NAudio.Wave.SampleProviders
+namespace SharpLib.Audio.Wave.SampleProviders
 {
     /// <summary>
     /// Utility class for converting to SampleProvider

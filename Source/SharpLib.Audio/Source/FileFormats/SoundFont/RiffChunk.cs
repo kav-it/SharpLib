@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text;
-using NAudio.Utils;
+using SharpLib.Audio.Utils;
 
-namespace NAudio.SoundFont 
+namespace SharpLib.Audio.SoundFont 
 {
 	internal class RiffChunk 
 	{

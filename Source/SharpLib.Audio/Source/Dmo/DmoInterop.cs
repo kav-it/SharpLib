@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace NAudio.Dmo
+namespace SharpLib.Audio.Dmo
 {
     static class DmoInterop
     {

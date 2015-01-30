@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-using NAudio.CoreAudioApi.Interfaces;
+using SharpLib.Audio.CoreAudioApi.Interfaces;
 
-namespace NAudio.Dmo
+namespace SharpLib.Audio.Dmo
 {
     [ComImport, Guid("f447b69e-1884-4a7e-8055-346f74d6edb3")]
     internal class ResamplerMediaComObject

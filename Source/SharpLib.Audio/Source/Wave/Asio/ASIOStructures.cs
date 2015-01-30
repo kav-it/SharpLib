@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace NAudio.Wave.Asio
+namespace SharpLib.Audio.Wave.Asio
 {
     // -------------------------------------------------------------------------------
     // Structures used by the ASIODriver and ASIODriverExt

@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 
-using NAudio.Wave.SampleProviders;
+using SharpLib.Audio.Wave.SampleProviders;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class WaveFileWriter : Stream
     {

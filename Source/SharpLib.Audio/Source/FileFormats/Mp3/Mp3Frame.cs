@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class Mp3Frame
     {

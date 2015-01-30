@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-using NAudio.Wave;
+using SharpLib.Audio.Wave;
 
-namespace NAudio.Dmo
+namespace SharpLib.Audio.Dmo
 {
     internal struct DmoMediaType
     {

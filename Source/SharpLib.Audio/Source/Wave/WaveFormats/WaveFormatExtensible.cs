@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-using NAudio.Dmo;
+using SharpLib.Audio.Dmo;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 2)]
     internal class WaveFormatExtensible : WaveFormat

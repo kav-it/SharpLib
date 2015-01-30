@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using NAudio.Utils;
-using NAudio.Wave;
+using SharpLib.Audio.Utils;
+using SharpLib.Audio.Wave;
 using System.Diagnostics;
 
-namespace NAudio.FileFormats.Wav
+namespace SharpLib.Audio.FileFormats.Wav
 {
     class WaveFileChunkReader
     {

@@ -1,6 +1,6 @@
-﻿using NAudio.Utils;
+﻿using SharpLib.Audio.Utils;
 
-namespace NAudio.Wave.SampleProviders
+namespace SharpLib.Audio.Wave.SampleProviders
 {
     internal abstract class SampleProviderConverterBase : ISampleProvider
     {

@@ -1,8 +1,8 @@
 using System;
 
-using NAudio.Dsp;
+using SharpLib.Audio.Dsp;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class SimpleCompressorStream : WaveStream
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace NAudio.CoreAudioApi.Interfaces
+namespace SharpLib.Audio.CoreAudioApi.Interfaces
 {
     [Guid("5CDF2C82-841E-4546-9722-0CF74078229A"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IAudioEndpointVolume

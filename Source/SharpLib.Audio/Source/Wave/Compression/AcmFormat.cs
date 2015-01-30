@@ -1,4 +1,4 @@
-﻿namespace NAudio.Wave.Compression
+﻿namespace SharpLib.Audio.Wave.Compression
 {
     internal class AcmFormat
     {

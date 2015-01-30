@@ -1,9 +1,9 @@
 using System;
 using System.Diagnostics;
 
-using NAudio.Wave.Compression;
+using SharpLib.Audio.Wave.Compression;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class WaveFormatConversionStream : WaveStream
     {

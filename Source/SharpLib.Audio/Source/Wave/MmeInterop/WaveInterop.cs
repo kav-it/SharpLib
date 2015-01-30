@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     /// <summary>
     /// MME Wave function interop

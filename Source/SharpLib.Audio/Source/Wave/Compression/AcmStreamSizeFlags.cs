@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NAudio.Wave.Compression
+namespace SharpLib.Audio.Wave.Compression
 {
     enum AcmStreamSizeFlags
     {

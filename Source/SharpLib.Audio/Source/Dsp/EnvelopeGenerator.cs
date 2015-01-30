@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NAudio.Dsp
+namespace SharpLib.Audio.Dsp
 {
     internal class EnvelopeGenerator
     {

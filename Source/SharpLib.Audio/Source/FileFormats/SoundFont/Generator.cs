@@ -1,6 +1,6 @@
 using System;
 
-namespace NAudio.SoundFont
+namespace SharpLib.Audio.SoundFont
 {
     internal class Generator
     {

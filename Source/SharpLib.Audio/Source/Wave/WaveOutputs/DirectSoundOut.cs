@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class DirectSoundOut : IWavePlayer
     {

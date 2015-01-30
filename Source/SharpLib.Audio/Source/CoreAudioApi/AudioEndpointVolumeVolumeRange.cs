@@ -1,8 +1,8 @@
 using System.Runtime.InteropServices;
 
-using NAudio.CoreAudioApi.Interfaces;
+using SharpLib.Audio.CoreAudioApi.Interfaces;
 
-namespace NAudio.CoreAudioApi
+namespace SharpLib.Audio.CoreAudioApi
 {
     internal class AudioEndpointVolumeVolumeRange
     {

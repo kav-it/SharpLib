@@ -1,4 +1,4 @@
-﻿namespace NAudio.CoreAudioApi
+﻿namespace SharpLib.Audio.CoreAudioApi
 {
     internal enum AudioClientShareMode
     {

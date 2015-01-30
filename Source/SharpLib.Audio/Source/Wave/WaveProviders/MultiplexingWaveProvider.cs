@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using NAudio.Utils;
+using SharpLib.Audio.Utils;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class MultiplexingWaveProvider : IWaveProvider
     {

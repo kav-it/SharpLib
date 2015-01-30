@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NAudio.Wave.Asio
+namespace SharpLib.Audio.Wave.Asio
 {
     /// <summary>
     /// This class stores convertors for different interleaved WaveFormat to ASIOSampleType separate channel

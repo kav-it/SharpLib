@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal interface IWaveIn : IDisposable
     {

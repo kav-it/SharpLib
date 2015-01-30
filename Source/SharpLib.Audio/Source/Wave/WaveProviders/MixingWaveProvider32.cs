@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class MixingWaveProvider32 : IWaveProvider
     {

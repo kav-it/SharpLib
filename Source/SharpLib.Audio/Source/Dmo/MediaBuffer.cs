@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-using NAudio.Utils;
+using SharpLib.Audio.Utils;
 
-namespace NAudio.Dmo
+namespace SharpLib.Audio.Dmo
 {
     internal class MediaBuffer : IMediaBuffer, IDisposable
     {

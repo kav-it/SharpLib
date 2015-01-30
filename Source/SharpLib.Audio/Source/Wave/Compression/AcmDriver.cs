@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
-using NAudio.Utils;
+using SharpLib.Audio.Utils;
 
-namespace NAudio.Wave.Compression
+namespace SharpLib.Audio.Wave.Compression
 {
     internal class AcmDriver : IDisposable
     {

@@ -1,4 +1,4 @@
-namespace NAudio.Midi
+namespace SharpLib.Audio.Midi
 {
     internal enum MidiOutTechnology
     {

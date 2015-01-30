@@ -1,8 +1,8 @@
 ﻿using System;
 
-using NAudio.Wave.Asio;
+using SharpLib.Audio.Wave.Asio;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class AsioAudioAvailableEventArgs : EventArgs
     {

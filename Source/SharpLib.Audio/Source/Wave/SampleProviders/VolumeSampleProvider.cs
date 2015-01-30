@@ -1,12 +1,10 @@
-﻿namespace NAudio.Wave.SampleProviders
+﻿namespace SharpLib.Audio.Wave.SampleProviders
 {
     internal class VolumeSampleProvider : ISampleProvider
     {
         #region Поля
 
-        private readonly ISampleProvider source;
-
-        private float volume;
+        private readonly ISampleProvider _source;
 
         #endregion
 
@@ -14,14 +12,10 @@
 
         public WaveFormat WaveFormat
         {
-            get { return source.WaveFormat; }
+            get { return _source.WaveFormat; }
         }
 
-        public float Volume
-        {
-            get { return volume; }
-            set { volume = value; }
-        }
+        public float Volume { get; set; }
 
         #endregion
 
@@ -29,8 +23,8 @@
 
         public VolumeSampleProvider(ISampleProvider source)
         {
-            this.source = source;
-            volume = 1.0f;
+            this._source = source;
+            Volume = 1.0f;
         }
 
         #endregion
@@ -39,12 +33,12 @@
 
         public int Read(float[] buffer, int offset, int sampleCount)
         {
-            int samplesRead = source.Read(buffer, offset, sampleCount);
-            if (volume != 1f)
+            int samplesRead = _source.Read(buffer, offset, sampleCount);
+            if (Volume != 1f)
             {
                 for (int n = 0; n < sampleCount; n++)
                 {
-                    buffer[offset + n] *= volume;
+                    buffer[offset + n] *= Volume;
                 }
             }
             return samplesRead;

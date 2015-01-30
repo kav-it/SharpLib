@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Threading;
 
-using NAudio.Mixer;
+using SharpLib.Audio.Mixer;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class WaveInEvent : IWaveIn
     {

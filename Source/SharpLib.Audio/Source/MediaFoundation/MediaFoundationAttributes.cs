@@ -1,8 +1,8 @@
 ﻿using System;
 
-using NAudio.Utils;
+using SharpLib.Audio.Utils;
 
-namespace NAudio.MediaFoundation
+namespace SharpLib.Audio.MediaFoundation
 {
     internal static class MediaFoundationAttributes
     {

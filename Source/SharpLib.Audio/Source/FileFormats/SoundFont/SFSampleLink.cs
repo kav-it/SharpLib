@@ -1,4 +1,4 @@
-namespace NAudio.SoundFont
+namespace SharpLib.Audio.SoundFont
 {
     internal enum SFSampleLink : ushort
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Collections;
 
-namespace NAudio.SoundFont 
+namespace SharpLib.Audio.SoundFont 
 {
 
 	/// <summary>

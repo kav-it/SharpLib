@@ -1,6 +1,6 @@
-﻿using NAudio.Utils;
+﻿using SharpLib.Audio.Utils;
 
-namespace NAudio.CoreAudioApi.Interfaces
+namespace SharpLib.Audio.CoreAudioApi.Interfaces
 {
     internal enum AudioClientErrors
     {

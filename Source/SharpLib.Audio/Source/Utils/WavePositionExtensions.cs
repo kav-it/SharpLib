@@ -1,8 +1,8 @@
 ﻿using System;
 
-using NAudio.Wave;
+using SharpLib.Audio.Wave;
 
-namespace NAudio.Utils
+namespace SharpLib.Audio.Utils
 {
     internal static class WavePositionExtensions
     {

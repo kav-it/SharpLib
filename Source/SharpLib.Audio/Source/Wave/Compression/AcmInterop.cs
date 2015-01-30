@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 
-namespace NAudio.Wave.Compression
+namespace SharpLib.Audio.Wave.Compression
 {
     /// <summary>
     /// Interop definitions for Windows ACM (Audio Compression Manager) API
@@ -97,9 +97,9 @@ namespace NAudio.Wave.Compression
         [DllImport("Msacm32.dll")]
         public static extern MmResult acmFormatSuggest(
             IntPtr hAcmDriver,
-            [In, MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "NAudio.Wave.WaveFormatCustomMarshaler")] 
+            [In, MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SharpLib.Audio.Wave.WaveFormatCustomMarshaler")] 
             WaveFormat sourceFormat,
-            [In, Out, MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "NAudio.Wave.WaveFormatCustomMarshaler")] 
+            [In, Out, MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SharpLib.Audio.Wave.WaveFormatCustomMarshaler")] 
             WaveFormat destFormat, 
             int sizeDestFormat, 
             AcmFormatSuggestFlags suggestFlags);
@@ -137,9 +137,9 @@ namespace NAudio.Wave.Compression
         public static extern MmResult acmStreamOpen(
             out IntPtr hAcmStream, 
             IntPtr hAcmDriver, 
-            [In, MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "NAudio.Wave.WaveFormatCustomMarshaler")] 
+            [In, MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SharpLib.Audio.Wave.WaveFormatCustomMarshaler")] 
             WaveFormat sourceFormat,
-            [In, MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "NAudio.Wave.WaveFormatCustomMarshaler")] 
+            [In, MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SharpLib.Audio.Wave.WaveFormatCustomMarshaler")] 
             WaveFormat destFormat, 
             [In] WaveFilter waveFilter, 
             IntPtr callback, 

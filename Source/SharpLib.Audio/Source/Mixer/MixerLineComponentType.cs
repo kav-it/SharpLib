@@ -1,4 +1,4 @@
-﻿namespace NAudio.Mixer
+﻿namespace SharpLib.Audio.Mixer
 {
     internal enum MixerLineComponentType
     {

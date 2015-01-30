@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 
-using NAudio.Utils;
+using SharpLib.Audio.Utils;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class AiffFileReader : WaveStream
     {
@@ -28,7 +28,7 @@ namespace NAudio.Wave
 
         #region Свойства
 
-        public override NAudio.Wave.WaveFormat WaveFormat
+        public override WaveFormat WaveFormat
         {
             get { return waveFormat; }
         }

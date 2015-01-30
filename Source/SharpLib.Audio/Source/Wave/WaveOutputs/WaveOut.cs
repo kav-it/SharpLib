@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class WaveOut : IWavePlayer, IWavePosition
     {

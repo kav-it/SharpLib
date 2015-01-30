@@ -1,4 +1,4 @@
-﻿namespace NAudio.Wave.SampleProviders
+﻿namespace SharpLib.Audio.Wave.SampleProviders
 {
     internal class Pcm32BitToSampleProvider : SampleProviderConverterBase
     {

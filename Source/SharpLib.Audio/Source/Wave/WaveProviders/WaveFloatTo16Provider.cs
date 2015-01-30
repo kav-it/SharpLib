@@ -1,8 +1,8 @@
 ﻿using System;
 
-using NAudio.Utils;
+using SharpLib.Audio.Utils;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class WaveFloatTo16Provider : IWaveProvider
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace NAudio.Wave.Asio
+namespace SharpLib.Audio.Wave.Asio
 {
     /// <summary>
     /// ASIODriverCapability holds all the information from the ASIODriver.

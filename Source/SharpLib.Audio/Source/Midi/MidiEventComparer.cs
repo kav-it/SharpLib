@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace NAudio.Midi
+namespace SharpLib.Audio.Midi
 {
     internal class MidiEventComparer : IComparer<MidiEvent>
     {

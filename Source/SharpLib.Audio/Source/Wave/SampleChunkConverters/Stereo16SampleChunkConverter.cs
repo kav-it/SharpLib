@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using NAudio.Utils;
+using SharpLib.Audio.Utils;
 
-namespace NAudio.Wave.SampleProviders
+namespace SharpLib.Audio.Wave.SampleProviders
 {
     class Stereo16SampleChunkConverter : ISampleChunkConverter
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace NAudio.Sfz
+namespace SharpLib.Audio.Sfz
 {
     enum SfzParseState
     {

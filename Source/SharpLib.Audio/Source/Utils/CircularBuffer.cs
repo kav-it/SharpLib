@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace NAudio.Utils
+namespace SharpLib.Audio.Utils
 {
     internal class CircularBuffer
     {

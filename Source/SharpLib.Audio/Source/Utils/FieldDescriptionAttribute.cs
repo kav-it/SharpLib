@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NAudio.Utils
+namespace SharpLib.Audio.Utils
 {
     [AttributeUsage(AttributeTargets.Field)]
     internal class FieldDescriptionAttribute : Attribute

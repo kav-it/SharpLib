@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace NAudio.MediaFoundation
+namespace SharpLib.Audio.MediaFoundation
 {
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("5BC8A76B-869A-46A3-9B03-FA218A66AEBE")]
     internal interface IMFCollection

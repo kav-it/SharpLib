@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NAudio.Wave.Asio
+namespace SharpLib.Audio.Wave.Asio
 {
     /// <summary>
     /// Callback used by the ASIODriverExt to get wave data

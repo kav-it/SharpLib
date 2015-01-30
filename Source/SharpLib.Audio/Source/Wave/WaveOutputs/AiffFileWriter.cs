@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 
-using NAudio.Utils;
+using SharpLib.Audio.Utils;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class AiffFileWriter : Stream
     {
@@ -197,7 +197,7 @@ namespace NAudio.Wave
                 writer.Write(value24);
                 dataChunkSize += 3;
             }
-            else if (WaveFormat.BitsPerSample == 32 && WaveFormat.Encoding == NAudio.Wave.WaveFormatEncoding.Extensible)
+            else if (WaveFormat.BitsPerSample == 32 && WaveFormat.Encoding == WaveFormatEncoding.Extensible)
             {
                 writer.Write(SwapEndian(UInt16.MaxValue * (Int32)sample));
                 dataChunkSize += 4;

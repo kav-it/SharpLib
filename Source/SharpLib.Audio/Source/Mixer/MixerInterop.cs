@@ -1,11 +1,11 @@
 // created on 09/12/2002 at 21:03
 using System;
 using System.Runtime.InteropServices;
-using NAudio.Wave;
+using SharpLib.Audio.Wave;
 
 // TODO: add function help from MSDN
 // TODO: Create enums for flags parameters
-namespace NAudio.Mixer
+namespace SharpLib.Audio.Mixer
 {
     class MixerInterop
     {

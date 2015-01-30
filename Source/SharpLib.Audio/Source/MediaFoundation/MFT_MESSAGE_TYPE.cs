@@ -1,4 +1,4 @@
-﻿namespace NAudio.MediaFoundation
+﻿namespace SharpLib.Audio.MediaFoundation
 {
     internal enum MFT_MESSAGE_TYPE
     {

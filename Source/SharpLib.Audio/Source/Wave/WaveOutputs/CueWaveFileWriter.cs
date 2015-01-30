@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class CueWaveFileWriter : WaveFileWriter
     {

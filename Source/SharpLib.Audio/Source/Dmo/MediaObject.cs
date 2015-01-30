@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-using NAudio.Utils;
-using NAudio.Wave;
+using SharpLib.Audio.Utils;
+using SharpLib.Audio.Wave;
 
-namespace NAudio.Dmo
+namespace SharpLib.Audio.Dmo
 {
     internal class MediaObject : IDisposable
     {

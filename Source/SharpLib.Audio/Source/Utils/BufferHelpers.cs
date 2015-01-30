@@ -1,4 +1,4 @@
-﻿namespace NAudio.Utils
+﻿namespace SharpLib.Audio.Utils
 {
     internal static class BufferHelpers
     {

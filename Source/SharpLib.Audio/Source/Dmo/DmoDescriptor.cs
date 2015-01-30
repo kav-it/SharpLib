@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NAudio.Dmo
+namespace SharpLib.Audio.Dmo
 {
     internal class DmoDescriptor
     {

@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-using NAudio.Wave;
+using SharpLib.Audio.Wave;
 
 namespace SharpLib.Audio
 {
@@ -125,6 +125,8 @@ namespace SharpLib.Audio
             }
 
             _isDisposed = true;
+
+            _reader.Volume
         }
 
         /// <summary>

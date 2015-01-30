@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-using NAudio.CoreAudioApi.Interfaces;
-using NAudio.Wave;
+using SharpLib.Audio.CoreAudioApi.Interfaces;
+using SharpLib.Audio.Wave;
 
-namespace NAudio.CoreAudioApi
+namespace SharpLib.Audio.CoreAudioApi
 {
     internal class AudioClient : IDisposable
     {

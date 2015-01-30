@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace NAudio.Midi
+namespace SharpLib.Audio.Midi
 {
     internal class ChannelAfterTouchEvent : MidiEvent
     {

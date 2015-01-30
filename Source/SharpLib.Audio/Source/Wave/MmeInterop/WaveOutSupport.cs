@@ -1,6 +1,6 @@
 using System;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
 	/// <summary>
 	/// Flags indicating what features this WaveOut device supports

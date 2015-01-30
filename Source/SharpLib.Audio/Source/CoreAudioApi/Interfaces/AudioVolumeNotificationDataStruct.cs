@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NAudio.CoreAudioApi.Interfaces
+namespace SharpLib.Audio.CoreAudioApi.Interfaces
 {
     internal struct AudioVolumeNotificationDataStruct
     {

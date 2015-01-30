@@ -1,4 +1,4 @@
-﻿namespace NAudio.Wave.Asio
+﻿namespace SharpLib.Audio.Wave.Asio
 {
     internal enum AsioSampleType
     {

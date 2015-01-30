@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace NAudio.Wave.Compression
+namespace SharpLib.Audio.Wave.Compression
 {
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     internal class WaveFilter

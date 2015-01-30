@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace NAudio.Mixer
+namespace SharpLib.Audio.Mixer
 {
     internal class MixerLine
     {

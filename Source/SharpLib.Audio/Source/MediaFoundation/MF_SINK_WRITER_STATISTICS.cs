@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace NAudio.MediaFoundation
+namespace SharpLib.Audio.MediaFoundation
 {
     [StructLayout(LayoutKind.Sequential)]
     internal class MF_SINK_WRITER_STATISTICS

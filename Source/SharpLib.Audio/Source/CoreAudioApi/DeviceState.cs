@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NAudio.CoreAudioApi
+namespace SharpLib.Audio.CoreAudioApi
 {
     [Flags]
     internal enum DeviceState

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace NAudio.Utils
+namespace SharpLib.Audio.Utils
 {
     internal class IgnoreDisposeStream : Stream
     {

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-using NAudio.MediaFoundation;
-using NAudio.Utils;
+using SharpLib.Audio.MediaFoundation;
+using SharpLib.Audio.Utils;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class MediaFoundationEncoder : IDisposable
     {

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-using NAudio.Utils;
+using SharpLib.Audio.Utils;
 
-namespace NAudio.Midi
+namespace SharpLib.Audio.Midi
 {
     internal class MidiEventCollection : IEnumerable<IList<MidiEvent>>
     {

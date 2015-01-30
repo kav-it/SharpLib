@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NAudio.Wave.Compression
+namespace SharpLib.Audio.Wave.Compression
 {
     [Flags]
     internal enum AcmFormatEnumFlags

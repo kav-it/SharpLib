@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Runtime.InteropServices;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     [StructLayout(LayoutKind.Sequential, Pack = 2)]
     internal class Gsm610WaveFormat : WaveFormat

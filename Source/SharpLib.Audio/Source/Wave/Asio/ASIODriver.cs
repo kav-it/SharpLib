@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32;
 
-namespace NAudio.Wave.Asio
+namespace SharpLib.Audio.Wave.Asio
 {
     /// <summary>
     /// Main ASIODriver Class. To use this class, you need to query first the GetASIODriverNames() and

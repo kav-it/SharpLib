@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NAudio.Utils
+namespace SharpLib.Audio.Utils
 {
     class MergeSort
     {

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace NAudio.FileFormats.Map
+namespace SharpLib.Audio.FileFormats.Map
 {
     class MapBlockHeader
     {

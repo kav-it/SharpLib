@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NAudio.Codecs
+namespace SharpLib.Audio.Codecs
 {
     internal class G722Codec
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace NAudio.Dmo
+namespace SharpLib.Audio.Dmo
 {
     [ComImport,
 #if !NETFX_CORE

@@ -1,8 +1,8 @@
 using System;
 
-using NAudio.Wave.SampleProviders;
+using SharpLib.Audio.Wave.SampleProviders;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class WaveChannel32 : WaveStream, ISampleNotifier
     {

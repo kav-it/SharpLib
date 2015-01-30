@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 using Microsoft.Win32;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
     internal struct WaveInCapabilities

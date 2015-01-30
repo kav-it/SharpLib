@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace NAudio.Dmo
+namespace SharpLib.Audio.Dmo
 {
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
     internal struct DmoOutputDataBuffer : IDisposable

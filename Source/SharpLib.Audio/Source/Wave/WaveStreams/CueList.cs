@@ -4,9 +4,9 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-using NAudio.Utils;
+using SharpLib.Audio.Utils;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class Cue
     {

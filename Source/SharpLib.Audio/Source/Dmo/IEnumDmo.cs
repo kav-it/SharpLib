@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace NAudio.Dmo
+namespace SharpLib.Audio.Dmo
 {
     [Guid("2c3cd98a-2bfa-4a53-9c27-5249ba64ba0f"), 
     InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

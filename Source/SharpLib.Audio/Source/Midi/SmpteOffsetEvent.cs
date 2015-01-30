@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace NAudio.Midi
+namespace SharpLib.Audio.Midi
 {
     class SmpteOffsetEvent : MetaEvent
     {

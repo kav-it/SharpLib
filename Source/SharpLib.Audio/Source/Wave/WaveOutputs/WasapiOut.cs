@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Threading;
 
-using NAudio.CoreAudioApi;
+using SharpLib.Audio.CoreAudioApi;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class WasapiOut : IWavePlayer, IWavePosition
     {

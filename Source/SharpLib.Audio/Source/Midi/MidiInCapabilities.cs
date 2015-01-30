@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace NAudio.Midi
+namespace SharpLib.Audio.Midi
 {
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
     internal struct MidiInCapabilities

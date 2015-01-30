@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace NAudio.CoreAudioApi
+namespace SharpLib.Audio.CoreAudioApi
 {
     [StructLayout(LayoutKind.Sequential)]
     internal struct AudioClientProperties

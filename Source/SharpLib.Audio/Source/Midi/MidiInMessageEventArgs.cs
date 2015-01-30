@@ -1,6 +1,6 @@
 using System;
 
-namespace NAudio.Midi
+namespace SharpLib.Audio.Midi
 {
     internal class MidiInMessageEventArgs : EventArgs
     {

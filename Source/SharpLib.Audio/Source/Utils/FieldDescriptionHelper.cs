@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace NAudio.Utils
+namespace SharpLib.Audio.Utils
 {
     internal static class FieldDescriptionHelper
     {

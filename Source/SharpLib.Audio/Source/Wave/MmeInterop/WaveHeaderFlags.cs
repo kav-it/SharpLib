@@ -1,6 +1,6 @@
 using System;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     [Flags]
     internal enum WaveHeaderFlags

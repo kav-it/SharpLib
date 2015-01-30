@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace NAudio.CoreAudioApi.Interfaces
+namespace SharpLib.Audio.CoreAudioApi.Interfaces
 {
     [Guid("BFA971F1-4D5E-40BB-935E-967039BFBEE4"),
      InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

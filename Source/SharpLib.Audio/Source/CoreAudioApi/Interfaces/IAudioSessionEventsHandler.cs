@@ -1,4 +1,4 @@
-﻿namespace NAudio.CoreAudioApi.Interfaces
+﻿namespace SharpLib.Audio.CoreAudioApi.Interfaces
 {
     internal interface IAudioSessionEventsHandler
     {

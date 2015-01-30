@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 
-using NAudio.Dmo;
-using NAudio.Wave;
+using SharpLib.Audio.Dmo;
+using SharpLib.Audio.Wave;
 
-namespace NAudio.FileFormats.Mp3
+namespace SharpLib.Audio.FileFormats.Mp3
 {
     internal class DmoMp3FrameDecompressor : IMp3FrameDecompressor
     {

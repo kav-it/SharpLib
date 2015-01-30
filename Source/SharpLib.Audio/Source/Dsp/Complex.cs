@@ -1,4 +1,4 @@
-namespace NAudio.Dsp
+namespace SharpLib.Audio.Dsp
 {
     internal struct Complex
     {

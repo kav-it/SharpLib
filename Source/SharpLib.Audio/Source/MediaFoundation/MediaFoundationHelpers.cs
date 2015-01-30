@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-using NAudio.Wave;
+using SharpLib.Audio.Wave;
 
-namespace NAudio.MediaFoundation
+namespace SharpLib.Audio.MediaFoundation
 {
     internal static class MediaFoundationApi
     {

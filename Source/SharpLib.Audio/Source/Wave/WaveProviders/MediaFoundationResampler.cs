@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-using NAudio.Dmo;
-using NAudio.MediaFoundation;
+using SharpLib.Audio.Dmo;
+using SharpLib.Audio.MediaFoundation;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class MediaFoundationResampler : MediaFoundationTransform
     {

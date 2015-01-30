@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-using NAudio.Wave;
+using SharpLib.Audio.Wave;
 
-namespace NAudio.CoreAudioApi
+namespace SharpLib.Audio.CoreAudioApi
 {
     internal class WasapiCapture : IWaveIn
     {

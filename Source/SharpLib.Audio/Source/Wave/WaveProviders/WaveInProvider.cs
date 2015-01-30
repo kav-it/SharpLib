@@ -1,4 +1,4 @@
-﻿namespace NAudio.Wave
+﻿namespace SharpLib.Audio.Wave
 {
     internal class WaveInProvider : IWaveProvider
     {

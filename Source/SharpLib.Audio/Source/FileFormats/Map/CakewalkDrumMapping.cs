@@ -1,6 +1,6 @@
 using System;
 
-namespace NAudio.FileFormats.Map
+namespace SharpLib.Audio.FileFormats.Map
 {
     internal class CakewalkDrumMapping
     {

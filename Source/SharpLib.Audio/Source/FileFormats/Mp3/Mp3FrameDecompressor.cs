@@ -1,8 +1,8 @@
 ﻿using System;
 
-using NAudio.Wave.Compression;
+using SharpLib.Audio.Wave.Compression;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class AcmMp3FrameDecompressor : IMp3FrameDecompressor
     {

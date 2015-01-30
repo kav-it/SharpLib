@@ -1,4 +1,4 @@
-namespace NAudio
+namespace SharpLib.Audio
 {
     internal enum Manufacturers
     {

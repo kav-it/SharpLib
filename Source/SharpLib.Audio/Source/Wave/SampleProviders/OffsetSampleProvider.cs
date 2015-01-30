@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NAudio.Wave.SampleProviders
+namespace SharpLib.Audio.Wave.SampleProviders
 {
     internal class OffsetSampleProvider : ISampleProvider
     {

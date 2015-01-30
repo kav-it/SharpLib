@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace NAudio.Midi
+namespace SharpLib.Audio.Midi
 {
     internal class TextEvent : MetaEvent
     {
@@ -30,7 +30,7 @@ namespace NAudio.Midi
 
         public TextEvent(BinaryReader br, int length)
         {
-            Encoding byteEncoding = NAudio.Utils.ByteEncoding.Instance;
+            Encoding byteEncoding = Utils.ByteEncoding.Instance;
             text = byteEncoding.GetString(br.ReadBytes(length));
         }
 
@@ -52,7 +52,7 @@ namespace NAudio.Midi
         public override void Export(ref long absoluteTime, BinaryWriter writer)
         {
             base.Export(ref absoluteTime, writer);
-            Encoding byteEncoding = NAudio.Utils.ByteEncoding.Instance;
+            Encoding byteEncoding = Utils.ByteEncoding.Instance;
             byte[] encoded = byteEncoding.GetBytes(text);
             writer.Write(encoded);
         }

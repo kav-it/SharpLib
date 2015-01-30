@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace NAudio.SoundFont 
+namespace SharpLib.Audio.SoundFont 
 {
 	internal class GeneratorBuilder : StructureBuilder<Generator> 
 	{

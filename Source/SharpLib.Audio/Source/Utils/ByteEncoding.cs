@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace NAudio.Utils
+namespace SharpLib.Audio.Utils
 {
     internal class ByteEncoding : Encoding
     {

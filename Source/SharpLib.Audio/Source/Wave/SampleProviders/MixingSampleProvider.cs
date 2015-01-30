@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using NAudio.Utils;
+using SharpLib.Audio.Utils;
 
-namespace NAudio.Wave.SampleProviders
+namespace SharpLib.Audio.Wave.SampleProviders
 {
     internal class MixingSampleProvider : ISampleProvider
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-using NAudio.Utils;
-using NAudio.Wave;
+using SharpLib.Audio.Utils;
+using SharpLib.Audio.Wave;
 
-namespace NAudio.MediaFoundation
+namespace SharpLib.Audio.MediaFoundation
 {
     internal class MediaType
     {

@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-using NAudio.FileFormats.Wav;
+using SharpLib.Audio.FileFormats.Wav;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class WaveFileReader : WaveStream
     {

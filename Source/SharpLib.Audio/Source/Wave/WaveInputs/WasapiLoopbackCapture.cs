@@ -1,8 +1,8 @@
 ﻿using System;
 
-using NAudio.CoreAudioApi;
+using SharpLib.Audio.CoreAudioApi;
 
-namespace NAudio.Wave
+namespace SharpLib.Audio.Wave
 {
     internal class WasapiLoopbackCapture : WasapiCapture
     {

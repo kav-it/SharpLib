@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace NAudio.Mixer
+namespace SharpLib.Audio.Mixer
 {
     internal class BooleanMixerControl : MixerControl
     {

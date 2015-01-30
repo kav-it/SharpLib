@@ -3,7 +3,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
-namespace NAudio.Mixer
+namespace SharpLib.Audio.Mixer
 {
     /// <summary>
     /// Represents a mixer control

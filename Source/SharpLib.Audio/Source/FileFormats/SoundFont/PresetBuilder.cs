@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace NAudio.SoundFont 
+namespace SharpLib.Audio.SoundFont 
 {
 	class PresetBuilder : StructureBuilder<Preset>
 	{

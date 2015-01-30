@@ -1,4 +1,4 @@
-﻿namespace NAudio.Codecs
+﻿namespace SharpLib.Audio.Codecs
 {
     internal class ALawDecoder
     {

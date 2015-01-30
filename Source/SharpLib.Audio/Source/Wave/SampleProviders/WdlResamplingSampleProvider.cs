@@ -1,6 +1,6 @@
-﻿using NAudio.Dsp;
+﻿using SharpLib.Audio.Dsp;
 
-namespace NAudio.Wave.SampleProviders
+namespace SharpLib.Audio.Wave.SampleProviders
 {
     internal class WdlResamplingSampleProvider : ISampleProvider
     {

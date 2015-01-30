@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace NAudio.Midi
+namespace SharpLib.Audio.Midi
 {
     internal class SequencerSpecificEvent : MetaEvent
     {
