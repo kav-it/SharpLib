@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 using SharpLib.Audio.Wave;
 
@@ -11,6 +12,16 @@ namespace SharpLib.Audio
     /// </summary>
     public class AudioFile: IDisposable
     {
+        /// <summary>
+        /// Максимальное значение громкости
+        /// </summary>
+        private const float MAX_VOLULME = 1.0f;
+
+        /// <summary>
+        /// Период уведомления о процессе воспроизведения (мс)
+        /// </summary>
+        private const int PLAY_PROGRESS_EVENT_INTERVAL = 500;
+
         #region Поля
 
         /// <summary>
@@ -27,6 +38,11 @@ namespace SharpLib.Audio
         /// Плеер
         /// </summary>
         private IWavePlayer _waveOutDevice;
+
+        /// <summary>
+        /// Таймер уведомления о процессе воспроизведения
+        /// </summary>
+        private Timer _timer;
 
         /// <summary>
         /// Состояние процесса воспроизведения
@@ -62,11 +78,15 @@ namespace SharpLib.Audio
         }
 
         /// <summary>
-        /// Громкость 
+        /// Громкость (от 0 до 100%) 
         /// </summary>
-        public float Volume
+        /// <remarks>
+        /// Сейчас реализовано линейная зависимость, но она неравномерна.
+        /// </remarks>
+        public int Volume
         {
-            get { return _reader.Volume; }
+            get { return (int)(_reader.Volume * 100 / MAX_VOLULME); }
+            set { _reader.Volume = (value * MAX_VOLULME) / 100; }
         }
 
         #endregion
@@ -82,6 +102,11 @@ namespace SharpLib.Audio
             {
                 return;
             }
+
+
+            _timer = new Timer(OnTimerTick);
+
+            var a = new Stopwatch();
 
             _reader = new AudioFileReader(location);
             _waveOutDevice = new WaveOutEvent();
@@ -100,6 +125,14 @@ namespace SharpLib.Audio
 
         #region Методы
 
+        private void OnTimerTick(object state)
+        {
+            
+        }
+
+        /// <summary>
+        /// Освобождение элемента
+        /// </summary>
         private void DisposeAll()
         {
             if (_isDisposed)
@@ -124,9 +157,13 @@ namespace SharpLib.Audio
                 _waveOutDevice = null;
             }
 
-            _isDisposed = true;
+            if (_timer != null)
+            {
+                _timer.Dispose();
+                _timer = null;
+            }
 
-            _reader.Volume
+            _isDisposed = true;
         }
 
         /// <summary>

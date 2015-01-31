@@ -23,7 +23,7 @@
 
         public VolumeSampleProvider(ISampleProvider source)
         {
-            this._source = source;
+            _source = source;
             Volume = 1.0f;
         }
 
@@ -34,7 +34,7 @@
         public int Read(float[] buffer, int offset, int sampleCount)
         {
             int samplesRead = _source.Read(buffer, offset, sampleCount);
-            if (Volume != 1f)
+            if (!Volume.EqualEx(1f))
             {
                 for (int n = 0; n < sampleCount; n++)
                 {

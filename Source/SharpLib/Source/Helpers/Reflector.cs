@@ -16,11 +16,29 @@ namespace SharpLib
         #region Методы
 
         /// <summary>
-        /// Создание объекта в run-time
+        /// Создание объекта в run-time (по типу)
         /// </summary>
         public static object CreateObject(Type typ)
         {
             var result = Activator.CreateInstance(typ);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Создание объекта в run-time (по имени)
+        /// </summary>
+        public static Type SearchType(string assemblyName, string typeName)
+        {
+            var assembly = AppDomain.CurrentDomain.GetAssemblies()
+                .FirstOrDefault(x => x.GetName().Name.EqualsOrdinalEx(assemblyName));
+
+            if (assembly == null)
+            {
+                return null;
+            }
+
+            var result = assembly.GetTypes().FirstOrDefault(x => x.FullName.EqualsOrdinalEx(typeName));
 
             return result;
         }

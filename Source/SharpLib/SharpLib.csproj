@@ -51,6 +51,7 @@
     <Compile Include="Source\Events\EventArgs{T}.Changing.cs" />
     <Compile Include="Source\Events\EventArgs{T}.cs" />
     <Compile Include="Source\Extensions\Extension.Byte.cs" />
+    <Compile Include="Source\Extensions\Extension.Float.cs" />
     <Compile Include="Source\Extensions\Extension.TimeSpan.cs" />
     <Compile Include="Source\Extensions\Extension.StringBuilder.cs" />
     <Compile Include="Source\Extensions\Extension.Exception.cs" />
@@ -78,6 +79,10 @@
     <Compile Include="Source\Helpers\Position.cs" />
     <Compile Include="Source\Helpers\Resources\EmbeddedResourceUri.cs" />
     <Compile Include="Source\Helpers\Resources\EmbeddedResources.cs" />
+    <Compile Include="Source\Helpers\Timers\ITimer.cs" />
+    <Compile Include="Source\Helpers\Timers\Timer.Wpf.cs" />
+    <Compile Include="Source\Helpers\Timers\Timers.cs" />
+    <Compile Include="Source\Helpers\Timers\Timer.cs" />
     <Compile Include="Source\Helpers\WideInt.cs" />
     <Compile Include="Source\Helpers\BufferRange.cs" />
     <Compile Include="Source\Helpers\ByteList.cs" />

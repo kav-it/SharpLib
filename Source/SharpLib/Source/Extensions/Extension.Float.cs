@@ -3,24 +3,24 @@
 namespace SharpLib
 {
     /// <summary>
-    /// Класс расширения "Double"
+    /// Класс расширения "Float"
     /// </summary>
-    public static class ExtensionDouble
+    public static class ExtensionFloat
     {
         #region Константы
 
-        public const double EPSILON = 0.0001;
+        public const float EPSILON = 0.0001f;
 
         #endregion
 
         #region Методы
 
-        public static bool EqualEx(this double value1, double value2, double epsilon = EPSILON)
+        public static bool EqualEx(this float value1, float value2, float epsilon = EPSILON)
         {
             return Math.Abs(value1 - value2) < epsilon;
         }
 
-        public static bool EqualZeroEx(this double value1)
+        public static bool EqualZeroEx(this float value1)
         {
             return value1.EqualEx(0);
         }

@@ -16,6 +16,8 @@ namespace DemoWpf
 
         private DispatcherTimer _timer;
 
+        private ITimer _timer1;
+
         #endregion
 
         #region Конструктор
@@ -28,10 +30,14 @@ namespace DemoWpf
             asm.CopyEmbeddedResourceToFileEx("Source/Assets/Music.mp3", false);
 
             _file = new AudioFile(asm.GetDirectoryEx() + "\\Music.mp3");
+
             _timer = new DispatcherTimer();
             _timer.Interval = new TimeSpan(0, 0, 0, 0, 500);
             _timer.Tick += _timer_Tick;
-            _timer.Start();
+            // _timer.Start();
+
+            _timer1 = Timers.Create(500, _timer_Tick);
+            _timer1.Start();
 
             Application.Current.Exit += ApplicationExit;
         }
@@ -67,6 +73,16 @@ namespace DemoWpf
         private void ButtonStop_Click(object sender, RoutedEventArgs e)
         {
             _file.Stop();
+        }
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (_file != null)
+            {
+                var value = (int)PART_sliderVolume.Value;
+                _file.Volume = value;
+                PART_labelVolume.Content = value;
+            }
         }
 
         #endregion

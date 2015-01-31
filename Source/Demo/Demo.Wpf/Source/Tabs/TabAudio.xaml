@@ -10,8 +10,9 @@
         <Button Content="Pause" Name="PART_buttonPause" Margin="120,10,0,0" Click="ButtonPause_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90" />
         <Button Content="Stop" Name="PART_buttonStop" Margin="230,10,0,0" Click="ButtonStop_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="90" />
         <Label Content="Громкость" Margin="10,45,689,176"></Label>
-        <Slider HorizontalAlignment="Left" Margin="30,72,0,0" VerticalAlignment="Top" Width="20" Orientation="Vertical" Height="128"/>
+        <Slider Name="PART_sliderVolume" HorizontalAlignment="Left" IsSnapToTickEnabled="True" Margin="30,72,0,0" VerticalAlignment="Top" Width="20" Orientation="Vertical" Height="128" TickFrequency="5" Value="100" LargeChange="5" Maximum="100" ValueChanged="Slider_ValueChanged" SmallChange="5"/>
         <Slider HorizontalAlignment="Left" Margin="120,54,0,0" VerticalAlignment="Top" Width="595"/>
         <Label Name="PART_labelTime" Content="00:00:00/00:00:00" HorizontalAlignment="Left" Margin="120,77,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="PART_labelVolume" Content="100" HorizontalAlignment="Left" Margin="24,205,0,0" VerticalAlignment="Top"/>
     </Grid>
 </UserControl>

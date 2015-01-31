@@ -421,5 +421,11 @@
     <Compile Include="Source\Wave\WaveStreams\WaveOutBuffer.cs" />
     <Compile Include="Source\Wave\WaveStreams\WaveStream.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpLib\SharpLib.csproj">
+      <Project>{9cdec0b8-2232-45d1-815c-90880e1f8595}</Project>
+      <Name>SharpLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
