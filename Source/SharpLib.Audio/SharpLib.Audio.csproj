@@ -41,6 +41,7 @@
     <Compile Include="..\SharpLib.Version.cs">
       <Link>Source\Version\SharpLib.Version.cs</Link>
     </Compile>
+    <Compile Include="Source\AudioFile.Progress.Args.cs" />
     <Compile Include="Source\AudioFile.cs" />
     <Compile Include="Source\Codecs\ALawDecoder.cs" />
     <Compile Include="Source\Codecs\ALawEncoder.cs" />

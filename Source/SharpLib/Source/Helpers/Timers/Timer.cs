@@ -65,7 +65,6 @@ namespace SharpLib
         /// </summary>
         private void OnTimerTick(object state)
         {
-            Diag.WriteLine("OnTimerTick");
             Restart();
             RaiseTickEvent();
         }
@@ -130,7 +129,6 @@ namespace SharpLib
             if (_threadTimer != null)
             {
                 _threadTimer.Dispose();
-                GC.SuppressFinalize(this);
             }
         }
 

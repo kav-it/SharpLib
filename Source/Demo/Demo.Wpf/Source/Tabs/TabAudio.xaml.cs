@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Threading;
 
 using SharpLib;
 using SharpLib.Audio;
+using SharpLib.Audio.Wave;
 
 namespace DemoWpf
 {
@@ -14,9 +16,9 @@ namespace DemoWpf
 
         private readonly AudioFile _file;
 
-        private DispatcherTimer _timer;
+        private bool _isDragging;
 
-        private ITimer _timer1;
+        private bool _isPlaying;
 
         #endregion
 
@@ -30,14 +32,13 @@ namespace DemoWpf
             asm.CopyEmbeddedResourceToFileEx("Source/Assets/Music.mp3", false);
 
             _file = new AudioFile(asm.GetDirectoryEx() + "\\Music.mp3");
+            _file.PlayProgress += _file_PlayProgress;
 
-            _timer = new DispatcherTimer();
-            _timer.Interval = new TimeSpan(0, 0, 0, 0, 500);
-            _timer.Tick += _timer_Tick;
-            // _timer.Start();
+            PART_sliderPlay.IsSnapToTickEnabled = true;
+            PART_sliderPlay.Minimum = 0;
+            PART_sliderPlay.Maximum = _file.TotalTime.TotalSeconds;
 
-            _timer1 = Timers.Create(500, _timer_Tick);
-            _timer1.Start();
+            UpdateSlider(_file.CurrentTime);
 
             Application.Current.Exit += ApplicationExit;
         }
@@ -46,10 +47,17 @@ namespace DemoWpf
 
         #region Методы
 
-        private void _timer_Tick(object sender, EventArgs e)
+        private void _file_PlayProgress(object sender, AudioFileProgressArgs args)
         {
-            var text = string.Format("{0}/{1}", _file.CurrentTime.ToStringMinEx(), _file.TotalTime.ToStringMinEx());
+            UpdateSlider(args.Current);
+        }
+
+        private void UpdateSlider(TimeSpan current)
+        {
+            var total = new TimeSpan(0, 0, 0, (int)PART_sliderPlay.Maximum);
+            var text = string.Format("{0}/{1}", current.ToStringMinEx(), total.ToStringMinEx());
             PART_labelTime.Content = text;
+            PART_sliderPlay.Value = current.TotalSeconds;
         }
 
         private void ApplicationExit(object sender, ExitEventArgs e)
@@ -62,7 +70,8 @@ namespace DemoWpf
 
         private void ButtonPlay_Click(object sender, RoutedEventArgs e)
         {
-            _file.Play();
+            Play();
+            
         }
 
         private void ButtonPause_Click(object sender, RoutedEventArgs e)
@@ -86,5 +95,43 @@ namespace DemoWpf
         }
 
         #endregion
+
+        private void PART_sliderPlay_OnDragStarted(object sender, DragStartedEventArgs e)
+        {
+            _isDragging = true;
+
+            if (_file.State == PlaybackState.Playing)
+            {
+                _isPlaying = true;
+                _file.Pause();
+            }
+        }
+
+        private void PART_sliderPlay_OnDragCompleted(object sender, DragCompletedEventArgs e)
+        {
+            _isDragging = false;
+
+            if (_isPlaying)
+            {
+                Play();
+
+                _isPlaying = false;
+            }
+        }
+
+        private void PART_sliderPlay_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (_isDragging)
+            {
+                var current = new TimeSpan(0, 0, 0, (int)e.NewValue);
+                UpdateSlider(current);
+            }
+        }
+
+        private void Play()
+        {
+            var current = new TimeSpan(0, 0, 0, (int)PART_sliderPlay.Value);
+            _file.Play(current);
+        }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
 
 using SharpLib.Audio.Wave;
 
@@ -10,8 +9,10 @@ namespace SharpLib.Audio
     /// <summary>
     /// Музыкальный файл с возможностью управления
     /// </summary>
-    public class AudioFile: IDisposable
+    public class AudioFile : IDisposable
     {
+        #region Константы
+
         /// <summary>
         /// Максимальное значение громкости
         /// </summary>
@@ -21,6 +22,8 @@ namespace SharpLib.Audio
         /// Период уведомления о процессе воспроизведения (мс)
         /// </summary>
         private const int PLAY_PROGRESS_EVENT_INTERVAL = 500;
+
+        #endregion
 
         #region Поля
 
@@ -35,14 +38,18 @@ namespace SharpLib.Audio
         private AudioFileReader _reader;
 
         /// <summary>
+        /// Таймер уведомления о процессе воспроизведения
+        /// </summary>
+        private ITimer _timer;
+
+        /// <summary>
         /// Плеер
         /// </summary>
         private IWavePlayer _waveOutDevice;
 
-        /// <summary>
-        /// Таймер уведомления о процессе воспроизведения
-        /// </summary>
-        private Timer _timer;
+        #endregion
+
+        #region Свойства
 
         /// <summary>
         /// Состояние процесса воспроизведения
@@ -51,10 +58,6 @@ namespace SharpLib.Audio
         {
             get { return _waveOutDevice.PlaybackState; }
         }
-
-        #endregion
-
-        #region Свойства
 
         /// <summary>
         /// Расположение файла
@@ -67,6 +70,7 @@ namespace SharpLib.Audio
         public TimeSpan CurrentTime
         {
             get { return _reader.CurrentTime; }
+            set { _reader.CurrentTime = value; }
         }
 
         /// <summary>
@@ -78,7 +82,7 @@ namespace SharpLib.Audio
         }
 
         /// <summary>
-        /// Громкость (от 0 до 100%) 
+        /// Громкость (от 0 до 100%)
         /// </summary>
         /// <remarks>
         /// Сейчас реализовано линейная зависимость, но она неравномерна.
@@ -88,6 +92,35 @@ namespace SharpLib.Audio
             get { return (int)(_reader.Volume * 100 / MAX_VOLULME); }
             set { _reader.Volume = (value * MAX_VOLULME) / 100; }
         }
+
+        #endregion
+
+        #region События
+
+        /// <summary>
+        /// Событие "Пауза воспроизведения"
+        /// </summary>
+        public event EventHandler PlayPaused;
+
+        /// <summary>
+        /// Событие "Продолжение воспроизведения после паузы"
+        /// </summary>
+        public event EventHandler PlayResumed;
+
+        /// <summary>
+        /// Событие "Запущено воспроизведение"
+        /// </summary>
+        public event EventHandler PlayStarted;
+
+        /// <summary>
+        /// Событие "Завершено воспроизведение"
+        /// </summary>
+        public event EventHandler PlayStopped;
+
+        /// <summary>
+        /// Событие "Текущее состояние процесса воспроизведения"
+        /// </summary>
+        public event EventHandler<AudioFileProgressArgs> PlayProgress;
 
         #endregion
 
@@ -103,11 +136,7 @@ namespace SharpLib.Audio
                 return;
             }
 
-
-            _timer = new Timer(OnTimerTick);
-
-            var a = new Stopwatch();
-
+            _timer = Timers.Create(PLAY_PROGRESS_EVENT_INTERVAL, OnTimerTick);
             _reader = new AudioFileReader(location);
             _waveOutDevice = new WaveOutEvent();
             _waveOutDevice.Init(_reader);
@@ -125,9 +154,12 @@ namespace SharpLib.Audio
 
         #region Методы
 
-        private void OnTimerTick(object state)
+        /// <summary>
+        /// Тик таймера (прогресса)
+        /// </summary>
+        private void OnTimerTick(object sender, EventArgs args)
         {
-            
+            RaiseEventProgress();
         }
 
         /// <summary>
@@ -159,7 +191,7 @@ namespace SharpLib.Audio
 
             if (_timer != null)
             {
-                _timer.Dispose();
+                _timer.Stop();
                 _timer = null;
             }
 
@@ -176,6 +208,19 @@ namespace SharpLib.Audio
         }
 
         /// <summary>
+        /// Воспроизведение файла с указанной позиции
+        /// </summary>
+        public void Play(TimeSpan position)
+        {
+            if (position < TotalTime)
+            {
+                CurrentTime = position;
+            }
+
+            Play();
+        }
+
+        /// <summary>
         /// Воспроизведение файла
         /// </summary>
         public void Play()
@@ -187,17 +232,27 @@ namespace SharpLib.Audio
 
             switch (_waveOutDevice.PlaybackState)
             {
-                case PlaybackState.Stopped: _waveOutDevice.Play(); break;
-                case PlaybackState.Paused: _waveOutDevice.Play(); break;
-                    
-            }
-            if (_waveOutDevice.PlaybackState == PlaybackState.Playing)
-            {
-                return;
-            }
+                case PlaybackState.Stopped:
+                    {
+                        _waveOutDevice.Play();
+                        RaiseEventPlay();
+                    }
+                    break;
+                case PlaybackState.Paused:
+                    {
+                        _waveOutDevice.Play();
+                        RaiseEventResume();
+                    }
+                    break;
 
+                default:
+                    return;
+            }
 
             _waveOutDevice.Play();
+            _timer.Start();
+
+            RaiseEventProgress();
         }
 
         /// <summary>
@@ -211,6 +266,8 @@ namespace SharpLib.Audio
             }
 
             _waveOutDevice.Pause();
+            _timer.Stop();
+            RaiseEventPause();
         }
 
         /// <summary>
@@ -223,9 +280,67 @@ namespace SharpLib.Audio
                 return;
             }
 
-            // _waveOutDevice.Pause();
             _waveOutDevice.Stop();
+            _timer.Stop();
             _reader.Position = 0;
+
+            RaiseEventStop();
+            RaiseEventProgress();
+        }
+
+        /// <summary>
+        /// Генерация события "Play"
+        /// </summary>
+        private void RaiseEventPlay()
+        {
+            if (PlayStarted != null)
+            {
+                PlayStarted(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Генерация события "Stop"
+        /// </summary>
+        private void RaiseEventStop()
+        {
+            if (PlayStopped != null)
+            {
+                PlayStopped(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Генерация события "Pause"
+        /// </summary>
+        private void RaiseEventPause()
+        {
+            if (PlayPaused != null)
+            {
+                PlayPaused(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Генерация события "Resume"
+        /// </summary>
+        private void RaiseEventResume()
+        {
+            if (PlayResumed != null)
+            {
+                PlayResumed(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Генерация события "Progress"
+        /// </summary>
+        private void RaiseEventProgress()
+        {
+            if (PlayProgress != null)
+            {
+                PlayProgress(this, new AudioFileProgressArgs(CurrentTime, TotalTime));
+            }
         }
 
         #endregion
