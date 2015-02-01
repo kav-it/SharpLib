@@ -1,12 +1,14 @@
-﻿namespace SharpLib
+﻿using System;
+
+namespace SharpLib
 {
-    public class ChangingEventArgs<T>
+    public class ChangingEventArgs<T>: EventArgs
     {
         #region Свойства
 
         public T OldValue { get; private set; }
 
-        public T NewValue { get; private set; }
+        public T NewValue { get; set; }
 
         #endregion
 

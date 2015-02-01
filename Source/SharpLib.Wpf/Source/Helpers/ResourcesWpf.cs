@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using System.Windows.Resources;
 
 namespace SharpLib.Wpf
@@ -41,7 +42,7 @@ namespace SharpLib.Wpf
         {
             var uri = GetFullUri(absolutPath, assembly);
 
-            StreamResourceInfo streamResource = Application.GetResourceStream(uri);
+            var streamResource = Application.GetResourceStream(uri);
 
             return streamResource;
         }
@@ -78,33 +79,14 @@ namespace SharpLib.Wpf
             return data;
         }
 
-        /// <summary>
-        /// Загрузка изображения из ресурсов
-        /// </summary>
-        public static Image LoadImage(string absolutPath, Assembly asm = null)
+        public static BitmapImage LoadImage(string absolutPath, Assembly assembly = null)
         {
-            var stream = LoadStreamResource(absolutPath, asm);
+            if (assembly == null)
+            {
+                assembly = Assembly.GetEntryAssembly();
+            }
 
-            var bitmap = new System.Windows.Media.Imaging.BitmapImage();
-            bitmap.BeginInit();
-            bitmap.StreamSource = stream.Stream;
-            bitmap.EndInit();
-
-            Image image = new Image();
-
-            image.Source = bitmap;
-            image.Width = bitmap.PixelWidth;
-            image.Height = bitmap.PixelHeight;
-
-            return image;
-        }
-
-        /// <summary>
-        /// Загрузка изображения из ресурсов в формате BitmapSource
-        /// </summary>
-        public static ImageSource LoadImageSource(String absolutPath, Assembly asm = null)
-        {
-            return LoadImage(absolutPath, asm).Source;
+            return assembly.LoadImageEx(absolutPath);
         }
 
     }

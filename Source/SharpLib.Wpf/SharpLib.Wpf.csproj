@@ -95,6 +95,7 @@
     </Compile>
     <Compile Include="Source\Converters\Converter.BoolToVisibility.cs" />
     <Compile Include="Source\Converters\Converter.StringToBool.cs" />
+    <Compile Include="Source\Extensions\Extension.Assembly.cs" />
     <Compile Include="Source\Extensions\Extension.Application.cs" />
     <Compile Include="Source\Extensions\Extension.DependencyObject.cs" />
     <Compile Include="Source\Extensions\Extension.Vector.cs" />
@@ -115,6 +116,8 @@
     <Compile Include="Source\Helpers\Dialogs\Interop\ShellComInterfaces.cs" />
     <Compile Include="Source\Helpers\Dialogs\Interop\ShellWrapperDefinitions.cs" />
     <Compile Include="Source\Helpers\Dialogs\Interop\Win32Resources.cs" />
+    <Compile Include="Source\Helpers\NotifyProperty\NotifyModelBase.cs" />
+    <Compile Include="Source\Helpers\VsHelper.cs" />
     <Compile Include="Source\Helpers\UI.cs" />
     <Compile Include="Source\Helpers\ResourcesWpf.cs" />
     <Compile Include="Source\Helpers\VisualTree.cs" />

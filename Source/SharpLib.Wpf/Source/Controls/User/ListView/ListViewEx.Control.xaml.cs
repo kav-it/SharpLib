@@ -407,7 +407,10 @@ namespace SharpLib.Wpf.Controls
 
                 if (column != null)
                 {
-                    ColumnSort(column, direction);
+                    if (ColumnSort(column, direction) == false)
+                    {
+                        return;
+                    }
 
                     if (direction == ListSortDirection.Ascending)
                     {
@@ -424,8 +427,13 @@ namespace SharpLib.Wpf.Controls
             }
         }
 
-        private void ColumnSort(ListViewExColumn column, ListSortDirection direction)
+        private bool ColumnSort(ListViewExColumn column, ListSortDirection direction)
         {
+            if (column.AllowSort == false)
+            {
+                return false;
+            }
+
             if (Sorter != null)
             {
                 Sorter.Direction = direction;
@@ -445,6 +453,8 @@ namespace SharpLib.Wpf.Controls
                     view.Refresh();
                 }
             }
+
+            return true;
         }
 
         private void PART_textEdit_TextChanged(object sender, TextChangedEventArgs e)
@@ -529,6 +539,8 @@ namespace SharpLib.Wpf.Controls
         #endregion
 
         #region Свойства
+
+        public bool AllowSort { get; set; }
 
         public DataTemplate Content
         {

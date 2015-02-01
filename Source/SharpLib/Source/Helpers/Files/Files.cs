@@ -121,7 +121,7 @@ namespace SharpLib
 
                 return true;
             }
-            catch (Exception ex)
+            catch 
             {
             }
 
