@@ -13,7 +13,7 @@
         <ListView x:Name="PART_listView" 
                    dragging:DragDrop.IsDragSource="True"
                    dragging:DragDrop.IsDropTarget="True"
-                  HorizontalAlignment="Left" Margin="10,10,0,43" Width="290" Style="{DynamicResource ListViewStyle1}" >
+                  HorizontalAlignment="Left" Margin="10,10,0,43" Width="290" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="123" Width="80" DisplayMemberBinding="{Binding Value1}"/>

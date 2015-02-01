@@ -1,6 +1,6 @@
 ﻿namespace SharpLib.Wpf.Dragging
 {
-    public interface IDropTarget
+    public interface IDragDest
     {
         #region Методы
 

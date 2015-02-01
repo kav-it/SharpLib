@@ -15,6 +15,12 @@ namespace SharpLib.Wpf.Dragging
 {
     public static class DragDrop
     {
+        private const string COPY_TO_TEXT = "Копировать";
+
+        private const string MOVE_TO_TEXT = "Переместить";
+
+        private const string LINK_TO_TEXT = "Ссылка";
+
         #region Поля
 
         public static readonly DataFormat DataFormat;
@@ -65,7 +71,7 @@ namespace SharpLib.Wpf.Dragging
 
         private static IDragSource _defaultDragHandler;
 
-        private static IDropTarget _defaultDropHandler;
+        private static IDragDest _defaultDropHandler;
 
         private static DragAdorner _dragAdorner;
 
@@ -87,7 +93,7 @@ namespace SharpLib.Wpf.Dragging
             set { _defaultDragHandler = value; }
         }
 
-        public static IDropTarget DefaultDropHandler
+        public static IDragDest DefaultDropHandler
         {
             get { return _defaultDropHandler ?? (_defaultDropHandler = new DefaultDropHandler()); }
             set { _defaultDropHandler = value; }
@@ -141,7 +147,7 @@ namespace SharpLib.Wpf.Dragging
 
         static DragDrop()
         {
-            DataFormat = DataFormats.GetDataFormat("GongSolutions.Wpf.DragDrop");
+            DataFormat = DataFormats.GetDataFormat("SharpLib.Wpf.DragDrop");
             DefaultDragAdornerOpacityProperty = DependencyProperty.RegisterAttached("DefaultDragAdornerOpacity", typeof(double), typeof(DragDrop), new PropertyMetadata(0.8));
             DragAdornerTemplateProperty = DependencyProperty.RegisterAttached("DragAdornerTemplate", typeof(DataTemplate), typeof(DragDrop));
             DragAdornerTemplateSelectorProperty = DependencyProperty.RegisterAttached("DragAdornerTemplateSelector", typeof(DataTemplateSelector), typeof(DragDrop),
@@ -151,7 +157,7 @@ namespace SharpLib.Wpf.Dragging
             DragHandlerProperty = DependencyProperty.RegisterAttached("DragHandler", typeof(IDragSource), typeof(DragDrop));
             DragMouseAnchorPointProperty = DependencyProperty.RegisterAttached("DragMouseAnchorPoint", typeof(Point), typeof(DragDrop), new PropertyMetadata(new Point(0, 1)));
             DragSourceIgnoreProperty = DependencyProperty.RegisterAttached("DragSourceIgnore", typeof(bool), typeof(DragDrop), new PropertyMetadata(false));
-            DropHandlerProperty = DependencyProperty.RegisterAttached("DropHandler", typeof(IDropTarget), typeof(DragDrop));
+            DropHandlerProperty = DependencyProperty.RegisterAttached("DropHandler", typeof(IDragDest), typeof(DragDrop));
             EffectAllAdornerTemplateProperty = DependencyProperty.RegisterAttached("EffectAllAdornerTemplate", typeof(DataTemplate), typeof(DragDrop));
             EffectCopyAdornerTemplateProperty = DependencyProperty.RegisterAttached("EffectCopyAdornerTemplate", typeof(DataTemplate), typeof(DragDrop));
             EffectLinkAdornerTemplateProperty = DependencyProperty.RegisterAttached("EffectLinkAdornerTemplate", typeof(DataTemplate), typeof(DragDrop));
@@ -161,7 +167,7 @@ namespace SharpLib.Wpf.Dragging
             IsDragSourceProperty = DependencyProperty.RegisterAttached("IsDragSource", typeof(bool), typeof(DragDrop), new UIPropertyMetadata(false, IsDragSourceChanged));
             IsDropTargetProperty = DependencyProperty.RegisterAttached("IsDropTarget", typeof(bool), typeof(DragDrop), new UIPropertyMetadata(false, IsDropTargetChanged));
             UseDefaultDragAdornerProperty = DependencyProperty.RegisterAttached("UseDefaultDragAdorner", typeof(bool), typeof(DragDrop), new PropertyMetadata(false));
-            UseDefaultEffectDataTemplateProperty = DependencyProperty.RegisterAttached("UseDefaultEffectDataTemplate", typeof(bool), typeof(DragDrop), new PropertyMetadata(false));
+            UseDefaultEffectDataTemplateProperty = DependencyProperty.RegisterAttached("UseDefaultEffectDataTemplate", typeof(bool), typeof(DragDrop), new PropertyMetadata(true));
         }
 
         #endregion
@@ -248,7 +254,7 @@ namespace SharpLib.Wpf.Dragging
 
         public static DataTemplate GetEffectCopyAdornerTemplate(UIElement target, string destinationText)
         {
-            var template = (DataTemplate)target.GetValue(EffectCopyAdornerTemplateProperty) ?? CreateDefaultEffectDataTemplate(target, IconFactory.EffectCopy, "Copy to", destinationText);
+            var template = (DataTemplate)target.GetValue(EffectCopyAdornerTemplateProperty) ?? CreateDefaultEffectDataTemplate(target, IconFactory.EffectCopy, COPY_TO_TEXT, destinationText);
 
             return template;
         }
@@ -260,7 +266,7 @@ namespace SharpLib.Wpf.Dragging
 
         public static DataTemplate GetEffectMoveAdornerTemplate(UIElement target, string destinationText)
         {
-            var template = (DataTemplate)target.GetValue(EffectMoveAdornerTemplateProperty) ?? CreateDefaultEffectDataTemplate(target, IconFactory.EffectMove, "Move to", destinationText);
+            var template = (DataTemplate)target.GetValue(EffectMoveAdornerTemplateProperty) ?? CreateDefaultEffectDataTemplate(target, IconFactory.EffectMove, MOVE_TO_TEXT, destinationText);
 
             return template;
         }
@@ -272,7 +278,7 @@ namespace SharpLib.Wpf.Dragging
 
         public static DataTemplate GetEffectLinkAdornerTemplate(UIElement target, string destinationText)
         {
-            var template = (DataTemplate)target.GetValue(EffectLinkAdornerTemplateProperty) ?? CreateDefaultEffectDataTemplate(target, IconFactory.EffectLink, "Link to", destinationText);
+            var template = (DataTemplate)target.GetValue(EffectLinkAdornerTemplateProperty) ?? CreateDefaultEffectDataTemplate(target, IconFactory.EffectLink, LINK_TO_TEXT, destinationText);
 
             return template;
         }
@@ -346,12 +352,12 @@ namespace SharpLib.Wpf.Dragging
             target.SetValue(DragHandlerProperty, value);
         }
 
-        public static IDropTarget GetDropHandler(UIElement target)
+        public static IDragDest GetDropHandler(UIElement target)
         {
-            return (IDropTarget)target.GetValue(DropHandlerProperty);
+            return (IDragDest)target.GetValue(DropHandlerProperty);
         }
 
-        public static void SetDropHandler(UIElement target, IDropTarget value)
+        public static void SetDropHandler(UIElement target, IDragDest value)
         {
             target.SetValue(DropHandlerProperty, value);
         }
@@ -705,9 +711,9 @@ namespace SharpLib.Wpf.Dragging
             return dragHandler ?? DefaultDragHandler;
         }
 
-        private static IDropTarget TryGetDropHandler(DropInfo dropInfo, UIElement sender)
+        private static IDragDest TryGetDropHandler(DropInfo dropInfo, UIElement sender)
         {
-            IDropTarget dropHandler = null;
+            IDragDest dropHandler = null;
             if (dropInfo != null && dropInfo.VisualTarget != null)
             {
                 dropHandler = GetDropHandler(dropInfo.VisualTarget);
@@ -799,6 +805,8 @@ namespace SharpLib.Wpf.Dragging
                     var dragHandler = TryGetDragHandler(_dragInfo, sender as UIElement);
                     if (dragHandler.CanStartDrag(_dragInfo))
                     {
+                        _dragInfo.Effects = DragDropEffects.Copy;
+
                         dragHandler.StartDrag(_dragInfo);
 
                         if (_dragInfo.Effects != DragDropEffects.None && _dragInfo.Data != null)
@@ -951,14 +959,6 @@ namespace SharpLib.Wpf.Dragging
                 adornerPos.Offset(20, 20);
                 EffectAdorner.MousePosition = adornerPos;
                 EffectAdorner.InvalidateVisual();
-            }
-
-            e.Effects = dropInfo.Effects;
-            e.Handled = !dropInfo.NotHandled;
-
-            if (!dropInfo.IsSameDragDropContextAsSource)
-            {
-                e.Effects = DragDropEffects.None;
             }
 
             Scroll(dropInfo.VisualTarget, e);

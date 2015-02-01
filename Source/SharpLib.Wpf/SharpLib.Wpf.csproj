@@ -101,6 +101,8 @@
     <Compile Include="Source\Extensions\Extension.Vector.cs" />
     <Compile Include="Source\Extensions\Extension.Size.cs" />
     <Compile Include="Source\Extensions\Extension.WinForms.cs" />
+    <Compile Include="Source\Helpers\ContextMenu\MenuItem.Base.cs" />
+    <Compile Include="Source\Helpers\ContextMenu\ContextMenu.Base.cs" />
     <Compile Include="Source\Helpers\Dialogs\Classes\DialogNativeMethods.cs" />
     <Compile Include="Source\Helpers\Dialogs\Classes\SafeHandles.cs" />
     <Compile Include="Source\Helpers\Dialogs\Classes\VistaFileDialog.cs" />
@@ -130,7 +132,7 @@
     <Compile Include="Source\Helpers\DragDrop\Interfaces\IDragInfo.cs" />
     <Compile Include="Source\Helpers\DragDrop\Interfaces\IDragSource.cs" />
     <Compile Include="Source\Helpers\DragDrop\Interfaces\IDropInfo.cs" />
-    <Compile Include="Source\Helpers\DragDrop\Interfaces\IDropTarget.cs" />
+    <Compile Include="Source\Helpers\DragDrop\Interfaces\IDragDest.cs" />
     <Compile Include="Source\Helpers\DragDrop\Utilities\HitTestUtilities.cs" />
     <Compile Include="Source\Helpers\DragDrop\Utilities\ItemsControlExtensions.cs" />
     <Compile Include="Source\Helpers\DragDrop\Utilities\TypeUtilities.cs" />

@@ -92,13 +92,10 @@ namespace SharpLib.Wpf.Dragging
                     return true;
                 }
 
-                var sourceContext = DragInfo.VisualSource.GetValue(DragDrop.DragDropContextProperty) as string;
-                if (String.IsNullOrEmpty(sourceContext))
-                {
-                    return true;
-                }
-                var targetContext = VisualTarget.GetValue(DragDrop.DragDropContextProperty) as string;
-                return string.Equals(sourceContext, targetContext);
+                var sourceContext = DragInfo.VisualSource.GetHashCode();
+                var targetContext = VisualTarget.GetHashCode();
+
+                return sourceContext == targetContext;
             }
         }
 
@@ -200,9 +197,6 @@ namespace SharpLib.Wpf.Dragging
                         {
                             InsertPosition |= RelativeInsertPosition.TargetItemCenter;
                         }
-#if DEBUG
-                        Console.WriteLine("==> DropInfo: {0}, {1}, {2}, X={3}", InsertPosition, item, InsertIndex, currentXPos);
-#endif
                     }
                 }
                 else

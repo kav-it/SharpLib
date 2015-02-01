@@ -10,7 +10,7 @@ using SharpLib.Wpf.Dragging.Utilities;
 
 namespace SharpLib.Wpf.Dragging
 {
-    public class DefaultDropHandler : IDropTarget
+    public class DefaultDropHandler : IDragDest
     {
         #region Методы
 

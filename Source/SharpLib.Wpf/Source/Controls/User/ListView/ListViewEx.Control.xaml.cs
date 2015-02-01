@@ -13,6 +13,10 @@ using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 
+using SharpLib.Wpf.Dragging;
+
+using DragDrop = SharpLib.Wpf.Dragging.DragDrop;
+
 namespace SharpLib.Wpf.Controls
 {
     #region Класс ListViewEx
@@ -131,6 +135,30 @@ namespace SharpLib.Wpf.Controls
         {
             get { return PART_textEdit.Text; }
             set { PART_textEdit.Text = value; }
+        }
+
+        /// <summary>
+        /// Элемент является источником операций DragDrop
+        /// </summary>
+        public IDragSource DragSource
+        {
+            get { return DragDrop.GetDragHandler(PART_listView); }
+            set { 
+
+                DragDrop.SetDragHandler(PART_listView, value);
+                DragDrop.SetIsDragSource(PART_listView, value != null);
+            }
+        }
+        /// <summary>
+        /// Элемент является получателем операций DragDrop
+        /// </summary>
+        public IDragDest DragDest
+        {
+            get { return DragDrop.GetDropHandler(PART_listView); }
+            set { 
+                DragDrop.SetDropHandler(PART_listView, value);
+                DragDrop.SetIsDropTarget(PART_listView, value != null);
+            }
         }
 
         #endregion

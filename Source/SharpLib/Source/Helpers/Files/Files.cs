@@ -214,5 +214,58 @@ namespace SharpLib
             return stream.WriteToFileEx(filename);
         }
 
+        /// <summary>
+        /// Копирование файла
+        /// </summary>
+        public static string CopyFile(string destPath, string filePath)
+        {
+            if (string.IsNullOrEmpty(destPath)) return string.Empty;
+            if (string.IsNullOrEmpty(filePath)) return string.Empty;
+
+            destPath = destPath.TrimEnd('\\');
+
+            try
+            {
+                if (Directory.Exists(destPath) == false)
+                {
+                    CreateDirectory(destPath);
+                }
+
+                string filename = GetFileNameAndExt(filePath);
+                string newPath = PathEx.Combine(destPath, filename);
+
+                if (File.Exists(newPath))
+                {
+                    DeleteFile(newPath);
+                }
+
+                File.Copy(filePath, newPath);
+
+                return newPath;
+            }
+            catch
+            {
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Удаление файла
+        /// </summary>
+        public static bool DeleteFile(string filename)
+        {
+            try
+            {
+                File.Delete(filename);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
     }
 }
