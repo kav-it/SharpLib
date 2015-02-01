@@ -116,6 +116,25 @@
     <Compile Include="Source\Helpers\Dialogs\Interop\ShellComInterfaces.cs" />
     <Compile Include="Source\Helpers\Dialogs\Interop\ShellWrapperDefinitions.cs" />
     <Compile Include="Source\Helpers\Dialogs\Interop\Win32Resources.cs" />
+    <Compile Include="Source\Helpers\DragDrop\Handlers\DefaultDragHandler.cs" />
+    <Compile Include="Source\Helpers\DragDrop\Handlers\DefaultDropHandler.cs" />
+    <Compile Include="Source\Helpers\DragDrop\Adorners\DragAdorner.cs" />
+    <Compile Include="Source\Helpers\DragDrop\DragDrop.cs" />
+    <Compile Include="Source\Helpers\DragDrop\DragInfo.cs" />
+    <Compile Include="Source\Helpers\DragDrop\DropInfo.cs" />
+    <Compile Include="Source\Helpers\DragDrop\Adorners\DropTargetAdorner.cs" />
+    <Compile Include="Source\Helpers\DragDrop\Adorners\DropTargetAdorners.cs" />
+    <Compile Include="Source\Helpers\DragDrop\Adorners\DropTargetHighlightAdorner.cs" />
+    <Compile Include="Source\Helpers\DragDrop\Adorners\DropTargetInsertionAdorner.cs" />
+    <Compile Include="Source\Helpers\DragDrop\Icons\IconFactory.cs" />
+    <Compile Include="Source\Helpers\DragDrop\Interfaces\IDragInfo.cs" />
+    <Compile Include="Source\Helpers\DragDrop\Interfaces\IDragSource.cs" />
+    <Compile Include="Source\Helpers\DragDrop\Interfaces\IDropInfo.cs" />
+    <Compile Include="Source\Helpers\DragDrop\Interfaces\IDropTarget.cs" />
+    <Compile Include="Source\Helpers\DragDrop\Utilities\HitTestUtilities.cs" />
+    <Compile Include="Source\Helpers\DragDrop\Utilities\ItemsControlExtensions.cs" />
+    <Compile Include="Source\Helpers\DragDrop\Utilities\TypeUtilities.cs" />
+    <Compile Include="Source\Helpers\DragDrop\Utilities\VisualTreeExtensions.cs" />
     <Compile Include="Source\Helpers\NotifyProperty\NotifyModelBase.cs" />
     <Compile Include="Source\Helpers\VsHelper.cs" />
     <Compile Include="Source\Helpers\UI.cs" />
@@ -232,6 +251,13 @@
   <ItemGroup>
     <EmbeddedResource Include="Source\Helpers\Dialogs\Assets\VistaSaveFileDialog.bmp" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Source\Helpers\DragDrop\Icons\EffectCopy.png" />
+    <Resource Include="Source\Helpers\DragDrop\Icons\EffectLink.png" />
+    <Resource Include="Source\Helpers\DragDrop\Icons\EffectMove.png" />
+    <Resource Include="Source\Helpers\DragDrop\Icons\EffectNone.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

@@ -15,10 +15,7 @@ namespace SharpLib.Wpf
             var temp = string.Format("pack://application:,,,/{0};component/{1}", name, absolutPath);
             var uri = new Uri(temp);
 
-            var img = new BitmapImage();
-            img.BeginInit();
-            img.UriSource = uri;
-            img.EndInit();
+            var img = new BitmapImage(uri);
 
             return img;
         }

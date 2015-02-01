@@ -18,7 +18,7 @@
             <TabItem Header="Radio" >
                 <local:TabRadio />
             </TabItem>
-            <TabItem Header="ListView" >
+            <TabItem Header="ListView" IsSelected="True" >
                 <local:TabListView />
             </TabItem>
             <TabItem Header="Tabs">
@@ -33,7 +33,7 @@
             <TabItem Header="Dialogs" >
                 <local:TabDialogs />
             </TabItem>
-            <TabItem Header="Audio" IsSelected="True" >
+            <TabItem Header="Audio" >
                 <local:TabAudio />
             </TabItem>
 

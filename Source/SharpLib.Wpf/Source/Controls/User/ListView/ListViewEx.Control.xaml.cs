@@ -15,7 +15,6 @@ using System.Windows.Media;
 
 namespace SharpLib.Wpf.Controls
 {
-
     #region Класс ListViewEx
 
     public partial class ListViewEx
@@ -171,6 +170,9 @@ namespace SharpLib.Wpf.Controls
 
         #region Методы
 
+        /// <summary>
+        /// Элемент загружен
+        /// </summary>
         private void ListViewLoaded(object sender, RoutedEventArgs e)
         {
             // Создание контекстного меню

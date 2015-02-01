@@ -4,13 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="http://codeofrussia.ru/sharplib/wpf/controls"
+             xmlns:dragging="http://codeofrussia.ru/sharplib/wpf/dragging"
              x:Class="DemoWpf.TabListView"
              mc:Ignorable="d" 
              d:DesignHeight="247.802" d:DesignWidth="764.272">
     <Grid>
         <Thumb Margin="660,75,39,123" BorderBrush="Purple" BorderThickness="1"></Thumb>
-        <ListView x:Name="PART_listView" HorizontalAlignment="Left" Height="195" Margin="10,10,0,0" 
-			VerticalAlignment="Top" Width="290" Style="{DynamicResource ListViewStyle1}" >
+        <ListView x:Name="PART_listView" 
+                   dragging:DragDrop.IsDragSource="True"
+                   dragging:DragDrop.IsDropTarget="True"
+                  HorizontalAlignment="Left" Margin="10,10,0,43" Width="290" Style="{DynamicResource ListViewStyle1}" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="123" Width="80" DisplayMemberBinding="{Binding Value1}"/>
@@ -21,7 +24,7 @@
         </ListView>
         <controls:ListViewEx 
 			x:Name="PART_listView2" BorderBrush="Red" BorderThickness="1"
-			HorizontalAlignment="Left" Margin="320,10,0,0" VerticalAlignment="Top" Height="195" Width="320">
+			HorizontalAlignment="Left" Margin="320,10,0,43" Width="320">
             <controls:ListViewEx.Columns>
                 <controls:ListViewExColumn Title="123" Width="80" DisplayMemberBinding="{Binding Value1}"/>
                 <controls:ListViewExColumn Title="234" Width="80" DisplayMemberBinding="{Binding Value2}"/>
