@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 using SharpLib.Audio.Utils;
@@ -11,8 +12,6 @@ namespace SharpLib.Audio.Wave
     {
         #region Поля
 
-        private readonly byte[] rawData;
-
         private long tagEndPosition;
 
         private long tagStartPosition;
@@ -21,10 +20,7 @@ namespace SharpLib.Audio.Wave
 
         #region Свойства
 
-        public byte[] RawData
-        {
-            get { return rawData; }
-        }
+        public byte[] RawData { get; private set; }
 
         #endregion
 
@@ -33,7 +29,7 @@ namespace SharpLib.Audio.Wave
         private Id3v2Tag(Stream input)
         {
             tagStartPosition = input.Position;
-            BinaryReader reader = new BinaryReader(input);
+            var reader = new BinaryReader(input);
             byte[] headerBytes = reader.ReadBytes(10);
             if ((headerBytes[0] == (byte)'I') &&
                 (headerBytes[1] == (byte)'D') &&
@@ -66,7 +62,7 @@ namespace SharpLib.Audio.Wave
             }
             tagEndPosition = input.Position;
             input.Position = tagStartPosition;
-            rawData = reader.ReadBytes((int)(tagEndPosition - tagStartPosition));
+            RawData = reader.ReadBytes((int)(tagEndPosition - tagStartPosition));
         }
 
         #endregion
@@ -87,7 +83,7 @@ namespace SharpLib.Audio.Wave
 
         public static Id3v2Tag Create(IEnumerable<KeyValuePair<string, string>> tags)
         {
-            return Id3v2Tag.ReadTag(CreateId3v2TagStream(tags));
+            return ReadTag(CreateId3V2TagStream(tags));
         }
 
         private static byte[] FrameSizeToBytes(int n)
@@ -97,7 +93,7 @@ namespace SharpLib.Audio.Wave
             return result;
         }
 
-        private static byte[] CreateId3v2Frame(string key, string value)
+        private static byte[] CreateId3V2Frame(string key, string value)
         {
             if (string.IsNullOrEmpty(key))
             {
@@ -114,8 +110,8 @@ namespace SharpLib.Audio.Wave
                 throw new ArgumentOutOfRangeException("key", "key " + key + " must be 4 characters long");
             }
 
-            const byte UnicodeEncoding = 01;
-            byte[] UnicodeOrder = { 0xff, 0xfe };
+            const byte UNICODE_ENCODING = 01;
+            byte[] unicodeOrder = { 0xff, 0xfe };
             byte[] language = { 0, 0, 0 };
             byte[] shortDescription = { 0, 0 };
 
@@ -123,17 +119,17 @@ namespace SharpLib.Audio.Wave
             if (key == "COMM")
             {
                 body = ByteArrayExtensions.Concat(
-                    new[] { UnicodeEncoding },
+                    new[] { UNICODE_ENCODING },
                     language,
                     shortDescription,
-                    UnicodeOrder,
+                    unicodeOrder,
                     Encoding.Unicode.GetBytes(value));
             }
             else
             {
                 body = ByteArrayExtensions.Concat(
-                    new[] { UnicodeEncoding },
-                    UnicodeOrder,
+                    new[] { UNICODE_ENCODING },
+                    unicodeOrder,
                     Encoding.Unicode.GetBytes(value));
             }
 
@@ -156,33 +152,30 @@ namespace SharpLib.Audio.Wave
             return result;
         }
 
-        private static byte[] CreateId3v2TagHeader(IEnumerable<byte[]> frames)
+        private static byte[] CreateId3V2TagHeader(IEnumerable<byte[]> frames)
         {
-            int size = 0;
-            foreach (byte[] frame in frames)
-            {
-                size += frame.Length;
-            }
+            int size = frames.Sum(frame => frame.Length);
 
-            byte[] tagHeader = ByteArrayExtensions.Concat(
+            var tagHeader = ByteArrayExtensions.Concat(
                 Encoding.UTF8.GetBytes("ID3"),
                 new byte[] { 3, 0 },
                 new byte[] { 0 },
                 GetId3TagHeaderSize(size));
+
             return tagHeader;
         }
 
-        private static Stream CreateId3v2TagStream(IEnumerable<KeyValuePair<string, string>> tags)
+        private static Stream CreateId3V2TagStream(IEnumerable<KeyValuePair<string, string>> tags)
         {
-            List<byte[]> frames = new List<byte[]>();
+            var frames = new List<byte[]>();
             foreach (KeyValuePair<string, string> tag in tags)
             {
-                frames.Add(CreateId3v2Frame(tag.Key, tag.Value));
+                frames.Add(CreateId3V2Frame(tag.Key, tag.Value));
             }
 
-            byte[] header = CreateId3v2TagHeader(frames);
+            var header = CreateId3V2TagHeader(frames);
 
-            MemoryStream ms = new MemoryStream();
+            var ms = new MemoryStream();
             ms.Write(header, 0, header.Length);
             foreach (byte[] frame in frames)
             {

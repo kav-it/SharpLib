@@ -1,0 +1,51 @@
+﻿<Window x:Class="SharpLib.Wpf.MessageBoxEx"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        mc:Ignorable="d" 
+        x:Name="PART_windowMessageBoxName"
+        SizeToContent="Height"
+        Title="TitleWindowMessageBox"
+        KeyDown="Window_KeyDown" d:DesignWidth="573.6" d:DesignHeight="167.6" >
+    <Window.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Width" Value="80" />
+            <Setter Property="Height" Value="25" />
+            <Setter Property="Margin" Value="5" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60" />
+            <ColumnDefinition Width="320*" />
+            <ColumnDefinition Width="5" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="85*" />
+            <RowDefinition Height="55" />
+        </Grid.RowDefinitions>
+
+        <Image x:Name="PART_image"
+			Grid.Row="0" Grid.Column="0"
+			Source="{Binding MessageImage, ElementName=PART_windowMessageBoxName}"
+			HorizontalAlignment="Center" VerticalAlignment="Center"
+			Height="25" Width="25"
+			Margin="10" />
+        <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="True" VerticalScrollBarVisibility="Auto"
+			Text="{Binding Message, ElementName=PART_windowMessageBoxName}"
+			TextWrapping="Wrap" TextAlignment="Left"
+			Margin="10,10,10.2,10.4"
+			HorizontalAlignment="Stretch" MinHeight="35" />
+        <Border x:Name="PART_border" Background="#FFE6E6E6" BorderThickness="0 1 0 0" BorderBrush="#FFDFDFDF"
+			Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+            <StackPanel x:Name="PART_stackPanel" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0 10 0">
+                <Button x:Name="PART_buttonOk" Content="OK" Click="ButtonClick" Visibility="{Binding OkVisibility}" />
+                <Button x:Name="PART_buttonYes" Content="Да" Click="ButtonClick" Visibility="{Binding YesVisibility}" />
+                <Button x:Name="PART_buttonNo" Content="Нет" Click="ButtonClick" Visibility="{Binding NoVisibility}" />
+                <Button x:Name="PART_buttonCancel" Content="Отмена" Click="ButtonClick"
+					Visibility="{Binding CancelVisibility}" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

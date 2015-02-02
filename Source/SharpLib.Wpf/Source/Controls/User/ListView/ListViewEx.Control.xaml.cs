@@ -14,6 +14,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 
 using SharpLib.Wpf.Dragging;
+using SharpLib.Wpf.Dragging.Utilities;
 
 using DragDrop = SharpLib.Wpf.Dragging.DragDrop;
 
@@ -159,6 +160,15 @@ namespace SharpLib.Wpf.Controls
                 DragDrop.SetDropHandler(PART_listView, value);
                 DragDrop.SetIsDropTarget(PART_listView, value != null);
             }
+        }
+
+        /// <summary>
+        /// Возможность выбора нескольких элементов
+        /// </summary>
+        public bool CanMultiSelect
+        {
+            set { PART_listView.SelectionMode = value ? SelectionMode.Multiple : SelectionMode.Single; }
+            get { return PART_listView.SelectionMode == SelectionMode.Multiple; }
         }
 
         #endregion

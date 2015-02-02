@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 
 namespace SharpLib
 {
@@ -253,18 +254,125 @@ namespace SharpLib
         /// <summary>
         /// Удаление файла
         /// </summary>
-        public static bool DeleteFile(string filename)
+        public static bool DeleteFile(string filename, bool throwEx = false)
         {
             try
             {
+                File.SetAttributes(filename, FileAttributes.Normal);
                 File.Delete(filename);
+
+                return true;
+            }
+            catch 
+            {
+                if (throwEx)
+                {
+                    throw;
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Смена имени файла/директории
+        /// </summary>
+        public static string Rename(string path, string newName)
+        {
+            if (path.IsValid() == false) return string.Empty;
+            if (newName.IsValid() == false) return string.Empty;
+            if (File.Exists(path) == false) return string.Empty;
+
+            if (IsFile(path))
+            {
+                // Путь является файлом
+                // Составление полного пути получателя
+                string destPath = PathEx.Combine(GetDirectory(path), newName);
+
+                // Файл уже так называется
+                if (destPath == path) return destPath;
+
+                // Если файл существует: Удаление файла
+                if (File.Exists(destPath))
+                    DeleteFile(destPath);
+
+                var info = new FileInfo(path);
+                info.MoveTo(destPath);
+
+                return destPath;
+            }
+
+            if (IsDirectory(path))
+            {
+                // Путь является директорией
+                // Составление полного пути получателя
+                var destPath = PathEx.Combine(GetDirectoryParent(path), newName);
+
+                // Если файл существует: Удаление файла
+                if (File.Exists(destPath))
+                    DeleteDirectory(destPath);
+
+                var info = new DirectoryInfo(path);
+                info.MoveTo(destPath);
+
+                return destPath;
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Удаление каталога
+        /// </summary>
+        public static bool DeleteDirectory(string dirPath)
+        {
+            try
+            {
+                var listSubFolders = Directory.GetDirectories(dirPath);
+
+                foreach (var subFolder in listSubFolders)
+                {
+                    DeleteDirectory(subFolder);
+                }
+
+                var files = Directory.GetFiles(dirPath);
+                foreach (var f in files)
+                {
+                    var attr = File.GetAttributes(f);
+
+                    if (attr.IsFlagSet(FileAttributes.ReadOnly))
+                    {
+                        File.SetAttributes(f, attr ^ FileAttributes.ReadOnly);
+                    }
+
+                    File.Delete(f);
+                }
+
+                Directory.Delete(dirPath);
 
                 return true;
             }
             catch
             {
-                return false;
             }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Очистка каталога
+        /// </summary>
+        public static bool EraseDirectory(String dirPath)
+        {
+            Boolean result = DeleteDirectory(dirPath);
+            if (result == false) return false;
+
+            // Ожидание завершения операции удаления каталога
+            Thread.Sleep(50);
+
+            result = CreateDirectory(dirPath);
+
+            return result;
         }
 
     }

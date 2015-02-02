@@ -137,11 +137,15 @@
     <Compile Include="Source\Helpers\DragDrop\Utilities\ItemsControlExtensions.cs" />
     <Compile Include="Source\Helpers\DragDrop\Utilities\TypeUtilities.cs" />
     <Compile Include="Source\Helpers\DragDrop\Utilities\VisualTreeExtensions.cs" />
+    <Compile Include="Source\Helpers\Gui\Gui.Images.cs" />
     <Compile Include="Source\Helpers\NotifyProperty\NotifyModelBase.cs" />
     <Compile Include="Source\Helpers\VsHelper.cs" />
-    <Compile Include="Source\Helpers\UI.cs" />
+    <Compile Include="Source\Helpers\Gui\Gui.cs" />
     <Compile Include="Source\Helpers\ResourcesWpf.cs" />
     <Compile Include="Source\Helpers\VisualTree.cs" />
+    <Compile Include="Source\Helpers\Windows\Window.MessageBox.xaml.cs">
+      <DependentUpon>Window.MessageBox.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Source\Controls\Fonts.xaml">
@@ -224,6 +228,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Source\Helpers\Windows\Window.MessageBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -259,7 +267,20 @@
     <Resource Include="Source\Helpers\DragDrop\Icons\EffectMove.png" />
     <Resource Include="Source\Helpers\DragDrop\Icons\EffectNone.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Source\Assets\png\icon.about.png" />
+    <Resource Include="Source\Assets\png\icon.add.png" />
+    <Resource Include="Source\Assets\png\icon.batfile.png" />
+    <Resource Include="Source\Assets\png\icon.cmd.png" />
+    <Resource Include="Source\Assets\png\icon.delete.light.png" />
+    <Resource Include="Source\Assets\png\icon.delete.png" />
+    <Resource Include="Source\Assets\png\icon.open.png" />
+    <Resource Include="Source\Assets\png\icon.settings.png" />
+    <Resource Include="Source\Assets\png\icon_input.png" />
+    <Resource Include="Source\Assets\png\icon_output.png" />
+    <Resource Include="Source\Assets\png\icon_play.png" />
+    <Resource Include="Source\Assets\png\icon_stop.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

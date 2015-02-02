@@ -132,6 +132,7 @@ namespace SharpLib.Wpf.Dialogs
                 {
                     info._ulFlags |= DialogNativeMethods.BrowseInfoFlags.NoNewFolderButton;
                 }
+
                 resultItemIdList = DialogNativeMethods.SHBrowseForFolder(ref info);
                 if (resultItemIdList != IntPtr.Zero)
                 {

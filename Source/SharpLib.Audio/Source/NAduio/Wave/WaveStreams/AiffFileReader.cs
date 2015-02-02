@@ -10,19 +10,19 @@ namespace SharpLib.Audio.Wave
     {
         #region Поля
 
-        private readonly List<AiffChunk> chunks = new List<AiffChunk>();
+        private readonly List<AiffChunk> _chunks;
 
-        private readonly int dataChunkLength;
+        private readonly int _dataChunkLength;
 
-        private readonly long dataPosition;
+        private readonly long _dataPosition;
 
-        private readonly object lockObject = new object();
+        private readonly object _lockObject;
 
-        private readonly bool ownInput;
+        private readonly bool _ownInput;
 
-        private readonly WaveFormat waveFormat;
+        private readonly WaveFormat _waveFormat;
 
-        private Stream waveStream;
+        private Stream _waveStream;
 
         #endregion
 
@@ -30,23 +30,23 @@ namespace SharpLib.Audio.Wave
 
         public override WaveFormat WaveFormat
         {
-            get { return waveFormat; }
+            get { return _waveFormat; }
         }
 
         public override long Length
         {
-            get { return dataChunkLength; }
+            get { return _dataChunkLength; }
         }
 
         public long SampleCount
         {
             get
             {
-                if (waveFormat.Encoding == WaveFormatEncoding.Pcm ||
-                    waveFormat.Encoding == WaveFormatEncoding.Extensible ||
-                    waveFormat.Encoding == WaveFormatEncoding.IeeeFloat)
+                if (_waveFormat.Encoding == WaveFormatEncoding.Pcm ||
+                    _waveFormat.Encoding == WaveFormatEncoding.Extensible ||
+                    _waveFormat.Encoding == WaveFormatEncoding.IeeeFloat)
                 {
-                    return dataChunkLength / BlockAlign;
+                    return _dataChunkLength / BlockAlign;
                 }
                 throw new FormatException("Sample count is calculated only for the standard encodings");
             }
@@ -54,15 +54,15 @@ namespace SharpLib.Audio.Wave
 
         public override long Position
         {
-            get { return waveStream.Position - dataPosition; }
+            get { return _waveStream.Position - _dataPosition; }
             set
             {
-                lock (lockObject)
+                lock (_lockObject)
                 {
                     value = Math.Min(value, Length);
 
-                    value -= (value % waveFormat.BlockAlign);
-                    waveStream.Position = value + dataPosition;
+                    value -= (value % _waveFormat.BlockAlign);
+                    _waveStream.Position = value + _dataPosition;
                 }
             }
         }
@@ -74,13 +74,15 @@ namespace SharpLib.Audio.Wave
         public AiffFileReader(String aiffFile) :
             this(File.OpenRead(aiffFile))
         {
-            ownInput = true;
+            _ownInput = true;
         }
 
         public AiffFileReader(Stream inputStream)
         {
-            waveStream = inputStream;
-            ReadAiffHeader(waveStream, out waveFormat, out dataPosition, out dataChunkLength, chunks);
+            _lockObject = new object();
+            _chunks = new List<AiffChunk>();
+            _waveStream = inputStream;
+            ReadAiffHeader(_waveStream, out _waveFormat, out _dataPosition, out _dataChunkLength, _chunks);
             Position = 0;
         }
 
@@ -171,13 +173,13 @@ namespace SharpLib.Audio.Wave
         {
             if (disposing)
             {
-                if (waveStream != null)
+                if (_waveStream != null)
                 {
-                    if (ownInput)
+                    if (_ownInput)
                     {
-                        waveStream.Close();
+                        _waveStream.Close();
                     }
-                    waveStream = null;
+                    _waveStream = null;
                 }
             }
             else
@@ -190,19 +192,19 @@ namespace SharpLib.Audio.Wave
 
         public override int Read(byte[] array, int offset, int count)
         {
-            if (count % waveFormat.BlockAlign != 0)
+            if (count % _waveFormat.BlockAlign != 0)
             {
                 throw new ArgumentException(String.Format("Must read complete blocks: requested {0}, block align is {1}", count, WaveFormat.BlockAlign));
             }
-            lock (lockObject)
+            lock (_lockObject)
             {
-                if (Position + count > dataChunkLength)
+                if (Position + count > _dataChunkLength)
                 {
-                    count = dataChunkLength - (int)Position;
+                    count = _dataChunkLength - (int)Position;
                 }
 
                 byte[] buffer = new byte[count];
-                int length = waveStream.Read(buffer, offset, count);
+                int length = _waveStream.Read(buffer, offset, count);
 
                 int bytesPerSample = WaveFormat.BitsPerSample / 8;
                 for (int i = 0; i < length; i += bytesPerSample)

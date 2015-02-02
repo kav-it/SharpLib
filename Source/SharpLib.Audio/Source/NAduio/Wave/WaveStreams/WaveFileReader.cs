@@ -10,19 +10,19 @@ namespace SharpLib.Audio.Wave
     {
         #region Поля
 
-        private readonly List<RiffChunk> chunks = new List<RiffChunk>();
+        private readonly List<RiffChunk> _chunks;
 
-        private readonly long dataChunkLength;
+        private readonly long _dataChunkLength;
 
-        private readonly long dataPosition;
+        private readonly long _dataPosition;
 
-        private readonly object lockObject = new object();
+        private readonly object _lockObject;
 
-        private readonly bool ownInput;
+        private readonly bool _ownInput;
 
-        private readonly WaveFormat waveFormat;
+        private readonly WaveFormat _waveFormat;
 
-        private Stream waveStream;
+        private Stream _waveStream;
 
         #endregion
 
@@ -30,28 +30,28 @@ namespace SharpLib.Audio.Wave
 
         public List<RiffChunk> ExtraChunks
         {
-            get { return chunks; }
+            get { return _chunks; }
         }
 
         public override WaveFormat WaveFormat
         {
-            get { return waveFormat; }
+            get { return _waveFormat; }
         }
 
         public override long Length
         {
-            get { return dataChunkLength; }
+            get { return _dataChunkLength; }
         }
 
         public long SampleCount
         {
             get
             {
-                if (waveFormat.Encoding == WaveFormatEncoding.Pcm ||
-                    waveFormat.Encoding == WaveFormatEncoding.Extensible ||
-                    waveFormat.Encoding == WaveFormatEncoding.IeeeFloat)
+                if (_waveFormat.Encoding == WaveFormatEncoding.Pcm ||
+                    _waveFormat.Encoding == WaveFormatEncoding.Extensible ||
+                    _waveFormat.Encoding == WaveFormatEncoding.IeeeFloat)
                 {
-                    return dataChunkLength / BlockAlign;
+                    return _dataChunkLength / BlockAlign;
                 }
 
                 throw new InvalidOperationException("Sample count is calculated only for the standard encodings");
@@ -60,15 +60,15 @@ namespace SharpLib.Audio.Wave
 
         public override long Position
         {
-            get { return waveStream.Position - dataPosition; }
+            get { return _waveStream.Position - _dataPosition; }
             set
             {
-                lock (lockObject)
+                lock (_lockObject)
                 {
                     value = Math.Min(value, Length);
 
-                    value -= (value % waveFormat.BlockAlign);
-                    waveStream.Position = value + dataPosition;
+                    value -= (value % _waveFormat.BlockAlign);
+                    _waveStream.Position = value + _dataPosition;
                 }
             }
         }
@@ -80,18 +80,20 @@ namespace SharpLib.Audio.Wave
         public WaveFileReader(String waveFile) :
             this(File.OpenRead(waveFile))
         {
-            ownInput = true;
+            _ownInput = true;
         }
 
         public WaveFileReader(Stream inputStream)
         {
-            waveStream = inputStream;
+            _lockObject = new object();
+            _chunks = new List<RiffChunk>();
+            _waveStream = inputStream;
             var chunkReader = new WaveFileChunkReader();
             chunkReader.ReadWaveHeader(inputStream);
-            waveFormat = chunkReader.WaveFormat;
-            dataPosition = chunkReader.DataChunkPosition;
-            dataChunkLength = chunkReader.DataChunkLength;
-            chunks = chunkReader.RiffChunks;
+            _waveFormat = chunkReader.WaveFormat;
+            _dataPosition = chunkReader.DataChunkPosition;
+            _dataChunkLength = chunkReader.DataChunkLength;
+            _chunks = chunkReader.RiffChunks;
             Position = 0;
         }
 
@@ -101,11 +103,11 @@ namespace SharpLib.Audio.Wave
 
         public byte[] GetChunkData(RiffChunk chunk)
         {
-            long oldPosition = waveStream.Position;
-            waveStream.Position = chunk.StreamPosition;
+            long oldPosition = _waveStream.Position;
+            _waveStream.Position = chunk.StreamPosition;
             byte[] data = new byte[chunk.Length];
-            waveStream.Read(data, 0, data.Length);
-            waveStream.Position = oldPosition;
+            _waveStream.Read(data, 0, data.Length);
+            _waveStream.Position = oldPosition;
             return data;
         }
 
@@ -113,13 +115,13 @@ namespace SharpLib.Audio.Wave
         {
             if (disposing)
             {
-                if (waveStream != null)
+                if (_waveStream != null)
                 {
-                    if (ownInput)
+                    if (_ownInput)
                     {
-                        waveStream.Close();
+                        _waveStream.Close();
                     }
-                    waveStream = null;
+                    _waveStream = null;
                 }
             }
             else
@@ -132,23 +134,23 @@ namespace SharpLib.Audio.Wave
 
         public override int Read(byte[] array, int offset, int count)
         {
-            if (count % waveFormat.BlockAlign != 0)
+            if (count % _waveFormat.BlockAlign != 0)
             {
                 throw new ArgumentException(String.Format("Must read complete blocks: requested {0}, block align is {1}", count, WaveFormat.BlockAlign));
             }
-            lock (lockObject)
+            lock (_lockObject)
             {
-                if (Position + count > dataChunkLength)
+                if (Position + count > _dataChunkLength)
                 {
-                    count = (int)(dataChunkLength - Position);
+                    count = (int)(_dataChunkLength - Position);
                 }
-                return waveStream.Read(array, offset, count);
+                return _waveStream.Read(array, offset, count);
             }
         }
 
         public float[] ReadNextSampleFrame()
         {
-            switch (waveFormat.Encoding)
+            switch (_waveFormat.Encoding)
             {
                 case WaveFormatEncoding.Pcm:
                 case WaveFormatEncoding.IeeeFloat:
@@ -157,8 +159,8 @@ namespace SharpLib.Audio.Wave
                 default:
                     throw new InvalidOperationException("Only 16, 24 or 32 bit PCM or IEEE float audio data supported");
             }
-            var sampleFrame = new float[waveFormat.Channels];
-            int bytesToRead = waveFormat.Channels * (waveFormat.BitsPerSample / 8);
+            var sampleFrame = new float[_waveFormat.Channels];
+            int bytesToRead = _waveFormat.Channels * (_waveFormat.BitsPerSample / 8);
             byte[] raw = new byte[bytesToRead];
             int bytesRead = Read(raw, 0, bytesToRead);
             if (bytesRead == 0)
@@ -170,24 +172,24 @@ namespace SharpLib.Audio.Wave
                 throw new InvalidDataException("Unexpected end of file");
             }
             int offset = 0;
-            for (int channel = 0; channel < waveFormat.Channels; channel++)
+            for (int channel = 0; channel < _waveFormat.Channels; channel++)
             {
-                if (waveFormat.BitsPerSample == 16)
+                if (_waveFormat.BitsPerSample == 16)
                 {
                     sampleFrame[channel] = BitConverter.ToInt16(raw, offset) / 32768f;
                     offset += 2;
                 }
-                else if (waveFormat.BitsPerSample == 24)
+                else if (_waveFormat.BitsPerSample == 24)
                 {
                     sampleFrame[channel] = (((sbyte)raw[offset + 2] << 16) | (raw[offset + 1] << 8) | raw[offset]) / 8388608f;
                     offset += 3;
                 }
-                else if (waveFormat.BitsPerSample == 32 && waveFormat.Encoding == WaveFormatEncoding.IeeeFloat)
+                else if (_waveFormat.BitsPerSample == 32 && _waveFormat.Encoding == WaveFormatEncoding.IeeeFloat)
                 {
                     sampleFrame[channel] = BitConverter.ToSingle(raw, offset);
                     offset += 4;
                 }
-                else if (waveFormat.BitsPerSample == 32)
+                else if (_waveFormat.BitsPerSample == 32)
                 {
                     sampleFrame[channel] = BitConverter.ToInt32(raw, offset) / (Int32.MaxValue + 1f);
                     offset += 4;

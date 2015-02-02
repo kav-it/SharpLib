@@ -164,5 +164,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Source\Assets\Music.mp3" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Source\Assets\Music.wav" />
+    <EmbeddedResource Include="Source\Assets\Music.wma" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

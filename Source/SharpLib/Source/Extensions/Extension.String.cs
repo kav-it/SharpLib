@@ -22,7 +22,7 @@ namespace SharpLib
             int index = pattern.SearchEx(patternConst);
             if (index == -1)
             {
-                return "";
+                return string.Empty;
             }
 
             string textLeft = pattern.Substring(0, index - patternConst.Length);
@@ -30,7 +30,7 @@ namespace SharpLib
 
             if (textLeft.IsNotValid() && textRight.IsNotValid())
             {
-                return "";
+                return string.Empty;
             }
 
             int indexLeft = -1;
@@ -56,15 +56,14 @@ namespace SharpLib
 
             if (indexLeft == -1 || indexRight == -1)
             {
-                return "";
+                return string.Empty;
             }
             if (indexLeft >= indexRight)
             {
-                return "";
+                return string.Empty;
             }
 
-            string result =
-                value.Substring(indexLeft, indexRight - indexLeft - textRight.Length);
+            string result = value.Substring(indexLeft, indexRight - indexLeft - textRight.Length);
 
             return result;
         }

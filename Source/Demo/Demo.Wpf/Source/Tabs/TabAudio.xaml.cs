@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls.Primitives;
-using System.Windows.Threading;
 
 using SharpLib;
 using SharpLib.Audio;
@@ -30,8 +29,10 @@ namespace DemoWpf
 
             var asm = Assembly.GetExecutingAssembly();
             asm.CopyEmbeddedResourceToFileEx("Source/Assets/Music.mp3", false);
+            asm.CopyEmbeddedResourceToFileEx("Source/Assets/Music.wma", false);
 
-            _file = new AudioFile(asm.GetDirectoryEx() + "\\Music.mp3");
+            // _file = new AudioFile(asm.GetDirectoryEx() + "\\Music.mp3");
+            _file = new AudioFile(asm.GetDirectoryEx() + "\\Music.wma");
             _file.PlayProgress += _file_PlayProgress;
 
             PART_sliderPlay.IsSnapToTickEnabled = true;
