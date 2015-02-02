@@ -27,6 +27,8 @@ namespace DemoWpf
         {
             InitializeComponent();
 
+            Id3Lib.
+
             var asm = Assembly.GetExecutingAssembly();
             asm.CopyEmbeddedResourceToFileEx("Source/Assets/Music.mp3", false);
             asm.CopyEmbeddedResourceToFileEx("Source/Assets/Music.wma", false);

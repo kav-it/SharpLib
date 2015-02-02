@@ -1,47 +1,33 @@
-﻿// Copyright(C) 2002-2012 Hugo Rumayor Montemayor, All rights reserved.
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Id3Lib
 {
-    /// <summary>
-    /// Helper class to get a description of the frame identifiers.
-    /// </summary>
-    public static class FrameDescription
+    internal static class FrameDescription
     {
-        #region Fields
-        /// <summary>
-        /// Keep a relation between frame Frames and descriptions of them
-        /// </summary>
-        private static Dictionary<string, string> _descriptions = Intitalize();
+        #region Поля
+
+        private static readonly Dictionary<string, string> _descriptions = Intitalize();
+
         #endregion
 
-        #region Methods
-        /// <summary>
-        /// Obtain a human description of a frame
-        /// </summary>
-        /// <param name="frameId">the four character frame id</param>
-        /// <returns>description of the tag</returns>
+        #region Методы
+
         public static string GetDescription(string frameId)
         {
             string description;
             if (_descriptions.TryGetValue(frameId, out description))
+            {
                 return description;
+            }
             return "Unknown tag";
-
         }
 
-        /// <summary>
-        /// Fill the hash with the frame descriptors
-        /// </summary>
         private static Dictionary<string, string> Intitalize()
         {
             var descriptions = new Dictionary<string, string>();
 
-            // ID3v2.3
             descriptions.Add("TYER", "Recording Year");
-            // ID3v2.4
+
             descriptions.Add("AENC", "Audio encryption");
             descriptions.Add("APIC", "Attached picture");
             descriptions.Add("ASPI", "Audio seek point index");
@@ -139,6 +125,7 @@ namespace Id3Lib
             descriptions.Add("WXXX", "User defined URL link frame");
             return descriptions;
         }
+
         #endregion
     }
 }

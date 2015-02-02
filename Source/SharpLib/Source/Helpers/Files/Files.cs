@@ -287,7 +287,7 @@ namespace SharpLib
             {
                 // Путь является файлом
                 // Составление полного пути получателя
-                string destPath = PathEx.Combine(GetDirectory(path), newName);
+                string destPath = PathEx.Combine(GetDirectory(path), newName + "." + GetExtension(path));
 
                 // Файл уже так называется
                 if (destPath == path) return destPath;

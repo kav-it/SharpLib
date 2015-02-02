@@ -1,43 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
 namespace SharpLib.Wpf.Converters
 {
-    [ValueConversion(typeof(bool), typeof(Visibility))]
-    public class BoolToVisibilityConverter : IValueConverter
+    public class BoolConverter<T> : IValueConverter
     {
-        #region Свойства
-
-        public Visibility TrueValue { get; set; }
-
-        public Visibility FalseValue { get; set; }
-
-        #endregion
-
-        #region Конструктор
-
-        public BoolToVisibilityConverter()
+        public BoolConverter(T trueValue, T falseValue)
         {
-            TrueValue = Visibility.Visible;
-            FalseValue = Visibility.Collapsed;
+            True = trueValue;
+            False = falseValue;
         }
 
-        #endregion
+        public T True { get; set; }
+        public T False { get; set; }
 
-        #region Методы
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (value as bool?) == true ? TrueValue : FalseValue;
+            return value is bool && ((bool)value) ? True : False;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public virtual object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is Visibility && (Visibility)value == TrueValue;
+            return value is T && EqualityComparer<T>.Default.Equals((T)value, True);
         }
+    }
 
-        #endregion
+    public sealed class BoolToVisibilityConverter : BoolConverter<Visibility>
+    {
+        public BoolToVisibilityConverter() :
+            base(Visibility.Visible, Visibility.Collapsed) { }
     }
 }

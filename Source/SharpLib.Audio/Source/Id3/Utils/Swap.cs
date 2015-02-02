@@ -1,14 +1,8 @@
-// Copyright(C) 2002-2012 Hugo Rumayor Montemayor, All rights reserved.
-using System;
-
 namespace Id3Lib
 {
-    /// <summary>
-    /// Performs byte swapping.
-    /// </summary>
     internal static class Swap
     {
-        #region Methods
+        #region Ìועמהû
 
         public static int Int32(int val)
         {
@@ -35,6 +29,7 @@ namespace Id3Lib
             retval |= ((uint)val & 0xff00) >> 8;
             return (ushort)retval;
         }
+
         #endregion
     }
 }

@@ -1,40 +1,28 @@
-// Copyright(C) 2002-2012 Hugo Rumayor Montemayor, All rights reserved.
 using System;
 using System.IO;
-using ICSharpCode.SharpZipLib.Zip.Compression;
-using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
+
 using Id3Lib.Exceptions;
 using Id3Lib.Frames;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Id3Lib
 {
-    /// <summary>
-    /// Manage the Parsing or Creation of binary frames.
-    /// </summary>
-    /// <remarks>
-    /// The <b>FrameHelper</b> is a helper class that receives binary frame from a ID3v1 tag
-    /// and returns the correct parsed frame or form a frame creates a binary frame that can be
-    /// saved on an ID3v2 tag in a mp3 file.
-    /// </remarks>
     internal class FrameHelper
     {
-        #region Fields
-        private byte _version;
-        private byte _revison;
+        #region Поля
+
+        private readonly byte _revison;
+
+        private readonly byte _version;
+
         #endregion
 
-        #region Properties
-        /// <summary>
-        /// Get the ID3v2 Version
-        /// </summary>
+        #region Свойства
+
         public byte Version
         {
             get { return _version; }
         }
-        /// <summary>
-        /// Get the ID3v2 Revision
-        /// </summary>
+
         public byte Revision
         {
             get { return _revison; }
@@ -42,30 +30,20 @@ namespace Id3Lib
 
         #endregion
 
-        #region Constructors
-        /// <summary>
-        /// Create Frames depending on type
-        /// </summary>
-        /// <param name="header">ID3 Header</param>
+        #region Конструктор
+
         public FrameHelper(TagHeader header)
         {
             _version = header.Version;
             _revison = header.Revision;
         }
+
         #endregion
 
-        #region Methods
+        #region Методы
 
-        /// <summary>
-        /// Create a frame depending on the tag form its binary representation.
-        /// </summary>
-        /// <param name="frameId">type of frame</param>
-        /// <param name="flags">frame flags</param>
-        /// <param name="frame">binary frame</param>
-        /// <returns>Frame of tag type</returns>
         public FrameBase Build(string frameId, ushort flags, byte[] buffer)
         {
-            // Build a frame
             var frame = FrameFactory.Build(frameId);
             SetFlags(frame, flags);
 
@@ -73,38 +51,39 @@ namespace Id3Lib
             uint size = (uint)buffer.Length;
             Stream stream = new MemoryStream(buffer, false);
             var reader = new BinaryReader(stream);
-            if (GetGrouping(flags) == true)
+            if (GetGrouping(flags))
             {
                 frame.Group = reader.ReadByte();
                 index++;
             }
-            if (frame.Compression == true)
+            if (frame.Compression)
             {
-                switch (Version)
-                {
-                    case 3:
-                        {
-                            size = Swap.UInt32(reader.ReadUInt32());
-                            break;
-                        }
-                    case 4:
-                        {
-                            size = Swap.UInt32(Sync.UnsafeBigEndian(reader.ReadUInt32()));
-                            break;
-                        }
-                    default:
-                        {
-                            throw new NotImplementedException("ID3v2 Version " + Version + " is not supported.");
-                        }
-                }
-                index = 0;
-                stream = new InflaterInputStream(stream);
+                throw new Exception("Сжатие пока отключено");
+                //switch (Version)
+                //{
+                //    case 3:
+                //        {
+                //            size = Swap.UInt32(reader.ReadUInt32());
+                //            break;
+                //        }
+                //    case 4:
+                //        {
+                //            size = Swap.UInt32(Sync.UnsafeBigEndian(reader.ReadUInt32()));
+                //            break;
+                //        }
+                //    default:
+                //        {
+                //            throw new NotImplementedException("ID3v2 Version " + Version + " is not supported.");
+                //        }
+                //}
+                //index = 0;
+                //stream = new InflaterInputStream(stream);
             }
-            if (frame.Encryption == true)
+            if (frame.Encryption)
             {
                 throw new NotImplementedException("Encryption is not implemented, consequently it is not supported.");
             }
-            if (frame.Unsynchronisation == true)
+            if (frame.Unsynchronisation)
             {
                 var memoryStream = new MemoryStream();
                 size = Sync.Unsafe(stream, memoryStream, size);
@@ -118,11 +97,6 @@ namespace Id3Lib
             return frame;
         }
 
-        /// <summary>
-        /// Build a binary data frame form the frame object.
-        /// </summary>
-        /// <param name="frame">ID3 Frame</param>
-        /// <returns>binary frame representation</returns>
         public byte[] Make(FrameBase frame, out ushort flags)
         {
             flags = GetFlags(frame);
@@ -131,60 +105,62 @@ namespace Id3Lib
             var memoryStream = new MemoryStream();
             var writer = new BinaryWriter(memoryStream);
 
-            if (frame.Group.HasValue == true)
-                writer.Write((byte)frame.Group);
-
-            if (frame.Compression == true)
+            if (frame.Group.HasValue)
             {
-                switch (Version)
-                {
-                    case 3:
-                        {
-                            writer.Write(Swap.Int32(buffer.Length));
-                            break;
-                        }
-                    case 4:
-                        {
-                            writer.Write(Sync.UnsafeBigEndian(Swap.UInt32((uint)buffer.Length)));
-                            break;
-                        }
-                    default:
-                        {
-                            throw new NotImplementedException("ID3v2 Version " + Version + " is not supported.");
-                        }
-                }
-                var buf = new byte[2048];
-                var deflater = new Deflater(Deflater.BEST_COMPRESSION);
-                deflater.SetInput(buffer, 0, buffer.Length);
-                deflater.Finish();
-                while (!deflater.IsNeedingInput)
-                {
-                    int len = deflater.Deflate(buf, 0, buf.Length);
-                    if (len <= 0)
-                    {
-                        break;
-                    }
-                    memoryStream.Write(buf, 0, len);
-                }
+                writer.Write((byte)frame.Group);
+            }
 
-                if (!deflater.IsNeedingInput)
-                {
-                    //TODO: Skip and remove invalid frames.
-                    throw new InvalidFrameException("Can't decompress frame '" + frame.FrameId + "' missing data");
-                }
+            if (frame.Compression)
+            {
+                throw new Exception("Сжатие пока отключено");
+
+                //switch (Version)
+                //{
+                //    case 3:
+                //        {
+                //            writer.Write(Swap.Int32(buffer.Length));
+                //            break;
+                //        }
+                //    case 4:
+                //        {
+                //            writer.Write(Sync.UnsafeBigEndian(Swap.UInt32((uint)buffer.Length)));
+                //            break;
+                //        }
+                //    default:
+                //        {
+                //            throw new NotImplementedException("ID3v2 Version " + Version + " is not supported.");
+                //        }
+                //}
+                //var buf = new byte[2048];
+                //var deflater = new Deflater(Deflater.BEST_COMPRESSION);
+                //deflater.SetInput(buffer, 0, buffer.Length);
+                //deflater.Finish();
+                //while (!deflater.IsNeedingInput)
+                //{
+                //    int len = deflater.Deflate(buf, 0, buf.Length);
+                //    if (len <= 0)
+                //    {
+                //        break;
+                //    }
+                //    memoryStream.Write(buf, 0, len);
+                //}
+
+                //if (!deflater.IsNeedingInput)
+                //{
+                //    throw new InvalidFrameException("Can't decompress frame '" + frame.FrameId + "' missing data");
+                //}
             }
             else
             {
                 memoryStream.Write(buffer, 0, buffer.Length);
             }
 
-            if (frame.Encryption == true)
+            if (frame.Encryption)
             {
-                //TODO: Encryption
                 throw new NotImplementedException("Encryption is not implemented, consequently it is not supported.");
             }
 
-            if (frame.Unsynchronisation == true)
+            if (frame.Unsynchronisation)
             {
                 MemoryStream synchStream = new MemoryStream();
                 Sync.Unsafe(memoryStream, synchStream, (uint)memoryStream.Position);
@@ -276,7 +252,8 @@ namespace Id3Lib
                 case 3:
                     return (flags & 0x0040) > 0;
                 case 4:
-                    return (flags & 0x0004) > 0; ;
+                    return (flags & 0x0004) > 0;
+                    ;
                 default:
                     throw new InvalidOperationException("ID3v2 Version " + _version + " is not supported.");
             }
@@ -289,7 +266,8 @@ namespace Id3Lib
                 case 3:
                     return false;
                 case 4:
-                    return (flags & 0x0002) > 0; ;
+                    return (flags & 0x0002) > 0;
+                    ;
                 default:
                     throw new InvalidOperationException("ID3v2 Version " + _version + " is not supported.");
             }

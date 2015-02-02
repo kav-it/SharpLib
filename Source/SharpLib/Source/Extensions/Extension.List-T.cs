@@ -14,7 +14,7 @@ namespace SharpLib
     {
         public static void MoveEx<T>(this List<T> self, int newIndex, T value)
         {
-            if (newIndex < 0 || newIndex >= self.Count)
+            if (newIndex < 0 || newIndex > self.Count)
             {
                 return;
             }
@@ -26,14 +26,23 @@ namespace SharpLib
                 return;
             }
 
-            self.RemoveAt(oldIndex);
-
-            if (newIndex > oldIndex)
+            if (newIndex == self.Count)
             {
-                newIndex--;
+                // Добавление к конец списка
+                self.RemoveAt(oldIndex);
+                self.Add(value);
             }
+            else
+            {
+                self.RemoveAt(oldIndex);
 
-            self.Insert(newIndex, value);
+                if (newIndex > oldIndex)
+                {
+                    newIndex--;
+                }
+
+                self.Insert(newIndex, value);
+            }
         }
     }
 }

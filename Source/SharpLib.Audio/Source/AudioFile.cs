@@ -215,6 +215,7 @@ namespace SharpLib.Audio
             if (position < TotalTime)
             {
                 CurrentTime = position;
+                _waveOutDevice.Pause();
             }
 
             Play();
