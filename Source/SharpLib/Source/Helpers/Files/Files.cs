@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
@@ -283,19 +284,37 @@ namespace SharpLib
         /// <summary>
         /// Копирование директории (с рекурсивным содержимым)
         /// </summary>
-        public static void CopyDirectory(string destDir, string srcDir)
+        public static string CopyDirectory(string destDir, string srcDir)
         {
             // Создание директорий назначений
-            foreach (string dirPath in Directory.GetDirectories(srcDir, "*", SearchOption.AllDirectories))
+            foreach (string dirPath in GetDirectories(srcDir))
             {
                 Directory.CreateDirectory(dirPath.Replace(srcDir, destDir));
             }
 
             // Копирование всех файлов
-            foreach (string newPath in Directory.GetFiles(srcDir, "*.*", SearchOption.AllDirectories))
+            foreach (string newPath in GetFiles(srcDir))
             {
                 File.Copy(newPath, newPath.Replace(srcDir, destDir), true);
             }
+
+            return Path.Combine(destDir, Files.GetFileName(srcDir));
+        }
+
+        /// <summary>
+        /// Чтение списка файлов в директории
+        /// </summary>
+        public static IEnumerable<string> GetFiles(string path, bool recursive = true, string mask = "*.*")
+        {
+            return Directory.GetFiles(path, mask, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+        }
+
+        /// <summary>
+        /// Чтение списка директорий в директории
+        /// </summary>
+        public static IEnumerable<string> GetDirectories(string path, bool recursive = true, string mask = "*")
+        {
+            return Directory.GetDirectories(path, mask, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
         }
 
         /// <summary>
