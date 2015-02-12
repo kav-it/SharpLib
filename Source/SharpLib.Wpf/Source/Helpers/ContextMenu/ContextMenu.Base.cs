@@ -5,7 +5,7 @@ namespace SharpLib.Wpf
     /// <summary>
     /// Расширение класса контектсного меню
     /// </summary>
-    public sealed class ContextMenuBase : ContextMenu
+    public class ContextMenuBase : ContextMenu
     {
         #region Методы
 

@@ -362,7 +362,7 @@ namespace SharpLib
         /// <summary>
         /// Очистка каталога
         /// </summary>
-        public static bool EraseDirectory(String dirPath)
+        public static bool EraseDirectory(string dirPath)
         {
             Boolean result = DeleteDirectory(dirPath);
             if (result == false) return false;
@@ -375,5 +375,52 @@ namespace SharpLib
             return result;
         }
 
+        /// <summary>
+        /// Сброс атрибутов
+        /// </summary>
+        public static void ClearAttribute(string location, FileAttributes value)
+        {
+            var attributes = File.GetAttributes(location);
+
+            if ((int)(attributes & value) != 0)
+            {
+                // Есть атрибуты, которые нужно сбросить
+                attributes &= ~value;
+
+                File.SetAttributes(location, attributes);
+            }
+        }
+
+        /// <summary>
+        /// Создание временной директории в %TEMP%
+        /// </summary>
+        public static String GetTempDirectory(Boolean isCreate = true)
+        {
+            var path = Path.GetTempPath();
+
+            if (isCreate)
+            { 
+                CreateDirectory(path);
+            }
+
+            return path;
+        }
+
+        /// <summary>
+        /// Генерация имени временного файла в %TEMP%
+        /// </summary>
+        public static string GetTempFilename(string startPart = null)
+        {
+            var path = Path.GetTempFileName();
+
+            if (startPart.IsValid())
+            {
+                path = Path.Combine(
+                    GetDirectory(path), 
+                    Path.GetFileName(startPart) + Path.GetFileName(path));
+            }
+
+            return path;
+        }
     }
 }

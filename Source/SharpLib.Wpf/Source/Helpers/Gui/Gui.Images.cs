@@ -27,19 +27,23 @@ namespace SharpLib.Wpf
 
         public static BitmapSource IconQuestion { get; private set; }
 
+        public static BitmapSource IconDelete { get; private set; }
+
         #endregion
 
         #region Конструктор
 
         static GuiImages()
         {
-            var asm = Assembly.GetExecutingAssembly();
-
-            IconAbout = asm.LoadImageEx(IMAGE_PATH + "icon.about.png");
             IconError = IconToBitmapSource(System.Drawing.SystemIcons.Error);
             IconWarning = IconToBitmapSource(System.Drawing.SystemIcons.Warning);
             IconInfo = IconToBitmapSource(System.Drawing.SystemIcons.Information);
             IconQuestion = IconToBitmapSource(System.Drawing.SystemIcons.Question);
+
+            var asm = Assembly.GetExecutingAssembly();
+
+            IconAbout = asm.LoadImageEx(IMAGE_PATH + "icon.about.png");
+            IconDelete = asm.LoadImageEx(IMAGE_PATH + "icon.delete.png");
         }
 
         #endregion

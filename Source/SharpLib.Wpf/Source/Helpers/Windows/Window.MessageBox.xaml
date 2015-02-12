@@ -33,6 +33,7 @@
 			Height="25" Width="25"
 			Margin="10" />
         <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="True" VerticalScrollBarVisibility="Auto"
+                 BorderThickness="0"
 			Text="{Binding Message, ElementName=PART_windowMessageBoxName}"
 			TextWrapping="Wrap" TextAlignment="Left"
 			Margin="10,10,10.2,10.4"

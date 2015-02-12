@@ -349,11 +349,53 @@ namespace SharpLib.Wpf.Controls
             if (listNode.CanExpandRecursively)
             {
                 listNode.IsExpanded = true;
-                foreach (TreeListExNode child in listNode.Children)
+                foreach (var child in listNode.Children)
                 {
                     ExpandRecursively(child);
                 }
             }
+        }
+
+        private void CollapseRecursively(TreeListExNode listNode)
+        {
+            if (listNode.CanExpandRecursively)
+            {
+                listNode.IsExpanded = false;
+                foreach (var child in listNode.Children)
+                {
+                    CollapseRecursively(child);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Свернуть все элементы
+        /// </summary>
+        public void ExpandAll()
+        {
+            if (Root != null)
+            {
+                ExpandRecursively(Root);
+            }
+        }
+
+        /// <summary>
+        /// Развернуть все элементы
+        /// </summary>
+        public void CollapseAll()
+        {
+            if (Root != null)
+            {
+                CollapseRecursively(Root);
+            }
+        }
+
+        /// <summary>
+        /// Очистка дерева
+        /// </summary>
+        public void Clear()
+        {
+            ItemsSource = null;
         }
 
         /// <summary>

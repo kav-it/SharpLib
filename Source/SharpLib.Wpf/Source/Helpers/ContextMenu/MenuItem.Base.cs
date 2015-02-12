@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace SharpLib.Wpf
 {
@@ -10,7 +11,7 @@ namespace SharpLib.Wpf
     {
         #region Конструктор
 
-        public MenuItemBase(string title, RoutedEventHandler click, object tag)
+        public MenuItemBase(string title, RoutedEventHandler click, BitmapSource icon, object tag)
         {
             Header = title;
             if (click != null)
@@ -18,15 +19,20 @@ namespace SharpLib.Wpf
                 Click += click;
             }
             Tag = tag;
+
+            if (icon != null)
+            {
+                Icon = new Image { Source = icon };
+            }
         }
 
         public MenuItemBase(string title)
-            : this(title, null, null)
+            : this(title, null, null, null)
         {
         }
 
         public MenuItemBase(string title, RoutedEventHandler click)
-            : this(title, click, null)
+            : this(title, click, null, null)
         {
         }
 

@@ -44,5 +44,32 @@ namespace SharpLib
                 self.Insert(newIndex, value);
             }
         }
+
+        /// <summary>
+        /// Добавление элемента в начало
+        /// </summary>
+        public static void AddFirstEx<T>(this List<T> self, T value)
+        {
+            self.Insert(0, value);
+        }
+
+        /// <summary>
+        /// Удаление последнего элемента
+        /// </summary>
+        public static void RemoveLastEx<T>(this List<T> self)
+        {
+            if (self.Any())
+            {
+                self.RemoveAt(self.Count - 1);
+            }
+        }
+
+        /// <summary>
+        /// Сортировка
+        /// </summary>
+        public static List<TSource> SortEx<TSource, TKey>(this List<TSource> self, Func<TSource, TKey> keySelector)
+        {
+            return self.OrderBy(keySelector).ToList();
+        }
     }
 }

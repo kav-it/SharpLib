@@ -93,6 +93,7 @@
     <Compile Include="Source\Controls\User\OkCancel\OkCancel.Control.xaml.cs">
       <DependentUpon>OkCancel.Control.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Source\Converters\Converter.ComboBox.cs" />
     <Compile Include="Source\Converters\Converter.BoolToVisibility.cs" />
     <Compile Include="Source\Converters\Converter.StringToBool.cs" />
     <Compile Include="Source\Extensions\Extension.Assembly.cs" />
@@ -137,7 +138,9 @@
     <Compile Include="Source\Helpers\DragDrop\Utilities\ItemsControlExtensions.cs" />
     <Compile Include="Source\Helpers\DragDrop\Utilities\TypeUtilities.cs" />
     <Compile Include="Source\Helpers\DragDrop\Utilities\VisualTreeExtensions.cs" />
+    <Compile Include="Source\Helpers\Gui\Gui.List-T.cs" />
     <Compile Include="Source\Helpers\Gui\Gui.Images.cs" />
+    <Compile Include="Source\Helpers\Keyboard\Keyboarder.cs" />
     <Compile Include="Source\Helpers\NotifyProperty\NotifyModelBase.cs" />
     <Compile Include="Source\Helpers\VsHelper.cs" />
     <Compile Include="Source\Helpers\Gui\Gui.cs" />

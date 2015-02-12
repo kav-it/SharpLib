@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -86,11 +87,21 @@ namespace SharpLib.Wpf.Controls
         public IList SelectedItems
         {
             get { return PART_listView.SelectedItems; }
+            set
+            {
+                PART_listView.SelectedItems.Clear();
+                foreach (var item in value)
+                {
+                    PART_listView.SelectedItems.Add(item);
+                }
+            }
         }
 
         public Double RowHeight { get; set; }
 
         public ListViewExSorter Sorter { get; set; }
+
+        public ListViewExFilter Filter { get; set; }
 
         public bool ShowPairLines
         {
@@ -521,9 +532,14 @@ namespace SharpLib.Wpf.Controls
                 return false;
             }
 
-            if (String.IsNullOrEmpty(filter))
+            if (filter.IsNotValid())
             {
                 return true;
+            }
+
+            if (Filter != null)
+            { 
+                return Filter.DoFilter(value, filter);
             }
 
             bool result = FilterInProperties(value, filter);
@@ -790,6 +806,15 @@ namespace SharpLib.Wpf.Controls
     }
 
     #endregion Класс ListViewExSorter
+
+    #region Класс ListViewExFilter
+
+    public abstract class ListViewExFilter
+    {
+        public abstract bool DoFilter(object value, string filter);
+    }
+
+    #endregion Класс ListViewExFilter
 
     #region Класс ListViewExSorterArgs
 

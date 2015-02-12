@@ -1031,6 +1031,11 @@ namespace SharpLib.Wpf.Controls
             }
         }
 
+        public void AddNode(TreeListExNode node)
+        {
+            Children.Add(node);
+        }
+
         #endregion
     }
 }

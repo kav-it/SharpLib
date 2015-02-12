@@ -27,11 +27,11 @@
         /// <summary>
         /// Выбор файла для сохранения
         /// </summary>
-        public static string SaveFile(string filter, string ext)
+        public static string SaveFile(string filter, string defaultExt)
         {
             var dialog = new VistaSaveFileDialog();
             dialog.Filter = filter;
-            dialog.DefaultExt = ext;
+            dialog.DefaultExt = defaultExt;
 
             var result = dialog.ShowDialog();
             if (result.HasValue && result.Value)

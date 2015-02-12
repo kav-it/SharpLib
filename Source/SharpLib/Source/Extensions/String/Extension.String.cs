@@ -559,6 +559,11 @@ namespace SharpLib
             return value1.Equals(value2, StringComparison.OrdinalIgnoreCase);
         }
 
+        public static string ToLinuxPathEx(this string self)
+        {
+            return self.Replace('\\', '/');
+        }
+
         #endregion
     }
 }
