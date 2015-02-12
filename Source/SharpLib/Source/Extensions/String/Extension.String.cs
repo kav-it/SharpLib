@@ -564,6 +564,15 @@ namespace SharpLib
             return self.Replace('\\', '/');
         }
 
+        public static T ParseEnumEx<T>(this string self) where T : struct
+        {
+            T result;
+
+            Enum.TryParse(self, true, out result);
+
+            return result;
+        }
+
         #endregion
     }
 }

@@ -6,7 +6,13 @@ namespace SharpLib
 {
     public static class Files
     {
+        #region Константы
+
         public const string PATH_SEPARATOR = @"\";
+
+        #endregion
+
+        #region Методы
 
         /// <summary>
         /// Добавление разделителя пути (если необходимо)
@@ -31,7 +37,7 @@ namespace SharpLib
         /// <summary>
         /// Формирование относительного пути
         /// </summary>
-        public static string GetPathRelative(string path1, string path2)
+        public static string GetPathRelative(string path1, string path2, bool removeLastDelimetr = false)
         {
             path1 = AddPathSeparator(path1);
             path2 = AddPathSeparator(path2);
@@ -41,6 +47,11 @@ namespace SharpLib
             var uri2 = new Uri(path2);
             var uriRel = uri1.MakeRelativeUri(uri2);
             string result = uriRel.ToString();
+
+            if (removeLastDelimetr)
+            {
+                result = result.TrimEnd('/', '\\');
+            }
 
             return result;
         }
@@ -122,11 +133,23 @@ namespace SharpLib
 
                 return true;
             }
-            catch 
+            catch
             {
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Создание каталога в указанном родительском
+        /// </summary>
+        public static string CreateDirectory(string parent, string name)
+        {
+            var path = Path.Combine(parent, name);
+
+            CreateDirectory(path);
+
+            return path;
         }
 
         /// <summary>
@@ -185,7 +208,7 @@ namespace SharpLib
             catch
             {
             }
-            
+
             return null;
         }
 
@@ -220,8 +243,14 @@ namespace SharpLib
         /// </summary>
         public static string CopyFile(string destPath, string filePath)
         {
-            if (string.IsNullOrEmpty(destPath)) return string.Empty;
-            if (string.IsNullOrEmpty(filePath)) return string.Empty;
+            if (string.IsNullOrEmpty(destPath))
+            {
+                return string.Empty;
+            }
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return string.Empty;
+            }
 
             destPath = destPath.TrimEnd('\\');
 
@@ -252,6 +281,24 @@ namespace SharpLib
         }
 
         /// <summary>
+        /// Копирование директории (с рекурсивным содержимым)
+        /// </summary>
+        public static void CopyDirectory(string destDir, string srcDir)
+        {
+            // Создание директорий назначений
+            foreach (string dirPath in Directory.GetDirectories(srcDir, "*", SearchOption.AllDirectories))
+            {
+                Directory.CreateDirectory(dirPath.Replace(srcDir, destDir));
+            }
+
+            // Копирование всех файлов
+            foreach (string newPath in Directory.GetFiles(srcDir, "*.*", SearchOption.AllDirectories))
+            {
+                File.Copy(newPath, newPath.Replace(srcDir, destDir), true);
+            }
+        }
+
+        /// <summary>
         /// Удаление файла
         /// </summary>
         public static bool DeleteFile(string filename, bool throwEx = false)
@@ -263,7 +310,7 @@ namespace SharpLib
 
                 return true;
             }
-            catch 
+            catch
             {
                 if (throwEx)
                 {
@@ -279,9 +326,18 @@ namespace SharpLib
         /// </summary>
         public static string Rename(string path, string newName)
         {
-            if (path.IsValid() == false) return string.Empty;
-            if (newName.IsValid() == false) return string.Empty;
-            if (File.Exists(path) == false) return string.Empty;
+            if (path.IsValid() == false)
+            {
+                return string.Empty;
+            }
+            if (newName.IsValid() == false)
+            {
+                return string.Empty;
+            }
+            if (File.Exists(path) == false)
+            {
+                return string.Empty;
+            }
 
             if (IsFile(path))
             {
@@ -290,11 +346,16 @@ namespace SharpLib
                 string destPath = PathEx.Combine(GetDirectory(path), newName + "." + GetExtension(path));
 
                 // Файл уже так называется
-                if (destPath == path) return destPath;
+                if (destPath == path)
+                {
+                    return destPath;
+                }
 
                 // Если файл существует: Удаление файла
                 if (File.Exists(destPath))
+                {
                     DeleteFile(destPath);
+                }
 
                 var info = new FileInfo(path);
                 info.MoveTo(destPath);
@@ -310,7 +371,9 @@ namespace SharpLib
 
                 // Если файл существует: Удаление файла
                 if (File.Exists(destPath))
+                {
                     DeleteDirectory(destPath);
+                }
 
                 var info = new DirectoryInfo(path);
                 info.MoveTo(destPath);
@@ -365,7 +428,10 @@ namespace SharpLib
         public static bool EraseDirectory(string dirPath)
         {
             Boolean result = DeleteDirectory(dirPath);
-            if (result == false) return false;
+            if (result == false)
+            {
+                return false;
+            }
 
             // Ожидание завершения операции удаления каталога
             Thread.Sleep(50);
@@ -394,12 +460,13 @@ namespace SharpLib
         /// <summary>
         /// Создание временной директории в %TEMP%
         /// </summary>
-        public static String GetTempDirectory(Boolean isCreate = true)
+        public static String GetTempDirectory(bool isCreate = true)
         {
             var path = Path.GetTempPath();
 
             if (isCreate)
-            { 
+            {
+                path = Path.Combine(path, Path.GetRandomFileName());
                 CreateDirectory(path);
             }
 
@@ -416,11 +483,13 @@ namespace SharpLib
             if (startPart.IsValid())
             {
                 path = Path.Combine(
-                    GetDirectory(path), 
+                    GetDirectory(path),
                     Path.GetFileName(startPart) + Path.GetFileName(path));
             }
 
             return path;
         }
+
+        #endregion
     }
 }

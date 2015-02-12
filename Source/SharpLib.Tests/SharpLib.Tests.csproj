@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\Files\TestFiles.cs" />
     <Compile Include="Source\Math\TestMath.cs" />
     <Compile Include="Source\Version\AssemblyInfo.cs" />
   </ItemGroup>
