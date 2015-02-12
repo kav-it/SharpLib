@@ -32,5 +32,20 @@ namespace SharpLib.Tests
             Assert.AreEqual(listDirs.Count, 2);
             Assert.AreEqual(listFiles.Count, 2);
         }
+
+        /// <summary>
+        /// Проверка расчета абсолютного пути
+        /// </summary>
+        /// <param name="basePath"></param>
+        /// <param name="relPath"></param>
+        /// <returns></returns>
+        [TestCase(@"C:\1\2", @"..\1.txt", Result = @"C:\1\1.txt")]
+        [TestCase(@"C:\1\2", @"..\", Result = @"C:\1\")]
+        [TestCase(@"C:\1\2", @"..", Result = @"C:\1\")]
+        [TestCase(@"C:\1\2", @"..\..\1.txt", Result = @"C:\1.txt")]
+        public string TestAbsolutePath(string basePath, string relPath)
+        {
+            return Files.GetPathAbsolute(basePath, relPath);
+        }
     }
 }

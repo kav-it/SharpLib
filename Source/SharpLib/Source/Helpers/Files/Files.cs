@@ -58,6 +58,36 @@ namespace SharpLib
         }
 
         /// <summary>
+        /// Определение абсолютного пути на основании основного 
+        /// <example>
+        /// basePath     = "C:\Folder 1\Folder 2\"
+        /// relativaPath = "..\file.txt"
+        /// result       = "C:\Folder 1\file.txt
+        /// </example>
+        /// </summary>
+        public static string GetPathAbsolute(string basePath, string relativePath)
+        {
+            if (IsFile(basePath))
+            {
+                basePath = GetDirectory(basePath);
+            }
+
+            basePath = AddPathSeparator(basePath);
+            if (relativePath.IsNotValid()) return basePath;
+
+            if (IsDirectory(relativePath))
+            {
+                relativePath = AddPathSeparator(relativePath);    
+            }
+
+            var baseUri = new Uri(basePath);
+            var absUri = new Uri(baseUri, relativePath);
+            var result = absUri.LocalPath;
+
+            return result;
+        }
+
+        /// <summary>
         /// Извлечение имени файла БЕЗ расширения из полного имени и пути
         /// </summary>
         public static string GetFileName(string filepath)
