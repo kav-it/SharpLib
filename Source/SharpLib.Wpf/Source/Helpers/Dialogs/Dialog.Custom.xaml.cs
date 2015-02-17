@@ -10,12 +10,27 @@ using System.Windows.Media.Imaging;
 
 namespace SharpLib.Wpf.Dialogs
 {
+    /// <summary>
+    /// Базовый класс выбора файлов, директорий
+    /// </summary>
     internal partial class CustomDialog
     {
+        #region Константы
+
         internal const string ROOT_DIR_NAME = "..";
+
+        #endregion
 
         #region Поля
 
+        /// <summary>
+        /// Последняя стартовая директория
+        /// </summary>
+        private static string _lastDirectory;
+
+        /// <summary>
+        /// Текущий список файлов/директорий
+        /// </summary>
         private readonly ObservableCollection<DialogCustomEntryModel> _entries;
 
         /// <summary>
@@ -80,6 +95,11 @@ namespace SharpLib.Wpf.Dialogs
 
         #region Конструктор
 
+        static CustomDialog()
+        {
+            _lastDirectory = Enviroments.Folders.Desktop;
+        }
+
         internal CustomDialog()
         {
             InitializeComponent();
@@ -87,6 +107,7 @@ namespace SharpLib.Wpf.Dialogs
             ShowInTaskbar = false;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             Owner = Gui.GetActiveWindow();
+            Closed += WindowOnClose;
 
             _places = new ObservableCollection<DialogCustomPlaceModel>();
             _entries = new ObservableCollection<DialogCustomEntryModel>();
@@ -100,44 +121,54 @@ namespace SharpLib.Wpf.Dialogs
             PART_treeView.ItemsSource = _treeItems;
 
             Loaded += CustomDialog_Loaded;
-            StartLocation = Enviroments.Folders.Desktop;
+            StartLocation = Directory.Exists(_lastDirectory) ? _lastDirectory : Enviroments.Folders.Desktop;
         }
 
-        public CustomDialog(DialogCustomSelectMode selectMode, string startLocation, string caption): this()
+        public CustomDialog(DialogCustomSelectMode selectMode, string startLocation, string caption) : this()
         {
             if (caption.IsNotValid())
             {
-                switch (selectMode)
+                var isFile = selectMode.IsFlagSet(DialogCustomSelectMode.File);
+                var isFolder = selectMode.IsFlagSet(DialogCustomSelectMode.Folder);
+                var isMany = selectMode.IsFlagSet(DialogCustomSelectMode.Many);
+
+                if (isFile && isFolder)
                 {
-                    case DialogCustomSelectMode.SingleFile:
-                        caption = "Выбор файла";
-                        break;
-                    case DialogCustomSelectMode.SingleFolder:
-                        caption = "Выбор директории";
-                        break;
-                    case DialogCustomSelectMode.Files:
-                        caption = "Выбор файлов";
-                        break;
-                    case DialogCustomSelectMode.Folders:
-                        caption = "Выбор директорий";
-                        break;
-                    case DialogCustomSelectMode.All:
-                        caption = "Выбор файлов и/или директорий";
-                        break;
-                    default:
-                        caption = "Выбор";
-                        break;
+                    caption = "Выбор файлов и/или директорий";
+                }
+                else if (isFile)
+                {
+                    caption = isMany ? "Выбор файлов" : "Выбор файла";
+                }
+                else if (isFolder)
+                {
+                    caption = isMany ? "Выбор директорий" : "Выбор директории";
+                }
+                else
+                {
+                    caption = "Выбор";
                 }
             }
 
             Title = caption;
-            StartLocation = startLocation ?? Enviroments.Folders.Desktop;
+            if (startLocation != null)
+            {
+                StartLocation = startLocation;
+            }
             SelectMode = selectMode;
         }
 
         #endregion
 
         #region Методы
+
+        /// <summary>
+        /// Сохранение последней открытой директории
+        /// </summary>
+        private void WindowOnClose(object sender, EventArgs eventArgs)
+        {
+            _lastDirectory = _locationDir;
+        }
 
         /// <summary>
         /// Загрузка диалога
@@ -215,7 +246,7 @@ namespace SharpLib.Wpf.Dialogs
             // Добавление файлов
             var files = Files.GetFiles(root, false, false).ToList();
             // Сортировка файлов (по расширению + по имени)
-            files.Sort(new DialogCustomFilenameComparer());
+            files.Sort(Comparers.Filename);
 
             foreach (var file in files)
             {
@@ -255,10 +286,19 @@ namespace SharpLib.Wpf.Dialogs
         {
             var item = PART_listView.SelectedItem as DialogCustomEntryModel;
 
-            if (item != null && item.IsDirectory)
+            if (item != null)
             {
-                SetLocation(item.Location);
-                _history.Add(item.Location);
+                if (item.IsDirectory)
+                {
+                    // Переход в директорию
+                    SetLocation(item.Location);
+                    _history.Add(item.Location);
+                }
+                else if (SelectMode.IsFlagSet(DialogCustomSelectMode.File))
+                {
+                    // Выбран файл по DoubleClick
+                    ButtonOkClick(this, null);
+                }
             }
         }
 
@@ -276,18 +316,30 @@ namespace SharpLib.Wpf.Dialogs
         private void UpdateButtonStates()
         {
             var items = SelectedItems;
-            var isMulty = items.Count > 1;
-            var canMulty = SelectMode.IsFlagSet(DialogCustomSelectMode.Folders) || SelectMode.IsFlagSet(DialogCustomSelectMode.Files);
+            var isMany = items.Count > 1;
+            var canMany = SelectMode.IsFlagSet(DialogCustomSelectMode.Many);
 
-            bool isEnable = items.Any() && (isMulty == canMulty);
+            // Выбран хоть один элемент
+            bool isEnable = items.Any();
 
-            if (isEnable && SelectMode.IsFlagSet(DialogCustomSelectMode.SingleFile))
+            if (isEnable)
             {
+                // Выбрано несколько элементов, но разрешено только SingleSelect
+                if (canMany == false && isMany)
+                {
+                    isEnable = false;
+                }
+            }
+
+            if (isEnable && SelectMode.IsFlagSet(DialogCustomSelectMode.File) == false)
+            {
+                // Файлы не разрешены
                 isEnable = items.All(x => !x.IsDirectory);
             }
 
-            if (isEnable && SelectMode.IsFlagSet(DialogCustomSelectMode.SingleFolder))
+            if (isEnable && SelectMode.IsFlagSet(DialogCustomSelectMode.Folder) == false)
             {
+                // Директории не разрешены
                 isEnable = items.All(x => x.IsDirectory && !x.IsRoot);
             }
 
@@ -374,10 +426,8 @@ namespace SharpLib.Wpf.Dialogs
         {
             get
             {
-                DateTime stamp;
-
-                stamp = Files.IsFile(Location) 
-                    ? File.GetLastWriteTime(Location) 
+                var stamp = Files.IsFile(Location)
+                    ? File.GetLastWriteTime(Location)
                     : Directory.GetLastAccessTime(Location);
 
                 return string.Format("{0:dd.MM.yyyy hh:mm}", stamp);
@@ -429,7 +479,7 @@ namespace SharpLib.Wpf.Dialogs
 
         public DialogCustomEntryModel(string location, string name = null)
         {
-            Name = name ?? Files.GetFileNameAndExt(location);
+            Name = name ?? Files.GetFileName(location);
             Location = location;
             Icon = Shell.GetIconByLocation(Location, false);
             IsDirectory = Files.IsDirectory(location);
@@ -473,5 +523,4 @@ namespace SharpLib.Wpf.Dialogs
     internal class DialogCustomTreeItemModel
     {
     }
-
 }

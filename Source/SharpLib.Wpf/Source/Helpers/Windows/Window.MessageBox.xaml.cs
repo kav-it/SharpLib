@@ -1,68 +1,62 @@
 ﻿using System;
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace SharpLib.Wpf
 {
     public partial class MessageBoxEx
     {
+        /// <summary>
+        /// Ширина диалога по умолчанию
+        /// </summary>
+        private const int WIDTH_DEFAULT = 500;
+
         #region Поля
 
-        public static DependencyProperty CancelVisibilityProperty;
-
+        /// <summary>
+        /// Изображение
+        /// </summary>
         public static DependencyProperty MessageImageProperty;
 
+        /// <summary>
+        /// Сообщение
+        /// </summary>
         public static DependencyProperty MessageProperty;
 
-        public static DependencyProperty NoVisibilityProperty;
+        /// <summary>
+        /// Результат диалога
+        /// </summary>
+        public MessageBoxExResult Result;
 
-        public static DependencyProperty OkVisibilityProperty;
-
-        public static DependencyProperty YesVisibilityProperty;
-
-        public MessageBoxResult Result;
+        /// <summary>
+        /// Модели кнопков
+        /// </summary>
+        private readonly List<MessageBoxExModel> _models;
 
         #endregion
 
         #region Свойства
 
-        public String Message
+        /// <summary>
+        /// Сообщение диалога
+        /// </summary>
+        public string Message
         {
             get { return (String)GetValue(MessageProperty); }
             set { SetValue(MessageProperty, value); }
         }
 
+        /// <summary>
+        /// Изображение сообещния
+        /// </summary>
         public ImageSource MessageImage
         {
             get { return (ImageSource)GetValue(MessageImageProperty); }
             set { SetValue(MessageImageProperty, value); }
-        }
-
-        public Visibility YesVisibility
-        {
-            get { return (Visibility)GetValue(YesVisibilityProperty); }
-            set { SetValue(YesVisibilityProperty, value); }
-        }
-
-        public Visibility NoVisibility
-        {
-            get { return (Visibility)GetValue(NoVisibilityProperty); }
-            set { SetValue(NoVisibilityProperty, value); }
-        }
-
-        public Visibility OkVisibility
-        {
-            get { return (Visibility)GetValue(OkVisibilityProperty); }
-            set { SetValue(OkVisibilityProperty, value); }
-        }
-
-        public Visibility CancelVisibility
-        {
-            get { return (Visibility)GetValue(CancelVisibilityProperty); }
-            set { SetValue(CancelVisibilityProperty, value); }
         }
 
         #endregion
@@ -73,10 +67,6 @@ namespace SharpLib.Wpf
         {
             MessageProperty = DependencyProperty.Register("Message", typeof(String), typeof(MessageBoxEx));
             MessageImageProperty = DependencyProperty.Register("MessageImage", typeof(ImageSource), typeof(MessageBoxEx));
-            YesVisibilityProperty = DependencyProperty.Register("YesVisibility", typeof(Visibility), typeof(MessageBoxEx));
-            NoVisibilityProperty = DependencyProperty.Register("NoVisibility", typeof(Visibility), typeof(MessageBoxEx));
-            OkVisibilityProperty = DependencyProperty.Register("OkVisibility", typeof(Visibility), typeof(MessageBoxEx));
-            CancelVisibilityProperty = DependencyProperty.Register("CancelVisibility", typeof(Visibility), typeof(MessageBoxEx));
         }
 
         public MessageBoxEx()
@@ -84,64 +74,67 @@ namespace SharpLib.Wpf
             InitializeComponent();
 
             // Установка родительского окна
-            var helper = new WindowInteropHelper(this);
-            helper.Owner = GetActiveWindow();
+            Owner = Gui.GetActiveWindow();
 
             // Настройка внешнего вида окна
             ShowInTaskbar = false;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             DataContext = this;
+
+            // Модели кнопок
+            _models = new List<MessageBoxExModel>();
+
+            _models.Add(new MessageBoxExModel(PART_buttonOk, MessageBoxExResult.Ok, MessageBoxExButtons.Ok));
+            _models.Add(new MessageBoxExModel(PART_buttonCancel, MessageBoxExResult.Cancel, MessageBoxExButtons.Cancel));
+            _models.Add(new MessageBoxExModel(PART_buttonYes, MessageBoxExResult.Yes, MessageBoxExButtons.Yes));
+            _models.Add(new MessageBoxExModel(PART_buttonNo, MessageBoxExResult.No, MessageBoxExButtons.No));
+            _models.Add(new MessageBoxExModel(PART_buttonYesToAll, MessageBoxExResult.YesToAll, MessageBoxExButtons.YesToAll));
+            _models.Add(new MessageBoxExModel(PART_buttonNoToAll, MessageBoxExResult.NoToAll, MessageBoxExButtons.NoToAll));
         }
 
         #endregion
 
         #region Методы
 
-        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-        internal static extern IntPtr GetActiveWindow();
-
+        /// <summary>
+        /// Обработка нажатия "Esc"
+        /// </summary>
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
-                Result = MessageBoxResult.None;
+                Result = MessageBoxExResult.Unknown;
                 e.Handled = true;
                 Close();
             }
         }
 
+        /// <summary>
+        /// Обработка нажатия кнопкок
+        /// </summary>
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
-            if (Equals(sender, PART_buttonOk))
+            var button = sender as Button;
+            if (button != null)
             {
-                Result = MessageBoxResult.OK;
-            }
-            else if (Equals(sender, PART_buttonYes))
-            {
-                Result = MessageBoxResult.Yes;
-            }
-            else if (Equals(sender, PART_buttonNo))
-            {
-                Result = MessageBoxResult.No;
-            }
-            else if (Equals(sender, PART_buttonCancel))
-            {
-                Result = MessageBoxResult.Cancel;
-            }
-            else
-            {
-                return;
-            }
+                Result = ((MessageBoxExModel)button.Tag).Result;
 
-            Close();
+                Close();
+            }
         }
 
-        private void SetCaption(String caption)
+        /// <summary>
+        /// Установка заголовка окна
+        /// </summary>
+        private void SetCaption(string caption)
         {
             Title = caption;
-            Width = 400;
+            Width = WIDTH_DEFAULT;
         }
 
+        /// <summary>
+        /// Установка изображения диалога
+        /// </summary>
         private void SetImageSource(MessageBoxImage image)
         {
             switch (image)
@@ -168,52 +161,38 @@ namespace SharpLib.Wpf
             }
         }
 
-        private void SetButtonVisibility(MessageBoxButton buttons)
+        /// <summary>
+        /// Установка видимости групп кнопок
+        /// </summary>
+        private void SetButtonVisibility(MessageBoxExButtons types)
         {
-            switch (buttons)
+            _models.ForEach(x => x.Button.Visibility = Visibility.Collapsed);
+
+            var buttons = _models.Where(x => (int)(x.Typ & types) != 0).Select(x => x.Button);
+
+            foreach (var button in buttons)
             {
-                case MessageBoxButton.YesNo:
-                    OkVisibility = CancelVisibility = Visibility.Collapsed;
-                    break;
-
-                case MessageBoxButton.YesNoCancel:
-                    OkVisibility = Visibility.Collapsed;
-                    break;
-
-                case MessageBoxButton.OK:
-                    YesVisibility = NoVisibility = CancelVisibility = Visibility.Collapsed;
-                    break;
-
-                case MessageBoxButton.OKCancel:
-                    YesVisibility = NoVisibility = Visibility.Collapsed;
-                    break;
-
-                default:
-                    YesVisibility = NoVisibility = OkVisibility = CancelVisibility = Visibility.Collapsed;
-                    break;
+                button.Visibility = Visibility.Visible;
             }
         }
 
-        private void SetButtonDefault(MessageBoxResult defaultResult)
+        /// <summary>
+        /// Установка фокуса на кнопке по умолчанию
+        /// </summary>
+        private void SetButtonDefault(MessageBoxExResult defaultResult)
         {
-            switch (defaultResult)
+            var button = _models.Where(x => x.Result == defaultResult).Select(x => x.Button).FirstOrDefault();
+
+            if (button != null)
             {
-                case MessageBoxResult.OK:
-                    PART_buttonOk.Focus();
-                    break;
-                case MessageBoxResult.Yes:
-                    PART_buttonYes.Focus();
-                    break;
-                case MessageBoxResult.No:
-                    PART_buttonNo.Focus();
-                    break;
-                case MessageBoxResult.Cancel:
-                    PART_buttonCancel.Focus();
-                    break;
+                button.Focus();
             }
         }
 
-        private MessageBoxResult ShowCustom(String caption, String message, MessageBoxButton buttons, MessageBoxImage image, MessageBoxResult defaultResult)
+        /// <summary>
+        /// Отображение диалога
+        /// </summary>
+        private MessageBoxExResult ShowCustom(string caption, string message, MessageBoxExButtons buttons, MessageBoxImage image, MessageBoxExResult defaultResult)
         {
             Message = message;
             SetCaption(caption);
@@ -226,23 +205,25 @@ namespace SharpLib.Wpf
             return Result;
         }
 
-        public static MessageBoxResult Show(String caption, String message, MessageBoxButton buttons, MessageBoxImage image, MessageBoxResult defaultResult)
+        /// <summary>
+        /// Отображение диалога
+        /// </summary>
+        public static MessageBoxExResult Show(string caption, string message, MessageBoxExButtons buttons, MessageBoxImage image, MessageBoxExResult defaultResult)
         {
-            MessageBoxResult result = MessageBoxResult.None;
+            var result = MessageBoxExResult.Unknown;
 
             if (Application.Current != null)
             {
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    MessageBoxEx window = new MessageBoxEx();
+                    var window = new MessageBoxEx();
 
                     result = window.ShowCustom(caption, message, buttons, image, defaultResult);
-                })
-                    );
+                }));
             }
             else
             {
-                MessageBoxEx window = new MessageBoxEx();
+                var window = new MessageBoxEx();
 
                 result = window.ShowCustom(caption, message, buttons, image, defaultResult);
             }
@@ -250,41 +231,95 @@ namespace SharpLib.Wpf
             return result;
         }
 
-        public static MessageBoxResult ShowWarning(String message, params object[] args)
+        /// <summary>
+        /// Диалог "Внимание"
+        /// </summary>
+        public static MessageBoxExResult ShowWarning(string message, params object[] args)
         {
             message = string.Format(message, args);
 
-            return Show("Внимание", message, MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
+            return Show("Внимание", message, MessageBoxExButtons.Ok, MessageBoxImage.Warning, MessageBoxExResult.Ok);
         }
 
-        public static MessageBoxResult ShowError(String message, params object[] args)
+        /// <summary>
+        /// Диалог "Ошибка"
+        /// </summary>
+        public static MessageBoxExResult ShowError(string message, params object[] args)
         {
             message = string.Format(message, args);
 
-            return Show("Ошибка", message, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+            return Show("Ошибка", message, MessageBoxExButtons.Ok, MessageBoxImage.Error, MessageBoxExResult.Ok);
         }
 
-        public static bool ShowQuestion(String message, params object[] args)
+        /// <summary>
+        /// Диалог "Вопрос"
+        /// </summary>
+        public static bool ShowQuestion(string message, params object[] args)
         {
             message = string.Format(message, args);
 
-            MessageBoxResult result = Show("Вопрос", message, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
+            var result = Show("Вопрос", message, MessageBoxExButtons.YesNo, MessageBoxImage.Question, MessageBoxExResult.Yes);
 
-            return (result == MessageBoxResult.Yes);
+            return (result == MessageBoxExResult.Yes);
         }
 
-        public static MessageBoxResult ShowInformation(String message, params object[] args)
+        /// <summary>
+        /// Диалог "Информация"
+        /// </summary>
+        public static MessageBoxExResult ShowInformation(string message, params object[] args)
         {
             message = string.Format(message, args);
 
-            return Show("Информация", message, MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK);
+            return Show("Информация", message, MessageBoxExButtons.Ok, MessageBoxImage.Information, MessageBoxExResult.Ok);
         }
 
-        public static MessageBoxResult ShowBlank(String caption, String message, params object[] args)
+        /// <summary>
+        /// Диалог "Без изображения"
+        /// </summary>
+        public static MessageBoxExResult ShowBlank(string caption, string message, params object[] args)
         {
             message = string.Format(message, args);
 
-            return Show(caption, message, MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.OK);
+            return Show(caption, message, MessageBoxExButtons.Ok, MessageBoxImage.None, MessageBoxExResult.Ok);
+        }
+
+        #endregion
+    }
+
+    /// <summary>
+    /// Контейнер для внутреннего использования
+    /// </summary>
+    internal class MessageBoxExModel
+    {
+        #region Свойства
+
+        /// <summary>
+        /// Кнопка
+        /// </summary>
+        internal Button Button { get; private set; }
+
+        /// <summary>
+        /// Результат, который возвращает кнопка
+        /// </summary>
+        internal MessageBoxExResult Result { get; private set; }
+
+        /// <summary>
+        /// Тип кнопки
+        /// </summary>
+        internal MessageBoxExButtons Typ { get; private set; }
+
+        #endregion
+
+        #region Конструктор
+
+        public MessageBoxExModel(Button button, MessageBoxExResult result, MessageBoxExButtons typ)
+        {
+            Button = button;
+            Result = result;
+            Typ = typ;
+
+            button.Tag = this;
+            button.DataContext = this;
         }
 
         #endregion

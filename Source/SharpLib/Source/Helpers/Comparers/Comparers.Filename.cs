@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace SharpLib.Wpf.Dialogs
+namespace SharpLib
 {
     /// <summary>
-    /// Сравнение файлов (по расширение и по имени)
+    /// Сравнение по имени файла с учетом расширения
     /// </summary>
-    internal class DialogCustomFilenameComparer : IComparer<string>
+    public class ComparersFilename : IComparer<string>
     {
         #region Методы
 

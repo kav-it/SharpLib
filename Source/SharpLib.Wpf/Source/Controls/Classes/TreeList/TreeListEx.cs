@@ -10,6 +10,8 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Threading;
 
+using SharpLib.Wpf.Dragging.Utilities;
+
 namespace SharpLib.Wpf.Controls
 {
     public class TreeListEx : ListView
@@ -362,7 +364,7 @@ namespace SharpLib.Wpf.Controls
         }
 
         /// <summary>
-        /// Scrolls the specified listNode in view and sets keyboard focus on it.
+        /// Выделение (фокусом) элементы (со скроллом)
         /// </summary>
         public void FocusNode(TreeListExNode listNode)
         {
@@ -820,6 +822,14 @@ namespace SharpLib.Wpf.Controls
             {
                 Root.CollapseAll();
             }
+        }
+
+        /// <summary>
+        /// Выделение элементов
+        /// </summary>
+        public void SetSelectedItems(IEnumerable<TreeListExNode> items)
+        {
+            base.SetSelectedItems(items);
         }
 
         #endregion

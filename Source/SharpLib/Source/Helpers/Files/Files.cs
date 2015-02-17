@@ -592,6 +592,31 @@ namespace SharpLib
             return info.Length;
         }
 
+        /// <summary>
+        /// Определение типа записи файловой системы
+        /// </summary>
+        public static FileTyp CheckTyp(string location)
+        {
+            if (File.Exists(location))
+            {
+                var fileInfo = new FileInfo(location);
+
+                if (fileInfo.Attributes.HasFlag(FileAttributes.ReparsePoint))
+                { 
+                    return FileTyp.LinkFile;
+                }
+                
+                return FileTyp.FIle;
+            }
+
+            if (Directory.Exists(location))
+            {
+                return FileTyp.Folder;
+            }
+
+            return FileTyp.Unknown;
+        }
+
         #endregion
     }
 }

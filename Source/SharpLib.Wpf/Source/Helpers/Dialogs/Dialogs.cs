@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security;
-
-using SharpLib.Native.Windows;
 
 namespace SharpLib.Wpf.Dialogs
 {
@@ -74,7 +69,6 @@ namespace SharpLib.Wpf.Dialogs
 
             using (var dialog = new System.Windows.Forms.OpenFileDialog())
             {
-
                 dialog.Filter = filter.Value;
                 dialog.FileName = filename;
                 dialog.Title = title;
@@ -121,7 +115,7 @@ namespace SharpLib.Wpf.Dialogs
         /// </summary>
         public static string SelectFolder(string textHeader = null, string startPath = null)
         {
-            var dialog = new CustomDialog(DialogCustomSelectMode.SingleFolder, startPath, textHeader);
+            var dialog = new CustomDialog(DialogCustomSelectMode.Folder, startPath, textHeader);
 
             if (dialog.ShowDialog() == true)
             {
@@ -136,7 +130,7 @@ namespace SharpLib.Wpf.Dialogs
         /// </summary>
         public static List<string> SelectFolders(string startPath = null, string textHeader = null)
         {
-            var dialog = new CustomDialog(DialogCustomSelectMode.Folders, startPath, textHeader);
+            var dialog = new CustomDialog(DialogCustomSelectMode.Folder | DialogCustomSelectMode.Many, startPath, textHeader);
 
             if (dialog.ShowDialog() == true)
             {

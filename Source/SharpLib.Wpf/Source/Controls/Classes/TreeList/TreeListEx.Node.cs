@@ -186,6 +186,14 @@ namespace SharpLib.Wpf.Controls
             }
         }
 
+        /// <summary>
+        /// Состоянеие "Collapsed"
+        /// </summary>
+        public bool IsCollapsed
+        {
+            get { return IsExpanded == false; }
+        }
+
         public bool LazyLoading
         {
             get { return _lazyLoading; }

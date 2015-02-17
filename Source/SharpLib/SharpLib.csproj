@@ -45,8 +45,10 @@
     </Compile>
     <Compile Include="Source\AssemblyInfo.cs" />
     <Compile Include="Source\Constants\Constants.TimeStamp.cs" />
+    <Compile Include="Source\Enums\MessageBox\MessageBoxEx.Buttons.cs" />
     <Compile Include="Source\Enums\Placement.cs" />
     <Compile Include="Source\Enums\NavigateDirection.cs" />
+    <Compile Include="Source\Enums\MessageBox\MessageBoxEx.Result.cs" />
     <Compile Include="Source\Enums\SortMode.cs" />
     <Compile Include="Source\Enums\SearchDirection.cs" />
     <Compile Include="Source\Enums\Endianess.cs" />
@@ -81,10 +83,13 @@
     <Compile Include="Source\Extensions\String\Extension.StringArray.cs" />
     <Compile Include="Source\Extensions\Xml\Extension.XDocument.cs" />
     <Compile Include="Source\Helpers\Bootstrap\Application.cs" />
+    <Compile Include="Source\Helpers\Comparers\Comparers.Filename.cs" />
+    <Compile Include="Source\Helpers\Comparers\Comparers.cs" />
     <Compile Include="Source\Helpers\Env.cs" />
     <Compile Include="Source\Helpers\Diag.cs" />
     <Compile Include="Source\Helpers\Enviroments\Enviroments.Folders.cs" />
     <Compile Include="Source\Helpers\Enviroments\Enviroments.cs" />
+    <Compile Include="Source\Helpers\Files\File.Type.cs" />
     <Compile Include="Source\Helpers\Position.cs" />
     <Compile Include="Source\Helpers\Resources\EmbeddedResourceUri.cs" />
     <Compile Include="Source\Helpers\Resources\EmbeddedResources.cs" />

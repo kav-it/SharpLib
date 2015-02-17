@@ -7,10 +7,11 @@
         x:Name="PART_windowMessageBoxName"
         SizeToContent="Height"
         Title="TitleWindowMessageBox"
-        KeyDown="Window_KeyDown" d:DesignWidth="573.6" d:DesignHeight="167.6" >
+        KeyDown="Window_KeyDown" 
+        d:DesignWidth="600" d:DesignHeight="170" >
     <Window.Resources>
         <Style TargetType="{x:Type Button}">
-            <Setter Property="Width" Value="80" />
+            <Setter Property="Width" Value="85" />
             <Setter Property="Height" Value="25" />
             <Setter Property="Margin" Value="5" />
         </Style>
@@ -41,11 +42,12 @@
         <Border x:Name="PART_border" Background="#FFE6E6E6" BorderThickness="0 1 0 0" BorderBrush="#FFDFDFDF"
 			Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
             <StackPanel x:Name="PART_stackPanel" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0 10 0">
-                <Button x:Name="PART_buttonOk" Content="OK" Click="ButtonClick" Visibility="{Binding OkVisibility}" />
-                <Button x:Name="PART_buttonYes" Content="Да" Click="ButtonClick" Visibility="{Binding YesVisibility}" />
-                <Button x:Name="PART_buttonNo" Content="Нет" Click="ButtonClick" Visibility="{Binding NoVisibility}" />
-                <Button x:Name="PART_buttonCancel" Content="Отмена" Click="ButtonClick"
-					Visibility="{Binding CancelVisibility}" />
+                <Button x:Name="PART_buttonOk" Content="OK" Click="ButtonClick" />
+                <Button x:Name="PART_buttonYes" Content="Да" Click="ButtonClick" />
+                <Button x:Name="PART_buttonYesToAll" Content="Да (для всех)" Click="ButtonClick" />
+                <Button x:Name="PART_buttonNo" Content="Нет" Click="ButtonClick" />
+                <Button x:Name="PART_buttonNoToAll" Content="Нет (для всех)" Click="ButtonClick" />
+                <Button x:Name="PART_buttonCancel" Content="Отмена" Click="ButtonClick"  />
             </StackPanel>
         </Border>
     </Grid>

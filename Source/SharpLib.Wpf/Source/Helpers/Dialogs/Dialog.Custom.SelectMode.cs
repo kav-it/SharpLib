@@ -16,26 +16,21 @@ namespace SharpLib.Wpf.Dialogs
         /// <summary>
         /// Только 1-файл
         /// </summary>
-        SingleFile = (1 << 0),
+        File = (1 << 0),
 
         /// <summary>
         /// Только 1 папка
         /// </summary>
-        SingleFolder = (1 << 1),
+        Folder = (1 << 1),
 
         /// <summary>
-        /// Несколько папок
+        /// Несколько элементов
         /// </summary>
-        Folders = (1 << 2),
-
-        /// <summary>
-        /// Несколько файлов
-        /// </summary>
-        Files = (1 << 3),
+        Many = (1 << 2),
 
         /// <summary>
         /// Все (и файлы и директории)
         /// </summary>
-        All = Folders | Files
+        All = File | Folder | Many
     }
 }
