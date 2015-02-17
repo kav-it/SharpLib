@@ -27,8 +27,7 @@ namespace SharpLib.Wpf.Controls
 
         static TreeListExEditTextBox()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(TreeListExEditTextBox),
-                new FrameworkPropertyMetadata(typeof(TreeListExEditTextBox)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(TreeListExEditTextBox), new FrameworkPropertyMetadata(typeof(TreeListExEditTextBox)));
         }
 
         public TreeListExEditTextBox()
@@ -50,15 +49,21 @@ namespace SharpLib.Wpf.Controls
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
+            {
                 Commit();
+            }
             else if (e.Key == Key.Escape)
+            {
                 ListNode.IsEditing = false;
+            }
         }
 
         protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e)
         {
             if (ListNode.IsEditing)
+            {
                 Commit();
+            }
         }
 
         private void Commit()
@@ -69,7 +74,9 @@ namespace SharpLib.Wpf.Controls
 
                 ListNode.IsEditing = false;
                 if (!ListNode.SaveEditText(Text))
+                {
                     Item.Focus();
+                }
                 ListNode.RaisePropertyChanged("Text");
 
                 _commiting = false;

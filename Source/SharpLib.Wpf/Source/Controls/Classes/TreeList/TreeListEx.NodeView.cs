@@ -77,7 +77,9 @@ namespace SharpLib.Wpf.Controls
         {
             base.OnPropertyChanged(e);
             if (e.Property == DataContextProperty)
+            {
                 UpdateDataContext(e.OldValue as TreeListExNode, e.NewValue as TreeListExNode);
+            }
         }
 
         private void UpdateDataContext(TreeListExNode oldListNode, TreeListExNode newListNode)
@@ -86,16 +88,22 @@ namespace SharpLib.Wpf.Controls
             {
                 newListNode.PropertyChanged += Node_PropertyChanged;
                 if (Template != null)
+                {
                     UpdateTemplate();
+                }
             }
             if (oldListNode != null)
+            {
                 oldListNode.PropertyChanged -= Node_PropertyChanged;
+            }
         }
 
         private void Node_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "IsEditing")
+            {
                 OnIsEditingChanged();
+            }
             else if (e.PropertyName == "IsLast")
             {
                 if (ParentTreeList.ShowLines)
@@ -104,41 +112,66 @@ namespace SharpLib.Wpf.Controls
                     {
                         var container = ParentTreeList.ItemContainerGenerator.ContainerFromItem(child) as TreeListExViewItem;
                         if (container != null)
+                        {
                             container.ListNodeView.TreeListLinesRenderer.InvalidateVisual();
+                        }
                     }
                 }
             }
             else if (e.PropertyName == "IsExpanded")
             {
                 if (ListNode.IsExpanded)
+                {
                     ParentTreeList.HandleExpanding(ListNode);
+                }
             }
         }
 
         private void OnIsEditingChanged()
         {
             var textEditorContainer = Template.FindName("textEditorContainer", this) as Border;
-            if (textEditorContainer == null) return;
+            if (textEditorContainer == null)
+            {
+                return;
+            }
 
             if (ListNode.IsEditing)
-                textEditorContainer.Child = CellEditor ?? new TreeListExEditTextBox {Item = ParentItem};
-            else textEditorContainer.Child = null;
+            {
+                textEditorContainer.Child = CellEditor ?? new TreeListExEditTextBox
+                {
+                    Item = ParentItem
+                };
+            }
+            else
+            {
+                textEditorContainer.Child = null;
+            }
         }
 
         private void UpdateTemplate()
         {
             var spacer = Template.FindName("spacer", this) as FrameworkElement;
-            if (spacer == null) return;
+            if (spacer == null)
+            {
+                return;
+            }
 
             spacer.Width = CalculateIndent();
 
             var expander = Template.FindName("expander", this) as ToggleButton;
-            if (expander == null) return;
+            if (expander == null)
+            {
+                return;
+            }
 
             if (ParentTreeList.Root == ListNode && !ParentTreeList.ShowRootExpander)
+            {
                 expander.Visibility = Visibility.Collapsed;
+            }
             else
+            {
                 expander.ClearValue(VisibilityProperty);
+            }
         }
 
         internal double CalculateIndent()
@@ -149,11 +182,15 @@ namespace SharpLib.Wpf.Controls
                 if (!ParentTreeList.ShowRootExpander)
                 {
                     if (ParentTreeList.Root != ListNode)
+                    {
                         result -= 15;
+                    }
                 }
             }
             else
+            {
                 result -= 19;
+            }
             if (result < 0)
             {
                 Debug.WriteLine("Negative indent level detected for listNode " + ListNode);

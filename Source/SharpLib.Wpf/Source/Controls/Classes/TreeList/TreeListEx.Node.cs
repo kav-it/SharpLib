@@ -31,8 +31,6 @@ namespace SharpLib.Wpf.Controls
 
         private bool _lazyLoading;
 
-        private TreeListExNode _left;
-
         internal TreeListExNode _listParent;
 
         private TreeListExNodeCollection _modelChildren;
@@ -41,16 +39,24 @@ namespace SharpLib.Wpf.Controls
 
         private TreeListExNode _right;
 
+        private TreeListExNode _left;
+
         private int _totalListLength;
 
         internal TreeListExFlattener _treeListFlattener;
 
-        protected TreeListExNode()
+        /// <summary>
+        /// Класс сортировка дерева (если указан)
+        /// </summary>
+        internal IComparer<TreeListExNode> Sorter
         {
-            _totalListLength = -1;
-            _isVisible = true;
-            _height = 1;
-            _canExpandRecursively = true;
+            get
+            {
+                var listRoot = GetListRoot();
+                var sorter = listRoot._treeListFlattener._tree.Sorter;
+
+                return sorter;
+            }
         }
 
         #endregion
@@ -108,10 +114,14 @@ namespace SharpLib.Wpf.Controls
                 {
                     _isHidden = value;
                     if (_modelParent != null)
+                    {
                         UpdateIsVisible(_modelParent._isVisible && _modelParent._isExpanded, true);
+                    }
                     RaisePropertyChanged("IsHidden");
                     if (Parent != null)
+                    {
                         Parent.RaisePropertyChanged("ShowExpander");
+                    }
                 }
             }
         }
@@ -147,6 +157,9 @@ namespace SharpLib.Wpf.Controls
             get { return LazyLoading || Children.Any(c => !c._isHidden); }
         }
 
+        /// <summary>
+        /// Смена состояния "Expanded/Collapsed"
+        /// </summary>
         public bool IsExpanded
         {
             get { return _isExpanded; }
@@ -157,11 +170,16 @@ namespace SharpLib.Wpf.Controls
                     _isExpanded = value;
                     if (_isExpanded)
                     {
+                        // Разворачинвание родительского узла (если он свернут)
+                        ExpandParent(this);
+                        // 
                         EnsureLazyChildren();
                         OnExpanding();
                     }
                     else
+                    {
                         OnCollapsing();
+                    }
                     UpdateChildIsVisible(true);
                     RaisePropertyChanged("IsExpanded");
                 }
@@ -236,8 +254,7 @@ namespace SharpLib.Wpf.Controls
         {
             get
             {
-                return Parent == null ||
-                       Parent.Children[Parent.Children.Count - 1] == this;
+                return Parent == null || Parent.Children[Parent.Children.Count - 1] == this;
             }
         }
 
@@ -254,8 +271,38 @@ namespace SharpLib.Wpf.Controls
 
         #endregion
 
+        #region Конструктор
+
+        protected TreeListExNode()
+        {
+            _totalListLength = -1;
+            _isVisible = true;
+            _height = 1;
+            _canExpandRecursively = true;
+        }
+
+        #endregion
+
         #region Методы
 
+        /// <summary>
+        /// Рекурсивное разворачивание родительских узлов
+        /// </summary>
+        private void ExpandParent(TreeListExNode node)
+        {
+            if (node != null)
+            {
+                var parent = node.Parent;
+                if (parent != null && parent.IsExpanded == false)
+                {
+                    node.Parent.IsExpanded = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// "Высота элемента" (бинарное дерево)
+        /// </summary>
         private static int Height(TreeListExNode listNode)
         {
             return listNode != null ? listNode._height : 0;
@@ -265,8 +312,25 @@ namespace SharpLib.Wpf.Controls
         {
             TreeListExNode listNode = this;
             while (listNode._listParent != null)
+            {
                 listNode = listNode._listParent;
+            }
             return listNode;
+        }
+
+        /// <summary>
+        /// Чтение корневого элемента всего дерева
+        /// </summary>
+        internal TreeListExNode GetRoot()
+        {
+            var item = this;
+
+            while (item.Parent != null)
+            {
+                item = item.Parent;
+            }
+
+            return item;
         }
 
         private void UpdateIsVisible(bool parentIsVisible, bool updateFlattener)
@@ -286,13 +350,17 @@ namespace SharpLib.Wpf.Controls
                 // Remember the removed listNodes:
                 List<TreeListExNode> removedNodes = null;
                 if (updateFlattener && !newIsVisible)
+                {
                     removedNodes = VisibleDescendantsAndSelf().ToList();
+                }
                 // also update the model children:
                 UpdateChildIsVisible(false);
 
                 // Validate our invariants:
                 if (updateFlattener)
+                {
                     CheckRootInvariants();
+                }
 
                 // Tell the flattener about the removed listNodes:
                 if (removedNodes != null)
@@ -302,7 +370,9 @@ namespace SharpLib.Wpf.Controls
                     {
                         flattener.NodesRemoved(GetVisibleIndexForNode(this), removedNodes);
                         foreach (var n in removedNodes)
+                        {
                             n.OnIsVisibleChanged();
+                        }
                     }
                 }
                 // Tell the flattener about the new listNodes:
@@ -313,7 +383,9 @@ namespace SharpLib.Wpf.Controls
                     {
                         flattener.NodesInserted(GetVisibleIndexForNode(this), VisibleDescendantsAndSelf());
                         foreach (var n in VisibleDescendantsAndSelf())
+                        {
                             n.OnIsVisibleChanged();
+                        }
                     }
                 }
             }
@@ -329,7 +401,9 @@ namespace SharpLib.Wpf.Controls
             {
                 bool showChildren = _isVisible && _isExpanded;
                 foreach (TreeListExNode child in _modelChildren)
+                {
                     child.UpdateIsVisible(showChildren, updateFlattener);
+                }
             }
         }
 
@@ -352,10 +426,11 @@ namespace SharpLib.Wpf.Controls
                 {
                     Debug.Assert(node._modelParent == this);
                     node._modelParent = null;
-                    Debug.WriteLine("Removing {0} from {1}", node, this);
                     TreeListExNode removeEnd = node;
                     while (removeEnd._modelChildren != null && removeEnd._modelChildren.Count > 0)
+                    {
                         removeEnd = removeEnd._modelChildren.Last();
+                    }
 
                     List<TreeListExNode> removedNodes = null;
                     int visibleIndexOfRemoval = 0;
@@ -371,7 +446,9 @@ namespace SharpLib.Wpf.Controls
                     {
                         var flattener = GetListRoot()._treeListFlattener;
                         if (flattener != null)
+                        {
                             flattener.NodesRemoved(visibleIndexOfRemoval, removedNodes);
+                        }
                     }
                 }
             }
@@ -384,10 +461,11 @@ namespace SharpLib.Wpf.Controls
                     Debug.Assert(node._modelParent == null);
                     node._modelParent = this;
                     node.UpdateIsVisible(_isVisible && _isExpanded, false);
-                    //Debug.WriteLine("Inserting {0} after {1}", listNode, insertionPos);
 
                     while (insertionPos != null && insertionPos._modelChildren != null && insertionPos._modelChildren.Count > 0)
+                    {
                         insertionPos = insertionPos._modelChildren.Last();
+                    }
                     InsertNodeAfter(insertionPos ?? this, node);
 
                     insertionPos = node;
@@ -395,7 +473,9 @@ namespace SharpLib.Wpf.Controls
                     {
                         var flattener = GetListRoot()._treeListFlattener;
                         if (flattener != null)
+                        {
                             flattener.NodesInserted(GetVisibleIndexForNode(node), node.VisibleDescendantsAndSelf());
+                        }
                     }
                 }
             }
@@ -449,13 +529,17 @@ namespace SharpLib.Wpf.Controls
         public IEnumerable<TreeListExNode> Ancestors()
         {
             for (TreeListExNode n = Parent; n != null; n = n.Parent)
+            {
                 yield return n;
+            }
         }
 
         public IEnumerable<TreeListExNode> AncestorsAndSelf()
         {
             for (TreeListExNode n = this; n != null; n = n.Parent)
+            {
                 yield return n;
+            }
         }
 
         public virtual string LoadEditText()
@@ -481,7 +565,9 @@ namespace SharpLib.Wpf.Controls
                         foreach (var child in Descendants())
                         {
                             if (child.IsCheckable)
+                            {
                                 child.SetIsChecked(IsChecked, false);
+                            }
                         }
                     }
 
@@ -492,7 +578,9 @@ namespace SharpLib.Wpf.Controls
                             if (!parent.TryValueForIsChecked(true))
                             {
                                 if (!parent.TryValueForIsChecked(false))
+                                {
                                     parent.SetIsChecked(null, false);
+                                }
                             }
                         }
                     }
@@ -512,19 +600,9 @@ namespace SharpLib.Wpf.Controls
             return false;
         }
 
-        public void Delete(TreeListExNode node)
-        {
-            Children.Remove(node);
-        }
-
         public virtual bool CanDelete(TreeListExNode[] listNodes)
         {
             return false;
-        }
-
-        public virtual void Delete(TreeListExNode[] listNodes)
-        {
-            throw new NotSupportedException(GetType().Name + " does not support deletion");
         }
 
         public virtual void DeleteWithoutConfirmation(TreeListExNode[] listNodes)
@@ -556,7 +634,9 @@ namespace SharpLib.Wpf.Controls
         {
             var data = GetDataObject(listNodes);
             if (data != null)
-                Clipboard.SetDataObject(data, copy: true);
+            {
+                Clipboard.SetDataObject(data, true);
+            }
         }
 
         protected virtual IDataObject GetDataObject(TreeListExNode[] listNodes)
@@ -580,13 +660,19 @@ namespace SharpLib.Wpf.Controls
             // Derived classes should override this method
             var data = GetDataObject(listNodes);
             if (data == null)
+            {
                 return;
+            }
             DragDropEffects effects = DragDropEffects.Copy;
             if (CanDelete(listNodes))
+            {
                 effects |= DragDropEffects.Move;
+            }
             DragDropEffects result = DragDrop.DoDragDrop(dragSource, data, effects);
             if (result == DragDropEffects.Move)
+            {
                 DeleteWithoutConfirmation(listNodes);
+            }
         }
 
         public virtual DragDropEffects GetDropEffect(DragEventArgs e, int index)
@@ -599,7 +685,9 @@ namespace SharpLib.Wpf.Controls
                 // If moving is not allowed -> copy
                 // Otherwise: move
                 if ((e.KeyStates & DragDropKeyStates.ControlKey) != 0 || (e.AllowedEffects & DragDropEffects.Move) == 0)
+                {
                     return DragDropEffects.Copy;
+                }
                 return DragDropEffects.Move;
             }
             return DragDropEffects.None;
@@ -631,7 +719,9 @@ namespace SharpLib.Wpf.Controls
                     if (e.NewStartingIndex == Children.Count - 1)
                     {
                         if (Children.Count > 1)
+                        {
                             Children[Children.Count - 2].RaisePropertyChanged("IsLast");
+                        }
                         Children[Children.Count - 1].RaisePropertyChanged("IsLast");
                     }
                     break;
@@ -639,7 +729,9 @@ namespace SharpLib.Wpf.Controls
                     if (e.OldStartingIndex == Children.Count)
                     {
                         if (Children.Count > 0)
+                        {
                             Children[Children.Count - 1].RaisePropertyChanged("IsLast");
+                        }
                     }
                     break;
             }
@@ -648,7 +740,9 @@ namespace SharpLib.Wpf.Controls
         public void RaisePropertyChanged(string name)
         {
             if (PropertyChanged != null)
+            {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
         }
 
         protected virtual object GetModel()
@@ -670,8 +764,14 @@ namespace SharpLib.Wpf.Controls
             Debug.Assert(_height == 1 + Math.Max(Height(_left), Height(_right)));
             Debug.Assert(Math.Abs(Balance) <= 1);
             Debug.Assert(_totalListLength == -1 || _totalListLength == (_left != null ? _left._totalListLength : 0) + (_isVisible ? 1 : 0) + (_right != null ? _right._totalListLength : 0));
-            if (_left != null) _left.CheckInvariants();
-            if (_right != null) _right.CheckInvariants();
+            if (_left != null)
+            {
+                _left.CheckInvariants();
+            }
+            if (_right != null)
+            {
+                _right.CheckInvariants();
+            }
         }
 
         [Conditional("DEBUG")]
@@ -687,12 +787,16 @@ namespace SharpLib.Wpf.Controls
         {
             Debug.Indent();
             if (_left != null)
+            {
                 _left.DumpTree();
+            }
             Debug.Unindent();
             Debug.WriteLine("{0}, totalListLength={1}, height={2}, Balance={3}, isVisible={4}", ToString(), _totalListLength, _height, Balance, _isVisible);
             Debug.Indent();
             if (_right != null)
+            {
                 _right.DumpTree();
+            }
             Debug.Unindent();
         }
 
@@ -705,15 +809,21 @@ namespace SharpLib.Wpf.Controls
             while (true)
             {
                 if (listNode._left != null && index < listNode._left._totalListLength)
+                {
                     listNode = listNode._left;
+                }
                 else
                 {
                     if (listNode._left != null)
+                    {
                         index -= listNode._left._totalListLength;
+                    }
                     if (listNode._isVisible)
                     {
                         if (index == 0)
+                        {
                             return listNode;
+                        }
                         index--;
                     }
                     listNode = listNode._right;
@@ -729,9 +839,13 @@ namespace SharpLib.Wpf.Controls
                 if (listNode == listNode._listParent._right)
                 {
                     if (listNode._listParent._left != null)
+                    {
                         index += listNode._listParent._left.GetTotalListLength();
+                    }
                     if (listNode._listParent._isVisible)
+                    {
                         index++;
+                    }
                 }
                 listNode = listNode._listParent;
             }
@@ -739,7 +853,7 @@ namespace SharpLib.Wpf.Controls
         }
 
         /// <summary>
-        /// Balances the subtree rooted in <paramref name="listNode"/> and recomputes the 'height' field.
+        /// Баланс поддерева и пересчет "высоты"
         /// This method assumes that the children of this listNode are already balanced and have an up-to-date 'height' value.
         /// </summary>
         /// <returns>The new root listNode</returns>
@@ -757,7 +871,9 @@ namespace SharpLib.Wpf.Controls
                 if (listNode.Balance > 1)
                 {
                     if (listNode._right != null && listNode._right.Balance < 0)
+                    {
                         listNode._right = listNode._right.RotateRight();
+                    }
                     listNode = listNode.RotateLeft();
                     // If 'listNode' was unbalanced by more than 2, we've shifted some of the inbalance to the left listNode; so rebalance that.
                     listNode._left = Rebalance(listNode._left);
@@ -765,7 +881,9 @@ namespace SharpLib.Wpf.Controls
                 else if (listNode.Balance < -1)
                 {
                     if (listNode._left != null && listNode._left.Balance > 0)
+                    {
                         listNode._left = listNode._left.RotateLeft();
+                    }
                     listNode = listNode.RotateRight();
                     // If 'listNode' was unbalanced by more than 2, we've shifted some of the inbalance to the right listNode; so rebalance that.
                     listNode._right = Rebalance(listNode._right);
@@ -781,12 +899,18 @@ namespace SharpLib.Wpf.Controls
         internal int GetTotalListLength()
         {
             if (_totalListLength >= 0)
+            {
                 return _totalListLength;
+            }
             int length = (_isVisible ? 1 : 0);
             if (_left != null)
+            {
                 length += _left.GetTotalListLength();
+            }
             if (_right != null)
+            {
                 length += _right.GetTotalListLength();
+            }
             return _totalListLength = length;
         }
 
@@ -803,7 +927,10 @@ namespace SharpLib.Wpf.Controls
             TreeListExNode b = _right._left;
             TreeListExNode newTop = _right;
 
-            if (b != null) b._listParent = this;
+            if (b != null)
+            {
+                b._listParent = this;
+            }
             _right = b;
             newTop._left = this;
             newTop._listParent = _listParent;
@@ -826,7 +953,10 @@ namespace SharpLib.Wpf.Controls
             TreeListExNode b = _left._right;
             TreeListExNode newTop = _left;
 
-            if (b != null) b._listParent = this;
+            if (b != null)
+            {
+                b._listParent = this;
+            }
             _left = b;
             newTop._right = this;
             newTop._listParent = _listParent;
@@ -835,25 +965,27 @@ namespace SharpLib.Wpf.Controls
             return newTop;
         }
 
-        private static void RebalanceUntilRoot(TreeListExNode pos)
+        private static void RebalanceUntilRoot(TreeListExNode node)
         {
-            while (pos._listParent != null)
+            while (node._listParent != null)
             {
-                if (pos == pos._listParent._left)
-                    pos = pos._listParent._left = Rebalance(pos);
+                if (node == node._listParent._left)
+                {
+                    node = node._listParent._left = Rebalance(node);
+                }
                 else
                 {
-                    Debug.Assert(pos == pos._listParent._right);
-                    pos = pos._listParent._right = Rebalance(pos);
+                    Debug.Assert(node == node._listParent._right);
+                    node = node._listParent._right = Rebalance(node);
                 }
-                pos = pos._listParent;
+                node = node._listParent;
             }
-            TreeListExNode newRoot = Rebalance(pos);
-            if (newRoot != pos && pos._treeListFlattener != null)
+            TreeListExNode newRoot = Rebalance(node);
+            if (newRoot != node && node._treeListFlattener != null)
             {
                 Debug.Assert(newRoot._treeListFlattener == null);
-                newRoot._treeListFlattener = pos._treeListFlattener;
-                pos._treeListFlattener = null;
+                newRoot._treeListFlattener = node._treeListFlattener;
+                node._treeListFlattener = null;
                 newRoot._treeListFlattener._root = newRoot;
             }
             Debug.Assert(newRoot._listParent == null);
@@ -874,7 +1006,9 @@ namespace SharpLib.Wpf.Controls
                 // insert before pos.right's leftmost:
                 pos = pos._right;
                 while (pos._left != null)
+                {
                     pos = pos._left;
+                }
                 Debug.Assert(pos._left == null);
                 pos._left = newListNode;
                 newListNode._listParent = pos;
@@ -896,7 +1030,9 @@ namespace SharpLib.Wpf.Controls
                 // recalculate the endAncestors every time, because the tree might have been rebalanced
                 HashSet<TreeListExNode> endAncestors = new HashSet<TreeListExNode>();
                 for (TreeListExNode tmp = end; tmp != null; tmp = tmp._listParent)
+                {
                     endAncestors.Add(tmp);
+                }
 
                 removedSubtrees.Add(pos);
                 if (!endAncestors.Contains(pos))
@@ -910,7 +1046,7 @@ namespace SharpLib.Wpf.Controls
                     }
                 }
                 TreeListExNode succ = pos.Successor();
-                DeleteNode(pos); // this will also rebalance out the deletion of the right subtree
+                DeleteNodeInternal(pos); // this will also rebalance out the deletion of the right subtree
 
                 oldPos = pos;
                 pos = succ;
@@ -919,14 +1055,18 @@ namespace SharpLib.Wpf.Controls
             // merge back together the removed subtrees:
             TreeListExNode removed = removedSubtrees[0];
             for (int i = 1; i < removedSubtrees.Count; i++)
+            {
                 removed = ConcatTrees(removed, removedSubtrees[i]);
+            }
         }
 
         private static TreeListExNode ConcatTrees(TreeListExNode first, TreeListExNode second)
         {
             TreeListExNode tmp = first;
             while (tmp._right != null)
+            {
                 tmp = tmp._right;
+            }
             InsertNodeAfter(tmp, second);
             return tmp.GetListRoot();
         }
@@ -937,7 +1077,9 @@ namespace SharpLib.Wpf.Controls
             {
                 TreeListExNode listNode = _right;
                 while (listNode._left != null)
+                {
                     listNode = listNode._left;
+                }
                 return listNode;
             }
             else
@@ -954,7 +1096,7 @@ namespace SharpLib.Wpf.Controls
             }
         }
 
-        private static void DeleteNode(TreeListExNode listNode)
+        private void DeleteNodeInternal(TreeListExNode listNode)
         {
             TreeListExNode balancingListNode;
             if (listNode._left == null)
@@ -973,7 +1115,9 @@ namespace SharpLib.Wpf.Controls
             {
                 TreeListExNode tmp = listNode._right;
                 while (tmp._left != null)
+                {
                     tmp = tmp._left;
+                }
                 // First replace tmp with tmp.right
                 balancingListNode = tmp._listParent;
                 tmp.ReplaceWith(tmp._right);
@@ -985,12 +1129,20 @@ namespace SharpLib.Wpf.Controls
                 listNode._left = null;
                 tmp._right = listNode._right;
                 listNode._right = null;
-                if (tmp._left != null) tmp._left._listParent = tmp;
-                if (tmp._right != null) tmp._right._listParent = tmp;
+                if (tmp._left != null)
+                {
+                    tmp._left._listParent = tmp;
+                }
+                if (tmp._right != null)
+                {
+                    tmp._right._listParent = tmp;
+                }
                 // Then replace listNode with tmp
                 listNode.ReplaceWith(tmp);
                 if (balancingListNode == listNode)
+                {
                     balancingListNode = tmp;
+                }
             }
             Debug.Assert(listNode._listParent == null);
             Debug.Assert(listNode._left == null);
@@ -998,7 +1150,9 @@ namespace SharpLib.Wpf.Controls
             listNode._height = 1;
             listNode._totalListLength = -1;
             if (balancingListNode != null)
+            {
                 RebalanceUntilRoot(balancingListNode);
+            }
         }
 
         private void ReplaceWith(TreeListExNode listNode)
@@ -1006,14 +1160,18 @@ namespace SharpLib.Wpf.Controls
             if (_listParent != null)
             {
                 if (_listParent._left == this)
+                {
                     _listParent._left = listNode;
+                }
                 else
                 {
                     Debug.Assert(_listParent._right == this);
                     _listParent._right = listNode;
                 }
                 if (listNode != null)
+                {
                     listNode._listParent = _listParent;
+                }
                 _listParent = null;
             }
             else
@@ -1031,9 +1189,144 @@ namespace SharpLib.Wpf.Controls
             }
         }
 
-        public void AddNode(TreeListExNode node)
+        /// <summary>
+        /// Развернуть все (рекурсивно)
+        /// </summary>
+        private void ExpandRecursively(TreeListExNode listNode)
         {
-            Children.Add(node);
+            if (listNode.CanExpandRecursively)
+            {
+                listNode.IsExpanded = true;
+                foreach (var child in listNode.Children)
+                {
+                    ExpandRecursively(child);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Свернуть все (рекурсивно)
+        /// </summary>
+        private void CollapseRecursively(TreeListExNode listNode)
+        {
+            if (listNode.CanExpandRecursively)
+            {
+                listNode.IsExpanded = false;
+                foreach (var child in listNode.Children)
+                {
+                    CollapseRecursively(child);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Разввернуть узел
+        /// </summary>
+        public void Expand()
+        {
+            IsExpanded = true;
+        }
+
+        /// <summary>
+        /// Свернуть узел
+        /// </summary>
+        public void Collapse()
+        {
+            IsExpanded = false;
+        }
+
+        /// <summary>
+        /// Свернуть все элементы
+        /// </summary>
+        public void ExpandAll()
+        {
+            ExpandRecursively(this);
+        }
+
+        /// <summary>
+        /// Развернуть все элементы
+        /// </summary>
+        public void CollapseAll()
+        {
+            CollapseRecursively(this);
+        }
+
+        /// <summary>
+        /// Добавление элемента
+        /// </summary>
+        public void AddChild(TreeListExNode node)
+        {
+            var sorter = Sorter;
+            if (sorter != null)
+            {
+                var tempList = new List<TreeListExNode>(Children);
+                var index = tempList.BinarySearch(node, sorter);
+                if (index < 0) index = ~index;
+                Children.Insert(index, node);
+            }
+            else
+            {
+                Children.Add(node);    
+            }
+        }
+
+        /// <summary>
+        /// Удаление дочернего элемента
+        /// </summary>
+        public void DeleteChild(TreeListExNode node)
+        {
+            Children.Remove(node);
+        }
+
+        /// <summary>
+        /// Удаление дочерних элементов 
+        /// </summary>
+        public void DeleteChilds(IEnumerable<TreeListExNode> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                Children.Remove(node);
+            }
+        }
+
+        /// <summary>
+        /// Удаление указанного элемента из дерева
+        /// </summary>
+        public void DeleteNode(TreeListExNode node)
+        {
+            var parernt = node.Parent;
+
+            if (parernt != null)
+            {
+                parernt.DeleteChild(node);
+            }
+        }
+
+        /// <summary>
+        /// Удаление указанных элементов из дерева
+        /// </summary>
+        public void DeleteNodes(IEnumerable<TreeListExNode> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                DeleteNode(node);
+            }
+        }
+
+        /// <summary>
+        /// Сортировка элеметов
+        /// </summary>
+        public void Sort()
+        {
+            var sorter = Sorter;
+            if (sorter != null)
+            {
+                var tempList = new List<TreeListExNode>(Children);
+                tempList.Sort(sorter);
+
+                Children.RemoveRange(0, Children.Count);
+                Children.AddRange(tempList);
+            }
         }
 
         #endregion

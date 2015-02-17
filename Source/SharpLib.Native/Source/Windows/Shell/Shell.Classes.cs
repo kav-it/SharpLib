@@ -5,6 +5,12 @@ namespace SharpLib.Native.Windows
 {
     public partial class NativeMethods
     {
+        private const uint SHGFI_ICON = 0x100;
+
+        private const uint SHGFI_LARGEICON = 0x0;
+
+        private const uint SHGFI_SMALLICON = 0x1;
+
         #region Перечисления
 
         [Flags]
@@ -156,6 +162,26 @@ namespace SharpLib.Native.Windows
 
             public int InfoFlags;
         }
+
+        #endregion
+
+        #region Вложенный класс: SHFILEINFO
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct SHFILEINFO
+        {
+            internal readonly IntPtr hIcon;
+
+            internal readonly IntPtr iIcon;
+
+            internal readonly uint dwAttributes;
+
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            internal readonly string szDisplayName;
+
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
+            internal readonly string szTypeName;
+        };
 
         #endregion
     }

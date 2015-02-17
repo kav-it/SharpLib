@@ -15,7 +15,7 @@ namespace SharpLib.Wpf.Controls
         /// <returns>Iterator that enumerates the tree structure in pre-order.</returns>
         public static IEnumerable<T> PreOrder<T>(T root, Func<T, IEnumerable<T>> recursion)
         {
-            return PreOrder(new[] {root}, recursion);
+            return PreOrder(new[] { root }, recursion);
         }
 
         /// <summary>
@@ -38,7 +38,9 @@ namespace SharpLib.Wpf.Controls
                         yield return element;
                         IEnumerable<T> children = recursion(element);
                         if (children != null)
+                        {
                             stack.Push(children.GetEnumerator());
+                        }
                     }
                     stack.Pop().Dispose();
                 }
@@ -46,7 +48,9 @@ namespace SharpLib.Wpf.Controls
             finally
             {
                 while (stack.Count > 0)
+                {
                     stack.Pop().Dispose();
+                }
             }
         }
 

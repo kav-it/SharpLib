@@ -54,6 +54,13 @@
       <Link>Source\SharpLib.Version.cs</Link>
     </Compile>
     <Compile Include="Source\AssemblyInfo.cs" />
+    <Compile Include="Source\Controls\Classes\Breadcrumb\Breadcrumb.Aero.cs" />
+    <Compile Include="Source\Controls\Classes\Breadcrumb\Breadcrumb.Bar.cs" />
+    <Compile Include="Source\Controls\Classes\Breadcrumb\Breadcrumb.Button.cs" />
+    <Compile Include="Source\Controls\Classes\Breadcrumb\Breadcrumb.Item.cs" />
+    <Compile Include="Source\Controls\Classes\Breadcrumb\EventArgs\ApplyPropertiesEventArgs.cs" />
+    <Compile Include="Source\Controls\Classes\Breadcrumb\EventArgs\BreadcrumbItemEventArgs.cs" />
+    <Compile Include="Source\Controls\Classes\Breadcrumb\EventArgs\PathConversionEventArgs.cs" />
     <Compile Include="Source\Controls\Classes\ComboBoxEx.cs" />
     <Compile Include="Source\Controls\Classes\Shape\ShapeEx.Type.cs" />
     <Compile Include="Source\Controls\Classes\Shape\ShapeEx.cs" />
@@ -72,17 +79,18 @@
     <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.EditTextBox.cs" />
     <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.CollapsedConverter.cs" />
     <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.cs" />
-    <Compile Include="Source\Controls\Classes\TreeList\TreeListExNode.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.Node.cs" />
     <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.ExtensionMethods.cs" />
     <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.Flattener.cs" />
     <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.GeneralAdorner.cs" />
     <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.GridView.cs" />
     <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.InsertMarker.cs" />
     <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.LinesRenderer.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.Sorter.cs" />
     <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.Traversal.cs" />
     <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.ViewItem.cs" />
-    <Compile Include="Source\Controls\Classes\TreeList\TreeListExNodeCollection.cs" />
-    <Compile Include="Source\Controls\Classes\TreeList\TreeListExNodeView.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.NodeCollection.cs" />
+    <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.NodeView.cs" />
     <Compile Include="Source\Controls\FlipPanel.cs" />
     <Compile Include="Source\Controls\User\ListView\ListViewEx.Control.xaml.cs">
       <DependentUpon>ListViewEx.Control.xaml</DependentUpon>
@@ -105,6 +113,13 @@
     <Compile Include="Source\Extensions\Extension.WinForms.cs" />
     <Compile Include="Source\Helpers\ContextMenu\MenuItem.Base.cs" />
     <Compile Include="Source\Helpers\ContextMenu\ContextMenu.Base.cs" />
+    <Compile Include="Source\Helpers\Dialogs\Dialog.Custom.Filename.Comparer.cs" />
+    <Compile Include="Source\Helpers\Dialogs\Dialog.Custom.SelectMode.cs" />
+    <Compile Include="Source\Helpers\Dialogs\Dialog.Custom.Helper.cs" />
+    <Compile Include="Source\Helpers\Dialogs\Dialog.Custom.History.cs" />
+    <Compile Include="Source\Helpers\Dialogs\Dialog.Custom.xaml.cs">
+      <DependentUpon>Dialog.Custom.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Source\Helpers\Dialogs\Dialog.Filter.cs" />
     <Compile Include="Source\Helpers\Dialogs\Dialogs.cs" />
     <Compile Include="Source\Helpers\DragDrop\Handlers\DefaultDragHandler.cs" />
@@ -130,6 +145,7 @@
     <Compile Include="Source\Helpers\Gui\Gui.Images.cs" />
     <Compile Include="Source\Helpers\Keyboard\Keyboarder.cs" />
     <Compile Include="Source\Helpers\NotifyProperty\NotifyModelBase.cs" />
+    <Compile Include="Source\Helpers\Shell\Shell.cs" />
     <Compile Include="Source\Helpers\VsHelper.cs" />
     <Compile Include="Source\Helpers\Gui\Gui.cs" />
     <Compile Include="Source\Helpers\ResourcesWpf.cs" />
@@ -216,6 +232,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Source\Controls\User\OkCancel\OkCancel.Control.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Helpers\Dialogs\Dialog.Custom.Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Helpers\Dialogs\Dialog.Custom.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

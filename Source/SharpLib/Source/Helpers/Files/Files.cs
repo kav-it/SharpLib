@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 
 namespace SharpLib
@@ -36,6 +37,18 @@ namespace SharpLib
         }
 
         /// <summary>
+        /// Удаление последнего разделителя (если он есть)
+        /// </summary>
+        /// <example>
+        /// Input:  'C:\Folder 1\'
+        /// Result: 'C:\Folder 1'
+        /// </example>
+        public static string RemoveLastSeparator(string path)
+        {
+            return path.TrimEnd('/', '\\');
+        }
+
+        /// <summary>
         /// Формирование относительного пути
         /// </summary>
         public static string GetPathRelative(string path1, string path2, bool removeLastDelimetr = false)
@@ -51,7 +64,7 @@ namespace SharpLib
 
             if (removeLastDelimetr)
             {
-                result = result.TrimEnd('/', '\\');
+                result = RemoveLastSeparator(result);
             }
 
             return result;
@@ -75,14 +88,24 @@ namespace SharpLib
             basePath = AddPathSeparator(basePath);
             if (relativePath.IsNotValid()) return basePath;
 
-            if (IsDirectory(relativePath))
+            bool removeLastDelimetr = false;
+            if (Directory.Exists(relativePath))
             {
                 relativePath = AddPathSeparator(relativePath);    
+            }
+            else
+            {
+                removeLastDelimetr = true;
             }
 
             var baseUri = new Uri(basePath);
             var absUri = new Uri(baseUri, relativePath);
             var result = absUri.LocalPath;
+
+            if (removeLastDelimetr)
+            {
+                result = RemoveLastSeparator(result);
+            }
 
             return result;
         }
@@ -126,11 +149,17 @@ namespace SharpLib
         /// </remarks>
         public static string GetDirectory(string location)
         {
-            if (IsDirectory(location))
+            if (Directory.Exists(location))
             {
                 return location;
             }
 
+            if (File.Exists(location))
+            {
+                return Path.GetDirectoryName(location);
+            }
+
+            // Элемент не существует - Считается что файл
             return Path.GetDirectoryName(location);
         }
 
@@ -193,9 +222,9 @@ namespace SharpLib
                 return false;
             }
 
-            bool result = Directory.Exists(path);
+            var attr = File.GetAttributes(path);
 
-            return result;
+            return attr.IsFlagSet(FileAttributes.Directory);
         }
 
         /// <summary>
@@ -208,9 +237,9 @@ namespace SharpLib
                 return false;
             }
 
-            bool result = File.Exists(path);
+            var attr = File.GetAttributes(path);
 
-            return result;
+            return (attr.IsFlagSet(FileAttributes.Directory) == false);
         }
 
         /// <summary>
@@ -272,13 +301,13 @@ namespace SharpLib
         /// <summary>
         /// Копирование файла
         /// </summary>
-        public static string CopyFile(string destPath, string filePath)
+        public static string CopyFile(string srcPath, string destPath)
         {
             if (string.IsNullOrEmpty(destPath))
             {
                 return string.Empty;
             }
-            if (string.IsNullOrEmpty(filePath))
+            if (string.IsNullOrEmpty(srcPath))
             {
                 return string.Empty;
             }
@@ -287,12 +316,7 @@ namespace SharpLib
 
             try
             {
-                if (Directory.Exists(destPath) == false)
-                {
-                    CreateDirectory(destPath);
-                }
-
-                string filename = GetFileNameAndExt(filePath);
+                string filename = GetFileNameAndExt(srcPath);
                 string newPath = PathEx.Combine(destPath, filename);
 
                 if (File.Exists(newPath))
@@ -300,7 +324,7 @@ namespace SharpLib
                     DeleteFile(newPath);
                 }
 
-                File.Copy(filePath, newPath);
+                File.Copy(srcPath, newPath);
 
                 return newPath;
             }
@@ -314,37 +338,72 @@ namespace SharpLib
         /// <summary>
         /// Копирование директории (с рекурсивным содержимым)
         /// </summary>
-        public static string CopyDirectory(string destDir, string srcDir)
+        public static string CopyDirectory(string srcDir, string destDir)
         {
-            // Создание директорий назначений
-            foreach (string dirPath in GetDirectories(srcDir))
+            destDir = Path.Combine(destDir, GetFileName(srcDir));
+
+            if (Directory.Exists(destDir) == false)
             {
-                Directory.CreateDirectory(dirPath.Replace(srcDir, destDir));
+                Directory.CreateDirectory(destDir);
+            }
+
+            // Создание директорий назначений
+            var dirs = GetDirectories(srcDir).ToList();
+            foreach (string dirPath in dirs)
+            {
+                var newDir = dirPath.Replace(srcDir, destDir);
+                Directory.CreateDirectory(newDir);
             }
 
             // Копирование всех файлов
-            foreach (string newPath in GetFiles(srcDir))
+            var files = GetFiles(srcDir).ToList();
+            foreach (string srcPath in files)
             {
-                File.Copy(newPath, newPath.Replace(srcDir, destDir), true);
+                var destFile = srcPath.Replace(srcDir, destDir);
+
+                if (File.Exists(destFile))
+                {
+                    File.Delete(destFile);
+                }
+
+                File.Copy(srcPath, destFile);
             }
 
-            return Path.Combine(destDir, Files.GetFileName(srcDir));
+            return destDir;
         }
 
         /// <summary>
         /// Чтение списка файлов в директории
         /// </summary>
-        public static IEnumerable<string> GetFiles(string path, bool recursive = true, string mask = "*.*")
+        public static IEnumerable<string> GetFiles(string path, bool recursive = true, bool includeHidden = true, string mask = "*.*")
         {
-            return Directory.GetFiles(path, mask, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+            var result = Directory.GetFiles(path, mask, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+
+            if (includeHidden == false && result.Any())
+            {
+                var filtered = result.Where(x => new DirectoryInfo(x).Attributes.HasFlag(FileAttributes.Hidden) == false);
+
+                return filtered;
+            }
+
+            return result;
         }
 
         /// <summary>
         /// Чтение списка директорий в директории
         /// </summary>
-        public static IEnumerable<string> GetDirectories(string path, bool recursive = true, string mask = "*")
+        public static IEnumerable<string> GetDirectories(string path, bool recursive = true, bool includeHidden = true, string mask = "*")
         {
-            return Directory.GetDirectories(path, mask, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+            var result = Directory.GetDirectories(path, mask, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+
+            if (includeHidden == false && result.Any())
+            {
+                var filtered = result.Where(x => new DirectoryInfo(x).Attributes.HasFlag(FileAttributes.Hidden) == false);
+
+                return filtered;
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -436,58 +495,42 @@ namespace SharpLib
         /// <summary>
         /// Удаление каталога
         /// </summary>
-        public static bool DeleteDirectory(string dirPath)
+        public static void DeleteDirectory(string dirPath)
         {
-            try
+            var listSubFolders = Directory.GetDirectories(dirPath);
+
+            foreach (var subFolder in listSubFolders)
             {
-                var listSubFolders = Directory.GetDirectories(dirPath);
-
-                foreach (var subFolder in listSubFolders)
-                {
-                    DeleteDirectory(subFolder);
-                }
-
-                var files = Directory.GetFiles(dirPath);
-                foreach (var f in files)
-                {
-                    var attr = File.GetAttributes(f);
-
-                    if (attr.IsFlagSet(FileAttributes.ReadOnly))
-                    {
-                        File.SetAttributes(f, attr ^ FileAttributes.ReadOnly);
-                    }
-
-                    File.Delete(f);
-                }
-
-                Directory.Delete(dirPath);
-
-                return true;
-            }
-            catch
-            {
+                DeleteDirectory(subFolder);
             }
 
-            return false;
+            var files = Directory.GetFiles(dirPath);
+            foreach (var f in files)
+            {
+                var attr = File.GetAttributes(f);
+
+                if (attr.IsFlagSet(FileAttributes.ReadOnly))
+                {
+                    File.SetAttributes(f, attr ^ FileAttributes.ReadOnly);
+                }
+
+                File.Delete(f);
+            }
+
+            Directory.Delete(dirPath);
         }
 
         /// <summary>
         /// Очистка каталога
         /// </summary>
-        public static bool EraseDirectory(string dirPath)
+        public static void EraseDirectory(string dirPath)
         {
-            Boolean result = DeleteDirectory(dirPath);
-            if (result == false)
-            {
-                return false;
-            }
+            DeleteDirectory(dirPath);
 
             // Ожидание завершения операции удаления каталога
             Thread.Sleep(50);
 
-            result = CreateDirectory(dirPath);
-
-            return result;
+            CreateDirectory(dirPath);
         }
 
         /// <summary>
@@ -537,6 +580,16 @@ namespace SharpLib
             }
 
             return path;
+        }
+
+        /// <summary>
+        /// Чтение размера 
+        /// </summary>
+        public static long GetFileSize(string location)
+        {
+            var info = new FileInfo(location);
+
+            return info.Length;
         }
 
         #endregion

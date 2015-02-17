@@ -3,6 +3,7 @@
                     xmlns:controls="clr-namespace:SharpLib.Wpf.Controls">
 
     <SolidColorBrush x:Key="KeyListBorder" Color="#FF7F9DB9" />
+    <Color x:Key="ListItemFocusedNot">#FFAABBCC</Color>
 
     <Style x:Key="KeyExpandCollapseToggleStyle"
            TargetType="{x:Type ToggleButton}">
@@ -79,8 +80,7 @@
         </Setter>
     </Style>
     
-    <Style TargetType="{x:Type controls:TreeListEx}"
-           BasedOn="{StaticResource {x:Type ListBox}}">
+    <Style TargetType="{x:Type controls:TreeListEx}" BasedOn="{StaticResource {x:Type ListBox}}">
         <Style.Triggers>
             <Trigger Property="ShowRoot" Value="False">
                 <Setter Property="Padding" Value="5 0 0 0" />
@@ -103,13 +103,14 @@
 
     <Style x:Key="{x:Static controls:TreeListExGridView.ItemContainerStyleKey}"
            TargetType="{x:Type ListViewItem}">
-        <Setter Property="Background"
-                Value="Transparent" />
-        <Setter Property="VerticalContentAlignment"
-                Value="Center" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
+                    <ControlTemplate.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="{StaticResource ListItemFocusedNot}" />
+                    </ControlTemplate.Resources>
                     <Border Name="Bd"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
@@ -160,10 +161,8 @@
                         </Trigger>
                         <!--<MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsSelected"
-                                           Value="True" />
-                                <Condition Property="Selector.IsSelectionActive"
-                                           Value="False" />
+                                <Condition Property="IsSelected" Value="True" />
+                                <Condition Property="Selector.IsSelectionActive" Value="False" />
                             </MultiTrigger.Conditions>
                             <Setter TargetName="nodeView"
                                     Property="TextBackground"
@@ -173,8 +172,7 @@
                                     Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
                         </MultiTrigger>-->
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="nodeView" Property="Foreground"
-                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                            <Setter TargetName="nodeView" Property="Foreground" Value="{StaticResource ListItemFocusedNot}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

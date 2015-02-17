@@ -27,7 +27,9 @@ namespace SharpLib.Wpf.Controls
         public static void AddOnce(this IList list, object item)
         {
             if (!list.Contains(item))
+            {
                 list.Add(item);
+            }
         }
 
         #endregion

@@ -56,20 +56,27 @@ namespace SharpLib
         /// <summary>
         /// Удаление последнего элемента
         /// </summary>
-        public static void RemoveLastEx<T>(this List<T> self)
+        public static void RemoveLastEx<T>(this List<T> self, int count = 1)
         {
             if (self.Any())
             {
-                self.RemoveAt(self.Count - 1);
+                var index = self.Count - count;
+
+                if (index < self.Count)
+                {
+                    self.RemoveRange(index, count);    
+                }
             }
         }
 
         /// <summary>
         /// Сортировка
         /// </summary>
-        public static List<TSource> SortEx<TSource, TKey>(this List<TSource> self, Func<TSource, TKey> keySelector)
+        public static List<TSource> SortEx<TSource, TKey>(this List<TSource> self, Func<TSource, TKey> keySelector, SortMode mode = SortMode.Ascending)
         {
-            return self.OrderBy(keySelector).ToList();
+            return mode == SortMode.Ascending 
+                ? self.OrderBy(keySelector).ToList()  
+                : self.OrderByDescending(keySelector).ToList();
         }
     }
 }

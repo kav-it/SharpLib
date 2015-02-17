@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Windows;
 
 using SharpLib.Wpf.Controls;
 
@@ -25,13 +23,19 @@ namespace DemoWpf
 
             var root = new TreeListFsNode("Root", 0, DateTime.Now, DateTime.Now);
             var child1 = new TreeListFsNode("Child1", 1, DateTime.Now, DateTime.Now);
-            var child2 = new TreeListFsNode("Child1", 1, DateTime.Now, DateTime.Now);
+            var child2 = new TreeListFsNode("Child2", 1, DateTime.Now, DateTime.Now);
+            var child3 = new TreeListFsNode("Child3", 1, DateTime.Now, DateTime.Now);
+            var child4 = new TreeListFsNode("Child4", 1, DateTime.Now, DateTime.Now);
 
-            // FillTree(root, 0);
-            root.Children.Add(child1);
-            root.Children.Add(child2);
-
+            PART_treeListEx.Sorter = TreeListExSorter.Default;
             PART_treeListEx.Root = root;
+
+            root.AddChild(child3);
+            root.AddChild(child4);
+            root.AddChild(child2);
+            root.AddChild(child1);
+
+            // root.Sort();
         }
 
         private void FillTree(TreeListExNode root, int level)
@@ -47,8 +51,6 @@ namespace DemoWpf
             //    item.Expanded += new RoutedEventHandler(folder_Expanded);
             //    foldersItem.Items.Add(item);
             //}
-
-            
         }
 
         #endregion

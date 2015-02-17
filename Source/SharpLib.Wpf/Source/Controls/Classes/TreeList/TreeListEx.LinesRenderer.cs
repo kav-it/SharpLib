@@ -38,9 +38,14 @@ namespace SharpLib.Wpf.Controls
             var p = new Point(indent + 4.5, 0);
 
             if (!ListNodeView.ListNode.IsRoot || ListNodeView.ParentTreeList.ShowRootExpander)
+            {
                 dc.DrawLine(_pen, new Point(p.X, ActualHeight / 2), new Point(p.X + 10, ActualHeight / 2));
+            }
 
-            if (ListNodeView.ListNode.IsRoot) return;
+            if (ListNodeView.ListNode.IsRoot)
+            {
+                return;
+            }
 
             dc.DrawLine(_pen, p, ListNodeView.ListNode.IsLast ? new Point(p.X, ActualHeight / 2) : new Point(p.X, ActualHeight));
 
@@ -49,9 +54,14 @@ namespace SharpLib.Wpf.Controls
             {
                 p.X -= 19;
                 current = current.Parent;
-                if (p.X < 0) break;
+                if (p.X < 0)
+                {
+                    break;
+                }
                 if (!current.IsLast)
+                {
                     dc.DrawLine(_pen, p, new Point(p.X, ActualHeight));
+                }
             }
         }
 

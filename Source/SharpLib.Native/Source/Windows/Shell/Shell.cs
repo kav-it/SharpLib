@@ -39,6 +39,10 @@ namespace SharpLib.Native.Windows
         [DllImport(DLLNAME_SHELL32, CharSet = CharSet.Auto, EntryPoint = "Shell_NotifyIcon")]
         public static extern int ShellNotifyIcon(int message, NotifyIconData pnid);
 
+        [DllImport(DLLNAME_SHELL32)]
+        private static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
+
+
         #endregion
     }
 }

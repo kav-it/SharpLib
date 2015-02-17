@@ -319,14 +319,14 @@ namespace SharpLib
             return list.ToArray();
         }
 
-        public static Boolean IsValid(this string value)
+        public static bool IsValid(this string value)
         {
-            Boolean result = (String.IsNullOrEmpty(value) == false);
+            bool result = (string.IsNullOrEmpty(value) == false);
 
             return result;
         }
 
-        public static Boolean IsNotValid(this string value)
+        public static bool IsNotValid(this string value)
         {
             return (value.IsValid() == false);
         }
@@ -571,6 +571,11 @@ namespace SharpLib
             Enum.TryParse(self, true, out result);
 
             return result;
+        }
+
+        public static int CompareToEx(this string self, string value, StringComparison comparsionType = StringComparison.Ordinal)
+        {
+            return string.Compare(self, value, comparsionType);
         }
 
         #endregion

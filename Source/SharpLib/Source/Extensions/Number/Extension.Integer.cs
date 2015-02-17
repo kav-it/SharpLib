@@ -153,6 +153,14 @@ namespace SharpLib
             return self;
         }
 
+        /// <summary>
+        /// Преобразование значение в файловый формат (1565485 = 1.5MB)
+        /// </summary>
+        public static string ToFileSizeEx(this int self, int divider = 1000)
+        {
+            return ((long)self).ToFileSizeEx(divider);
+        }
+
         #endregion
     }
 }

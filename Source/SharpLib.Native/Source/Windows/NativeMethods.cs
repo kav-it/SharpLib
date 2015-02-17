@@ -230,6 +230,46 @@ namespace SharpLib.Native.Windows
             return result;
         }
 
+        /// <summary>
+        /// Чтение маленькой иконки
+        /// </summary>
+        public static System.Drawing.Icon GetSmallIcon(string fileName)
+        {
+            var shinfo = new SHFILEINFO();
+            SHGetFileInfo(fileName, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), SHGFI_ICON | SHGFI_SMALLICON);
+            try
+            {
+                System.Drawing.Icon icon = (System.Drawing.Icon)System.Drawing.Icon.FromHandle(shinfo.hIcon).Clone();
+                DestroyIcon(shinfo.hIcon);
+
+                return icon;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Чтение большой иконки
+        /// </summary>
+        public static System.Drawing.Icon GetLargeIcon(string fileName)
+        {
+            var shinfo = new SHFILEINFO();
+            SHGetFileInfo(fileName, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), SHGFI_ICON | SHGFI_LARGEICON);
+
+            try
+            {
+                System.Drawing.Icon icon = (System.Drawing.Icon)System.Drawing.Icon.FromHandle(shinfo.hIcon).Clone();
+                DestroyIcon(shinfo.hIcon);
+                return icon;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         #endregion
     }
 }

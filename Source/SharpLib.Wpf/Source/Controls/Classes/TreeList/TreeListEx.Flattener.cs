@@ -12,13 +12,15 @@ namespace SharpLib.Wpf.Controls
 
         private readonly bool _includeRoot;
 
-        private readonly object _syncRoot = new object();
+        private readonly object _syncRoot;
 
         /// <summary>
         /// The root listNode of the flat list tree.
         /// Tjis is not necessarily the root of the model!
         /// </summary>
         internal TreeListExNode _root;
+
+        internal TreeListEx _tree;
 
         #endregion
 
@@ -29,7 +31,9 @@ namespace SharpLib.Wpf.Controls
             get
             {
                 if (index < 0 || index >= Count)
+                {
                     throw new ArgumentOutOfRangeException();
+                }
                 return TreeListExNode.GetNodeByVisibleIndex(_root, _includeRoot ? index : index + 1);
             }
             set { throw new NotSupportedException(); }
@@ -70,11 +74,15 @@ namespace SharpLib.Wpf.Controls
 
         #region Конструктор
 
-        public TreeListExFlattener(TreeListExNode modelRoot, bool includeRoot)
+        public TreeListExFlattener(TreeListEx tree, TreeListExNode modelRoot, bool includeRoot)
         {
+            _tree = tree;
+            _syncRoot = new object();
             _root = modelRoot;
             while (_root._listParent != null)
+            {
                 _root = _root._listParent;
+            }
             _root._treeListFlattener = this;
             _includeRoot = includeRoot;
         }
@@ -86,21 +94,33 @@ namespace SharpLib.Wpf.Controls
         public void RaiseCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             if (CollectionChanged != null)
+            {
                 CollectionChanged(this, e);
+            }
         }
 
         public void NodesInserted(int index, IEnumerable<TreeListExNode> nodes)
         {
-            if (!_includeRoot) index--;
+            if (!_includeRoot)
+            {
+                index--;
+            }
             foreach (TreeListExNode node in nodes)
+            {
                 RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, node, index++));
+            }
         }
 
         public void NodesRemoved(int index, IEnumerable<TreeListExNode> nodes)
         {
-            if (!_includeRoot) index--;
+            if (!_includeRoot)
+            {
+                index--;
+            }
             foreach (TreeListExNode node in nodes)
+            {
                 RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, node, index));
+            }
         }
 
         public void Stop()
@@ -115,7 +135,9 @@ namespace SharpLib.Wpf.Controls
             if (listNode != null && listNode.IsVisible && listNode.GetListRoot() == _root)
             {
                 if (_includeRoot)
+                {
                     return TreeListExNode.GetVisibleIndexForNode(listNode);
+                }
 
                 return TreeListExNode.GetVisibleIndexForNode(listNode) - 1;
             }
@@ -151,7 +173,9 @@ namespace SharpLib.Wpf.Controls
         public void CopyTo(Array array, int arrayIndex)
         {
             foreach (object item in this)
+            {
                 array.SetValue(item, arrayIndex++);
+            }
         }
 
         void IList.Remove(object item)
@@ -162,7 +186,9 @@ namespace SharpLib.Wpf.Controls
         public IEnumerator GetEnumerator()
         {
             for (int i = 0; i < Count; i++)
+            {
                 yield return this[i];
+            }
         }
 
         #endregion

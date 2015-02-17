@@ -1,0 +1,121 @@
+﻿<Window x:Class="SharpLib.Wpf.Dialogs.CustomDialog"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Window2"
+        Width="800" Height="500"
+        MinWidth="600" MinHeight="400">
+    <Window.Resources>
+        <ResourceDictionary Source="Dialog.Custom.Styles.xaml" />
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="118*" MinWidth="100" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="463*" MinWidth="300" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--Хлебные крошки-->
+        <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Bottom">
+            <!--Кнопки управления-->
+            <StackPanel Orientation="Horizontal" Name="PART_stackPanelButtons">
+                <StackPanel.Resources>
+                    <Style x:Key="TopButtonStyle" TargetType="Button" BasedOn="{StaticResource DialogCustomNavButtonStyle}">
+                        <Setter Property="Width" Value="40" />
+                        <Setter Property="Height" Value="40" />
+                    </Style>
+                </StackPanel.Resources>
+                <!--Кнопка "Назад"-->
+                <Button Style="{StaticResource TopButtonStyle}" Click="ButtonPrevClick" IsEnabled="{Binding IsEnablePrev}">
+                    <Button.RenderTransform>
+                        <RotateTransform Angle="-180" CenterX="20" CenterY="20"/>
+                    </Button.RenderTransform>
+                </Button>
+                <!--Кнопка "Вперед"-->
+                <Button Style="{StaticResource TopButtonStyle}" Click="ButtonNextClick" IsEnabled="{Binding IsEnableNext}"/>
+                <!--Кнопка "Вверх"-->
+                <Button Style="{StaticResource TopButtonStyle}" Click="ButtonUpClick" Background="#FF9BFFC6" IsEnabled="{Binding IsEnableUp}">
+                    <Button.RenderTransform>
+                        <RotateTransform Angle="-90" CenterX="20" CenterY="20"/>
+                    </Button.RenderTransform>
+                </Button>
+            </StackPanel>
+            <!--Строка пути-->
+            <TextBox Name="PART_textBox" Text="123" Margin="5" VerticalContentAlignment="Center" IsReadOnly="True" />
+        </DockPanel>
+
+        <!--Диски-->
+        <ListBox Grid.Row="1" Grid.Column="0" Name="PART_listBox" BorderThickness="0"
+                 Margin="5"
+                 FontFamily="Consolas" SelectionChanged="PART_listBox_SelectionChanged"
+                 >
+            <ListBoxItem Content="123" />
+            <ListBoxItem Content="234" />
+            <ListBoxItem Content="456" />
+        </ListBox>
+        <!--Файловое дерево-->
+        <TreeView Grid.Row="2" Grid.Column="0" Name="PART_treeView" BorderThickness="0"
+                  Margin="5"
+                  FontFamily="Consolas">
+            <TreeViewItem Header="123" />
+            <TreeViewItem Header="123" />
+            <TreeViewItem>
+                <TreeViewItem Header="123" />
+                <TreeViewItem Header="123" />
+            </TreeViewItem>
+            <TreeViewItem Header="123" />
+            <TreeViewItem Header="123" />
+            <TreeViewItem Header="123" />
+            <TreeViewItem Header="123" />
+            <TreeViewItem Header="123" />
+            <TreeViewItem Header="123" />
+            <TreeViewItem Header="123" />
+            <TreeViewItem Header="123" />
+            <TreeViewItem Header="123" />
+            <TreeViewItem Header="123" />
+            <TreeViewItem Header="123" />
+            <TreeViewItem Header="123" />
+        </TreeView>
+        
+        <!--Разделитель-->
+        <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Width="5" HorizontalAlignment="Center"/>
+        <!--Файловый список-->
+        <ListView Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Name="PART_listView"
+                  BorderThickness="0"
+                  MouseDoubleClick="PART_listView_OnMouseDoubleClick" SelectionChanged="PART_listView_SelectionChanged"
+                  >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" Width="400">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="{Binding Icon}" Margin="5, 0, 5, 0"/>
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Ext" DisplayMemberBinding="{Binding ExtText}" Width="40" />
+                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding StampText}" Width="110" />
+                    <GridViewColumn Header="Size" DisplayMemberBinding="{Binding SizeText}" Width="70" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!--Кнопки-->
+        <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right"
+                    Margin="5">
+            <Button Name="PART_buttonOk" Content="Select" Height="25" Width="75" Margin="5" Click="ButtonOkClick" IsEnabled="False"/>
+            <Button Content="Cancel" Height="25" Width="75" Margin="5" IsCancel="True" IsDefault="True" />
+        </StackPanel>
+
+    </Grid>
+</Window>

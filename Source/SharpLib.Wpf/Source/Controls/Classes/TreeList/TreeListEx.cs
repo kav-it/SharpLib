@@ -41,7 +41,7 @@ namespace SharpLib.Wpf.Controls
 
         public static readonly DependencyProperty ShowRootProperty;
 
-        private bool _doNotScrollOnExpanding;
+        // private bool _doNotScrollOnExpanding;
 
         private TreeListExFlattener _listFlattener;
 
@@ -49,6 +49,7 @@ namespace SharpLib.Wpf.Controls
 
         // ReSharper disable NotAccessedField.Local
         private DropPlace _previewPlace;
+
         // ReSharper restore NotAccessedField.Local
 
         private TreeListExInsertMarker _treeListInsertMarker;
@@ -89,6 +90,11 @@ namespace SharpLib.Wpf.Controls
             set { SetValue(ShowLinesProperty, value); }
         }
 
+        /// <summary>
+        /// Сортировка
+        /// </summary>
+        public TreeListExSorter Sorter { get; set; }
+
         #endregion
 
         #region Конструктор
@@ -108,7 +114,10 @@ namespace SharpLib.Wpf.Controls
             ShowRootExpanderProperty = DependencyProperty.Register("ShowRootExpander", typeof(bool), typeof(TreeListEx), new FrameworkPropertyMetadata(true));
             ShowRootProperty = DependencyProperty.Register("ShowRoot", typeof(bool), typeof(TreeListEx), new FrameworkPropertyMetadata(true));
 
-            RegisterCommands();
+            CommandManager.RegisterClassCommandBinding(typeof(TreeListEx), new CommandBinding(ApplicationCommands.Cut, HandleExecuted_Cut, HandleCanExecute_Cut));
+            CommandManager.RegisterClassCommandBinding(typeof(TreeListEx), new CommandBinding(ApplicationCommands.Copy, HandleExecuted_Copy, HandleCanExecute_Copy));
+            CommandManager.RegisterClassCommandBinding(typeof(TreeListEx), new CommandBinding(ApplicationCommands.Paste, HandleExecuted_Paste, HandleCanExecute_Paste));
+            CommandManager.RegisterClassCommandBinding(typeof(TreeListEx), new CommandBinding(ApplicationCommands.Delete, HandleExecuted_Delete, HandleCanExecute_Delete));
         }
 
         public TreeListEx()
@@ -153,7 +162,7 @@ namespace SharpLib.Wpf.Controls
                 {
                     Root.IsExpanded = true;
                 }
-                _listFlattener = new TreeListExFlattener(Root, ShowRoot);
+                _listFlattener = new TreeListExFlattener(this, Root, ShowRoot);
                 _listFlattener.CollectionChanged += ListFlattenerCollectionChanged;
                 ItemsSource = _listFlattener;
             }
@@ -225,32 +234,33 @@ namespace SharpLib.Wpf.Controls
         /// </summary>
         internal void HandleExpanding(TreeListExNode listNode)
         {
-            if (_doNotScrollOnExpanding)
-            {
-                return;
-            }
-            TreeListExNode lastVisibleChild = listNode;
-            while (true)
-            {
-                TreeListExNode tmp = lastVisibleChild.Children.LastOrDefault(c => c.IsVisible);
-                if (tmp != null)
-                {
-                    lastVisibleChild = tmp;
-                }
-                else
-                {
-                    break;
-                }
-            }
-            if (lastVisibleChild != listNode)
-            {
-                // Make the the expanded children are visible; but don't scroll down
-                // to much (keep listNode itself visible)
-                base.ScrollIntoView(lastVisibleChild);
-                // For some reason, this only works properly when delaying it...
-                Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(
-                    () => base.ScrollIntoView(listNode)));
-            }
+            // 20150214 - Откючение автоскролл при Expand
+            // if (_doNotScrollOnExpanding)
+            // {
+            //    return;
+            // }
+
+            //TreeListExNode lastVisibleChild = listNode;
+            //while (true)
+            //{
+            //    TreeListExNode tmp = lastVisibleChild.Children.LastOrDefault(c => c.IsVisible);
+            //    if (tmp != null)
+            //    {
+            //        lastVisibleChild = tmp;
+            //    }
+            //    else
+            //    {
+            //        break;
+            //    }
+            //}
+            //if (lastVisibleChild != listNode)
+            //{
+            //    // Make the the expanded children are visible; but don't scroll down
+            //    // to much (keep listNode itself visible)
+            //    base.ScrollIntoView(lastVisibleChild);
+            //    // For some reason, this only works properly when delaying it...
+            //    Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() => base.ScrollIntoView(listNode)));
+            //}
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -332,8 +342,7 @@ namespace SharpLib.Wpf.Controls
                 case Key.Multiply:
                     if (container != null && Equals(ItemsControlFromItemContainer(container), this))
                     {
-                        container.ListNode.IsExpanded = true;
-                        ExpandRecursively(container.ListNode);
+                        container.ListNode.ExpandAll();
                         e.Handled = true;
                     }
                     break;
@@ -341,52 +350,6 @@ namespace SharpLib.Wpf.Controls
             if (!e.Handled)
             {
                 base.OnKeyDown(e);
-            }
-        }
-
-        private void ExpandRecursively(TreeListExNode listNode)
-        {
-            if (listNode.CanExpandRecursively)
-            {
-                listNode.IsExpanded = true;
-                foreach (var child in listNode.Children)
-                {
-                    ExpandRecursively(child);
-                }
-            }
-        }
-
-        private void CollapseRecursively(TreeListExNode listNode)
-        {
-            if (listNode.CanExpandRecursively)
-            {
-                listNode.IsExpanded = false;
-                foreach (var child in listNode.Children)
-                {
-                    CollapseRecursively(child);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Свернуть все элементы
-        /// </summary>
-        public void ExpandAll()
-        {
-            if (Root != null)
-            {
-                ExpandRecursively(Root);
-            }
-        }
-
-        /// <summary>
-        /// Развернуть все элементы
-        /// </summary>
-        public void CollapseAll()
-        {
-            if (Root != null)
-            {
-                CollapseRecursively(Root);
             }
         }
 
@@ -425,12 +388,12 @@ namespace SharpLib.Wpf.Controls
             {
                 throw new ArgumentNullException("listNode");
             }
-            _doNotScrollOnExpanding = true;
+            // _doNotScrollOnExpanding = true;
             foreach (TreeListExNode ancestor in listNode.Ancestors())
             {
                 ancestor.IsExpanded = true;
             }
-            _doNotScrollOnExpanding = false;
+            // _doNotScrollOnExpanding = false;
             base.ScrollIntoView(listNode);
         }
 
@@ -736,21 +699,6 @@ namespace SharpLib.Wpf.Controls
             }
         }
 
-        private static void RegisterCommands()
-        {
-            CommandManager.RegisterClassCommandBinding(typeof(TreeListEx),
-                new CommandBinding(ApplicationCommands.Cut, HandleExecuted_Cut, HandleCanExecute_Cut));
-
-            CommandManager.RegisterClassCommandBinding(typeof(TreeListEx),
-                new CommandBinding(ApplicationCommands.Copy, HandleExecuted_Copy, HandleCanExecute_Copy));
-
-            CommandManager.RegisterClassCommandBinding(typeof(TreeListEx),
-                new CommandBinding(ApplicationCommands.Paste, HandleExecuted_Paste, HandleCanExecute_Paste));
-
-            CommandManager.RegisterClassCommandBinding(typeof(TreeListEx),
-                new CommandBinding(ApplicationCommands.Delete, HandleExecuted_Delete, HandleCanExecute_Delete));
-        }
-
         private static void HandleExecuted_Cut(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
@@ -823,11 +771,12 @@ namespace SharpLib.Wpf.Controls
         private static void HandleExecuted_Delete(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
-            TreeListEx treeList = (TreeListEx)sender;
+
+            var treeList = (TreeListEx)sender;
             var nodes = treeList.GetTopLevelSelection().ToArray();
             if (nodes.Length > 0)
             {
-                nodes[0].Delete(nodes);
+                nodes[0].DeleteChilds(nodes);
             }
         }
 
@@ -849,6 +798,28 @@ namespace SharpLib.Wpf.Controls
             var selectionHash = new HashSet<TreeListExNode>(treeListNodes);
 
             return treeListNodes.Where(item => item.Ancestors().All(a => !selectionHash.Contains(a)));
+        }
+
+        /// <summary>
+        /// Свернуть все элементы
+        /// </summary>
+        public void ExpandAll()
+        {
+            if (Root != null)
+            {
+                Root.ExpandAll();
+            }
+        }
+
+        /// <summary>
+        /// Развернуть все элементы
+        /// </summary>
+        public void CollapseAll()
+        {
+            if (Root != null)
+            {
+                Root.CollapseAll();
+            }
         }
 
         #endregion

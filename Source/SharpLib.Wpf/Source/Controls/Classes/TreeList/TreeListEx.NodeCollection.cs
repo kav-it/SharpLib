@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SharpLib.Wpf.Controls
 {
-    public sealed class TreeListExNodeCollection : IList<TreeListExNode>, INotifyCollectionChanged
+    public sealed class TreeListExNodeCollection : IEnumerable<TreeListExNode>, INotifyCollectionChanged
     {
         #region Поля
 
@@ -23,12 +23,14 @@ namespace SharpLib.Wpf.Controls
         public TreeListExNode this[int index]
         {
             get { return _list[index]; }
-            set
+            internal set
             {
                 ThrowOnReentrancy();
                 var oldItem = _list[index];
                 if (oldItem == value)
+                {
                     return;
+                }
                 ThrowIfValueIsNullOrHasParent(value);
                 _list[index] = value;
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value, oldItem, index));
@@ -40,10 +42,10 @@ namespace SharpLib.Wpf.Controls
             get { return _list.Count; }
         }
 
-        bool ICollection<TreeListExNode>.IsReadOnly
-        {
-            get { return false; }
-        }
+        //bool ICollection<TreeListExNode>.IsReadOnly
+        //{
+        //    get { return false; }
+        //}
 
         #endregion
 
@@ -55,7 +57,7 @@ namespace SharpLib.Wpf.Controls
 
         #region Конструктор
 
-        public TreeListExNodeCollection(TreeListExNode parent)
+        internal TreeListExNodeCollection(TreeListExNode parent)
         {
             _parent = parent;
         }
@@ -72,7 +74,9 @@ namespace SharpLib.Wpf.Controls
             {
                 _parent.OnChildrenChanged(e);
                 if (CollectionChanged != null)
+                {
                     CollectionChanged(this, e);
+                }
             }
             finally
             {
@@ -83,21 +87,29 @@ namespace SharpLib.Wpf.Controls
         private void ThrowOnReentrancy()
         {
             if (_isRaisingEvent)
+            {
                 throw new InvalidOperationException();
+            }
         }
 
         private void ThrowIfValueIsNullOrHasParent(TreeListExNode listNode)
         {
             if (listNode == null)
+            {
                 throw new ArgumentNullException("listNode");
+            }
             if (listNode._modelParent != null)
+            {
                 throw new ArgumentException("The listNode already has a parent", "listNode");
+            }
         }
 
         public int IndexOf(TreeListExNode listNode)
         {
             if (listNode == null || listNode._modelParent != _parent)
+            {
                 return -1;
+            }
 
             return _list.IndexOf(listNode);
         }
@@ -113,13 +125,19 @@ namespace SharpLib.Wpf.Controls
         public void InsertRange(int index, IEnumerable<TreeListExNode> nodes)
         {
             if (nodes == null)
+            {
                 throw new ArgumentNullException("nodes");
+            }
             ThrowOnReentrancy();
             List<TreeListExNode> newNodes = nodes.ToList();
             if (newNodes.Count == 0)
+            {
                 return;
+            }
             foreach (TreeListExNode node in newNodes)
+            {
                 ThrowIfValueIsNullOrHasParent(node);
+            }
             _list.InsertRange(index, newNodes);
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, newNodes, index));
         }
@@ -136,13 +154,15 @@ namespace SharpLib.Wpf.Controls
         {
             ThrowOnReentrancy();
             if (count == 0)
+            {
                 return;
+            }
             var oldItems = _list.GetRange(index, count);
             _list.RemoveRange(index, count);
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, oldItems, index));
         }
 
-        public void Add(TreeListExNode listNode)
+        internal void Add(TreeListExNode listNode)
         {
             ThrowOnReentrancy();
             ThrowIfValueIsNullOrHasParent(listNode);
@@ -150,7 +170,7 @@ namespace SharpLib.Wpf.Controls
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, listNode, _list.Count - 1));
         }
 
-        public void AddRange(IEnumerable<TreeListExNode> nodes)
+        internal void AddRange(IEnumerable<TreeListExNode> nodes)
         {
             InsertRange(Count, nodes);
         }
@@ -168,7 +188,7 @@ namespace SharpLib.Wpf.Controls
             return IndexOf(listNode) >= 0;
         }
 
-        public void CopyTo(TreeListExNode[] array, int arrayIndex)
+        internal void CopyTo(TreeListExNode[] array, int arrayIndex)
         {
             _list.CopyTo(array, arrayIndex);
         }
@@ -195,10 +215,12 @@ namespace SharpLib.Wpf.Controls
             return _list.GetEnumerator();
         }
 
-        public void RemoveAll(Predicate<TreeListExNode> match)
+        internal void RemoveAll(Predicate<TreeListExNode> match)
         {
             if (match == null)
+            {
                 throw new ArgumentNullException("match");
+            }
             ThrowOnReentrancy();
             int firstToRemove = 0;
             for (int i = 0; i < _list.Count; i++)
@@ -221,12 +243,16 @@ namespace SharpLib.Wpf.Controls
                         i = firstToRemove - 1;
                     }
                     else
+                    {
                         firstToRemove = i + 1;
+                    }
                     Debug.Assert(firstToRemove == i + 1);
                 }
             }
             if (firstToRemove < _list.Count)
+            {
                 RemoveRange(firstToRemove, _list.Count - firstToRemove);
+            }
         }
 
         #endregion
