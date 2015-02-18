@@ -1,0 +1,20 @@
+﻿<Window x:Class="SharpLib.Wpf.WindowPromt"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:SharpLib.Wpf.Controls"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="SingleBorderWindow" ResizeMode="NoResize">
+    <Grid Margin="10" Width="300">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ComboBox Name="PART_comboBox" Grid.Row="0" Height="23" KeyUp="Control_KeyUp" />
+        <controls:TextEdit x:Name="PART_textBox" Grid.Row="0" Height="25" KeyUp="Control_KeyUp" 
+                           TextChanged="PART_textBox_OnTextChanged" />
+        <controls:OkCancelControl 
+            x:Name="PART_okCancel" Grid.Row="1" OkClick="OkClick" CancelClick="CancelClick"
+            />
+    </Grid>
+</Window>

@@ -152,6 +152,9 @@
     <Compile Include="Source\Helpers\Windows\Window.MessageBox.xaml.cs">
       <DependentUpon>Window.MessageBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Source\Helpers\Windows\Window.Promt.xaml.cs">
+      <DependentUpon>Window.Promt.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Source\Controls\Fonts.xaml">
@@ -243,6 +246,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Source\Helpers\Windows\Window.MessageBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Helpers\Windows\Window.Promt.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

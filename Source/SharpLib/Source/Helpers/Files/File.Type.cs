@@ -9,7 +9,7 @@ namespace SharpLib
     {
         Unknown = 0,
 
-        FIle,
+        File,
 
         Folder,
 

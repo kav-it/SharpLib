@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 
+using SharpLib.Wpf;
 using SharpLib.Wpf.Dialogs;
 
 namespace DemoWpf
@@ -17,7 +18,7 @@ namespace DemoWpf
 
         #region Методы
 
-        private void _showDialogButton_Click(object sender, RoutedEventArgs e)
+        private void ShowDialogButtonClick(object sender, RoutedEventArgs e)
         {
             switch (_dialogComboBox.SelectedIndex)
             {
@@ -46,6 +47,13 @@ namespace DemoWpf
         private void ShowSaveFileDialog()
         {
             Dialog.SaveFile("Text files (*.txt)|*.txt|All files (*.*)|*.*", "txt");
+        }
+
+        private void ShowPromtButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var result = WindowPromt.ShowText("Title", "value", "watermark", true);
+
+            MessageBoxEx.ShowBlank("Caption", result);
         }
 
         #endregion

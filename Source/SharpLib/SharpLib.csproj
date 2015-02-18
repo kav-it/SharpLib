@@ -93,6 +93,7 @@
     <Compile Include="Source\Helpers\Position.cs" />
     <Compile Include="Source\Helpers\Resources\EmbeddedResourceUri.cs" />
     <Compile Include="Source\Helpers\Resources\EmbeddedResources.cs" />
+    <Compile Include="Source\Helpers\Runtime\Runtime.cs" />
     <Compile Include="Source\Helpers\Timers\ITimer.cs" />
     <Compile Include="Source\Helpers\Timers\Timer.Wpf.cs" />
     <Compile Include="Source\Helpers\Timers\Timers.cs" />

@@ -55,7 +55,7 @@ namespace SharpLib
         {
             path1 = AddPathSeparator(path1);
             path2 = AddPathSeparator(path2);
-
+            
             // Определение минимальной вложенности
             var uri1 = new Uri(path1);
             var uri2 = new Uri(path2);
@@ -66,6 +66,8 @@ namespace SharpLib
             {
                 result = RemoveLastSeparator(result);
             }
+
+            result = Uri.UnescapeDataString(result);
 
             return result;
         }
@@ -442,16 +444,20 @@ namespace SharpLib
             {
                 return string.Empty;
             }
-            if (File.Exists(path) == false)
-            {
-                return string.Empty;
-            }
 
-            if (IsFile(path))
+            var typ = CheckTyp(path);
+
+            if (typ == FileTyp.File)
             {
                 // Путь является файлом
                 // Составление полного пути получателя
-                string destPath = PathEx.Combine(GetDirectory(path), newName + "." + GetExtension(path));
+                var ext = GetExtension(path);
+                if (ext.IsValid())
+                {
+                    // Если расширение существует добавление разделителя
+                    ext = "." + ext;
+                }
+                var destPath = PathEx.Combine(GetDirectory(path), newName + ext);
 
                 // Файл уже так называется
                 if (destPath == path)
@@ -471,7 +477,7 @@ namespace SharpLib
                 return destPath;
             }
 
-            if (IsDirectory(path))
+            if (typ == FileTyp.Folder)
             {
                 // Путь является директорией
                 // Составление полного пути получателя
@@ -606,7 +612,7 @@ namespace SharpLib
                     return FileTyp.LinkFile;
                 }
                 
-                return FileTyp.FIle;
+                return FileTyp.File;
             }
 
             if (Directory.Exists(location))

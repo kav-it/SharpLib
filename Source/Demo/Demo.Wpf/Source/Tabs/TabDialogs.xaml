@@ -19,7 +19,16 @@
                 <ComboBoxItem>Save File Dialog</ComboBoxItem>
             </ComboBox.Items>
         </ComboBox>
-        <Button Grid.Column="2" Height="23" Margin="4,8,8,0" Padding="8,0" HorizontalAlignment="Right" Name="_showDialogButton" VerticalAlignment="Top" IsDefault="True" Click="_showDialogButton_Click">_Show dialog</Button>
+        <Button Content="Show dialog"  Grid.Column="2" Height="23" Margin="4,8,8,0" Padding="8,0" HorizontalAlignment="Right" 
+                Name="ShowDialogButton" VerticalAlignment="Top" 
+                IsDefault="True" 
+                Click="ShowDialogButtonClick" />
+        
+        <Button Grid.Column="2" Height="23" Margin="0,36,8,0" 
+                Padding="8,0" HorizontalAlignment="Right" 
+                x:Name="ShowPromtButton" VerticalAlignment="Top" IsDefault="True" 
+                Click="ShowPromtButton_OnClick"
+                Content="ShowPromt"/>
 
     </Grid>
 </UserControl>

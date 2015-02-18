@@ -421,7 +421,6 @@ namespace SharpLib.Wpf.Controls
 
         public override string ToString()
         {
-            // used for keyboard navigation
             object text = Text;
             return text != null ? text.ToString() : string.Empty;
         }
@@ -1335,6 +1334,14 @@ namespace SharpLib.Wpf.Controls
                 Children.RemoveRange(0, Children.Count);
                 Children.AddRange(tempList);
             }
+        }
+
+        /// <summary>
+        /// Вызывается для обновление текстового представления
+        /// </summary>
+        public void UpdateText()
+        {
+            RaisePropertyChanged("Text");
         }
 
         #endregion

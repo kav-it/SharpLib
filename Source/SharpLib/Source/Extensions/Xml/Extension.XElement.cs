@@ -15,13 +15,13 @@ namespace SharpLib
 
         public static void AddAttributeEx(this XElement elem, string name, string value)
         {
-            XAttribute attr = new XAttribute(name, value);
+            var attr = new XAttribute(name, value);
             elem.Add(attr);
         }
 
         public static XElement AddElementEx(this XElement elem, string name, string value)
         {
-            XElement newElem = new XElement(name, value);
+            var newElem = new XElement(name, value);
             elem.Add(newElem);
 
             return newElem;
