@@ -333,14 +333,14 @@ namespace SharpLib.Wpf.Dialogs
 
             if (isEnable && SelectMode.IsFlagSet(DialogCustomSelectMode.File) == false)
             {
-                // Файлы не разрешены
-                isEnable = items.All(x => !x.IsDirectory);
+                // Файлы не разрешены, разрешены только директории
+                isEnable = items.All(x => x.IsDirectory && x.IsRoot == false);
             }
 
             if (isEnable && SelectMode.IsFlagSet(DialogCustomSelectMode.Folder) == false)
             {
-                // Директории не разрешены
-                isEnable = items.All(x => x.IsDirectory && !x.IsRoot);
+                // Директории не разрешены, разрешены только файлы
+                isEnable = items.All(x => !x.IsDirectory);
             }
 
             PART_buttonOk.IsEnabled = isEnable;

@@ -27,10 +27,10 @@
             <TabItem Header="Memo" >
                 <local:TabMemo />
             </TabItem>
-            <TabItem Header="TreeList" >
+            <TabItem Header="TreeList" IsSelected="True" >
                 <local:TabTreeList />
             </TabItem>
-            <TabItem Header="Dialogs" IsSelected="True" >
+            <TabItem Header="Dialogs" >
                 <local:TabDialogs />
             </TabItem>
             <TabItem Header="Audio" >

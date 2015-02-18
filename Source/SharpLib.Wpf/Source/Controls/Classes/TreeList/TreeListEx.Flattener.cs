@@ -10,22 +10,33 @@ namespace SharpLib.Wpf.Controls
     {
         #region Поля
 
+        /// <summary>
+        /// 
+        /// </summary>
         private readonly bool _includeRoot;
 
+        /// <summary>
+        /// Блокировка
+        /// </summary>
         private readonly object _syncRoot;
 
         /// <summary>
-        /// The root listNode of the flat list tree.
-        /// Tjis is not necessarily the root of the model!
+        /// Ссылка на корневой узел (в терминах сбалансированного дерева)
         /// </summary>
         internal TreeListExNode _root;
 
+        /// <summary>
+        /// Ссылка на основной элемент (дерево)
+        /// </summary>
         internal TreeListEx _tree;
 
         #endregion
 
         #region Свойства
 
+        /// <summary>
+        /// Индексатор
+        /// </summary>
         public object this[int index]
         {
             get

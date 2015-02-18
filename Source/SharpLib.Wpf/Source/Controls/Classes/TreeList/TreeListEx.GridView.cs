@@ -3,6 +3,9 @@ using System.Windows.Controls;
 
 namespace SharpLib.Wpf.Controls
 {
+    /// <summary>
+    /// Реализация специализированного GridView
+    /// </summary>
     public class TreeListExGridView : GridView
     {
         #region Свойства

@@ -7,6 +7,9 @@ using System.Windows.Media;
 
 namespace SharpLib.Wpf.Controls
 {
+    /// <summary>
+    /// Реализация "View" дерева
+    /// </summary>
     public class TreeListExNodeView : Control
     {
         #region Поля
@@ -59,6 +62,9 @@ namespace SharpLib.Wpf.Controls
 
         #region Методы
 
+        /// <summary>
+        /// Событие родителя "Применение шаблона"
+        /// </summary>
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -66,6 +72,9 @@ namespace SharpLib.Wpf.Controls
             UpdateTemplate();
         }
 
+        /// <summary>
+        /// Событие родителя "Изменился родительский элемент"
+        /// </summary>
         protected override void OnVisualParentChanged(DependencyObject oldParent)
         {
             base.OnVisualParentChanged(oldParent);

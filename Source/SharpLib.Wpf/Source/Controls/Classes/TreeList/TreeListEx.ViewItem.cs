@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -68,7 +67,9 @@ namespace SharpLib.Wpf.Controls
         {
             _wasSelected = IsSelected;
             if (!IsSelected)
+            {
                 base.OnMouseLeftButtonDown(e);
+            }
 
             if (Mouse.LeftButton == MouseButtonState.Pressed)
             {
@@ -76,10 +77,15 @@ namespace SharpLib.Wpf.Controls
                 CaptureMouse();
 
                 if (e.ClickCount == 2)
+                {
                     _wasDoubleClick = true;
+                }
             }
         }
 
+        /// <summary>
+        /// Обработка события "MouseMove"
+        /// </summary>
         protected override void OnMouseMove(MouseEventArgs e)
         {
             if (IsMouseCaptured)
@@ -88,8 +94,6 @@ namespace SharpLib.Wpf.Controls
                 if (Math.Abs(currentPoint.X - _startPoint.X) >= SystemParameters.MinimumHorizontalDragDistance ||
                     Math.Abs(currentPoint.Y - _startPoint.Y) >= SystemParameters.MinimumVerticalDragDistance)
                 {
-                    var selection = ParentTreeList.GetTopLevelSelection().ToArray();
-                    ListNode.StartDrag(this, selection);
                 }
             }
         }
@@ -103,33 +107,17 @@ namespace SharpLib.Wpf.Controls
                 if (!e.Handled)
                 {
                     if (!ListNode.IsRoot || ParentTreeList.ShowRootExpander)
+                    {
                         ListNode.IsExpanded = !ListNode.IsExpanded;
+                    }
                 }
             }
 
             ReleaseMouseCapture();
             if (_wasSelected)
+            {
                 base.OnMouseLeftButtonDown(e);
-        }
-
-        protected override void OnDragEnter(DragEventArgs e)
-        {
-            ParentTreeList.HandleDragEnter(this, e);
-        }
-
-        protected override void OnDragOver(DragEventArgs e)
-        {
-            ParentTreeList.HandleDragOver(this, e);
-        }
-
-        protected override void OnDrop(DragEventArgs e)
-        {
-            ParentTreeList.HandleDrop(this, e);
-        }
-
-        protected override void OnDragLeave(DragEventArgs e)
-        {
-            ParentTreeList.HandleDragLeave(this, e);
+            }
         }
 
         #endregion

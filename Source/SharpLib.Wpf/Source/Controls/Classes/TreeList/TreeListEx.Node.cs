@@ -260,10 +260,7 @@ namespace SharpLib.Wpf.Controls
 
         public bool IsLast
         {
-            get
-            {
-                return Parent == null || Parent.Children[Parent.Children.Count - 1] == this;
-            }
+            get { return Parent == null || Parent.Children[Parent.Children.Count - 1] == this; }
         }
 
         public object Model
@@ -316,6 +313,10 @@ namespace SharpLib.Wpf.Controls
             return listNode != null ? listNode._height : 0;
         }
 
+        /// <summary>
+        /// Чтение корневого элемента (в терминах дерева)
+        /// </summary>
+        /// <returns></returns>
         internal TreeListExNode GetListRoot()
         {
             TreeListExNode listNode = this;
@@ -605,117 +606,6 @@ namespace SharpLib.Wpf.Controls
                 return true;
             }
             return false;
-        }
-
-        public virtual bool CanDelete(TreeListExNode[] listNodes)
-        {
-            return false;
-        }
-
-        public virtual void DeleteWithoutConfirmation(TreeListExNode[] listNodes)
-        {
-            throw new NotSupportedException(GetType().Name + " does not support deletion");
-        }
-
-        public virtual bool CanCut(TreeListExNode[] listNodes)
-        {
-            return CanCopy(listNodes) && CanDelete(listNodes);
-        }
-
-        public virtual void Cut(TreeListExNode[] listNodes)
-        {
-            var data = GetDataObject(listNodes);
-            if (data != null)
-            {
-                Clipboard.SetDataObject(data, true);
-                DeleteWithoutConfirmation(listNodes);
-            }
-        }
-
-        public virtual bool CanCopy(TreeListExNode[] listNodes)
-        {
-            return false;
-        }
-
-        public virtual void Copy(TreeListExNode[] listNodes)
-        {
-            var data = GetDataObject(listNodes);
-            if (data != null)
-            {
-                Clipboard.SetDataObject(data, true);
-            }
-        }
-
-        protected virtual IDataObject GetDataObject(TreeListExNode[] listNodes)
-        {
-            return null;
-        }
-
-        public virtual bool CanPaste(IDataObject data)
-        {
-            return false;
-        }
-
-        public virtual void Paste(IDataObject data)
-        {
-            throw new NotSupportedException(GetType().Name + " does not support copy/paste");
-        }
-
-        public virtual void StartDrag(DependencyObject dragSource, TreeListExNode[] listNodes)
-        {
-            // The default drag implementation works by reusing the copy infrastructure.
-            // Derived classes should override this method
-            var data = GetDataObject(listNodes);
-            if (data == null)
-            {
-                return;
-            }
-            DragDropEffects effects = DragDropEffects.Copy;
-            if (CanDelete(listNodes))
-            {
-                effects |= DragDropEffects.Move;
-            }
-            DragDropEffects result = DragDrop.DoDragDrop(dragSource, data, effects);
-            if (result == DragDropEffects.Move)
-            {
-                DeleteWithoutConfirmation(listNodes);
-            }
-        }
-
-        public virtual DragDropEffects GetDropEffect(DragEventArgs e, int index)
-        {
-            // Since the default drag implementation uses Copy(),
-            // we'll use Paste() in our default drop implementation.
-            if (CanPaste(e.Data))
-            {
-                // If Ctrl is pressed -> copy
-                // If moving is not allowed -> copy
-                // Otherwise: move
-                if ((e.KeyStates & DragDropKeyStates.ControlKey) != 0 || (e.AllowedEffects & DragDropEffects.Move) == 0)
-                {
-                    return DragDropEffects.Copy;
-                }
-                return DragDropEffects.Move;
-            }
-            return DragDropEffects.None;
-        }
-
-        internal void InternalDrop(DragEventArgs e, int index)
-        {
-            if (LazyLoading)
-            {
-                EnsureLazyChildren();
-                index = Children.Count;
-            }
-
-            Drop(e, index);
-        }
-
-        public virtual void Drop(DragEventArgs e, int index)
-        {
-            // Since the default drag implementation uses Copy(),
-            // we'll use Paste() in our default drop implementation.
-            Paste(e.Data);
         }
 
         private void RaiseIsLastChangedIfNeeded(NotifyCollectionChangedEventArgs e)

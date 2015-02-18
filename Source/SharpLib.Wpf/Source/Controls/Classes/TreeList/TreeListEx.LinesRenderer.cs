@@ -3,6 +3,9 @@ using System.Windows.Media;
 
 namespace SharpLib.Wpf.Controls
 {
+    /// <summary>
+    /// Класс отображения блока вертикальной линии (на каждую строку)
+    /// </summary>
     internal class TreeListExLinesRenderer : FrameworkElement
     {
         #region Поля
@@ -32,6 +35,9 @@ namespace SharpLib.Wpf.Controls
 
         #region Методы
 
+        /// <summary>
+        /// Обработка методы "Render"
+        /// </summary>
         protected override void OnRender(DrawingContext dc)
         {
             var indent = ListNodeView.CalculateIndent();

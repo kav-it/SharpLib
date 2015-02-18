@@ -3,6 +3,7 @@ using System.Windows.Controls;
 
 namespace SharpLib.Wpf.Controls
 {
+    #warning Удалить
     public class TreeListExInsertMarker : Control
     {
         #region Конструктор
