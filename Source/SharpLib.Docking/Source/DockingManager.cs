@@ -25,8 +25,6 @@ namespace SharpLib.Docking
     {
         #region Поля
 
-        private static readonly DependencyPropertyKey _autoHideWindowPropertyKey;
-
         public static readonly DependencyProperty ActiveContentProperty;
 
         public static readonly DependencyProperty AllowMixedOrientationProperty;
@@ -108,6 +106,8 @@ namespace SharpLib.Docking
         public static readonly DependencyProperty ThemeProperty;
 
         public static readonly DependencyProperty TopSidePanelProperty;
+
+        private static readonly DependencyPropertyKey _autoHideWindowPropertyKey;
 
         private readonly List<LayoutFloatingWindowControl> _fwList;
 
@@ -1223,35 +1223,50 @@ namespace SharpLib.Docking
             var parentPane = contentModel.Parent as ILayoutPane;
             var parentPaneAsPositionableElement = contentModel.Parent as ILayoutPositionableElement;
             var parentPaneAsWithActualSize = contentModel.Parent as ILayoutPositionableElementWithActualSize;
-            var contentModelParentChildrenIndex = parentPane.Children.ToList().IndexOf(contentModel);
-
-            if (contentModel.FindParent<LayoutFloatingWindow>() == null)
+            if (parentPane != null)
             {
-                ((ILayoutPreviousContainer)contentModel).PreviousContainer = parentPane;
-                contentModel.PreviousContainerIndex = contentModelParentChildrenIndex;
-            }
+                var contentModelParentChildrenIndex = parentPane.Children.ToList().IndexOf(contentModel);
 
-            parentPane.RemoveChildAt(contentModelParentChildrenIndex);
+                if (contentModel.FindParent<LayoutFloatingWindow>() == null)
+                {
+                    ((ILayoutPreviousContainer)contentModel).PreviousContainer = parentPane;
+                    contentModel.PreviousContainerIndex = contentModelParentChildrenIndex;
+                }
+
+                parentPane.RemoveChildAt(contentModelParentChildrenIndex);
+            }
 
             double fwWidth = contentModel.FloatingWidth;
             double fwHeight = contentModel.FloatingHeight;
 
-            if (fwWidth == 0.0)
+            if (fwWidth.IsZeroEx())
             {
-                fwWidth = parentPaneAsPositionableElement.FloatingWidth;
+                if (parentPaneAsPositionableElement != null)
+                {
+                    fwWidth = parentPaneAsPositionableElement.FloatingWidth;
+                }
             }
-            if (fwHeight == 0.0)
+            if (fwHeight.IsZeroEx())
             {
-                fwHeight = parentPaneAsPositionableElement.FloatingHeight;
+                if (parentPaneAsPositionableElement != null)
+                {
+                    fwHeight = parentPaneAsPositionableElement.FloatingHeight;
+                }
             }
 
-            if (fwWidth == 0.0)
+            if (fwWidth.IsZeroEx())
             {
-                fwWidth = parentPaneAsWithActualSize.ActualWidth;
+                if (parentPaneAsWithActualSize != null)
+                {
+                    fwWidth = parentPaneAsWithActualSize.ActualWidth;
+                }
             }
-            if (fwHeight == 0.0)
+            if (fwHeight.IsZeroEx())
             {
-                fwHeight = parentPaneAsWithActualSize.ActualHeight;
+                if (parentPaneAsWithActualSize != null)
+                {
+                    fwHeight = parentPaneAsWithActualSize.ActualHeight;
+                }
             }
 
             LayoutFloatingWindow fw;
@@ -1277,8 +1292,7 @@ namespace SharpLib.Docking
 
                 Layout.FloatingWindows.Add(fw);
 
-                fwc = new LayoutAnchorableFloatingWindowControl(
-                    fw as LayoutAnchorableFloatingWindow)
+                fwc = new LayoutAnchorableFloatingWindowControl(fw as LayoutAnchorableFloatingWindow)
                 {
                     Width = fwWidth,
                     Height = fwHeight,
@@ -1336,11 +1350,11 @@ namespace SharpLib.Docking
             double fwLeft = paneAsPositionableElement.FloatingLeft;
             double fwTop = paneAsPositionableElement.FloatingTop;
 
-            if (fwWidth == 0.0)
+            if (fwWidth.IsZeroEx())
             {
                 fwWidth = paneAsWithActualSize.ActualWidth;
             }
-            if (fwHeight == 0.0)
+            if (fwHeight.IsZeroEx())
             {
                 fwHeight = paneAsWithActualSize.ActualHeight;
             }
@@ -1379,9 +1393,7 @@ namespace SharpLib.Docking
                 destPane.SelectedContentIndex = currentSelectedContentIndex;
             }
 
-            LayoutFloatingWindow fw;
-            LayoutFloatingWindowControl fwc;
-            fw = new LayoutAnchorableFloatingWindow
+            LayoutFloatingWindow fw = new LayoutAnchorableFloatingWindow
             {
                 RootPanel = new LayoutAnchorablePaneGroup(
                     destPane)
@@ -1395,8 +1407,7 @@ namespace SharpLib.Docking
 
             Layout.FloatingWindows.Add(fw);
 
-            fwc = new LayoutAnchorableFloatingWindowControl(
-                fw as LayoutAnchorableFloatingWindow)
+            var fwc = new LayoutAnchorableFloatingWindowControl(fw as LayoutAnchorableFloatingWindow)
             {
                 Width = fwWidth,
                 Height = fwHeight
@@ -1427,7 +1438,7 @@ namespace SharpLib.Docking
             while (currentHandle != IntPtr.Zero)
             {
                 var ctrl = _fwList.FirstOrDefault(fw => new WindowInteropHelper(fw).Handle == currentHandle);
-                if (ctrl != null && ctrl.Model.Root.Manager == this)
+                if (ctrl != null && Equals(ctrl.Model.Root.Manager, this))
                 {
                     yield return ctrl;
                 }
@@ -1523,7 +1534,7 @@ namespace SharpLib.Docking
             foreach (var areaHost in this.FindVisualChildren<LayoutDocumentPaneGroupControl>())
             {
                 var documentGroupModel = areaHost.Model as LayoutDocumentPaneGroup;
-                if (documentGroupModel.Children.Where(c => c.IsVisible).Count() == 0)
+                if (documentGroupModel != null && !documentGroupModel.Children.Any(c => c.IsVisible))
                 {
                     _areas.Add(new DropArea<LayoutDocumentPaneGroupControl>(
                         areaHost,
@@ -1641,11 +1652,11 @@ namespace SharpLib.Docking
             var documentsSourceAsNotifier = documentsSource as INotifyCollectionChanged;
             if (documentsSourceAsNotifier != null)
             {
-                documentsSourceAsNotifier.CollectionChanged += documentsSourceElementsChanged;
+                documentsSourceAsNotifier.CollectionChanged += DocumentsSourceElementsChanged;
             }
         }
 
-        private void documentsSourceElementsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void DocumentsSourceElementsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (Layout == null)
             {
@@ -1657,8 +1668,7 @@ namespace SharpLib.Docking
                 return;
             }
 
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+            if (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace)
             {
                 if (e.OldItems != null)
                 {
@@ -1671,9 +1681,7 @@ namespace SharpLib.Docking
                 }
             }
 
-            if (e.NewItems != null &&
-                (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
-                 e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace))
+            if (e.NewItems != null && (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace))
             {
                 if (e.NewItems != null)
                 {
@@ -1721,7 +1729,7 @@ namespace SharpLib.Docking
 
                         var root = documentToImport.Root;
 
-                        if (root != null && root.Manager == this)
+                        if (root != null && Equals(root.Manager, this))
                         {
                             CreateDocumentLayoutItem(documentToImport);
                         }
@@ -1770,7 +1778,7 @@ namespace SharpLib.Docking
             var documentsSourceAsNotifier = documentsSource as INotifyCollectionChanged;
             if (documentsSourceAsNotifier != null)
             {
-                documentsSourceAsNotifier.CollectionChanged -= documentsSourceElementsChanged;
+                documentsSourceAsNotifier.CollectionChanged -= DocumentsSourceElementsChanged;
             }
         }
 
@@ -1804,7 +1812,7 @@ namespace SharpLib.Docking
         {
             foreach (
                 var contentToClose in
-                    Layout.Descendents().OfType<LayoutContent>().Where(d => d != contentSelected && (d.Parent is LayoutDocumentPane || d.Parent is LayoutDocumentFloatingWindow)).ToArray())
+                    Layout.Descendents().OfType<LayoutContent>().Where(d => !Equals(d, contentSelected) && (d.Parent is LayoutDocumentPane || d.Parent is LayoutDocumentFloatingWindow)).ToArray())
             {
                 if (!contentToClose.CanClose)
                 {
@@ -1876,7 +1884,7 @@ namespace SharpLib.Docking
 
             if (anchorablePane == null)
             {
-                anchorablePane = layout.Descendents().OfType<LayoutAnchorablePane>().Where(pane => !pane.IsHostedInFloatingWindow && pane.GetSide() == AnchorSide.Right).FirstOrDefault();
+                anchorablePane = layout.Descendents().OfType<LayoutAnchorablePane>().FirstOrDefault(pane => !pane.IsHostedInFloatingWindow && pane.GetSide() == AnchorSide.Right);
             }
 
             if (anchorablePane == null)
@@ -1936,11 +1944,11 @@ namespace SharpLib.Docking
             var anchorablesSourceAsNotifier = anchorablesSource as INotifyCollectionChanged;
             if (anchorablesSourceAsNotifier != null)
             {
-                anchorablesSourceAsNotifier.CollectionChanged += anchorablesSourceElementsChanged;
+                anchorablesSourceAsNotifier.CollectionChanged += AnchorablesSourceElementsChanged;
             }
         }
 
-        private void anchorablesSourceElementsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void AnchorablesSourceElementsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (Layout == null)
             {
@@ -1952,8 +1960,7 @@ namespace SharpLib.Docking
                 return;
             }
 
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+            if (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace)
             {
                 if (e.OldItems != null)
                 {
@@ -1966,9 +1973,7 @@ namespace SharpLib.Docking
                 }
             }
 
-            if (e.NewItems != null &&
-                (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
-                 e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace))
+            if (e.NewItems != null && (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace))
             {
                 if (e.NewItems != null)
                 {
@@ -1981,7 +1986,7 @@ namespace SharpLib.Docking
 
                     if (anchorablePane == null)
                     {
-                        anchorablePane = Layout.Descendents().OfType<LayoutAnchorablePane>().Where(pane => !pane.IsHostedInFloatingWindow && pane.GetSide() == AnchorSide.Right).FirstOrDefault();
+                        anchorablePane = Layout.Descendents().OfType<LayoutAnchorablePane>().FirstOrDefault(pane => !pane.IsHostedInFloatingWindow && pane.GetSide() == AnchorSide.Right);
                     }
 
                     if (anchorablePane == null)
@@ -2035,7 +2040,7 @@ namespace SharpLib.Docking
 
                         var root = anchorableToImport.Root;
 
-                        if (root != null && root.Manager == this)
+                        if (root != null && Equals(root.Manager, this))
                         {
                             CreateAnchorableLayoutItem(anchorableToImport);
                         }
@@ -2084,7 +2089,7 @@ namespace SharpLib.Docking
             var anchorablesSourceAsNotifier = anchorablesSource as INotifyCollectionChanged;
             if (anchorablesSourceAsNotifier != null)
             {
-                anchorablesSourceAsNotifier.CollectionChanged -= anchorablesSourceElementsChanged;
+                anchorablesSourceAsNotifier.CollectionChanged -= AnchorablesSourceElementsChanged;
             }
         }
 
@@ -2111,9 +2116,9 @@ namespace SharpLib.Docking
             }
         }
 
-        internal void _ExecuteAutoHideCommand(LayoutAnchorable _anchorable)
+        internal void _ExecuteAutoHideCommand(LayoutAnchorable anchorable)
         {
-            _anchorable.ToggleAutoHide();
+            anchorable.ToggleAutoHide();
         }
 
         internal void _ExecuteFloatCommand(LayoutContent contentToFloat)
@@ -2147,7 +2152,7 @@ namespace SharpLib.Docking
 
         private void InternalSetActiveContent(object contentObject)
         {
-            var layoutContent = Layout.Descendents().OfType<LayoutContent>().FirstOrDefault(lc => lc == contentObject || lc.Content == contentObject);
+            var layoutContent = Layout.Descendents().OfType<LayoutContent>().FirstOrDefault(lc => Equals(lc, contentObject) || lc.Content == contentObject);
             _insideInternalSetActiveContent = true;
             Layout.ActiveContent = layoutContent;
             _insideInternalSetActiveContent = false;
@@ -2298,7 +2303,7 @@ namespace SharpLib.Docking
             _collectLayoutItemsOperations = Dispatcher.BeginInvoke(new Action(() =>
             {
                 _collectLayoutItemsOperations = null;
-                foreach (var itemToRemove in _layoutItems.Where(item => item.LayoutElement.Root != Layout).ToArray())
+                foreach (var itemToRemove in _layoutItems.Where(item => !Equals(item.LayoutElement.Root, Layout)).ToArray())
                 {
                     if (itemToRemove != null &&
                         itemToRemove.Model != null &&
@@ -2306,8 +2311,11 @@ namespace SharpLib.Docking
                     {
                     }
 
-                    itemToRemove.Detach();
-                    _layoutItems.Remove(itemToRemove);
+                    if (itemToRemove != null)
+                    {
+                        itemToRemove.Detach();
+                        _layoutItems.Remove(itemToRemove);
+                    }
                 }
             }));
         }
@@ -2346,7 +2354,7 @@ namespace SharpLib.Docking
 
         private void CreateAnchorableLayoutItem(LayoutAnchorable contentToAttach)
         {
-            if (_layoutItems.Any(item => item.LayoutElement == contentToAttach))
+            if (_layoutItems.Any(item => Equals(item.LayoutElement, contentToAttach)))
             {
                 return;
             }
@@ -2366,7 +2374,7 @@ namespace SharpLib.Docking
 
         private void CreateDocumentLayoutItem(LayoutDocument contentToAttach)
         {
-            if (_layoutItems.Any(item => item.LayoutElement == contentToAttach))
+            if (_layoutItems.Any(item => Equals(item.LayoutElement, contentToAttach)))
             {
                 return;
             }
@@ -2406,7 +2414,7 @@ namespace SharpLib.Docking
 
         public LayoutItem GetLayoutItemFromModel(LayoutContent content)
         {
-            return _layoutItems.FirstOrDefault(item => item.LayoutElement == content);
+            return _layoutItems.FirstOrDefault(item => Equals(item.LayoutElement, content));
         }
 
         private void ShowNavigatorWindow()

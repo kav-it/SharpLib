@@ -133,7 +133,7 @@
     <Compile Include="Source\Converters\Converter.LayoutItemFromLayoutModel.cs" />
     <Compile Include="Source\Converters\Converter.NullToDoNothing.cs" />
     <Compile Include="Source\Converters\Converter.UriSourceToBitmapImage.cs" />
-    <Compile Include="DockingManager.cs" />
+    <Compile Include="Source\DockingManager.cs" />
     <Compile Include="Source\Args\EventArgs.DocumentClosed.cs" />
     <Compile Include="Source\Args\EventArgs.DocumentClosing.cs" />
     <Compile Include="Source\Interfaces\Layout\ILayoutElementForFloatingWindow.cs" />
@@ -172,7 +172,7 @@
     <Compile Include="Source\Layout\LayoutDocumentPane.cs" />
     <Compile Include="Source\Layout\LayoutDocumentPaneGroup.cs" />
     <Compile Include="Source\Layout\LayoutElement.cs" />
-    <Compile Include="Source\Layout\LayoutElementEventArgs.cs" />
+    <Compile Include="Source\Args\EventArgs.LayoutElement.cs" />
     <Compile Include="Source\Layout\LayoutFloatingWindow.cs" />
     <Compile Include="Source\Layout\LayoutGroup.cs" />
     <Compile Include="Source\Layout\LayoutGroupBase.cs" />

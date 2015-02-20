@@ -1,27 +1,7 @@
-﻿/************************************************************************
-
-   AvalonDock
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
-
-   This program is provided to you under the terms of the New BSD
-   License (BSD) as published at http://avalondock.codeplex.com/license 
-
-   For more features, controls, and fast professional support,
-   pick up AvalonDock in Extended WPF Toolkit Plus at http://xceed.com/wpf_toolkit
-
-   Stay informed: follow @datagrid on Twitter or Like facebook.com/datagrids
-
-  **********************************************************************/
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Windows.Markup;
-using System.Collections.ObjectModel;
-using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Markup;
 
 namespace SharpLib.Docking.Layout
 {
@@ -29,20 +9,14 @@ namespace SharpLib.Docking.Layout
     [Serializable]
     public class LayoutPanel : LayoutPositionableGroup<ILayoutPanelElement>, ILayoutPanelElement, ILayoutOrientableGroup
     {
-        public LayoutPanel()
-        {
-
-        }
-
-        public LayoutPanel(ILayoutPanelElement firstChild)
-        {
-            Children.Add(firstChild);
-        }
-
-
-        #region Orientation
+        #region Поля
 
         private Orientation _orientation;
+
+        #endregion
+
+        #region Свойства
+
         public Orientation Orientation
         {
             get { return _orientation; }
@@ -59,6 +33,20 @@ namespace SharpLib.Docking.Layout
 
         #endregion
 
+        #region Конструктор
+
+        public LayoutPanel()
+        {
+        }
+
+        public LayoutPanel(ILayoutPanelElement firstChild)
+        {
+            Children.Add(firstChild);
+        }
+
+        #endregion
+
+        #region Методы
 
         protected override bool GetVisibility()
         {
@@ -74,19 +62,24 @@ namespace SharpLib.Docking.Layout
         public override void ReadXml(System.Xml.XmlReader reader)
         {
             if (reader.MoveToAttribute("Orientation"))
+            {
                 Orientation = (Orientation)Enum.Parse(typeof(Orientation), reader.Value, true);
+            }
             base.ReadXml(reader);
         }
 
-#if TRACE
         public override void ConsoleDump(int tab)
         {
-          System.Diagnostics.Trace.Write( new string( ' ', tab * 4 ) );
-          System.Diagnostics.Trace.WriteLine( string.Format( "Panel({0})", Orientation ) );
+            System.Diagnostics.Trace.Write(new string(' ', tab * 4));
+            System.Diagnostics.Trace.WriteLine(string.Format("Panel({0})", Orientation));
 
-          foreach (LayoutElement child in Children)
-              child.ConsoleDump(tab + 1);
+            foreach (var layoutPanelElement in Children)
+            {
+                var child = (LayoutElement)layoutPanelElement;
+                child.ConsoleDump(tab + 1);
+            }
         }
-#endif
+
+        #endregion
     }
 }

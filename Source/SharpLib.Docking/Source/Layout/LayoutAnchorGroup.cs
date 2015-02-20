@@ -1,24 +1,4 @@
-﻿/************************************************************************
-
-   AvalonDock
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
-
-   This program is provided to you under the terms of the New BSD
-   License (BSD) as published at http://avalondock.codeplex.com/license 
-
-   For more features, controls, and fast professional support,
-   pick up AvalonDock in Extended WPF Toolkit Plus at http://xceed.com/wpf_toolkit
-
-   Stay informed: follow @datagrid on Twitter or Like facebook.com/datagrids
-
-  **********************************************************************/
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections.ObjectModel;
+﻿using System;
 using System.Windows.Markup;
 using System.Xml.Serialization;
 
@@ -28,20 +8,17 @@ namespace SharpLib.Docking.Layout
     [Serializable]
     public class LayoutAnchorGroup : LayoutGroup<LayoutAnchorable>, ILayoutPreviousContainer, ILayoutPaneSerializable
     {
-        public LayoutAnchorGroup()
-        {
-        }
+        #region Поля
 
-        protected override bool GetVisibility()
-        {
-            return Children.Count > 0;
-        }
+        private string _id;
 
+        [field: NonSerialized]
+        private ILayoutContainer _previousContainer;
 
-        #region PreviousContainer
+        #endregion
 
-        [field:NonSerialized]
-        private ILayoutContainer _previousContainer = null;
+        #region Свойства
+
         [XmlIgnore]
         ILayoutContainer ILayoutPreviousContainer.PreviousContainer
         {
@@ -55,36 +32,36 @@ namespace SharpLib.Docking.Layout
                     var paneSerializable = _previousContainer as ILayoutPaneSerializable;
                     if (paneSerializable != null &&
                         paneSerializable.Id == null)
+                    {
                         paneSerializable.Id = Guid.NewGuid().ToString();
+                    }
                 }
             }
         }
 
-        #endregion
-
-        string _id;
         string ILayoutPaneSerializable.Id
         {
-            get
-            {
-                return _id;
-            }
-            set
-            {
-                _id = value;
-            }
+            get { return _id; }
+            set { _id = value; }
         }
 
-        string ILayoutPreviousContainer.PreviousContainerId
+        string ILayoutPreviousContainer.PreviousContainerId { get; set; }
+
+        #endregion
+
+        #region Методы
+
+        protected override bool GetVisibility()
         {
-            get;
-            set;
+            return Children.Count > 0;
         }
 
         public override void WriteXml(System.Xml.XmlWriter writer)
         {
             if (_id != null)
+            {
                 writer.WriteAttributeString("Id", _id);
+            }
             if (_previousContainer != null)
             {
                 var paneSerializable = _previousContainer as ILayoutPaneSerializable;
@@ -100,12 +77,17 @@ namespace SharpLib.Docking.Layout
         public override void ReadXml(System.Xml.XmlReader reader)
         {
             if (reader.MoveToAttribute("Id"))
+            {
                 _id = reader.Value;
+            }
             if (reader.MoveToAttribute("PreviousContainerId"))
+            {
                 ((ILayoutPreviousContainer)this).PreviousContainerId = reader.Value;
-
+            }
 
             base.ReadXml(reader);
         }
+
+        #endregion
     }
 }

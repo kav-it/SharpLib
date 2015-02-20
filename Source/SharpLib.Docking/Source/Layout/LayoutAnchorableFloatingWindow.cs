@@ -1,25 +1,8 @@
-﻿/************************************************************************
-
-   AvalonDock
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
-
-   This program is provided to you under the terms of the New BSD
-   License (BSD) as published at http://avalondock.codeplex.com/license 
-
-   For more features, controls, and fast professional support,
-   pick up AvalonDock in Extended WPF Toolkit Plus at http://xceed.com/wpf_toolkit
-
-   Stay informed: follow @datagrid on Twitter or Like facebook.com/datagrids
-
-  **********************************************************************/
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Markup;
 using System.Diagnostics;
+using System.Linq;
+using System.Windows.Markup;
 using System.Xml.Serialization;
 
 namespace SharpLib.Docking.Layout
@@ -28,56 +11,56 @@ namespace SharpLib.Docking.Layout
     [ContentProperty("RootPanel")]
     public class LayoutAnchorableFloatingWindow : LayoutFloatingWindow, ILayoutElementWithVisibility
     {
-        public LayoutAnchorableFloatingWindow()
-        { 
+        #region Поля
 
-        }
+        [NonSerialized]
+        private bool _isVisible = true;
 
-        #region RootPanel
+        private LayoutAnchorablePaneGroup _rootPanel;
 
-        private LayoutAnchorablePaneGroup _rootPanel = null;
+        #endregion
+
+        #region Свойства
+
         public LayoutAnchorablePaneGroup RootPanel
         {
             get { return _rootPanel; }
             set
             {
-                if (_rootPanel != value)
+                if (Equals(_rootPanel, value))
                 {
-                    RaisePropertyChanging("RootPanel");
-
-                    if (_rootPanel != null)
-                        _rootPanel.ChildrenTreeChanged -= new EventHandler<ChildrenTreeChangedEventArgs>(_rootPanel_ChildrenTreeChanged);
-
-                    _rootPanel = value;
-                    if (_rootPanel != null)
-                        _rootPanel.Parent = this;
-
-                    if (_rootPanel != null)
-                        _rootPanel.ChildrenTreeChanged += new EventHandler<ChildrenTreeChangedEventArgs>(_rootPanel_ChildrenTreeChanged);
-
-                    RaisePropertyChanged("RootPanel");
-                    RaisePropertyChanged("IsSinglePane");
-                    RaisePropertyChanged("SinglePane");
-                    RaisePropertyChanged("Children");
-                    RaisePropertyChanged("ChildrenCount");
-                    ((ILayoutElementWithVisibility)this).ComputeVisibility();
+                    return;
                 }
+                RaisePropertyChanging("RootPanel");
+
+                if (_rootPanel != null)
+                {
+                    _rootPanel.ChildrenTreeChanged -= _rootPanel_ChildrenTreeChanged;
+                }
+
+                _rootPanel = value;
+                if (_rootPanel != null)
+                {
+                    _rootPanel.Parent = this;
+                }
+
+                if (_rootPanel != null)
+                {
+                    _rootPanel.ChildrenTreeChanged += _rootPanel_ChildrenTreeChanged;
+                }
+
+                RaisePropertyChanged("RootPanel");
+                RaisePropertyChanged("IsSinglePane");
+                RaisePropertyChanged("SinglePane");
+                RaisePropertyChanged("Children");
+                RaisePropertyChanged("ChildrenCount");
+                ((ILayoutElementWithVisibility)this).ComputeVisibility();
             }
-        }
-
-        void _rootPanel_ChildrenTreeChanged(object sender, ChildrenTreeChangedEventArgs e)
-        {
-            RaisePropertyChanged("IsSinglePane");
-            RaisePropertyChanged("SinglePane");
-
         }
 
         public bool IsSinglePane
         {
-            get
-            {
-                return RootPanel != null && RootPanel.Descendents().OfType<ILayoutAnchorablePane>().Where(p => p.IsVisible).Count() == 1;
-            }
+            get { return RootPanel != null && RootPanel.Descendents().OfType<ILayoutAnchorablePane>().Where(p => p.IsVisible).Count() == 1; }
         }
 
         public ILayoutAnchorablePane SinglePane
@@ -85,7 +68,9 @@ namespace SharpLib.Docking.Layout
             get
             {
                 if (!IsSinglePane)
+                {
                     return null;
+                }
 
                 var singlePane = RootPanel.Descendents().OfType<LayoutAnchorablePane>().Single(p => p.IsVisible);
                 singlePane.UpdateIsDirectlyHostedInFloatingWindow();
@@ -93,44 +78,28 @@ namespace SharpLib.Docking.Layout
             }
         }
 
-        #endregion
-
         public override IEnumerable<ILayoutElement> Children
         {
-            get 
+            get
             {
-                if (ChildrenCount == 1)    
+                if (ChildrenCount == 1)
+                {
                     yield return RootPanel;
-
-                yield break;
+                }
             }
-        }
-
-        public override void RemoveChild(ILayoutElement element)
-        {
-            Debug.Assert(element == RootPanel && element != null);
-            RootPanel = null;
-        }
-
-        public override void ReplaceChild(ILayoutElement oldElement, ILayoutElement newElement)
-        {
-            Debug.Assert(oldElement == RootPanel && oldElement != null);
-            RootPanel = newElement as LayoutAnchorablePaneGroup;
         }
 
         public override int ChildrenCount
         {
-            get 
+            get
             {
                 if (RootPanel == null)
+                {
                     return 0;
-                return 1; 
+                }
+                return 1;
             }
         }
-
-        #region IsVisible
-        [NonSerialized]
-        private bool _isVisible = true;
 
         [XmlIgnore]
         public bool IsVisible
@@ -144,23 +113,11 @@ namespace SharpLib.Docking.Layout
                     _isVisible = value;
                     RaisePropertyChanged("IsVisible");
                     if (IsVisibleChanged != null)
+                    {
                         IsVisibleChanged(this, EventArgs.Empty);
+                    }
                 }
             }
-        }
-
-        public event EventHandler IsVisibleChanged;
-
-        #endregion
-
-
-        void ILayoutElementWithVisibility.ComputeVisibility()
-        {
-            if (RootPanel != null)
-                IsVisible = RootPanel.IsVisible;
-            else
-                IsVisible = false;
-
         }
 
         public override bool IsValid
@@ -168,12 +125,47 @@ namespace SharpLib.Docking.Layout
             get { return RootPanel != null; }
         }
 
+        #endregion
+
+        #region События
+
+        public event EventHandler IsVisibleChanged;
+
+        #endregion
+
+        #region Методы
+
+        private void _rootPanel_ChildrenTreeChanged(object sender, ChildrenTreeChangedEventArgs e)
+        {
+            RaisePropertyChanged("IsSinglePane");
+            RaisePropertyChanged("SinglePane");
+        }
+
+        public override void RemoveChild(ILayoutElement element)
+        {
+            Debug.Assert(Equals(element, RootPanel) && element != null);
+            RootPanel = null;
+        }
+
+        public override void ReplaceChild(ILayoutElement oldElement, ILayoutElement newElement)
+        {
+            Debug.Assert(Equals(oldElement, RootPanel) && oldElement != null);
+            RootPanel = newElement as LayoutAnchorablePaneGroup;
+        }
+
+        void ILayoutElementWithVisibility.ComputeVisibility()
+        {
+            IsVisible = RootPanel != null && RootPanel.IsVisible;
+        }
+
         public override void ConsoleDump(int tab)
         {
-          Trace.Write( new string( ' ', tab * 4 ) );
-          Trace.WriteLine( "FloatingAnchorableWindow()" );
+            Trace.Write(new string(' ', tab * 4));
+            Trace.WriteLine("FloatingAnchorableWindow()");
 
-          RootPanel.ConsoleDump(tab + 1);
+            RootPanel.ConsoleDump(tab + 1);
         }
+
+        #endregion
     }
 }

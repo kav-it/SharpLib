@@ -1,29 +1,11 @@
-﻿/************************************************************************
-
-   AvalonDock
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
-
-   This program is provided to you under the terms of the New BSD
-   License (BSD) as published at http://avalondock.codeplex.com/license 
-
-   For more features, controls, and fast professional support,
-   pick up AvalonDock in Extended WPF Toolkit Plus at http://xceed.com/wpf_toolkit
-
-   Stay informed: follow @datagrid on Twitter or Like facebook.com/datagrids
-
-  **********************************************************************/
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Markup;
-using System.Xml.Serialization;
-using System.Windows;
-using System.Globalization;
-using System.Windows.Media;
+﻿using System;
 using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
+using System.Windows;
+using System.Windows.Markup;
+using System.Windows.Media;
+using System.Xml.Serialization;
 
 namespace SharpLib.Docking.Layout
 {
@@ -31,40 +13,58 @@ namespace SharpLib.Docking.Layout
     [Serializable]
     public abstract class LayoutContent : LayoutElement, IXmlSerializable, ILayoutElementForFloatingWindow, IComparable<LayoutContent>, ILayoutPreviousContainer
     {
-        internal LayoutContent()
-        { }
+        #region Поля
 
-        #region Title
+        public static readonly DependencyProperty TitleProperty;
 
-        public static readonly DependencyProperty TitleProperty =
-            DependencyProperty.Register( "Title", typeof( string ), typeof( LayoutContent ), new UIPropertyMetadata( null, OnTitlePropertyChanged, CoerceTitleValue ) );
+        private bool _canClose;
+
+        private bool _canFloat;
+
+        [NonSerialized]
+        private object _content;
+
+        private string _contentId;
+
+        private double _floatingHeight;
+
+        private double _floatingLeft;
+
+        private double _floatingTop;
+
+        private double _floatingWidth;
+
+        private ImageSource _iconSource;
+
+        [field: NonSerialized]
+        private bool _isActive;
+
+        private bool _isLastFocusedDocument;
+
+        private bool _isMaximized;
+
+        private bool _isSelected;
+
+        private DateTime? _lastActivationTimeStamp;
+
+        [field: NonSerialized]
+        private ILayoutContainer _previousContainer;
+
+        [field: NonSerialized]
+        private int _previousContainerIndex = -1;
+
+        private object _toolTip;
+
+        #endregion
+
+        #region Свойства
 
         public string Title
         {
-          get { return ( string )GetValue( TitleProperty ); }
-          set { SetValue( TitleProperty, value ); }
+            get { return (string)GetValue(TitleProperty); }
+            set { SetValue(TitleProperty, value); }
         }
 
-        private static object CoerceTitleValue( DependencyObject obj, object value )
-        {
-          var lc = ( LayoutContent )obj;
-          if( ( ( string )value ) != lc.Title )
-          {
-            lc.RaisePropertyChanging( LayoutContent.TitleProperty.Name );
-          }
-          return value;
-        }
-
-        private static void OnTitlePropertyChanged( DependencyObject obj, DependencyPropertyChangedEventArgs args )
-        {
-          ( ( LayoutContent )obj ).RaisePropertyChanged( LayoutContent.TitleProperty.Name );
-        }
-
-        #endregion //Title
-
-        #region Content
-        [NonSerialized]
-        private object _content = null;
         [XmlIgnore]
         public object Content
         {
@@ -80,22 +80,19 @@ namespace SharpLib.Docking.Layout
             }
         }
 
-        #endregion
-
-        #region ContentId
-
-        private string _contentId = null;
         public string ContentId
         {
-            get 
+            get
             {
                 if (_contentId == null)
-                { 
+                {
                     var contentAsControl = _content as FrameworkElement;
                     if (contentAsControl != null && !string.IsNullOrWhiteSpace(contentAsControl.Name))
+                    {
                         return contentAsControl.Name;
+                    }
                 }
-                return _contentId; 
+                return _contentId;
             }
             set
             {
@@ -107,11 +104,6 @@ namespace SharpLib.Docking.Layout
             }
         }
 
-        #endregion
-
-        #region IsSelected
-
-        private bool _isSelected = false;
         public bool IsSelected
         {
             get { return _isSelected; }
@@ -124,30 +116,15 @@ namespace SharpLib.Docking.Layout
                     _isSelected = value;
                     var parentSelector = (Parent as ILayoutContentSelector);
                     if (parentSelector != null)
+                    {
                         parentSelector.SelectedContentIndex = _isSelected ? parentSelector.IndexOf(this) : -1;
+                    }
                     OnIsSelectedChanged(oldValue, value);
                     RaisePropertyChanged("IsSelected");
                 }
             }
         }
 
-        /// <summary>
-        /// Provides derived classes an opportunity to handle changes to the IsSelected property.
-        /// </summary>
-        protected virtual void OnIsSelectedChanged(bool oldValue, bool newValue)
-        {
-            if (IsSelectedChanged != null)
-                IsSelectedChanged(this, EventArgs.Empty);
-        }
-
-        public event EventHandler IsSelectedChanged;
-
-        #endregion
-
-        #region IsActive
-
-        [field: NonSerialized]
-        private bool _isActive = false;
         [XmlIgnore]
         public bool IsActive
         {
@@ -163,10 +140,14 @@ namespace SharpLib.Docking.Layout
 
                     var root = Root;
                     if (root != null && _isActive)
+                    {
                         root.ActiveContent = this;
+                    }
 
                     if (_isActive)
+                    {
                         IsSelected = true;
+                    }
 
                     OnIsActiveChanged(oldValue, value);
                     RaisePropertyChanged("IsActive");
@@ -174,25 +155,6 @@ namespace SharpLib.Docking.Layout
             }
         }
 
-        /// <summary>
-        /// Provides derived classes an opportunity to handle changes to the IsActive property.
-        /// </summary>
-        protected virtual void OnIsActiveChanged(bool oldValue, bool newValue)
-        {
-            if (newValue)
-                LastActivationTimeStamp = DateTime.Now;
-
-            if (IsActiveChanged != null)
-                IsActiveChanged(this, EventArgs.Empty);
-        }
-
-        public event EventHandler IsActiveChanged;
-
-        #endregion
-
-        #region IsLastFocusedDocument
-
-        private bool _isLastFocusedDocument = false;
         public bool IsLastFocusedDocument
         {
             get { return _isLastFocusedDocument; }
@@ -206,13 +168,6 @@ namespace SharpLib.Docking.Layout
                 }
             }
         }
-
-        #endregion
-
-        #region PreviousContainer
-
-        [field: NonSerialized]
-        private ILayoutContainer _previousContainer = null;
 
         [XmlIgnore]
         ILayoutContainer ILayoutPreviousContainer.PreviousContainer
@@ -228,7 +183,9 @@ namespace SharpLib.Docking.Layout
                     var paneSerializable = _previousContainer as ILayoutPaneSerializable;
                     if (paneSerializable != null &&
                         paneSerializable.Id == null)
+                    {
                         paneSerializable.Id = Guid.NewGuid().ToString();
+                    }
                 }
             }
         }
@@ -240,11 +197,7 @@ namespace SharpLib.Docking.Layout
         }
 
         [XmlIgnore]
-        string ILayoutPreviousContainer.PreviousContainerId
-        {
-            get;
-            set;
-        }
+        string ILayoutPreviousContainer.PreviousContainerId { get; set; }
 
         protected string PreviousContainerId
         {
@@ -252,11 +205,6 @@ namespace SharpLib.Docking.Layout
             set { ((ILayoutPreviousContainer)this).PreviousContainerId = value; }
         }
 
-        #endregion
-
-        #region PreviousContainerIndex
-        [field: NonSerialized]
-        private int _previousContainerIndex = -1;
         [XmlIgnore]
         public int PreviousContainerIndex
         {
@@ -271,11 +219,6 @@ namespace SharpLib.Docking.Layout
             }
         }
 
-        #endregion
-
-        #region LastActivationTimeStamp
-
-        private DateTime? _lastActivationTimeStamp = null;
         public DateTime? LastActivationTimeStamp
         {
             get { return _lastActivationTimeStamp; }
@@ -289,198 +232,12 @@ namespace SharpLib.Docking.Layout
             }
         }
 
-        #endregion
-
-        protected override void OnParentChanging(ILayoutContainer oldValue, ILayoutContainer newValue)
-        {
-            var root = Root;
-
-            if (oldValue != null)
-                IsSelected = false;
-
-            //if (root != null && _isActive && newValue == null)
-            //    root.ActiveContent = null;
-
-            base.OnParentChanging(oldValue, newValue);
-        }
-
-        protected override void OnParentChanged(ILayoutContainer oldValue, ILayoutContainer newValue)
-        {
-            if (IsSelected && Parent != null && Parent is ILayoutContentSelector)
-            {
-                var parentSelector = (Parent as ILayoutContentSelector);
-                parentSelector.SelectedContentIndex = parentSelector.IndexOf(this);
-            }
-
-            //var root = Root;
-            //if (root != null && _isActive)
-            //    root.ActiveContent = this;
-
-            base.OnParentChanged(oldValue, newValue);
-        }
-
-        /// <summary>
-        /// Test if the content can be closed
-        /// </summary>
-        /// <returns></returns>
-        internal bool TestCanClose()
-        {
-            CancelEventArgs args = new CancelEventArgs();
-
-            OnClosing(args);
-
-            if (args.Cancel)
-                return false;
-
-            return true;
-        }
-
-        /// <summary>
-        /// Close the content
-        /// </summary>
-        /// <remarks>Please note that usually the anchorable is only hidden (not closed). By default when user click the X button it only hides the content.</remarks>
-        public void Close()
-        {
-            var root = Root;
-            var parentAsContainer = Parent as ILayoutContainer;
-            parentAsContainer.RemoveChild(this);
-            if (root != null)
-                root.CollectGarbage();
-
-            OnClosed();
-        }
-
-        /// <summary>
-        /// Event fired when the content is closed (i.e. removed definitely from the layout)
-        /// </summary>
-        public event EventHandler Closed;
-
-        protected virtual void OnClosed()
-        {
-            if (Closed != null)
-                Closed(this, EventArgs.Empty);
-        }
-
-        /// <summary>
-        /// Event fired when the content is about to be closed (i.e. removed definitely from the layout)
-        /// </summary>
-        /// <remarks>Please note that LayoutAnchorable also can be hidden. Usually user hide anchorables when click the 'X' button. To completely close 
-        /// an anchorable the user should click the 'Close' menu item from the context menu. When an LayoutAnchorable is hidden its visibility changes to false and
-        /// IsHidden property is set to true.
-        /// Hanlde the Hiding event for the LayoutAnchorable to cancel the hide operation.</remarks>
-        public event EventHandler<CancelEventArgs> Closing;
-
-        protected virtual void OnClosing(CancelEventArgs args)
-        {
-            if (Closing != null)
-                Closing(this, args);
-        }
-
-        public System.Xml.Schema.XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        public virtual void ReadXml(System.Xml.XmlReader reader)
-        {
-            if (reader.MoveToAttribute("Title"))
-                Title = reader.Value;
-            //if (reader.MoveToAttribute("IconSource"))
-            //    IconSource = new Uri(reader.Value, UriKind.RelativeOrAbsolute);
-
-            if (reader.MoveToAttribute("IsSelected"))
-                IsSelected = bool.Parse(reader.Value);
-            if (reader.MoveToAttribute("ContentId"))
-                ContentId = reader.Value;
-            if (reader.MoveToAttribute("IsLastFocusedDocument"))
-                IsLastFocusedDocument = bool.Parse(reader.Value);
-            if (reader.MoveToAttribute("PreviousContainerId"))
-                PreviousContainerId = reader.Value;
-            if (reader.MoveToAttribute("PreviousContainerIndex"))
-                PreviousContainerIndex = int.Parse(reader.Value);
-
-            if (reader.MoveToAttribute("FloatingLeft"))
-                FloatingLeft = double.Parse(reader.Value, CultureInfo.InvariantCulture);
-            if (reader.MoveToAttribute("FloatingTop"))
-                FloatingTop = double.Parse(reader.Value, CultureInfo.InvariantCulture);
-            if (reader.MoveToAttribute("FloatingWidth"))
-                FloatingWidth = double.Parse(reader.Value, CultureInfo.InvariantCulture);
-            if (reader.MoveToAttribute("FloatingHeight"))
-                FloatingHeight = double.Parse(reader.Value, CultureInfo.InvariantCulture);
-            if (reader.MoveToAttribute("IsMaximized"))
-                IsMaximized = bool.Parse(reader.Value);
-            if (reader.MoveToAttribute("CanClose"))
-                CanClose = bool.Parse(reader.Value);
-            if (reader.MoveToAttribute("CanFloat"))
-                CanFloat = bool.Parse(reader.Value);
-            if (reader.MoveToAttribute("LastActivationTimeStamp"))
-                LastActivationTimeStamp = DateTime.Parse(reader.Value, CultureInfo.InvariantCulture);
-
-            reader.Read();
-        }
-
-        public virtual void WriteXml(System.Xml.XmlWriter writer)
-        {
-            if (!string.IsNullOrWhiteSpace(Title))
-                writer.WriteAttributeString("Title", Title);
-
-            //if (IconSource != null)
-            //    writer.WriteAttributeString("IconSource", IconSource.ToString());
-
-            if (IsSelected)
-                writer.WriteAttributeString("IsSelected", IsSelected.ToString());
-
-            if (IsLastFocusedDocument)
-                writer.WriteAttributeString("IsLastFocusedDocument", IsLastFocusedDocument.ToString());
-
-            if (!string.IsNullOrWhiteSpace(ContentId))
-                writer.WriteAttributeString("ContentId", ContentId);
-
-
-            if (ToolTip != null && ToolTip is string)
-                if (!string.IsNullOrWhiteSpace((string)ToolTip))
-                    writer.WriteAttributeString("ToolTip", (string)ToolTip);
-
-            if (FloatingLeft != 0.0)
-                writer.WriteAttributeString("FloatingLeft", FloatingLeft.ToString(CultureInfo.InvariantCulture));
-            if (FloatingTop != 0.0)
-                writer.WriteAttributeString("FloatingTop", FloatingTop.ToString(CultureInfo.InvariantCulture));
-            if (FloatingWidth != 0.0)
-                writer.WriteAttributeString("FloatingWidth", FloatingWidth.ToString(CultureInfo.InvariantCulture));
-            if (FloatingHeight != 0.0)
-                writer.WriteAttributeString("FloatingHeight", FloatingHeight.ToString(CultureInfo.InvariantCulture));
-
-            if (IsMaximized)
-                writer.WriteAttributeString("IsMaximized", IsMaximized.ToString());
-            if (!CanClose)
-                writer.WriteAttributeString("CanClose", CanClose.ToString());
-            if (!CanFloat)
-                writer.WriteAttributeString("CanFloat", CanFloat.ToString());
-
-            if (LastActivationTimeStamp != null)
-                writer.WriteAttributeString("LastActivationTimeStamp", LastActivationTimeStamp.Value.ToString(CultureInfo.InvariantCulture));
-
-            if (_previousContainer != null)
-            {
-                var paneSerializable = _previousContainer as ILayoutPaneSerializable;
-                if (paneSerializable != null)
-                {
-                    writer.WriteAttributeString("PreviousContainerId", paneSerializable.Id);
-                    writer.WriteAttributeString("PreviousContainerIndex", _previousContainerIndex.ToString());
-                }
-            }
-
-        }
-
-        #region FloatingWidth
-
-        private double _floatingWidth = 0.0;
         public double FloatingWidth
         {
             get { return _floatingWidth; }
             set
             {
-                if (_floatingWidth != value)
+                if (_floatingWidth.NotEqualEx(value))
                 {
                     RaisePropertyChanging("FloatingWidth");
                     _floatingWidth = value;
@@ -489,17 +246,12 @@ namespace SharpLib.Docking.Layout
             }
         }
 
-        #endregion
-
-        #region FloatingHeight
-
-        private double _floatingHeight = 0.0;
         public double FloatingHeight
         {
             get { return _floatingHeight; }
             set
             {
-                if (_floatingHeight != value)
+                if (_floatingHeight.NotEqualEx(value))
                 {
                     RaisePropertyChanging("FloatingHeight");
                     _floatingHeight = value;
@@ -508,17 +260,12 @@ namespace SharpLib.Docking.Layout
             }
         }
 
-        #endregion
-
-        #region FloatingLeft
-
-        private double _floatingLeft = 0.0;
         public double FloatingLeft
         {
             get { return _floatingLeft; }
             set
             {
-                if (_floatingLeft != value)
+                if (_floatingLeft.NotEqualEx(value))
                 {
                     RaisePropertyChanging("FloatingLeft");
                     _floatingLeft = value;
@@ -527,17 +274,12 @@ namespace SharpLib.Docking.Layout
             }
         }
 
-        #endregion
-
-        #region FloatingTop
-
-        private double _floatingTop = 0.0;
         public double FloatingTop
         {
             get { return _floatingTop; }
             set
             {
-                if (_floatingTop != value)
+                if (_floatingTop.NotEqualEx(value))
                 {
                     RaisePropertyChanging("FloatingTop");
                     _floatingTop = value;
@@ -546,11 +288,6 @@ namespace SharpLib.Docking.Layout
             }
         }
 
-        #endregion
-
-        #region IsMaximized
-
-        private bool _isMaximized = false;
         public bool IsMaximized
         {
             get { return _isMaximized; }
@@ -565,11 +302,6 @@ namespace SharpLib.Docking.Layout
             }
         }
 
-        #endregion
-
-        #region ToolTip
-
-        private object _toolTip = null;
         public object ToolTip
         {
             get { return _toolTip; }
@@ -583,22 +315,17 @@ namespace SharpLib.Docking.Layout
             }
         }
 
-        #endregion
-
         public bool IsFloating
         {
             get { return this.FindParent<LayoutFloatingWindow>() != null; }
         }
 
-        #region IconSource
-
-        private ImageSource _iconSource = null;
         public ImageSource IconSource
         {
             get { return _iconSource; }
             set
             {
-                if (_iconSource != value)
+                if (!Equals(_iconSource, value))
                 {
                     _iconSource = value;
                     RaisePropertyChanged("IconSource");
@@ -606,7 +333,309 @@ namespace SharpLib.Docking.Layout
             }
         }
 
+        public bool CanClose
+        {
+            get { return _canClose; }
+            set
+            {
+                if (_canClose != value)
+                {
+                    _canClose = value;
+                    RaisePropertyChanged("CanClose");
+                }
+            }
+        }
+
+        public bool CanFloat
+        {
+            get { return _canFloat; }
+            set
+            {
+                if (_canFloat != value)
+                {
+                    _canFloat = value;
+                    RaisePropertyChanged("CanFloat");
+                }
+            }
+        }
+
         #endregion
+
+        #region События
+
+        public event EventHandler Closed;
+
+        public event EventHandler<CancelEventArgs> Closing;
+
+        public event EventHandler IsActiveChanged;
+
+        public event EventHandler IsSelectedChanged;
+
+        #endregion
+
+        #region Конструктор
+
+        static LayoutContent()
+        {
+            TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(LayoutContent), new UIPropertyMetadata(null, OnTitlePropertyChanged, CoerceTitleValue));
+        }
+
+        internal LayoutContent()
+        {
+            _canFloat = true;
+            _canClose = true;
+        }
+
+        #endregion
+
+        #region Методы
+
+        private static object CoerceTitleValue(DependencyObject obj, object value)
+        {
+            var lc = (LayoutContent)obj;
+            if (((string)value) != lc.Title)
+            {
+                lc.RaisePropertyChanging(TitleProperty.Name);
+            }
+            return value;
+        }
+
+        private static void OnTitlePropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            ((LayoutContent)obj).RaisePropertyChanged(TitleProperty.Name);
+        }
+
+        protected virtual void OnIsSelectedChanged(bool oldValue, bool newValue)
+        {
+            if (IsSelectedChanged != null)
+            {
+                IsSelectedChanged(this, EventArgs.Empty);
+            }
+        }
+
+        protected virtual void OnIsActiveChanged(bool oldValue, bool newValue)
+        {
+            if (newValue)
+            {
+                LastActivationTimeStamp = DateTime.Now;
+            }
+
+            if (IsActiveChanged != null)
+            {
+                IsActiveChanged(this, EventArgs.Empty);
+            }
+        }
+
+        protected override void OnParentChanging(ILayoutContainer oldValue, ILayoutContainer newValue)
+        {
+            var root = Root;
+
+            if (oldValue != null)
+            {
+                IsSelected = false;
+            }
+
+            base.OnParentChanging(oldValue, newValue);
+        }
+
+        protected override void OnParentChanged(ILayoutContainer oldValue, ILayoutContainer newValue)
+        {
+            if (IsSelected && Parent is ILayoutContentSelector)
+            {
+                var parentSelector = (Parent as ILayoutContentSelector);
+                parentSelector.SelectedContentIndex = parentSelector.IndexOf(this);
+            }
+
+            base.OnParentChanged(oldValue, newValue);
+        }
+
+        internal bool TestCanClose()
+        {
+            var args = new CancelEventArgs();
+
+            OnClosing(args);
+
+            if (args.Cancel)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public void Close()
+        {
+            var root = Root;
+            var parentAsContainer = Parent;
+            parentAsContainer.RemoveChild(this);
+            if (root != null)
+            {
+                root.CollectGarbage();
+            }
+
+            OnClosed();
+        }
+
+        protected virtual void OnClosed()
+        {
+            if (Closed != null)
+            {
+                Closed(this, EventArgs.Empty);
+            }
+        }
+
+        protected virtual void OnClosing(CancelEventArgs args)
+        {
+            if (Closing != null)
+            {
+                Closing(this, args);
+            }
+        }
+
+        public System.Xml.Schema.XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        public virtual void ReadXml(System.Xml.XmlReader reader)
+        {
+            if (reader.MoveToAttribute("Title"))
+            {
+                Title = reader.Value;
+            }
+
+            if (reader.MoveToAttribute("IsSelected"))
+            {
+                IsSelected = bool.Parse(reader.Value);
+            }
+            if (reader.MoveToAttribute("ContentId"))
+            {
+                ContentId = reader.Value;
+            }
+            if (reader.MoveToAttribute("IsLastFocusedDocument"))
+            {
+                IsLastFocusedDocument = bool.Parse(reader.Value);
+            }
+            if (reader.MoveToAttribute("PreviousContainerId"))
+            {
+                PreviousContainerId = reader.Value;
+            }
+            if (reader.MoveToAttribute("PreviousContainerIndex"))
+            {
+                PreviousContainerIndex = int.Parse(reader.Value);
+            }
+
+            if (reader.MoveToAttribute("FloatingLeft"))
+            {
+                FloatingLeft = double.Parse(reader.Value, CultureInfo.InvariantCulture);
+            }
+            if (reader.MoveToAttribute("FloatingTop"))
+            {
+                FloatingTop = double.Parse(reader.Value, CultureInfo.InvariantCulture);
+            }
+            if (reader.MoveToAttribute("FloatingWidth"))
+            {
+                FloatingWidth = double.Parse(reader.Value, CultureInfo.InvariantCulture);
+            }
+            if (reader.MoveToAttribute("FloatingHeight"))
+            {
+                FloatingHeight = double.Parse(reader.Value, CultureInfo.InvariantCulture);
+            }
+            if (reader.MoveToAttribute("IsMaximized"))
+            {
+                IsMaximized = bool.Parse(reader.Value);
+            }
+            if (reader.MoveToAttribute("CanClose"))
+            {
+                CanClose = bool.Parse(reader.Value);
+            }
+            if (reader.MoveToAttribute("CanFloat"))
+            {
+                CanFloat = bool.Parse(reader.Value);
+            }
+            if (reader.MoveToAttribute("LastActivationTimeStamp"))
+            {
+                LastActivationTimeStamp = DateTime.Parse(reader.Value, CultureInfo.InvariantCulture);
+            }
+
+            reader.Read();
+        }
+
+        public virtual void WriteXml(System.Xml.XmlWriter writer)
+        {
+            if (!string.IsNullOrWhiteSpace(Title))
+            {
+                writer.WriteAttributeString("Title", Title);
+            }
+
+            if (IsSelected)
+            {
+                writer.WriteAttributeString("IsSelected", IsSelected.ToString());
+            }
+
+            if (IsLastFocusedDocument)
+            {
+                writer.WriteAttributeString("IsLastFocusedDocument", IsLastFocusedDocument.ToString());
+            }
+
+            if (!string.IsNullOrWhiteSpace(ContentId))
+            {
+                writer.WriteAttributeString("ContentId", ContentId);
+            }
+
+            if (ToolTip is string)
+            {
+                if (!string.IsNullOrWhiteSpace((string)ToolTip))
+                {
+                    writer.WriteAttributeString("ToolTip", (string)ToolTip);
+                }
+            }
+
+            if (FloatingLeft.NotZeroEx())
+            {
+                writer.WriteAttributeString("FloatingLeft", FloatingLeft.ToString(CultureInfo.InvariantCulture));
+            }
+            if (FloatingTop.NotZeroEx())
+            {
+                writer.WriteAttributeString("FloatingTop", FloatingTop.ToString(CultureInfo.InvariantCulture));
+            }
+            if (FloatingWidth.NotZeroEx())
+            {
+                writer.WriteAttributeString("FloatingWidth", FloatingWidth.ToString(CultureInfo.InvariantCulture));
+            }
+            if (FloatingHeight.NotZeroEx())
+            {
+                writer.WriteAttributeString("FloatingHeight", FloatingHeight.ToString(CultureInfo.InvariantCulture));
+            }
+
+            if (IsMaximized)
+            {
+                writer.WriteAttributeString("IsMaximized", IsMaximized.ToString());
+            }
+            if (!CanClose)
+            {
+                writer.WriteAttributeString("CanClose", CanClose.ToString());
+            }
+            if (!CanFloat)
+            {
+                writer.WriteAttributeString("CanFloat", CanFloat.ToString());
+            }
+
+            if (LastActivationTimeStamp != null)
+            {
+                writer.WriteAttributeString("LastActivationTimeStamp", LastActivationTimeStamp.Value.ToString(CultureInfo.InvariantCulture));
+            }
+
+            if (_previousContainer != null)
+            {
+                var paneSerializable = _previousContainer as ILayoutPaneSerializable;
+                if (paneSerializable != null)
+                {
+                    writer.WriteAttributeString("PreviousContainerId", paneSerializable.Id);
+                    writer.WriteAttributeString("PreviousContainerIndex", _previousContainerIndex.ToString(CultureInfo.InvariantCulture));
+                }
+            }
+        }
 
         public int CompareTo(LayoutContent other)
         {
@@ -616,29 +645,30 @@ namespace SharpLib.Docking.Layout
                 return contentAsComparable.CompareTo(other.Content);
             }
 
-            return string.Compare(Title, other.Title);
+            return string.CompareOrdinal(Title, other.Title);
         }
 
-        /// <summary>
-        /// Float the content in a popup window
-        /// </summary>
         public void Float()
         {
             if (PreviousContainer != null &&
                 PreviousContainer.FindParent<LayoutFloatingWindow>() != null)
             {
-
                 var currentContainer = Parent as ILayoutPane;
-                var currentContainerIndex = (currentContainer as ILayoutGroup).IndexOfChild(this);
-                var previousContainerAsLayoutGroup = PreviousContainer as ILayoutGroup;
+                var layoutGroup = currentContainer as ILayoutGroup;
+                if (layoutGroup != null)
+                {
+                    var currentContainerIndex = layoutGroup.IndexOfChild(this);
+                    var previousContainerAsLayoutGroup = PreviousContainer as ILayoutGroup;
 
-                if (PreviousContainerIndex < previousContainerAsLayoutGroup.ChildrenCount)
-                    previousContainerAsLayoutGroup.InsertChildAt(PreviousContainerIndex, this);
-                else
-                    previousContainerAsLayoutGroup.InsertChildAt(previousContainerAsLayoutGroup.ChildrenCount, this);
+                    if (previousContainerAsLayoutGroup != null)
+                    {
+                        previousContainerAsLayoutGroup.InsertChildAt(
+                            PreviousContainerIndex < previousContainerAsLayoutGroup.ChildrenCount ? PreviousContainerIndex : previousContainerAsLayoutGroup.ChildrenCount, this);
+                    }
 
-                PreviousContainer = currentContainer;
-                PreviousContainerIndex = currentContainerIndex;
+                    PreviousContainer = currentContainer;
+                    PreviousContainerIndex = currentContainerIndex;
+                }
 
                 IsSelected = true;
                 IsActive = true;
@@ -652,19 +682,19 @@ namespace SharpLib.Docking.Layout
                 IsSelected = true;
                 IsActive = true;
             }
-
         }
 
-        /// <summary>
-        /// Dock the content as document
-        /// </summary>
         public void DockAsDocument()
         {
             var root = Root as LayoutRoot;
             if (root == null)
+            {
                 throw new InvalidOperationException();
+            }
             if (Parent is LayoutDocumentPane)
+            {
                 return;
+            }
 
             if (PreviousContainer is LayoutDocumentPane)
             {
@@ -692,21 +722,19 @@ namespace SharpLib.Docking.Layout
             IsActive = true;
         }
 
-        /// <summary>
-        /// Re-dock the content to its previous container
-        /// </summary>
         public void Dock()
         {
             if (PreviousContainer != null)
             {
-                var currentContainer = Parent as ILayoutContainer;
+                var currentContainer = Parent;
                 var currentContainerIndex = (currentContainer is ILayoutGroup) ? (currentContainer as ILayoutGroup).IndexOfChild(this) : -1;
                 var previousContainerAsLayoutGroup = PreviousContainer as ILayoutGroup;
 
-                if (PreviousContainerIndex < previousContainerAsLayoutGroup.ChildrenCount)
-                    previousContainerAsLayoutGroup.InsertChildAt(PreviousContainerIndex, this);
-                else
-                    previousContainerAsLayoutGroup.InsertChildAt(previousContainerAsLayoutGroup.ChildrenCount, this);
+                if (previousContainerAsLayoutGroup != null)
+                {
+                    previousContainerAsLayoutGroup.InsertChildAt(
+                        PreviousContainerIndex < previousContainerAsLayoutGroup.ChildrenCount ? PreviousContainerIndex : previousContainerAsLayoutGroup.ChildrenCount, this);
+                }
 
                 if (currentContainerIndex > -1)
                 {
@@ -727,49 +755,11 @@ namespace SharpLib.Docking.Layout
                 InternalDock();
             }
 
-
             Root.CollectGarbage();
-
         }
 
         protected virtual void InternalDock()
-        { 
-
-        }
-
-
-        #region CanClose
-
-        private bool _canClose = true;
-        public bool CanClose
         {
-            get { return _canClose; }
-            set
-            {
-                if (_canClose != value)
-                {
-                    _canClose = value;
-                    RaisePropertyChanged("CanClose");
-                }
-            }
-        }
-
-        #endregion
-
-        #region CanFloat
-
-        private bool _canFloat = true;
-        public bool CanFloat
-        {
-            get { return _canFloat; }
-            set
-            {
-                if (_canFloat != value)
-                {
-                    _canFloat = value;
-                    RaisePropertyChanged("CanFloat");
-                }
-            }
         }
 
         #endregion

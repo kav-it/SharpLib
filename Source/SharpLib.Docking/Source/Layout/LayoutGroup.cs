@@ -1,76 +1,23 @@
-﻿/************************************************************************
-
-   AvalonDock
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
-
-   This program is provided to you under the terms of the New BSD
-   License (BSD) as published at http://avalondock.codeplex.com/license 
-
-   For more features, controls, and fast professional support,
-   pick up AvalonDock in Extended WPF Toolkit Plus at http://xceed.com/wpf_toolkit
-
-   Stay informed: follow @datagrid on Twitter or Like facebook.com/datagrids
-
-  **********************************************************************/
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace SharpLib.Docking.Layout
 {
     [Serializable]
-    public abstract class LayoutGroup<T> : LayoutGroupBase, ILayoutContainer, ILayoutGroup, IXmlSerializable where T : class, ILayoutElement
+    public abstract class LayoutGroup<T> : LayoutGroupBase, ILayoutGroup, IXmlSerializable where T : class, ILayoutElement
     {
-        internal LayoutGroup()
-        {
-            _children.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(_children_CollectionChanged);
-        }
+        #region Поля
 
-        void _children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
-            {
-                if (e.OldItems != null)
-                {
-                    foreach (LayoutElement element in e.OldItems)
-                    {
-                        if (element.Parent == this)
-                            element.Parent = null;
-                    }
-                }
-            }
+        private readonly ObservableCollection<T> _children = new ObservableCollection<T>();
 
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
-            {
-                if (e.NewItems != null)
-                {
-                    foreach (LayoutElement element in e.NewItems)
-                    {
-                        if (element.Parent != this)
-                        {
-                            if (element.Parent != null)
-                                element.Parent.RemoveChild(element);
-                            element.Parent = this;
-                        }
+        private bool _isVisible = true;
 
-                    }
-                }
-            }
+        #endregion
 
-            ComputeVisibility();
-            OnChildrenCollectionChanged();
-            NotifyChildrenTreeChanged(ChildrenTreeChange.DirectChildrenChanged);
-            RaisePropertyChanged("ChildrenCount");
-        }
-
-        ObservableCollection<T> _children = new ObservableCollection<T>();
+        #region Свойства
 
         public ObservableCollection<T> Children
         {
@@ -79,13 +26,9 @@ namespace SharpLib.Docking.Layout
 
         IEnumerable<ILayoutElement> ILayoutContainer.Children
         {
-            get { return _children.Cast<ILayoutElement>(); }
+            get { return _children; }
         }
 
-
-        #region IsVisible
-
-        private bool _isVisible = true;
         public bool IsVisible
         {
             get { return _isVisible; }
@@ -101,18 +44,79 @@ namespace SharpLib.Docking.Layout
             }
         }
 
+        public int ChildrenCount
+        {
+            get { return _children.Count; }
+        }
+
+        #endregion
+
+        #region Конструктор
+
+        internal LayoutGroup()
+        {
+            _children.CollectionChanged += _children_CollectionChanged;
+        }
+
+        #endregion
+
+        #region Методы
+
+        private void _children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
+                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+            {
+                if (e.OldItems != null)
+                {
+                    foreach (LayoutElement element in e.OldItems)
+                    {
+                        if (Equals(element.Parent, this))
+                        {
+                            element.Parent = null;
+                        }
+                    }
+                }
+            }
+
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
+                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+            {
+                if (e.NewItems != null)
+                {
+                    foreach (LayoutElement element in e.NewItems)
+                    {
+                        if (!Equals(element.Parent, this))
+                        {
+                            if (element.Parent != null)
+                            {
+                                element.Parent.RemoveChild(element);
+                            }
+                            element.Parent = this;
+                        }
+                    }
+                }
+            }
+
+            ComputeVisibility();
+            OnChildrenCollectionChanged();
+            NotifyChildrenTreeChanged(ChildrenTreeChange.DirectChildrenChanged);
+            RaisePropertyChanged("ChildrenCount");
+        }
+
         protected virtual void OnIsVisibleChanged()
         {
             UpdateParentVisibility();
         }
 
-        void UpdateParentVisibility()
+        private void UpdateParentVisibility()
         {
             var parentPane = Parent as ILayoutElementWithVisibility;
             if (parentPane != null)
+            {
                 parentPane.ComputeVisibility();
+            }
         }
-
 
         public void ComputeVisibility()
         {
@@ -128,20 +132,18 @@ namespace SharpLib.Docking.Layout
             ComputeVisibility();
         }
 
-        #endregion
-
-
         public void MoveChild(int oldIndex, int newIndex)
         {
             if (oldIndex == newIndex)
+            {
                 return;
+            }
             _children.Move(oldIndex, newIndex);
             ChildMoved(oldIndex, newIndex);
         }
 
         protected virtual void ChildMoved(int oldIndex, int newIndex)
-        { 
-
+        {
         }
 
         public void RemoveChildAt(int childIndex)
@@ -171,16 +173,10 @@ namespace SharpLib.Docking.Layout
             _children.RemoveAt(index + 1);
         }
 
-        public int ChildrenCount
-        {
-            get { return _children.Count; }
-        }
-
         public void ReplaceChildAt(int index, ILayoutElement element)
         {
             _children[index] = (T)element;
         }
-
 
         public System.Xml.Schema.XmlSchema GetSchema()
         {
@@ -208,23 +204,42 @@ namespace SharpLib.Docking.Layout
 
                 XmlSerializer serializer = null;
                 if (reader.LocalName == "LayoutAnchorablePaneGroup")
+                {
                     serializer = new XmlSerializer(typeof(LayoutAnchorablePaneGroup));
+                }
                 else if (reader.LocalName == "LayoutAnchorablePane")
+                {
                     serializer = new XmlSerializer(typeof(LayoutAnchorablePane));
+                }
                 else if (reader.LocalName == "LayoutAnchorable")
+                {
                     serializer = new XmlSerializer(typeof(LayoutAnchorable));
+                }
                 else if (reader.LocalName == "LayoutDocumentPaneGroup")
+                {
                     serializer = new XmlSerializer(typeof(LayoutDocumentPaneGroup));
+                }
                 else if (reader.LocalName == "LayoutDocumentPane")
+                {
                     serializer = new XmlSerializer(typeof(LayoutDocumentPane));
+                }
                 else if (reader.LocalName == "LayoutDocument")
+                {
                     serializer = new XmlSerializer(typeof(LayoutDocument));
+                }
                 else if (reader.LocalName == "LayoutAnchorGroup")
+                {
                     serializer = new XmlSerializer(typeof(LayoutAnchorGroup));
+                }
                 else if (reader.LocalName == "LayoutPanel")
+                {
                     serializer = new XmlSerializer(typeof(LayoutPanel));
+                }
 
-                Children.Add((T)serializer.Deserialize(reader));
+                if (serializer != null)
+                {
+                    Children.Add((T)serializer.Deserialize(reader));
+                }
             }
 
             reader.ReadEndElement();
@@ -235,10 +250,11 @@ namespace SharpLib.Docking.Layout
             foreach (var child in Children)
             {
                 var type = child.GetType();
-                XmlSerializer serializer = new XmlSerializer(type);
+                var serializer = new XmlSerializer(type);
                 serializer.Serialize(writer, child);
             }
-
         }
+
+        #endregion
     }
 }

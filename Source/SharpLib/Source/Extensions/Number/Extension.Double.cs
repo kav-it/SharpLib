@@ -25,9 +25,14 @@ namespace SharpLib
             return value1.EqualEx(value2, epsilon) == false;
         }
 
-        public static bool EqualZeroEx(this double value1)
+        public static bool IsZeroEx(this double value1)
         {
             return value1.EqualEx(0);
+        }
+
+        public static bool NotZeroEx(this double value1)
+        {
+            return value1.IsZeroEx() == false;
         }
 
         #endregion
