@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Controls;
 
-namespace SharpLib.Wpf.Docking.Layout
+namespace SharpLib.Docking.Layout
 {
     public interface ILayoutOrientableGroup : ILayoutGroup
     {

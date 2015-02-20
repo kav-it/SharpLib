@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     public class DocumentPaneControlOverlayArea : OverlayArea
     {

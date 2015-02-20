@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 
-namespace SharpLib.Wpf.Docking.Commands
+namespace SharpLib.Docking.Commands
 {
     internal class RelayCommand : ICommand
     {

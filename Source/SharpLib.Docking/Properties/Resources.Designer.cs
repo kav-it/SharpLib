@@ -24,7 +24,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SharpLib.Wpf.Docking.Properties {
+namespace SharpLib.Docking.Properties {
     using System;
 
 

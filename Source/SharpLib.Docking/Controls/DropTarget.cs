@@ -21,11 +21,11 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
 using System.Windows.Threading;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     internal abstract class DropTarget<T> : DropTargetBase, IDropTarget where T : FrameworkElement
     {

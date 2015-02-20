@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     class FocusChangeEventArgs : EventArgs
     {

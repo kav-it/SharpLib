@@ -26,12 +26,12 @@ using System.Windows.Input;
 using System.Windows.Data;
 using System.Windows.Media;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
 using System.Diagnostics;
 using System.Windows.Threading;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     public class LayoutAutoHideWindowControl : HwndHost, ILayoutControl
     {

@@ -23,7 +23,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
 
-namespace SharpLib.Wpf.Docking.Layout
+namespace SharpLib.Docking.Layout
 {
     [ContentProperty("Children")]
     [Serializable]

@@ -20,10 +20,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Data;
 
-using SharpLib.Wpf.Docking.Controls;
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Controls;
+using SharpLib.Docking.Layout;
 
-namespace SharpLib.Wpf.Docking.Converters
+namespace SharpLib.Docking.Converters
 {
     public class HideCommandLayoutItemFromLayoutModelConverter : IValueConverter
     {

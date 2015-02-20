@@ -22,7 +22,7 @@ using System.Windows;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace SharpLib.Wpf.Docking.Layout
+namespace SharpLib.Docking.Layout
 {
     [Serializable]
     public abstract class LayoutElement : DependencyObject, ILayoutElement

@@ -19,9 +19,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
-namespace SharpLib.Wpf.Docking
+namespace SharpLib.Docking
 {
     public class DocumentClosedEventArgs : EventArgs
     {

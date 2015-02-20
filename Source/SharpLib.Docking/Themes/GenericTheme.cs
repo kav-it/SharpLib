@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SharpLib.Wpf.Docking.Themes
+namespace SharpLib.Docking.Themes
 {
     public class GenericTheme : Theme
     {
@@ -8,7 +8,7 @@ namespace SharpLib.Wpf.Docking.Themes
 
         public override Uri GetResourceUri()
         {
-            return new Uri("/Xceed.Wpf.AvalonDock;component/Themes/generic.xaml", UriKind.Relative);
+            return new Uri("/SharpLib.Docking;component/Themes/generic.xaml", UriKind.Relative);
         }
 
         #endregion

@@ -26,16 +26,16 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Input;
 
-using SharpLib.Wpf.Docking.Commands;
-using SharpLib.Wpf.Docking.Converters;
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Commands;
+using SharpLib.Docking.Converters;
+using SharpLib.Docking.Layout;
 
 using System.Diagnostics;
 using System.Windows.Controls.Primitives;
 
 using Microsoft.Windows.Shell;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     public class LayoutAnchorableFloatingWindowControl : LayoutFloatingWindowControl, IOverlayWindowHost
     {
@@ -52,7 +52,7 @@ namespace SharpLib.Wpf.Docking.Controls
             HideWindowCommand = new RelayCommand((p) => OnExecuteHideWindowCommand(p), (p) => CanExecuteHideWindowCommand(p));
         }
 
-        internal override void UpdateThemeResources( SharpLib.Wpf.Docking.Themes.Theme oldTheme = null )
+        internal override void UpdateThemeResources( SharpLib.Docking.Themes.Theme oldTheme = null )
         {
             base.UpdateThemeResources(oldTheme);
 

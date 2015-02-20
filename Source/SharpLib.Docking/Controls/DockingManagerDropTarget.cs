@@ -21,9 +21,9 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     internal class DockingManagerDropTarget : DropTarget<DockingManager>
     {

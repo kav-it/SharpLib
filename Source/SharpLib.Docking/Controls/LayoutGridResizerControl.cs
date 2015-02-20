@@ -22,7 +22,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows;
 using System.Windows.Media;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     public class LayoutGridResizerControl : Thumb
     {

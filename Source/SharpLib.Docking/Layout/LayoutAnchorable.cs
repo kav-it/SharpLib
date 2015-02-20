@@ -24,7 +24,7 @@ using System.Windows.Controls;
 using System.Globalization;
 using System.ComponentModel;
 
-namespace SharpLib.Wpf.Docking.Layout
+namespace SharpLib.Docking.Layout
 {
     [Serializable]
     public class LayoutAnchorable : LayoutContent

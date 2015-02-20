@@ -21,7 +21,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Windows;
 
-namespace SharpLib.Wpf.Docking.Converters
+namespace SharpLib.Docking.Converters
 {
     [ValueConversion(typeof(bool), typeof(Visibility))] 
     public class InverseBoolToVisibilityConverter : IValueConverter 

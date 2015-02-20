@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Data;
 
-namespace SharpLib.Wpf.Docking.Converters
+namespace SharpLib.Docking.Converters
 {
     public class NullToDoNothingConverter : IValueConverter
     {

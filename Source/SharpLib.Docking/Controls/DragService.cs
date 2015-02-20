@@ -22,9 +22,9 @@ using System.Windows.Input;
 using System.Windows;
 using System.Diagnostics;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     class DragService
     {

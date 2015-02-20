@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 
-namespace SharpLib.Wpf.Docking.Layout.Serialization
+namespace SharpLib.Docking.Layout.Serialization
 {
     public class LayoutSerializationCallbackEventArgs : CancelEventArgs
     {

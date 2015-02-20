@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SharpLib.Wpf.Docking
+namespace SharpLib.Docking
 {
     internal static class MathHelper
     {

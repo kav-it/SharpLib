@@ -22,9 +22,9 @@ using System.Windows;
 using System.Windows.Media;
 using System.Diagnostics;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     internal class DocumentPaneDropAsAnchorableTarget : DropTarget<LayoutDocumentPaneControl>
     {

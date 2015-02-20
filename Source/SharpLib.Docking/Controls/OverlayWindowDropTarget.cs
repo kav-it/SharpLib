@@ -21,7 +21,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     public class OverlayWindowDropTarget : IOverlayWindowDropTarget
     {

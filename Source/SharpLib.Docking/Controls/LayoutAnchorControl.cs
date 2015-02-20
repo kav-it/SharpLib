@@ -21,11 +21,11 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
 using System.Windows.Threading;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     public class LayoutAnchorControl : Control, ILayoutControl
     {

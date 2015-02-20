@@ -21,7 +21,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     internal static class TransformExtensions
     {

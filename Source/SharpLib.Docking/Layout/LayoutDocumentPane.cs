@@ -21,7 +21,7 @@ using System.Text;
 using System.Collections.ObjectModel;
 using System.Windows.Markup;
 
-namespace SharpLib.Wpf.Docking.Layout
+namespace SharpLib.Docking.Layout
 {
     [ContentProperty("Children")]
     [Serializable]

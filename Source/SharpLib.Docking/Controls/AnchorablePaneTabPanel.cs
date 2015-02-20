@@ -21,9 +21,9 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     public class AnchorablePaneTabPanel : Panel
     {

@@ -22,9 +22,9 @@ using System.Windows.Controls;
 using System.Windows;
 using System.Collections.ObjectModel;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     public class LayoutAnchorSideControl : Control, ILayoutControl
     {

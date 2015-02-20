@@ -22,7 +22,7 @@ using System.Windows.Markup;
 using System.Windows;
 using System.Xml.Serialization;
 
-namespace SharpLib.Wpf.Docking.Layout
+namespace SharpLib.Docking.Layout
 {
     [Serializable]
     [XmlInclude(typeof(LayoutAnchorableFloatingWindow))]

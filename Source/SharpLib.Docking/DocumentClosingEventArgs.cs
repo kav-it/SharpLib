@@ -20,9 +20,9 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
-namespace SharpLib.Wpf.Docking
+namespace SharpLib.Docking
 {
     public class DocumentClosingEventArgs : CancelEventArgs
     {

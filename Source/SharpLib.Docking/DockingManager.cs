@@ -13,11 +13,11 @@ using System.Windows.Interop;
 using System.Windows.Markup;
 using System.Windows.Threading;
 
-using SharpLib.Wpf.Docking.Controls;
-using SharpLib.Wpf.Docking.Layout;
-using SharpLib.Wpf.Docking.Themes;
+using SharpLib.Docking.Controls;
+using SharpLib.Docking.Layout;
+using SharpLib.Docking.Themes;
 
-namespace SharpLib.Wpf.Docking
+namespace SharpLib.Docking
 {
     [ContentProperty("Layout")]
     [TemplatePart(Name = "PART_AutoHideArea")]

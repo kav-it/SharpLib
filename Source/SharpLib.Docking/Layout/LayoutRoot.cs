@@ -24,7 +24,7 @@ using System.Windows.Markup;
 using System.Xml.Serialization;
 using Standard;
 
-namespace SharpLib.Wpf.Docking.Layout
+namespace SharpLib.Docking.Layout
 {
     [ContentProperty("RootPanel")]
     [Serializable]

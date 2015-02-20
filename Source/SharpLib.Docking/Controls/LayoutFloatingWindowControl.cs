@@ -26,13 +26,13 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
 using System.Diagnostics;
 using System.Windows.Documents;
-using SharpLib.Wpf.Docking.Themes;
+using SharpLib.Docking.Themes;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     public abstract class LayoutFloatingWindowControl : Window, ILayoutControl
     {

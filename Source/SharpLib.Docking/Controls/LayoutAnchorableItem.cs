@@ -19,14 +19,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using SharpLib.Wpf.Docking.Commands;
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Commands;
+using SharpLib.Docking.Layout;
 
 using System.Windows.Input;
 using System.Windows;
 using System.Windows.Data;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     public class LayoutAnchorableItem : LayoutItem
     {

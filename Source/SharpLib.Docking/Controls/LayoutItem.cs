@@ -20,8 +20,8 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 
-using SharpLib.Wpf.Docking.Commands;
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Commands;
+using SharpLib.Docking.Layout;
 
 using System.Windows.Input;
 using System.ComponentModel;
@@ -29,7 +29,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Controls;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     public abstract class LayoutItem : FrameworkElement
     {

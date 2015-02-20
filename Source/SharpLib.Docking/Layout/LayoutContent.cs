@@ -25,7 +25,7 @@ using System.Globalization;
 using System.Windows.Media;
 using System.ComponentModel;
 
-namespace SharpLib.Wpf.Docking.Layout
+namespace SharpLib.Docking.Layout
 {
     [ContentProperty("Content")]
     [Serializable]

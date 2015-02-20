@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Globalization;
 
-namespace SharpLib.Wpf.Docking.Layout
+namespace SharpLib.Docking.Layout
 {
     [Serializable]
     public class LayoutDocument : LayoutContent

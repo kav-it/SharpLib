@@ -19,10 +19,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using SharpLib.Wpf.Docking.Controls;
+using SharpLib.Docking.Controls;
 using System.Windows;
 
-namespace SharpLib.Wpf.Docking.Layout.Serialization
+namespace SharpLib.Docking.Layout.Serialization
 {
     public abstract class LayoutSerializer
     {

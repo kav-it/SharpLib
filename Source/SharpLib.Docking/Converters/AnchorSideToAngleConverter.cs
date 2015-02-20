@@ -20,9 +20,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Data;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
-namespace SharpLib.Wpf.Docking.Converters
+namespace SharpLib.Docking.Converters
 {
     [ValueConversion(typeof(AnchorSide), typeof(double))]
     public class AnchorSideToAngleConverter : IValueConverter

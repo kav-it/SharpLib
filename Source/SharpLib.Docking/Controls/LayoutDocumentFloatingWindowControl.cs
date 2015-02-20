@@ -20,14 +20,14 @@ using System.Linq;
 using System.Text;
 using System.Windows.Data;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using Microsoft.Windows.Shell;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     public class LayoutDocumentFloatingWindowControl : LayoutFloatingWindowControl
     {

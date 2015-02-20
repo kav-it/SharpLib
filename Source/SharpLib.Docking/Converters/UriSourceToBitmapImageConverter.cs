@@ -22,7 +22,7 @@ using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using System.Windows.Controls;
 
-namespace SharpLib.Wpf.Docking.Converters
+namespace SharpLib.Docking.Converters
 {
     public class UriSourceToBitmapImageConverter : IValueConverter
     {

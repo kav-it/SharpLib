@@ -20,13 +20,13 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
 using System.Windows.Interop;
 using System.Windows.Threading;
-using SharpLib.Wpf.Docking.Themes;
+using SharpLib.Docking.Themes;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     public class NavigatorWindow : Window
     {

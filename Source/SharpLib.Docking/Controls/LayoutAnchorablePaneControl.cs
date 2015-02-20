@@ -23,9 +23,9 @@ using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Data;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     public class LayoutAnchorablePaneControl : TabControl, ILayoutControl//, ILogicalChildrenContainer
     {

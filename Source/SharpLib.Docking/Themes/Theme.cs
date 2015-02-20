@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace SharpLib.Wpf.Docking.Themes
+namespace SharpLib.Docking.Themes
 {
     public abstract class Theme : DependencyObject
     {

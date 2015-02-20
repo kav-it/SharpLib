@@ -23,12 +23,12 @@ using System.Windows.Interop;
 using System.Windows;
 using System.Diagnostics;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     internal static class FocusElementManager
     {

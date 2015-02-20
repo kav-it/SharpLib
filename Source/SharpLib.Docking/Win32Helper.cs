@@ -21,7 +21,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-namespace SharpLib.Wpf.Docking
+namespace SharpLib.Docking
 {
     internal static class Win32Helper
     {

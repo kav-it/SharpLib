@@ -21,7 +21,7 @@ using System.Text;
 using System.Windows.Markup;
 using System.Diagnostics;
 
-namespace SharpLib.Wpf.Docking.Layout
+namespace SharpLib.Docking.Layout
 {
     [ContentProperty("RootDocument")]
     [Serializable]

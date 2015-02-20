@@ -21,9 +21,9 @@ using System.Text;
 using System.Windows.Data;
 using System.Windows.Controls;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
-namespace SharpLib.Wpf.Docking.Converters
+namespace SharpLib.Docking.Converters
 {
     [ValueConversion(typeof(AnchorSide), typeof(Orientation))] 
     public class AnchorSideToOrientationConverter : IValueConverter

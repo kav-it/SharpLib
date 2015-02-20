@@ -23,7 +23,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Threading;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     class BindingHelper
     {

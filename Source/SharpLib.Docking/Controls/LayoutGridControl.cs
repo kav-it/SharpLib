@@ -23,12 +23,12 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
 using System.Diagnostics;
 using System.Windows.Threading;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     public abstract class LayoutGridControl<T> : Grid, ILayoutControl where T : class, ILayoutPanelElement
     {

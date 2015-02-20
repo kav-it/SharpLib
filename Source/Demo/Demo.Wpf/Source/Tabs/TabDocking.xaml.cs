@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
 namespace DemoWpf
 {

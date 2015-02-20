@@ -23,12 +23,12 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-using SharpLib.Wpf.Docking.Layout;
+using SharpLib.Docking.Layout;
 
 using System.Diagnostics;
-using SharpLib.Wpf.Docking.Themes;
+using SharpLib.Docking.Themes;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     public class OverlayWindow : Window, IOverlayWindow
     {

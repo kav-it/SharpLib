@@ -23,7 +23,7 @@ using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using System.Runtime.InteropServices;
 
-namespace SharpLib.Wpf.Docking.Controls
+namespace SharpLib.Docking.Controls
 {
     public static class Extentions
     {

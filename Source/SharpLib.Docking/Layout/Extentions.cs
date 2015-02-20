@@ -24,7 +24,7 @@ using System.Windows.Media.Media3D;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace SharpLib.Wpf.Docking.Layout
+namespace SharpLib.Docking.Layout
 {
     public static class Extensions
     {

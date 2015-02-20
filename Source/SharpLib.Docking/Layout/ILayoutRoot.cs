@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
 
-namespace SharpLib.Wpf.Docking.Layout
+namespace SharpLib.Docking.Layout
 {
     public interface ILayoutRoot
     {
