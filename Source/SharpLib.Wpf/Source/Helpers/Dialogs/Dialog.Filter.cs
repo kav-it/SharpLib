@@ -7,7 +7,7 @@
     {
         #region Поля
 
-        public static DialogFilter All = new DialogFilter("Все файлы", "*.*");
+        public static DialogFilter Any = new DialogFilter("Все файлы", "*.*");
 
         public static DialogFilter Dll = new DialogFilter("Библиотеки", "*.dll");
 

@@ -358,6 +358,11 @@ namespace SharpLib
 
         public static string TrimEndEx(this string text, string subString)
         {
+            if (subString.IsNotValid())
+            {
+                return text;
+            }
+
             if (text.EndsWith(subString))
             {
                 text = text.Remove(text.Length - subString.Length);

@@ -25,11 +25,6 @@ namespace SharpLib.Wpf.Controls
         /// </summary>
         internal TreeListExNode _root;
 
-        /// <summary>
-        /// —сылка на основной элемент (дерево)
-        /// </summary>
-        internal TreeListEx _tree;
-
         #endregion
 
         #region —войства
@@ -87,7 +82,7 @@ namespace SharpLib.Wpf.Controls
 
         public TreeListExFlattener(TreeListEx tree, TreeListExNode modelRoot, bool includeRoot)
         {
-            _tree = tree;
+            modelRoot._tree = tree;
             _syncRoot = new object();
             _root = modelRoot;
             while (_root._listParent != null)

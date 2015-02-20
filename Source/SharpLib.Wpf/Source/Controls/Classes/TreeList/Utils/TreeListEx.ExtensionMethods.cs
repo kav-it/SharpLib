@@ -24,15 +24,6 @@ namespace SharpLib.Wpf.Controls
             }
         }
 
-        #warning Удалить
-        public static void AddOnce(this IList list, object item)
-        {
-            if (!list.Contains(item))
-            {
-                list.Add(item);
-            }
-        }
-
         #endregion
     }
 }

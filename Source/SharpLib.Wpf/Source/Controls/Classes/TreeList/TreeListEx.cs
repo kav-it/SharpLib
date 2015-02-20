@@ -84,6 +84,7 @@ namespace SharpLib.Wpf.Controls
                 Dragging.DragDrop.SetIsDragSource(this, value != null);
             }
         }
+
         /// <summary>
         /// Элемент является получателем операций DragDrop
         /// </summary>
@@ -96,6 +97,11 @@ namespace SharpLib.Wpf.Controls
                 Dragging.DragDrop.SetIsDropTarget(this, value != null);
             }
         }
+
+        /// <summary>
+        /// Событие "Активация элемента"
+        /// </summary>
+        public event EventHandler<EventArgs<TreeListExNode>> ActivatedItem;
 
         #endregion
 
@@ -454,6 +460,18 @@ namespace SharpLib.Wpf.Controls
         public void SetSelectedItems(IEnumerable<TreeListExNode> items)
         {
             base.SetSelectedItems(items);
+        }
+
+        /// <summary>
+        /// Событие "Активация элемента"
+        /// </summary>
+        internal void RaiseActivatedItem(TreeListExNode value)
+        {
+            if (ActivatedItem != null)
+            {
+                ActivatedItem(this, new EventArgs<TreeListExNode>(value));
+            }
+
         }
 
         #endregion

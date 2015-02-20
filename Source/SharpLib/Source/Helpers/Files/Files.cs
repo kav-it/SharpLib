@@ -219,14 +219,7 @@ namespace SharpLib
         /// </summary>
         public static bool IsDirectory(string path)
         {
-            if (string.IsNullOrEmpty(path))
-            {
-                return false;
-            }
-
-            var attr = File.GetAttributes(path);
-
-            return attr.IsFlagSet(FileAttributes.Directory);
+            return CheckTyp(path) == FileTyp.Folder;
         }
 
         /// <summary>
@@ -234,14 +227,7 @@ namespace SharpLib
         /// </summary>
         public static bool IsFile(string path)
         {
-            if (string.IsNullOrEmpty(path))
-            {
-                return false;
-            }
-
-            var attr = File.GetAttributes(path);
-
-            return (attr.IsFlagSet(FileAttributes.Directory) == false);
+            return CheckTyp(path) == FileTyp.File;
         }
 
         /// <summary>
@@ -303,7 +289,7 @@ namespace SharpLib
         /// <summary>
         /// Копирование файла
         /// </summary>
-        public static string CopyFile(string srcPath, string destPath)
+        public static string CopyFile(string srcPath, string destPath, string newName = null)
         {
             if (string.IsNullOrEmpty(destPath))
             {
@@ -318,7 +304,7 @@ namespace SharpLib
 
             try
             {
-                string filename = GetFileNameAndExt(srcPath);
+                string filename = newName ?? GetFileNameAndExt(srcPath);
                 string newPath = PathEx.Combine(destPath, filename);
 
                 if (File.Exists(newPath))
@@ -340,9 +326,11 @@ namespace SharpLib
         /// <summary>
         /// Копирование директории (с рекурсивным содержимым)
         /// </summary>
-        public static string CopyDirectory(string srcDir, string destDir)
+        public static string CopyDirectory(string srcDir, string destDir, string newName = null)
         {
-            destDir = Path.Combine(destDir, GetFileName(srcDir));
+            destDir = newName == null
+                ? Path.Combine(destDir, GetFileName(srcDir))
+                : Path.Combine(destDir, newName);
 
             if (Directory.Exists(destDir) == false)
             {

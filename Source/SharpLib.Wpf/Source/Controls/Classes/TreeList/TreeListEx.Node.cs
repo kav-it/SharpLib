@@ -13,6 +13,11 @@ namespace SharpLib.Wpf.Controls
     {
         #region Поля
 
+        /// <summary>
+        /// Ссылка на элемент "Дерево" (есть только у root)
+        /// </summary>
+        internal TreeListEx _tree;
+
         private bool _canExpandRecursively;
 
         private byte _height;
@@ -50,13 +55,7 @@ namespace SharpLib.Wpf.Controls
         /// </summary>
         internal IComparer<TreeListExNode> Sorter
         {
-            get
-            {
-                var listRoot = GetListRoot();
-                var sorter = listRoot._treeListFlattener._tree.Sorter;
-
-                return sorter;
-            }
+            get { return Tree.Sorter; }
         }
 
         #endregion
@@ -66,6 +65,19 @@ namespace SharpLib.Wpf.Controls
         private int Balance
         {
             get { return Height(_right) - Height(_left); }
+        }
+
+        /// <summary>
+        /// Родительский элемента "Дерево"
+        /// </summary>
+        internal TreeListEx Tree
+        {
+            get
+            {
+                var root = GetRoot();
+
+                return root._tree;
+            }
         }
 
         public TreeListExNodeCollection Children
@@ -290,6 +302,7 @@ namespace SharpLib.Wpf.Controls
 
         #region Методы
 
+
         /// <summary>
         /// Рекурсивное разворачивание родительских узлов
         /// </summary>
@@ -340,6 +353,18 @@ namespace SharpLib.Wpf.Controls
             }
 
             return item;
+        }
+
+        /// <summary>
+        /// Активация элемента (реализация в наследниках)
+        /// </summary>
+        /// <remarks>
+        /// Может быть DoubleClick и Enter и Space (для Checkable)
+        /// </remarks>
+        public virtual void ActivateItem(RoutedEventArgs e)
+        {
+            // В базовой реализация работает через генерацию события
+            Tree.RaiseActivatedItem(this);
         }
 
         private void UpdateIsVisible(bool parentIsVisible, bool updateFlattener)
@@ -414,10 +439,6 @@ namespace SharpLib.Wpf.Controls
                     child.UpdateIsVisible(showChildren, updateFlattener);
                 }
             }
-        }
-
-        public virtual void ActivateItem(RoutedEventArgs e)
-        {
         }
 
         public override string ToString()
