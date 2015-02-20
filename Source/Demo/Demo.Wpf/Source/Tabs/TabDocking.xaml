@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:avalonDock="clr-namespace:AvalonDock;assembly=SharpLib.Docking"
+             xmlns:avalonDock1="clr-namespace:Xceed.Wpf.AvalonDock;assembly=SharpLib.Docking"
              mc:Ignorable="d"
              d:DesignHeight="247.802" d:DesignWidth="764.272">
     <Grid>
@@ -14,7 +14,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <Button Content="Add left" Click="AddLeftButtonClick"/>
         </StackPanel>
-        <avalonDock:DockingManager Name="PART_dockingManager" Grid.Row="1">
-        </avalonDock:DockingManager>
+        <avalonDock1:DockingManager Name="PART_dockingManager" Grid.Row="1">
+        </avalonDock1:DockingManager>
     </Grid>
 </UserControl>
