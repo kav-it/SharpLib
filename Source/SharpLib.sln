@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.Web", "SharpLib.We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.Audio", "SharpLib.Audio\SharpLib.Audio.csproj", "{A821AFDA-4E31-4448-A23B-0584867DE4F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.Docking", "SharpLib.Docking\SharpLib.Docking.csproj", "{D01F976F-A09D-430D-9D6E-865383B22C52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{A821AFDA-4E31-4448-A23B-0584867DE4F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A821AFDA-4E31-4448-A23B-0584867DE4F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A821AFDA-4E31-4448-A23B-0584867DE4F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D01F976F-A09D-430D-9D6E-865383B22C52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D01F976F-A09D-430D-9D6E-865383B22C52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D01F976F-A09D-430D-9D6E-865383B22C52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D01F976F-A09D-430D-9D6E-865383B22C52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

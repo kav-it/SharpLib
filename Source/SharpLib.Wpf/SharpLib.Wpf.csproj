@@ -127,7 +127,6 @@
     <Compile Include="Source\Controls\Classes\TreeList\Utils\TreeListEx.ExtensionMethods.cs" />
     <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.Flattener.cs" />
     <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.GridView.cs" />
-    <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.InsertMarker.cs" />
     <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.LinesRenderer.cs" />
     <Compile Include="Source\Controls\Classes\TreeList\TreeListEx.Sorter.cs" />
     <Compile Include="Source\Controls\Classes\TreeList\Utils\TreeListEx.Traversal.cs" />
