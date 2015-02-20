@@ -569,10 +569,6 @@ namespace SharpLib.Docking
                         _fwList.Add(CreateUIElementForModel(fw) as LayoutFloatingWindowControl);
                     }
                 }
-
-                foreach (var fw in _fwList)
-                {
-                }
             }
 
             if (newLayout != null)
@@ -640,12 +636,12 @@ namespace SharpLib.Docking
                 };
             }
 
-            ((DockingManager)d).OnLayoutChanging(value as LayoutRoot);
+            ((DockingManager)d).OnLayoutChanging();
 
             return value;
         }
 
-        private void OnLayoutChanging(LayoutRoot newLayout)
+        private void OnLayoutChanging()
         {
             if (LayoutChanging != null)
             {

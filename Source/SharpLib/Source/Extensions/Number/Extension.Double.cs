@@ -20,6 +20,11 @@ namespace SharpLib
             return Math.Abs(value1 - value2) < epsilon;
         }
 
+        public static bool NotEqualEx(this double value1, double value2, double epsilon = EPSILON)
+        {
+            return value1.EqualEx(value2, epsilon) == false;
+        }
+
         public static bool EqualZeroEx(this double value1)
         {
             return value1.EqualEx(0);
