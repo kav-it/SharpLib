@@ -55,9 +55,6 @@
     <Compile Include="..\..\SharpLib.Version.cs">
       <Link>Source\Version\SharpLib.Version.cs</Link>
     </Compile>
-    <Compile Include="Source\Tabs\TabDocking.xaml.cs">
-      <DependentUpon>TabDocking.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Source\Tabs\TabAudio.xaml.cs">
       <DependentUpon>TabAudio.xaml</DependentUpon>
     </Compile>
@@ -66,6 +63,9 @@
     </Compile>
     <Compile Include="Source\Tabs\TabTreeList.xaml.cs">
       <DependentUpon>TabTreeList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Tabs\TabDocking.xaml.cs">
+      <DependentUpon>TabDocking.xaml</DependentUpon>
     </Compile>
     <Compile Include="Source\Version\AssemblyInfo.cs" />
     <Compile Include="Source\App.xaml.cs">
@@ -98,10 +98,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Source\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Source\Tabs\TabDocking.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -142,6 +138,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Source\Tabs\TabText.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Source\Tabs\TabDocking.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

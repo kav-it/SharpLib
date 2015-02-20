@@ -1,20 +1,23 @@
 ﻿<UserControl x:Class="DemoWpf.TabDocking"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:avalonDock1="clr-namespace:Xceed.Wpf.AvalonDock;assembly=SharpLib.Docking"
-             mc:Ignorable="d"
-             d:DesignHeight="247.802" d:DesignWidth="764.272">
+             xmlns:xcad="clr-namespace:Xceed.Wpf.AvalonDock;assembly=SharpLib.Docking"
+             xmlns:layout="clr-namespace:Xceed.Wpf.AvalonDock.Layout;assembly=SharpLib.Docking"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="35*"/>
-            <RowDefinition Height="213*"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="9*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Button Content="Add left" Click="AddLeftButtonClick"/>
+            <Button Content="Add left" Click="AddLeftClick"></Button>
+            <Button Content="Add" Click="AddCenterClick" Width="70" Margin="5"/>
         </StackPanel>
-        <avalonDock1:DockingManager Name="PART_dockingManager" Grid.Row="1">
-        </avalonDock1:DockingManager>
+        <xcad:DockingManager Grid.Row="1">
+            <layout:LayoutRoot x:Name="PART_rootLayout" />
+        </xcad:DockingManager>
     </Grid>
 </UserControl>
