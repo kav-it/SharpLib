@@ -124,7 +124,7 @@ namespace SharpLib.Docking.Controls
             if (msg == Win32Helper.WM_WINDOWPOSCHANGING)
             {
                 if (_internalHost_ContentRendered)
-                    Win32Helper.SetWindowPos(_internalHwndSource.Handle, Win32Helper.HWND_TOP, 0, 0, 0, 0, Win32Helper.SetWindowPosFlags.IgnoreMove | Win32Helper.SetWindowPosFlags.IgnoreResize);
+                    Win32Helper.SetWindowPos(_internalHwndSource.Handle, Win32Helper.HwndTop, 0, 0, 0, 0, Win32Helper.SetWindowPosFlags.IgnoreMove | Win32Helper.SetWindowPosFlags.IgnoreResize);
             }
             return base.WndProc(hwnd, msg, wParam, lParam, ref handled);
         }

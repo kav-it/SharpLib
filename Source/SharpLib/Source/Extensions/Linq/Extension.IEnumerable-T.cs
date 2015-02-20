@@ -5,7 +5,7 @@ using System.Linq;
 namespace SharpLib
 {
     /// <summary>
-    /// Расширения класса IEnumerable
+    /// Расширения класса IEnumerableT
     /// </summary>
     public static class ExtensionEnumerableT
     {
@@ -25,6 +25,14 @@ namespace SharpLib
             var list = self.ToList();
 
             return list.SelectMany(c => func(c).FlatternEx(func)).Concat(list);
+        }
+
+        public static void ForEach<T>(this IEnumerable<T> self, Action<T> action)
+        {
+            foreach (T v in self)
+            {
+                action(v);
+            }
         }
     }
 }

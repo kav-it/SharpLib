@@ -133,10 +133,10 @@
     <Compile Include="Converters\NullToDoNothingConverter.cs" />
     <Compile Include="Converters\UriSourceToBitmapImageConverter.cs" />
     <Compile Include="DockingManager.cs" />
-    <Compile Include="DocumentClosedEventArgs.cs" />
-    <Compile Include="DocumentClosingEventArgs.cs" />
-    <Compile Include="Extentions.cs" />
-    <Compile Include="LayoutEventArgs.cs" />
+    <Compile Include="Source\Args\DocumentClosed.EventArgs.cs" />
+    <Compile Include="Source\Args\DocumentClosing.EventArgs.cs" />
+    <Compile Include="Source\Utils\Extentions.cs" />
+    <Compile Include="Source\Args\Layout.EventArgs.cs" />
     <Compile Include="Layout\AnchorableShowStrategy.cs" />
     <Compile Include="Layout\AnchorSide.cs" />
     <Compile Include="Layout\ChildrenTreeChangedEventArgs.cs" />
@@ -179,7 +179,7 @@
     <Compile Include="Layout\Serialization\LayoutSerializationCallbackEventArgs.cs" />
     <Compile Include="Layout\Serialization\LayoutSerializer.cs" />
     <Compile Include="Layout\Serialization\XmlLayoutSerializer.cs" />
-    <Compile Include="MathHelper.cs" />
+    <Compile Include="Source\Utils\MathHelper.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -188,10 +188,15 @@
     <Compile Include="Source\Version\AssemblyInfo.cs" />
     <Compile Include="Themes\GenericTheme.cs" />
     <Compile Include="Themes\Theme.cs" />
-    <Compile Include="Win32Helper.cs" />
-    <Compile Include="WindowHelper.cs" />
+    <Compile Include="Source\Utils\Win32Helper.cs" />
+    <Compile Include="Source\Utils\WindowHelper.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SharpLib\SharpLib.csproj">
+      <Project>{9cdec0b8-2232-45d1-815c-90880e1f8595}</Project>
+      <Name>SharpLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx" />
   </ItemGroup>

@@ -99,7 +99,9 @@
     <Compile Include="Source\Events\EventArgs{T}.Cancel.cs" />
     <Compile Include="Source\Events\EventArgs{T}.Changing.cs" />
     <Compile Include="Source\Events\EventArgs{T}.cs" />
-    <Compile Include="Source\Extensions\Extension.List-T.cs" />
+    <Compile Include="Source\Extensions\Linq\Extension.IEnumerable.cs" />
+    <Compile Include="Source\Extensions\Linq\Extension.Array-T.cs" />
+    <Compile Include="Source\Extensions\Linq\Extension.List-T.cs" />
     <Compile Include="Source\Extensions\Extension.Expressions.cs" />
     <Compile Include="Source\Extensions\Number\Extension.Byte.cs" />
     <Compile Include="Source\Extensions\Number\Extension.Float.cs" />
@@ -108,7 +110,7 @@
     <Compile Include="Source\Extensions\String\Extension.StringBuilder.cs" />
     <Compile Include="Source\Extensions\Extension.Exception.cs" />
     <Compile Include="Source\Extensions\Extension.Guid.cs" />
-    <Compile Include="Source\Extensions\Extension.IEnumerable-T.cs" />
+    <Compile Include="Source\Extensions\Linq\Extension.IEnumerable-T.cs" />
     <Compile Include="Source\Extensions\Extension.ParametrInfo.cs" />
     <Compile Include="Source\Extensions\Extension.Type.cs" />
     <Compile Include="Source\Extensions\Extension.ConcurrentDictionary.cs" />

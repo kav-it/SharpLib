@@ -1427,7 +1427,7 @@ namespace SharpLib.Docking
 
             var windowParentHanlde = new WindowInteropHelper(parentWindow).Handle;
 
-            var currentHandle = Win32Helper.GetWindow(windowParentHanlde, (uint)Win32Helper.GetWindow_Cmd.GW_HWNDFIRST);
+            var currentHandle = Win32Helper.GetWindow(windowParentHanlde, (uint)Win32Helper.GetWindowCmd.GW_HWNDFIRST);
             while (currentHandle != IntPtr.Zero)
             {
                 var ctrl = _fwList.FirstOrDefault(fw => new WindowInteropHelper(fw).Handle == currentHandle);
@@ -1436,7 +1436,7 @@ namespace SharpLib.Docking
                     yield return ctrl;
                 }
 
-                currentHandle = Win32Helper.GetWindow(currentHandle, (uint)Win32Helper.GetWindow_Cmd.GW_HWNDNEXT);
+                currentHandle = Win32Helper.GetWindow(currentHandle, (uint)Win32Helper.GetWindowCmd.GW_HWNDNEXT);
             }
         }
 
