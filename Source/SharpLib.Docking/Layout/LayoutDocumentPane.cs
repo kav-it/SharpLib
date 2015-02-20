@@ -21,7 +21,7 @@ using System.Text;
 using System.Collections.ObjectModel;
 using System.Windows.Markup;
 
-namespace Xceed.Wpf.AvalonDock.Layout
+namespace SharpLib.Wpf.Docking.Layout
 {
     [ContentProperty("Children")]
     [Serializable]

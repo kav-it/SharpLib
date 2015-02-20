@@ -19,9 +19,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
-using Xceed.Wpf.AvalonDock.Layout;
 
-namespace Xceed.Wpf.AvalonDock
+using SharpLib.Wpf.Docking.Layout;
+
+namespace SharpLib.Wpf.Docking
 {
     public class DocumentClosingEventArgs : CancelEventArgs
     {

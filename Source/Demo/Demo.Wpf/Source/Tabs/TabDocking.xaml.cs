@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-using Xceed.Wpf.AvalonDock.Layout;
+using SharpLib.Wpf.Docking.Layout;
 
 namespace DemoWpf
 {

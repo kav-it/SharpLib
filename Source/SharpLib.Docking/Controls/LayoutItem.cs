@@ -19,15 +19,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using Xceed.Wpf.AvalonDock.Layout;
+
+using SharpLib.Wpf.Docking.Commands;
+using SharpLib.Wpf.Docking.Layout;
+
 using System.Windows.Input;
-using Xceed.Wpf.AvalonDock.Commands;
 using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Controls;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+namespace SharpLib.Wpf.Docking.Controls
 {
     public abstract class LayoutItem : FrameworkElement
     {

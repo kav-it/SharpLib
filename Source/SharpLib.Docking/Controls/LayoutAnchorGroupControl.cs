@@ -20,10 +20,12 @@ using System.Linq;
 using System.Text;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
-using Xceed.Wpf.AvalonDock.Layout;
+
+using SharpLib.Wpf.Docking.Layout;
+
 using System.Windows;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+namespace SharpLib.Wpf.Docking.Controls
 {
     public class LayoutAnchorGroupControl : Control, ILayoutControl
     {

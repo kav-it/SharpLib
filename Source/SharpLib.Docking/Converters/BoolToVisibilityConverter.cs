@@ -21,7 +21,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Windows;
 
-namespace Xceed.Wpf.AvalonDock.Converters
+namespace SharpLib.Wpf.Docking.Converters
 {
     [ValueConversion(typeof(bool), typeof(Visibility))] 
     public class BoolToVisibilityConverter : IValueConverter 

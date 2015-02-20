@@ -21,7 +21,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+namespace SharpLib.Wpf.Docking.Controls
 {
     public class MenuItemEx : MenuItem
     {

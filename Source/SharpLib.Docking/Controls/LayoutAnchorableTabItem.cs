@@ -22,11 +22,13 @@ using System.Windows;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Xceed.Wpf.AvalonDock.Layout;
+
+using SharpLib.Wpf.Docking.Layout;
+
 using System.Reflection;
 using System.Diagnostics;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+namespace SharpLib.Wpf.Docking.Controls
 {
     public class LayoutAnchorableTabItem : Control
     {

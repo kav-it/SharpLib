@@ -25,12 +25,14 @@ using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using Xceed.Wpf.AvalonDock.Layout;
+
+using SharpLib.Wpf.Docking.Layout;
+
 using System.Diagnostics;
 using System.Windows.Documents;
-using Xceed.Wpf.AvalonDock.Themes;
+using SharpLib.Wpf.Docking.Themes;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+namespace SharpLib.Wpf.Docking.Controls
 {
     public abstract class LayoutFloatingWindowControl : Window, ILayoutControl
     {

@@ -21,7 +21,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+namespace SharpLib.Wpf.Docking.Controls
 {
     internal static class TransformExtensions
     {

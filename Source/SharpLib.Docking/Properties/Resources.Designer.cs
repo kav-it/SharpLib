@@ -24,7 +24,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Xceed.Wpf.AvalonDock.Properties {
+namespace SharpLib.Wpf.Docking.Properties {
     using System;
 
 

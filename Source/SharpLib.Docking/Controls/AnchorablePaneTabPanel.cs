@@ -20,9 +20,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows;
-using Xceed.Wpf.AvalonDock.Layout;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+using SharpLib.Wpf.Docking.Layout;
+
+namespace SharpLib.Wpf.Docking.Controls
 {
     public class AnchorablePaneTabPanel : Panel
     {

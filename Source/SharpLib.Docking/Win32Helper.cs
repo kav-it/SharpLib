@@ -21,7 +21,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-namespace Xceed.Wpf.AvalonDock
+namespace SharpLib.Wpf.Docking
 {
     internal static class Win32Helper
     {
@@ -180,9 +180,9 @@ namespace Xceed.Wpf.AvalonDock
 
         internal const int HT_CAPTION = 0x2;
 
-        [DllImportAttribute("user32.dll")]
+        [DllImport("user32.dll")]
         internal static extern int SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
-        [DllImportAttribute("user32.dll")]
+        [DllImport("user32.dll")]
         internal static extern int PostMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
 
 

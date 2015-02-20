@@ -22,9 +22,10 @@ using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Data;
-using Xceed.Wpf.AvalonDock.Layout;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+using SharpLib.Wpf.Docking.Layout;
+
+namespace SharpLib.Wpf.Docking.Controls
 {
     public class LayoutAnchorablePaneControl : TabControl, ILayoutControl//, ILogicalChildrenContainer
     {

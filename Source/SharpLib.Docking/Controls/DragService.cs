@@ -21,9 +21,10 @@ using System.Text;
 using System.Windows.Input;
 using System.Windows;
 using System.Diagnostics;
-using Xceed.Wpf.AvalonDock.Layout;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+using SharpLib.Wpf.Docking.Layout;
+
+namespace SharpLib.Wpf.Docking.Controls
 {
     class DragService
     {

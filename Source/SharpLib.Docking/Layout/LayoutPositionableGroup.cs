@@ -21,7 +21,7 @@ using System.Text;
 using System.Windows;
 using System.Globalization;
 
-namespace Xceed.Wpf.AvalonDock.Layout
+namespace SharpLib.Wpf.Docking.Layout
 {
     [Serializable]
     public abstract class LayoutPositionableGroup<T> : LayoutGroup<T>, ILayoutPositionableElement, ILayoutPositionableElementWithActualSize where T : class, ILayoutElement

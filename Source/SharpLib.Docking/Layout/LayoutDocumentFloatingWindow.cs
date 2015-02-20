@@ -21,7 +21,7 @@ using System.Text;
 using System.Windows.Markup;
 using System.Diagnostics;
 
-namespace Xceed.Wpf.AvalonDock.Layout
+namespace SharpLib.Wpf.Docking.Layout
 {
     [ContentProperty("RootDocument")]
     [Serializable]

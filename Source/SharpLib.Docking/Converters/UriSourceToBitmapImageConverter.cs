@@ -22,7 +22,7 @@ using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using System.Windows.Controls;
 
-namespace Xceed.Wpf.AvalonDock.Converters
+namespace SharpLib.Wpf.Docking.Converters
 {
     public class UriSourceToBitmapImageConverter : IValueConverter
     {

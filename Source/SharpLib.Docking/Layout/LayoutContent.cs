@@ -25,7 +25,7 @@ using System.Globalization;
 using System.Windows.Media;
 using System.ComponentModel;
 
-namespace Xceed.Wpf.AvalonDock.Layout
+namespace SharpLib.Wpf.Docking.Layout
 {
     [ContentProperty("Content")]
     [Serializable]

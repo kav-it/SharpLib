@@ -17,11 +17,11 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:shell="clr-namespace:Microsoft.Windows.Shell"
-                    xmlns:avalonDock="clr-namespace:Xceed.Wpf.AvalonDock"
-                    xmlns:avalonDockLayout="clr-namespace:Xceed.Wpf.AvalonDock.Layout"
-                    xmlns:avalonDockControls="clr-namespace:Xceed.Wpf.AvalonDock.Controls"
-                    xmlns:avalonDockConverters="clr-namespace:Xceed.Wpf.AvalonDock.Converters"
-                    xmlns:avalonDockProperties="clr-namespace:Xceed.Wpf.AvalonDock.Properties"
+                    xmlns:avalonDock="clr-namespace:SharpLib.Wpf.Docking"
+                    xmlns:avalonDockLayout="clr-namespace:SharpLib.Wpf.Docking.Layout"
+                    xmlns:avalonDockControls="clr-namespace:SharpLib.Wpf.Docking.Controls"
+                    xmlns:avalonDockConverters="clr-namespace:SharpLib.Wpf.Docking.Converters"
+                    xmlns:avalonDockProperties="clr-namespace:SharpLib.Wpf.Docking.Properties"
                     >
 
     <avalonDockConverters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>

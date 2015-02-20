@@ -24,7 +24,7 @@ using System.Windows.Media.Media3D;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace Xceed.Wpf.AvalonDock.Layout
+namespace SharpLib.Wpf.Docking.Layout
 {
     public static class Extensions
     {

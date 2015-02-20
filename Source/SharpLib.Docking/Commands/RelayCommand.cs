@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 
-namespace Xceed.Wpf.AvalonDock.Commands
+namespace SharpLib.Wpf.Docking.Commands
 {
     internal class RelayCommand : ICommand
     {

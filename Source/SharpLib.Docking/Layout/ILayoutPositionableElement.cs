@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 
-namespace Xceed.Wpf.AvalonDock.Layout
+namespace SharpLib.Wpf.Docking.Layout
 {
     internal interface ILayoutPositionableElement : ILayoutElement, ILayoutElementForFloatingWindow
     {

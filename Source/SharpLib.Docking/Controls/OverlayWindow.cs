@@ -22,11 +22,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using Xceed.Wpf.AvalonDock.Layout;
-using System.Diagnostics;
-using Xceed.Wpf.AvalonDock.Themes;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+using SharpLib.Wpf.Docking.Layout;
+
+using System.Diagnostics;
+using SharpLib.Wpf.Docking.Themes;
+
+namespace SharpLib.Wpf.Docking.Controls
 {
     public class OverlayWindow : Window, IOverlayWindow
     {

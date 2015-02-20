@@ -25,14 +25,17 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Input;
-using Xceed.Wpf.AvalonDock.Layout;
-using Xceed.Wpf.AvalonDock.Converters;
+
+using SharpLib.Wpf.Docking.Commands;
+using SharpLib.Wpf.Docking.Converters;
+using SharpLib.Wpf.Docking.Layout;
+
 using System.Diagnostics;
 using System.Windows.Controls.Primitives;
-using Xceed.Wpf.AvalonDock.Commands;
+
 using Microsoft.Windows.Shell;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+namespace SharpLib.Wpf.Docking.Controls
 {
     public class LayoutAnchorableFloatingWindowControl : LayoutFloatingWindowControl, IOverlayWindowHost
     {
@@ -49,7 +52,7 @@ namespace Xceed.Wpf.AvalonDock.Controls
             HideWindowCommand = new RelayCommand((p) => OnExecuteHideWindowCommand(p), (p) => CanExecuteHideWindowCommand(p));
         }
 
-        internal override void UpdateThemeResources( Xceed.Wpf.AvalonDock.Themes.Theme oldTheme = null )
+        internal override void UpdateThemeResources( SharpLib.Wpf.Docking.Themes.Theme oldTheme = null )
         {
             base.UpdateThemeResources(oldTheme);
 

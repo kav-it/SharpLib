@@ -21,9 +21,10 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows;
 using System.Collections.ObjectModel;
-using Xceed.Wpf.AvalonDock.Layout;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+using SharpLib.Wpf.Docking.Layout;
+
+namespace SharpLib.Wpf.Docking.Controls
 {
     public class LayoutAnchorSideControl : Control, ILayoutControl
     {

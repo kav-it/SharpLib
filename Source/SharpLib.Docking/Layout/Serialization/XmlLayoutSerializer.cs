@@ -21,7 +21,7 @@ using System.Text;
 using System.Xml.Serialization;
 using System.IO;
 
-namespace Xceed.Wpf.AvalonDock.Layout.Serialization
+namespace SharpLib.Wpf.Docking.Layout.Serialization
 {
     public class XmlLayoutSerializer : LayoutSerializer
     {

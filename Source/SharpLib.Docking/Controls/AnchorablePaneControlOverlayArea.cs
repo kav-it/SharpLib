@@ -19,9 +19,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using Xceed.Wpf.AvalonDock.Layout;
+using SharpLib.Wpf.Docking.Layout;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+namespace SharpLib.Wpf.Docking.Controls
 {
     public class AnchorablePaneControlOverlayArea : OverlayArea
     {

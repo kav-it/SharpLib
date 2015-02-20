@@ -22,7 +22,7 @@ using System.Windows;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace Xceed.Wpf.AvalonDock.Layout
+namespace SharpLib.Wpf.Docking.Layout
 {
     [Serializable]
     public abstract class LayoutElement : DependencyObject, ILayoutElement

@@ -20,9 +20,9 @@ using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
 using System.Windows.Markup;
-using Xceed.Wpf.AvalonDock.Controls;
+using SharpLib.Wpf.Docking.Controls;
 
-namespace Xceed.Wpf.AvalonDock.Layout
+namespace SharpLib.Wpf.Docking.Layout
 {
     [ContentProperty("Children")]
     [Serializable]

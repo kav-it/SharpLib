@@ -19,10 +19,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Data;
-using Xceed.Wpf.AvalonDock.Layout;
-using Xceed.Wpf.AvalonDock.Controls;
 
-namespace Xceed.Wpf.AvalonDock.Converters
+using SharpLib.Wpf.Docking.Controls;
+using SharpLib.Wpf.Docking.Layout;
+
+namespace SharpLib.Wpf.Docking.Converters
 {
     public class AutoHideCommandLayoutItemFromLayoutModelConverter : IValueConverter
     {

@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 
-namespace Xceed.Wpf.AvalonDock
+namespace SharpLib.Wpf.Docking
 {
     internal static class Extensions
     {

@@ -19,12 +19,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using Xceed.Wpf.AvalonDock.Layout;
+
+using SharpLib.Wpf.Docking.Layout;
+
 using System.Windows.Interop;
 using System.Windows.Threading;
-using Xceed.Wpf.AvalonDock.Themes;
+using SharpLib.Wpf.Docking.Themes;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+namespace SharpLib.Wpf.Docking.Controls
 {
     public class NavigatorWindow : Window
     {

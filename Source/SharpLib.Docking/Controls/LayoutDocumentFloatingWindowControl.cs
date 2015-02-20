@@ -19,13 +19,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Data;
-using Xceed.Wpf.AvalonDock.Layout;
+
+using SharpLib.Wpf.Docking.Layout;
+
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using Microsoft.Windows.Shell;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+namespace SharpLib.Wpf.Docking.Controls
 {
     public class LayoutDocumentFloatingWindowControl : LayoutFloatingWindowControl
     {

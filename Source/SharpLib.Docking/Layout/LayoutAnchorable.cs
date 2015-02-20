@@ -24,7 +24,7 @@ using System.Windows.Controls;
 using System.Globalization;
 using System.ComponentModel;
 
-namespace Xceed.Wpf.AvalonDock.Layout
+namespace SharpLib.Wpf.Docking.Layout
 {
     [Serializable]
     public class LayoutAnchorable : LayoutContent

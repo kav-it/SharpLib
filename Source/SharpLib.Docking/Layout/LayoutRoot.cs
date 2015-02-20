@@ -24,7 +24,7 @@ using System.Windows.Markup;
 using System.Xml.Serialization;
 using Standard;
 
-namespace Xceed.Wpf.AvalonDock.Layout
+namespace SharpLib.Wpf.Docking.Layout
 {
     [ContentProperty("RootPanel")]
     [Serializable]

@@ -18,13 +18,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Xceed.Wpf.AvalonDock.Layout;
+
+using SharpLib.Wpf.Docking.Commands;
+using SharpLib.Wpf.Docking.Layout;
+
 using System.Windows.Input;
 using System.Windows;
-using Xceed.Wpf.AvalonDock.Commands;
 using System.Windows.Data;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+namespace SharpLib.Wpf.Docking.Controls
 {
     public class LayoutAnchorableItem : LayoutItem
     {

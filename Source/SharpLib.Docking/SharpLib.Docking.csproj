@@ -45,8 +45,6 @@
     <Compile Include="..\SharpLib.Version.cs">
       <Link>Source\Version\SharpLib.Version.cs</Link>
     </Compile>
-    <Compile Include="AssemblyVersionInfo.cs" />
-    <Compile Include="AssemblyVersionInfoCommon.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Controls\AnchorablePaneControlOverlayArea.cs" />
     <Compile Include="Controls\AnchorablePaneDropTarget.cs" />
@@ -182,17 +180,11 @@
     <Compile Include="Layout\Serialization\LayoutSerializer.cs" />
     <Compile Include="Layout\Serialization\XmlLayoutSerializer.cs" />
     <Compile Include="MathHelper.cs" />
-    <Compile Include="Properties\Resources.de.Designer.cs" />
-    <Compile Include="Properties\Resources.Designer.cs" />
-    <Compile Include="Properties\Resources.es.Designer.cs" />
-    <Compile Include="Properties\Resources.fr.Designer.cs" />
-    <Compile Include="Properties\Resources.hu.Designer.cs" />
-    <Compile Include="Properties\Resources.it.Designer.cs" />
-    <Compile Include="Properties\Resources.pt-BR.Designer.cs" />
-    <Compile Include="Properties\Resources.ro.Designer.cs" />
-    <Compile Include="Properties\Resources.ru.Designer.cs" />
-    <Compile Include="Properties\Resources.sv.Designer.cs" />
-    <Compile Include="Properties\Resources.zh-Hans.Designer.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Source\Version\AssemblyInfo.cs" />
     <Compile Include="Themes\GenericTheme.cs" />
     <Compile Include="Themes\Theme.cs" />
@@ -201,17 +193,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.de.resx" />
-    <EmbeddedResource Include="Properties\Resources.es.resx" />
-    <EmbeddedResource Include="Properties\Resources.fr.resx" />
-    <EmbeddedResource Include="Properties\Resources.hu.resx" />
-    <EmbeddedResource Include="Properties\Resources.it.resx" />
-    <EmbeddedResource Include="Properties\Resources.pt-BR.resx" />
     <EmbeddedResource Include="Properties\Resources.resx" />
-    <EmbeddedResource Include="Properties\Resources.ro.resx" />
-    <EmbeddedResource Include="Properties\Resources.ru.resx" />
-    <EmbeddedResource Include="Properties\Resources.sv.resx" />
-    <EmbeddedResource Include="Properties\Resources.zh-Hans.resx" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\generic.xaml">

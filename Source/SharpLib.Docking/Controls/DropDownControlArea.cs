@@ -25,7 +25,7 @@ using System.Windows.Media;
 using System.Windows.Input;
 using System.Diagnostics;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+namespace SharpLib.Wpf.Docking.Controls
 {
     public class DropDownControlArea : UserControl
     {

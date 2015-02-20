@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace Xceed.Wpf.AvalonDock.Layout
+namespace SharpLib.Wpf.Docking.Layout
 {
     [Serializable]
     public abstract class LayoutGroupBase : LayoutElement

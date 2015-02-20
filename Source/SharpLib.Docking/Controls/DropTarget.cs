@@ -20,10 +20,12 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Media;
-using Xceed.Wpf.AvalonDock.Layout;
+
+using SharpLib.Wpf.Docking.Layout;
+
 using System.Windows.Threading;
 
-namespace Xceed.Wpf.AvalonDock.Controls
+namespace SharpLib.Wpf.Docking.Controls
 {
     internal abstract class DropTarget<T> : DropTargetBase, IDropTarget where T : FrameworkElement
     {

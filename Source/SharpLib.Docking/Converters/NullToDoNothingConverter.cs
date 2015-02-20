@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Data;
 
-namespace Xceed.Wpf.AvalonDock.Converters
+namespace SharpLib.Wpf.Docking.Converters
 {
     public class NullToDoNothingConverter : IValueConverter
     {
