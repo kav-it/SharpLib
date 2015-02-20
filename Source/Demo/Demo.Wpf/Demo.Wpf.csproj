@@ -55,6 +55,9 @@
     <Compile Include="..\..\SharpLib.Version.cs">
       <Link>Source\Version\SharpLib.Version.cs</Link>
     </Compile>
+    <Compile Include="Source\Tabs\TabDocking.xaml.cs">
+      <DependentUpon>TabDocking.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Source\Tabs\TabAudio.xaml.cs">
       <DependentUpon>TabAudio.xaml</DependentUpon>
     </Compile>
@@ -95,6 +98,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Source\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Tabs\TabDocking.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -143,6 +150,10 @@
     <ProjectReference Include="..\..\SharpLib.Audio\SharpLib.Audio.csproj">
       <Project>{a821afda-4e31-4448-a23b-0584867de4f0}</Project>
       <Name>SharpLib.Audio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SharpLib.Docking\SharpLib.Docking.csproj">
+      <Project>{d01f976f-a09d-430d-9d6e-865383b22c52}</Project>
+      <Name>SharpLib.Docking</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SharpLib.Json\SharpLib.Json.csproj">
       <Project>{893AAF6E-AC29-402A-B2FB-356CB417E562}</Project>

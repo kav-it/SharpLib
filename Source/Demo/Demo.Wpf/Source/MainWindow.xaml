@@ -27,7 +27,7 @@
             <TabItem Header="Memo" >
                 <local:TabMemo />
             </TabItem>
-            <TabItem Header="TreeList" IsSelected="True" >
+            <TabItem Header="TreeList" >
                 <local:TabTreeList />
             </TabItem>
             <TabItem Header="Dialogs" >
@@ -35,6 +35,9 @@
             </TabItem>
             <TabItem Header="Audio" >
                 <local:TabAudio />
+            </TabItem>
+            <TabItem Header="Docking" IsSelected="True" >
+                <local:TabDocking/>
             </TabItem>
 
         </TabControl>
