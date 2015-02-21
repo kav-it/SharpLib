@@ -70,6 +70,14 @@ namespace DemoWpf
 
         private void AddCenterClick(object sender, RoutedEventArgs e)
         {
+            var container = new LayoutDocument
+            {
+                Content = new Button { Content = "Left 1", Width = 75, Height = 27 },
+                Title = "Title",
+                ContentId = Guid.NewGuid().ToString()
+            };
+
+            CenterPanel.Children.Add(container);
         }
 
         #endregion
@@ -78,7 +86,7 @@ namespace DemoWpf
         {
             var container = new LayoutAnchorable
             {
-                Content = new Button {Content = "Left 1"},
+                Content = new Button {Content = "Left 1", Width = 75, Height = 27},
                 Title = "Title",
                 ContentId = Guid.NewGuid().ToString()
             };

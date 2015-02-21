@@ -677,21 +677,21 @@ namespace SharpLib.Docking.Layout
 
         public override void ConsoleDump(int tab)
         {
-            Trace.Write(new string(' ', tab * 4));
-            Trace.WriteLine("RootPanel()");
+            // Trace.Write(new string(' ', tab * 4));
+            // Trace.WriteLine("RootPanel()");
 
             RootPanel.ConsoleDump(tab + 1);
 
-            Trace.Write(new string(' ', tab * 4));
-            Trace.WriteLine("FloatingWindows()");
+            // Trace.Write(new string(' ', tab * 4));
+            // Trace.WriteLine("FloatingWindows()");
 
             foreach (LayoutFloatingWindow fw in FloatingWindows)
             {
                 fw.ConsoleDump(tab + 1);
             }
 
-            Trace.Write(new string(' ', tab * 4));
-            Trace.WriteLine("Hidden()");
+            // Trace.Write(new string(' ', tab * 4));
+            // Trace.WriteLine("Hidden()");
 
             foreach (LayoutAnchorable hidden in Hidden)
             {

@@ -130,8 +130,8 @@ namespace SharpLib.Docking.Layout
 
         public virtual void ConsoleDump(int tab)
         {
-            Trace.Write(new string(' ', tab * 4));
-            Trace.WriteLine(ToString());
+            // Trace.Write(new string(' ', tab * 4));
+            // Trace.WriteLine(ToString());
         }
 
         #endregion

@@ -58,8 +58,8 @@ namespace SharpLib.Docking.Layout
 
         public override void ConsoleDump(int tab)
         {
-            System.Diagnostics.Trace.Write(new string(' ', tab * 4));
-            System.Diagnostics.Trace.WriteLine("Document()");
+            // Trace.Write(new string(' ', tab * 4));
+            // Trace.WriteLine("Document()");
         }
 
         protected override void InternalDock()

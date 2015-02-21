@@ -152,9 +152,6 @@ namespace SharpLib.Docking.Controls
                 focused = IntPtr.Zero != Win32Helper.SetFocus(handleToFocus);
             }
 
-            Trace.WriteLine(string.Format("SetFocusOnLastElement(focused={0}, model={1}, element={2})", focused, model,
-                handleToFocus == IntPtr.Zero ? (objectToFocus == null ? "" : objectToFocus.ToString()) : handleToFocus.ToString()));
-
             if (focused)
             {
                 _lastFocusedElement = new WeakReference(model);
@@ -196,11 +193,7 @@ namespace SharpLib.Docking.Controls
 
         private static void WindowActivating(object sender, WindowActivateEventArgs e)
         {
-            Trace.WriteLine("WindowActivating");
-
-            if (Keyboard.FocusedElement == null &&
-                _lastFocusedElement != null &&
-                _lastFocusedElement.IsAlive)
+            if (Keyboard.FocusedElement == null && _lastFocusedElement != null && _lastFocusedElement.IsAlive)
             {
                 var elementToSetFocus = _lastFocusedElement.Target as ILayoutElement;
                 if (elementToSetFocus != null)
@@ -252,22 +245,6 @@ namespace SharpLib.Docking.Controls
             }
 
             _lastFocusedElementBeforeEnterMenuMode = new WeakReference(Keyboard.FocusedElement);
-        }
-
-        private static void InputManager_LeaveMenuMode(object sender, EventArgs e)
-        {
-            if (_lastFocusedElementBeforeEnterMenuMode != null &&
-                _lastFocusedElementBeforeEnterMenuMode.IsAlive)
-            {
-                var lastFocusedInputElement = _lastFocusedElementBeforeEnterMenuMode.GetValueOrDefault<UIElement>();
-                if (lastFocusedInputElement != null)
-                {
-                    if (lastFocusedInputElement != Keyboard.Focus(lastFocusedInputElement))
-                    {
-                        Debug.WriteLine("Unable to activate the element");
-                    }
-                }
-            }
         }
 
         #endregion

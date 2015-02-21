@@ -70,12 +70,6 @@ namespace SharpLib.Docking.Controls
             modelWithAtcualSize.ActualHeight = ActualHeight;
         }
 
-        protected override void OnGotKeyboardFocus(System.Windows.Input.KeyboardFocusChangedEventArgs e)
-        {
-            base.OnGotKeyboardFocus(e);
-            System.Diagnostics.Trace.WriteLine(string.Format("OnGotKeyboardFocus({0}, {1})", e.Source, e.NewFocus));
-        }
-
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             base.OnSelectionChanged(e);

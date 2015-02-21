@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Threading;
 
 using SharpLib.Docking.Layout;
@@ -48,7 +49,7 @@ namespace SharpLib.Docking.Controls
             }
             else
             {
-                System.Diagnostics.Debug.Assert(false);
+                Debug.Assert(false);
             }
         }
 

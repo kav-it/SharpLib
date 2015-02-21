@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -69,10 +68,9 @@ namespace SharpLib.Docking.Controls
         static LayoutFloatingWindowControl()
         {
             _isDraggingPropertyKey = DependencyProperty.RegisterReadOnly("IsDragging", typeof(bool), typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(false, OnIsDraggingChanged));
-
-            IsMaximizedProperty = _isMaximizedPropertyKey.DependencyProperty;
             _isMaximizedPropertyKey = DependencyProperty.RegisterReadOnly("IsMaximized", typeof(bool), typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(false));
             IsDraggingProperty = _isDraggingPropertyKey.DependencyProperty;
+            IsMaximizedProperty = _isMaximizedPropertyKey.DependencyProperty;
 
             ContentProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(null, null, CoerceContentValue));
             AllowsTransparencyProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(false));
@@ -425,12 +423,6 @@ namespace SharpLib.Docking.Controls
                 return new HandleRef(this, _wpfContentHost.Handle);
             }
 
-            protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
-            {
-                Trace.WriteLine("FloatingWindowContentHost.GotKeyboardFocus");
-                base.OnGotKeyboardFocus(e);
-            }
-
             protected override void DestroyWindowCore(HandleRef hwnd)
             {
                 _manager.InternalRemoveLogicalChild(_rootPresenter);
@@ -439,20 +431,6 @@ namespace SharpLib.Docking.Controls
                     _wpfContentHost.Dispose();
                     _wpfContentHost = null;
                 }
-            }
-
-            protected override IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-            {
-                switch (msg)
-                {
-                    case Win32Helper.WM_SETFOCUS:
-                        Trace.WriteLine("FloatingWindowContentHost.WM_SETFOCUS");
-                        break;
-                    case Win32Helper.WM_KILLFOCUS:
-                        Trace.WriteLine("FloatingWindowContentHost.WM_KILLFOCUS");
-                        break;
-                }
-                return base.WndProc(hwnd, msg, wParam, lParam, ref handled);
             }
 
             protected override Size MeasureOverride(Size constraint)

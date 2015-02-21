@@ -257,7 +257,6 @@ namespace SharpLib.Docking.Controls
             LayoutElement.IsActiveChanged += LayoutElement_IsActiveChanged;
 
             DataContext = this;
-            System.Diagnostics.Trace.WriteLine(string.Format("Attach({0})", LayoutElement.Title));
         }
 
         private void LayoutElement_IsActiveChanged(object sender, EventArgs e)
@@ -286,7 +285,6 @@ namespace SharpLib.Docking.Controls
 
         internal virtual void Detach()
         {
-            System.Diagnostics.Trace.WriteLine(string.Format("Detach({0})", LayoutElement.Title));
             LayoutElement.IsSelectedChanged -= LayoutElement_IsSelectedChanged;
             LayoutElement.IsActiveChanged -= LayoutElement_IsActiveChanged;
             LayoutElement = null;
@@ -544,12 +542,6 @@ namespace SharpLib.Docking.Controls
 
         private bool CanExecuteCloseCommand(object parameter)
         {
-#if DEBUG
-            if (LayoutElement != null)
-            {
-                System.Diagnostics.Trace.WriteLine(string.Format("CanExecuteCloseCommand({0}) = {1}", LayoutElement.Title, LayoutElement.CanClose));
-            }
-#endif
             return LayoutElement != null && LayoutElement.CanClose;
         }
 

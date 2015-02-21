@@ -163,13 +163,13 @@ namespace SharpLib.Docking.Controls
                 return;
             }
 
-            if (SelectedDocument != null &&
-                SelectedDocument.ActivateCommand.CanExecute(null))
+            if (SelectedDocument == null || !SelectedDocument.ActivateCommand.CanExecute(null))
             {
-                System.Diagnostics.Trace.WriteLine("OnSelectedDocumentChanged()");
-                SelectedDocument.ActivateCommand.Execute(null);
-                Hide();
+                return;
             }
+
+            SelectedDocument.ActivateCommand.Execute(null);
+            Hide();
         }
 
         private void InternalSetSelectedDocument(LayoutDocumentItem documentToSelect)

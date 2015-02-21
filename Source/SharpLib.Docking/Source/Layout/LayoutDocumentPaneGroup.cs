@@ -70,8 +70,8 @@ namespace SharpLib.Docking.Layout
 
         public override void ConsoleDump(int tab)
         {
-            Trace.Write(new string(' ', tab * 4));
-            Trace.WriteLine(string.Format("DocumentPaneGroup({0})", Orientation));
+            // Trace.Write(new string(' ', tab * 4));
+            // Trace.WriteLine(string.Format("DocumentPaneGroup({0})", Orientation));
 
             foreach (var layoutDocumentPane in Children)
             {

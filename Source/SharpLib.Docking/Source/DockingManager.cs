@@ -1015,25 +1015,6 @@ namespace SharpLib.Docking
             }
         }
 
-        protected override void OnPreviewGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
-        {
-            Trace.WriteLine(string.Format("DockingManager.OnPreviewGotKeyboardFocus({0})", e.NewFocus));
-
-            base.OnPreviewGotKeyboardFocus(e);
-        }
-
-        protected override void OnPreviewLostKeyboardFocus(KeyboardFocusChangedEventArgs e)
-        {
-            Trace.WriteLine(string.Format("DockingManager.OnPreviewLostKeyboardFocus({0})", e.OldFocus));
-            base.OnPreviewLostKeyboardFocus(e);
-        }
-
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            Trace.WriteLine(string.Format("DockingManager.OnMouseLeftButtonDown([{0}])", e.GetPosition(this)));
-            base.OnMouseLeftButtonDown(e);
-        }
-
         private static void OnLayoutRootPanelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ((DockingManager)d).OnLayoutRootPanelChanged(e);
@@ -2430,13 +2411,10 @@ namespace SharpLib.Docking
 
             _navigatorWindow.ShowDialog();
             _navigatorWindow = null;
-
-            Trace.WriteLine("ShowNavigatorWindow()");
         }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
-            Trace.WriteLine(string.Format("OnPreviewKeyDown({0})", e.Key));
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
             {
                 if (e.IsDown && e.Key == Key.Tab)

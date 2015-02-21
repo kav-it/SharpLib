@@ -154,16 +154,22 @@ namespace SharpLib.Docking.Controls
 
             _anchor = anchor;
             _model = anchor.Model as LayoutAnchorable;
-            _side = (anchor.Model.Parent.Parent as LayoutAnchorSide).Side;
-            _manager = _model.Root.Manager;
-            CreateInternalGrid();
+            var layoutAnchorSide = anchor.Model.Parent.Parent as LayoutAnchorSide;
+            if (layoutAnchorSide != null)
+            {
+                _side = layoutAnchorSide.Side;
+            }
+            if (_model != null)
+            {
+                _manager = _model.Root.Manager;
+                CreateInternalGrid();
 
-            _model.PropertyChanged += _model_PropertyChanged;
+                _model.PropertyChanged += _model_PropertyChanged;
+            }
 
             Visibility = Visibility.Visible;
             InvalidateMeasure();
             UpdateWindowPos();
-            Trace.WriteLine("LayoutAutoHideWindowControl.Show()");
         }
 
         internal void Hide()
@@ -180,8 +186,6 @@ namespace SharpLib.Docking.Controls
             _model = null;
             _manager = null;
             Visibility = Visibility.Hidden;
-
-            Trace.WriteLine("LayoutAutoHideWindowControl.Hide()");
         }
 
         protected override HandleRef BuildWindowCore(HandleRef hwndParent)

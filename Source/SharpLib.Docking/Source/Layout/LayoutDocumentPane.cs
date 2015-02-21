@@ -181,8 +181,8 @@ namespace SharpLib.Docking.Layout
 
         public override void ConsoleDump(int tab)
         {
-            Trace.Write(new string(' ', tab * 4));
-            Trace.WriteLine("DocumentPane()");
+            // Trace.Write(new string(' ', tab * 4));
+            // Trace.WriteLine("DocumentPane()");
 
             foreach (LayoutContent child in Children)
             {

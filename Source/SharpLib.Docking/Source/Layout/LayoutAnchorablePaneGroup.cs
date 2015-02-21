@@ -119,8 +119,8 @@ namespace SharpLib.Docking.Layout
 
         public override void ConsoleDump(int tab)
         {
-            System.Diagnostics.Trace.Write(new string(' ', tab * 4));
-            System.Diagnostics.Trace.WriteLine(string.Format("AnchorablePaneGroup({0})", Orientation));
+            // Trace.Write(new string(' ', tab * 4));
+            // Trace.WriteLine(string.Format("AnchorablePaneGroup({0})", Orientation));
 
             foreach (var layoutAnchorablePane in Children)
             {

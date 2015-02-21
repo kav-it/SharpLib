@@ -676,8 +676,8 @@ namespace SharpLib.Docking.Layout
 
         public override void ConsoleDump(int tab)
         {
-            System.Diagnostics.Trace.Write(new string(' ', tab * 4));
-            System.Diagnostics.Trace.WriteLine("Anchorable()");
+            // System.Diagnostics.Trace.Write(new string(' ', tab * 4));
+            // System.Diagnostics.Trace.WriteLine("Anchorable()");
         }
 
         #endregion

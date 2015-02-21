@@ -13,8 +13,8 @@
             <RowDefinition Height="9*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Button Content="Add left" Click="AddLeftClick"></Button>
-            <Button Content="Add" Click="AddCenterClick" Width="70" Margin="5"/>
+            <Button Content="Add left" Click="AddLeftClick" Width="70" Margin="5"/>
+            <Button Content="Add center" Click="AddCenterClick" Width="70" Margin="5"/>
         </StackPanel>
         <xcad:DockingManager Grid.Row="1">
             <layout:LayoutRoot x:Name="PART_rootLayout" />

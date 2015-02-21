@@ -254,10 +254,10 @@ namespace SharpLib.Docking.Layout
 
         public override void ConsoleDump(int tab)
         {
-            Trace.Write(new string(' ', tab * 4));
-            Trace.WriteLine("AnchorablePane()");
+            // Trace.Write(new string(' ', tab * 4));
+            // Trace.WriteLine("AnchorablePane()");
 
-            foreach (LayoutAnchorable child in Children)
+            foreach (var child in Children)
             {
                 child.ConsoleDump(tab + 1);
             }
