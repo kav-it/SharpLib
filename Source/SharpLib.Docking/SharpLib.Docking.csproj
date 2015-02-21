@@ -191,8 +191,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Source\Version\AssemblyInfo.cs" />
-    <Compile Include="Themes\GenericTheme.cs" />
-    <Compile Include="Themes\Theme.cs" />
+    <Compile Include="Source\Theme\Theme.Generic.cs" />
+    <Compile Include="Source\Theme\Theme.cs" />
     <Compile Include="Source\Utils\Win32Helper.cs" />
     <Compile Include="Source\Utils\WindowHelper.cs" />
   </ItemGroup>
