@@ -3,9 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:xcad="clr-namespace:SharpLib.Docking;assembly=SharpLib.Docking"
-             xmlns:layout="clr-namespace:SharpLib.Docking.Layout;assembly=SharpLib.Docking"
-             xmlns:themes="clr-namespace:SharpLib.Docking.Themes;assembly=SharpLib.Docking"
+             xmlns:docking="clr-namespace:SharpLib.Docking;assembly=SharpLib.Docking"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -17,11 +15,11 @@
             <Button Content="Add left" Click="AddLeftClick" Width="70" Margin="5"/>
             <Button Content="Add center" Click="AddCenterClick" Width="70" Margin="5"/>
         </StackPanel>
-        <xcad:DockingManager Grid.Row="1">
-            <xcad:DockingManager.Theme>
-                <themes:Vs2013LightTheme />
-            </xcad:DockingManager.Theme>
-            <layout:LayoutRoot x:Name="PART_rootLayout" />
-        </xcad:DockingManager>
+        <docking:DockingManager Grid.Row="1">
+            <docking:DockingManager.Theme>
+                <docking:Vs2013LightTheme />
+            </docking:DockingManager.Theme>
+            <docking:LayoutRoot x:Name="PART_rootLayout" />
+        </docking:DockingManager>
     </Grid>
 </UserControl>

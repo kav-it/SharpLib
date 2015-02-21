@@ -7,7 +7,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Xml.Serialization;
 
-namespace SharpLib.Docking.Layout
+namespace SharpLib.Docking
 {
     [ContentProperty("Content")]
     [Serializable]

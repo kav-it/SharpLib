@@ -13,8 +13,6 @@ using System.Windows.Markup;
 using System.Windows.Threading;
 
 using SharpLib.Docking.Controls;
-using SharpLib.Docking.Layout;
-using SharpLib.Docking.Themes;
 
 namespace SharpLib.Docking
 {

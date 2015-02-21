@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace SharpLib.Docking.Layout
+namespace SharpLib.Docking
 {
     internal interface ILayoutPositionableElement : ILayoutElement, ILayoutElementForFloatingWindow
     {

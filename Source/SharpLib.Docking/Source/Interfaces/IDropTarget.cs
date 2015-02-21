@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 
-using SharpLib.Docking.Layout;
+using SharpLib.Docking;
 
 namespace SharpLib.Docking.Controls
 {

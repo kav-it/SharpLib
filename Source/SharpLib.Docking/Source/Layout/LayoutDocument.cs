@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace SharpLib.Docking.Layout
+namespace SharpLib.Docking
 {
     [Serializable]
     public class LayoutDocument : LayoutContent

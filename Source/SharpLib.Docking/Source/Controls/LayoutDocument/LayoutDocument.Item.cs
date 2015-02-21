@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-using SharpLib.Docking.Layout;
+using SharpLib.Docking;
 
 namespace SharpLib.Docking.Controls
 {

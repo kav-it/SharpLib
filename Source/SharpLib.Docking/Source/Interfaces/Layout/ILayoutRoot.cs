@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace SharpLib.Docking.Layout
+namespace SharpLib.Docking
 {
     public interface ILayoutRoot
     {

@@ -2,8 +2,7 @@
 using System.Linq;
 using System.Windows;
 
-using SharpLib.Docking.Layout;
-using SharpLib.Docking.Themes;
+using SharpLib.Docking;
 
 namespace SharpLib.Docking.Controls
 {

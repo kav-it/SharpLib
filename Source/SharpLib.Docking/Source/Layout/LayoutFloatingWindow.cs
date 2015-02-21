@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace SharpLib.Docking.Layout
+namespace SharpLib.Docking
 {
     [Serializable]
     [XmlInclude(typeof(LayoutAnchorableFloatingWindow))]

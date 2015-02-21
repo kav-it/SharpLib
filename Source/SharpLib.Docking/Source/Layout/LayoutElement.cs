@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Xml.Serialization;
 
-namespace SharpLib.Docking.Layout
+namespace SharpLib.Docking
 {
     [Serializable]
     public abstract class LayoutElement : DependencyObject, ILayoutElement

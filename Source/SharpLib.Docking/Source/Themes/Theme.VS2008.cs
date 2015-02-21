@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SharpLib.Docking.Themes
+namespace SharpLib.Docking
 {
     public class Vs2008Theme : Theme
     {

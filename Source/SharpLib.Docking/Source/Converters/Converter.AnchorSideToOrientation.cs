@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Data;
 
-using SharpLib.Docking.Layout;
+using SharpLib.Docking;
 
 namespace SharpLib.Docking.Converters
 {

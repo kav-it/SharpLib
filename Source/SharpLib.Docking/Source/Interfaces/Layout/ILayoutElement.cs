@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace SharpLib.Docking.Layout
+namespace SharpLib.Docking
 {
     public interface ILayoutElement : INotifyPropertyChanged, INotifyPropertyChanging
     {

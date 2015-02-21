@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Markup;
 
-namespace SharpLib.Docking.Layout
+namespace SharpLib.Docking
 {
     [ContentProperty("RootDocument")]
     [Serializable]

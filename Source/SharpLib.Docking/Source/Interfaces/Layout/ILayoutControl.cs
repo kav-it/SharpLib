@@ -1,4 +1,4 @@
-﻿namespace SharpLib.Docking.Layout
+﻿namespace SharpLib.Docking
 {
     public interface ILayoutControl
     {

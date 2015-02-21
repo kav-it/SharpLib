@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
 
-namespace SharpLib.Docking.Layout.Serialization
+using SharpLib.Docking;
+
+namespace SharpLib.Docking
 {
     public class XmlLayoutSerializer : LayoutSerializer
     {

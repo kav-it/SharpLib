@@ -5,8 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 
 using SharpLib.Docking.Controls;
-using SharpLib.Docking.Layout;
-using SharpLib.Docking.Themes;
+using SharpLib.Docking;
 
 namespace SharpLib.Docking
 {

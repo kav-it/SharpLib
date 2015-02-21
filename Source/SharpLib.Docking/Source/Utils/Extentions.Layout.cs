@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace SharpLib.Docking.Layout
+namespace SharpLib.Docking
 {
-    public static class Extensions
+    internal static class Extensions
     {
         #region Методы
 

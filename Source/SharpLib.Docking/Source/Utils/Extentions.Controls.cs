@@ -6,7 +6,7 @@ using System.Windows.Media.Media3D;
 
 namespace SharpLib.Docking.Controls
 {
-    public static class Extentions
+    internal static class ExtentionsControls
     {
         #region Методы
 

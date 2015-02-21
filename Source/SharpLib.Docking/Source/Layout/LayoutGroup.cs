@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace SharpLib.Docking.Layout
+namespace SharpLib.Docking
 {
     [Serializable]
     public abstract class LayoutGroup<T> : LayoutGroupBase, ILayoutGroup, IXmlSerializable where T : class, ILayoutElement

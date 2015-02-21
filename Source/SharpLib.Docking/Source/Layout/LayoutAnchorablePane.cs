@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Markup;
 using System.Xml.Serialization;
 
-namespace SharpLib.Docking.Layout
+namespace SharpLib.Docking
 {
     [ContentProperty("Children")]
     [Serializable]

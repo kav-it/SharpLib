@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SharpLib.Docking.Layout
+namespace SharpLib.Docking
 {
     [Flags]
     public enum AnchorableShowStrategy : byte

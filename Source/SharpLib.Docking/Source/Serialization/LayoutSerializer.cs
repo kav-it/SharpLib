@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 
-namespace SharpLib.Docking.Layout.Serialization
+using SharpLib.Docking;
+
+namespace SharpLib.Docking
 {
     public abstract class LayoutSerializer
     {

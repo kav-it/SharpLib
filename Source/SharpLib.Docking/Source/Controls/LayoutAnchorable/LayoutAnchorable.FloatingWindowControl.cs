@@ -10,7 +10,7 @@ using Microsoft.Windows.Shell;
 
 using SharpLib.Docking.Commands;
 using SharpLib.Docking.Converters;
-using SharpLib.Docking.Layout;
+using SharpLib.Docking;
 
 namespace SharpLib.Docking.Controls
 {
@@ -70,7 +70,7 @@ namespace SharpLib.Docking.Controls
 
         #region Методы
 
-        internal override void UpdateThemeResources(Themes.Theme oldTheme = null)
+        internal override void UpdateThemeResources(Theme oldTheme = null)
         {
             base.UpdateThemeResources(oldTheme);
 

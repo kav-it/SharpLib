@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace SharpLib.Docking.Layout.Serialization
+using SharpLib.Docking;
+
+namespace SharpLib.Docking
 {
     public class LayoutSerializationCallbackEventArgs : CancelEventArgs
     {

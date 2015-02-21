@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Xml.Serialization;
 
-namespace SharpLib.Docking.Layout
+namespace SharpLib.Docking
 {
     [Serializable]
     public class LayoutAnchorable : LayoutContent

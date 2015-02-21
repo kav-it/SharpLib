@@ -2,7 +2,7 @@
 
 namespace SharpLib.Docking
 {
-    internal static class Extensions
+    internal static class ExtensionsWeakReference
     {
         #region Методы
 

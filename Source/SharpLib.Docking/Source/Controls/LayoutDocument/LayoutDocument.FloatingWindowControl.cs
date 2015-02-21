@@ -4,7 +4,7 @@ using System.Windows.Controls.Primitives;
 
 using Microsoft.Windows.Shell;
 
-using SharpLib.Docking.Layout;
+using SharpLib.Docking;
 
 namespace SharpLib.Docking.Controls
 {

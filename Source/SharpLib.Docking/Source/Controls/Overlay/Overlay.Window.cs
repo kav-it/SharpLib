@@ -4,8 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 
-using SharpLib.Docking.Layout;
-using SharpLib.Docking.Themes;
+using SharpLib.Docking;
 
 namespace SharpLib.Docking.Controls
 {

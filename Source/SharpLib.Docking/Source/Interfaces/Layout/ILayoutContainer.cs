@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SharpLib.Docking.Layout
+namespace SharpLib.Docking
 {
     public interface ILayoutContainer : ILayoutElement
     {

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace SharpLib.Docking.Layout
+namespace SharpLib.Docking
 {
     public interface ILayoutOrientableGroup : ILayoutGroup
     {

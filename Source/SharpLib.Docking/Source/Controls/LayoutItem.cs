@@ -7,7 +7,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 using SharpLib.Docking.Commands;
-using SharpLib.Docking.Layout;
+using SharpLib.Docking;
 
 namespace SharpLib.Docking.Controls
 {
