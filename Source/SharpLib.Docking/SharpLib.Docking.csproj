@@ -56,6 +56,7 @@
     <Compile Include="Source\Controls\AnchorablePane\AnchorablePane.TabPanel.cs" />
     <Compile Include="Source\Controls\AnchorablePane\AnchorablePane.Title.cs" />
     <Compile Include="Source\Controls\AutoHideWindowManager.cs" />
+    <Compile Include="Source\Themes\Theme.Metro.cs" />
     <Compile Include="Source\Utils\BindingHelper.cs" />
     <Compile Include="Source\Controls\Menu\ContextMenuEx.cs" />
     <Compile Include="Source\Controls\DockingManager\DockingManager.DropTarget.cs" />
@@ -192,8 +193,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Source\Version\AssemblyInfo.cs" />
-    <Compile Include="Source\Theme\Theme.Generic.cs" />
-    <Compile Include="Source\Theme\Theme.cs" />
+    <Compile Include="Source\Themes\Theme.Generic.cs" />
+    <Compile Include="Source\Themes\Theme.cs" />
     <Compile Include="Source\Utils\Win32Helper.cs" />
     <Compile Include="Source\Utils\WindowHelper.cs" />
   </ItemGroup>
@@ -207,7 +208,15 @@
     <EmbeddedResource Include="Properties\Resources.resx" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Themes\generic.xaml">
+    <Page Include="Themes\Metro.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Metro.Brushes.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -239,5 +248,42 @@
     <Resource Include="Themes\Generic\Images\VTabGroup.png" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Themes\Metro\Images\DockAnchorableBottom.png" />
+    <Resource Include="Themes\Metro\Images\DockAnchorableLeft.png" />
+    <Resource Include="Themes\Metro\Images\DockAnchorableRight.png" />
+    <Resource Include="Themes\Metro\Images\DockAnchorableTop.png" />
+    <Resource Include="Themes\Metro\Images\DockDocumentAsAnchorableBottom.png" />
+    <Resource Include="Themes\Metro\Images\DockDocumentAsAnchorableLeft.png" />
+    <Resource Include="Themes\Metro\Images\DockDocumentAsAnchorableRight.png" />
+    <Resource Include="Themes\Metro\Images\DockDocumentAsAnchorableTop.png" />
+    <Resource Include="Themes\Metro\Images\DockDocumentBottom.png" />
+    <Resource Include="Themes\Metro\Images\DockDocumentInside.png" />
+    <Resource Include="Themes\Metro\Images\DockDocumentLeft.png" />
+    <Resource Include="Themes\Metro\Images\DockDocumentRight.png" />
+    <Resource Include="Themes\Metro\Images\DockDocumentTop.png" />
+    <Resource Include="Themes\Metro\Images\DockPaneEmpty.png" />
+    <Resource Include="Themes\Metro\Images\DockPaneLargeEmpty.png" />
+    <Resource Include="Themes\Metro\Images\HTabGroup.png" />
+    <Resource Include="Themes\Metro\Images\Locked.png" />
+    <Resource Include="Themes\Metro\Images\PinAutoHide.png" />
+    <Resource Include="Themes\Metro\Images\PinAutoHide_Black.png" />
+    <Resource Include="Themes\Metro\Images\PinAutoHide_Dark.png" />
+    <Resource Include="Themes\Metro\Images\PinClose.png" />
+    <Resource Include="Themes\Metro\Images\PinClose_Black.png" />
+    <Resource Include="Themes\Metro\Images\PinClose_Dark.png" />
+    <Resource Include="Themes\Metro\Images\PinDocMenu.png" />
+    <Resource Include="Themes\Metro\Images\PinDocMenu_Black.png" />
+    <Resource Include="Themes\Metro\Images\PinMaximize.png" />
+    <Resource Include="Themes\Metro\Images\PinMaximize_Black.png" />
+    <Resource Include="Themes\Metro\Images\PinMaximize_Dark.png" />
+    <Resource Include="Themes\Metro\Images\PinMenu.png" />
+    <Resource Include="Themes\Metro\Images\PinMenu_Black.png" />
+    <Resource Include="Themes\Metro\Images\PinMenu_Dark.png" />
+    <Resource Include="Themes\Metro\Images\PinRestore.png" />
+    <Resource Include="Themes\Metro\Images\PinRestore_Black.png" />
+    <Resource Include="Themes\Metro\Images\PinRestore_Dark.png" />
+    <Resource Include="Themes\Metro\Images\VTabGroup.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

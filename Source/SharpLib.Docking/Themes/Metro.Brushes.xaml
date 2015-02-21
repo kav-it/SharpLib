@@ -1,0 +1,12 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <SolidColorBrush x:Key="ThemeMetroBaseColor1" Color="White"/>
+    <SolidColorBrush x:Key="ThemeMetroBaseColor2" Color="Black"/>
+    <SolidColorBrush x:Key="ThemeMetroBaseColor3" Color="#41B1E1"/>
+    <SolidColorBrush x:Key="ThemeMetroBaseColor4" Color="#5EA1C0"/>
+    <SolidColorBrush x:Key="ThemeMetroBaseColor5" Color="#333333"/>
+    <SolidColorBrush x:Key="ThemeMetroBaseColor6" Color="#8C8E94"/>
+    <SolidColorBrush x:Key="ThemeMetroBaseColor7" Color="#EEEEEE"/>
+</ResourceDictionary>
