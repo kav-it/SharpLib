@@ -26,7 +26,7 @@ namespace DemoWpf
             LogManager.Instance.Configuration.AddTarget(target, LogLevel.Debug);
             _logger = LogManager.Instance.GetLogger();
 
-            // _timer = new Timer(OnTimer, null, 0, 2000);
+            _timer = new Timer(OnTimer, null, 0, 5000);
         }
 
         #endregion
