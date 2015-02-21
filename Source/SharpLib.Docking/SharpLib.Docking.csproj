@@ -106,7 +106,6 @@
     <Compile Include="Source\Controls\ReentrantFlag.cs" />
     <Compile Include="Source\Controls\Shell\Standard\ComGuids.cs" />
     <Compile Include="Source\Controls\Shell\Standard\Debug.cs" />
-    <Compile Include="Source\Controls\Shell\Standard\DoubleUtil.cs" />
     <Compile Include="Source\Controls\Shell\Standard\DpiHelper.cs" />
     <Compile Include="Source\Controls\Shell\Standard\ErrorCodes.cs" />
     <Compile Include="Source\Controls\Shell\Standard\MessageWindow.cs" />

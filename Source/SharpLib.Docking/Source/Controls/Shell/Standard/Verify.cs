@@ -1,55 +1,17 @@
-﻿/************************************************************************
+﻿using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Threading;
 
-   AvalonDock
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
-
-   This program is provided to you under the terms of the New BSD
-   License (BSD) as published at http://avalondock.codeplex.com/license 
-
-   For more features, controls, and fast professional support,
-   pick up AvalonDock in Extended WPF Toolkit Plus at http://xceed.com/wpf_toolkit
-
-   Stay informed: follow @datagrid on Twitter or Like facebook.com/datagrids
-
-  **********************************************************************/
-
-/**************************************************************************\
-    Copyright Microsoft Corporation. All Rights Reserved.
-\**************************************************************************/
-
-// This file contains general utilities to aid in development.
-// Classes here generally shouldn't be exposed publicly since
-// they're not particular to any library functionality.
-// Because the classes here are internal, it's likely this file
-// might be included in multiple assemblies.
 namespace Standard
 {
-    using System;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
-    using System.IO;
-    using System.Threading;
-
-    /// <summary>
-    /// A static class for retail validated assertions.
-    /// Instead of breaking into the debugger an exception is thrown.
-    /// </summary>
     internal static class Verify
     {
-        /// <summary>
-        /// Ensure that the current thread's apartment state is what's expected.
-        /// </summary>
-        /// <param name="requiredState">
-        /// The required apartment state for the current thread.
-        /// </param>
-        /// <param name="message">
-        /// The message string for the exception to be thrown if the state is invalid.
-        /// </param>
-        /// <exception cref="InvalidOperationException">
-        /// Thrown if the calling thread's apartment state is not the same as the requiredState.
-        /// </exception>
+        #region Методы
+
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DebuggerStepThrough]
         public static void IsApartmentState(ApartmentState requiredState, string message)
@@ -60,60 +22,42 @@ namespace Standard
             }
         }
 
-        /// <summary>
-        /// Ensure that an argument is neither null nor empty.
-        /// </summary>
-        /// <param name="value">The string to validate.</param>
-        /// <param name="name">The name of the parameter that will be presented if an exception is thrown.</param>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [SuppressMessage("Microsoft.Performance", "CA1820:TestForEmptyStringsUsingStringLength")]
         [DebuggerStepThrough]
         public static void IsNeitherNullNorEmpty(string value, string name)
         {
-            // catch caller errors, mixing up the parameters.  Name should never be empty.
             Assert.IsNeitherNullNorEmpty(name);
 
-            // Notice that ArgumentNullException and ArgumentException take the parameters in opposite order :P
-            const string errorMessage = "The parameter can not be either null or empty.";
+            const string ERROR_MESSAGE = "The parameter can not be either null or empty.";
             if (null == value)
             {
-                throw new ArgumentNullException(name, errorMessage);
+                throw new ArgumentNullException(name, ERROR_MESSAGE);
             }
             if ("" == value)
             {
-                throw new ArgumentException(errorMessage, name);
+                throw new ArgumentException(ERROR_MESSAGE, name);
             }
         }
 
-        /// <summary>
-        /// Ensure that an argument is neither null nor does it consist only of whitespace.
-        /// </summary>
-        /// <param name="value">The string to validate.</param>
-        /// <param name="name">The name of the parameter that will be presented if an exception is thrown.</param>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [SuppressMessage("Microsoft.Performance", "CA1820:TestForEmptyStringsUsingStringLength")]
         [DebuggerStepThrough]
         public static void IsNeitherNullNorWhitespace(string value, string name)
         {
-            // catch caller errors, mixing up the parameters.  Name should never be empty.
             Assert.IsNeitherNullNorEmpty(name);
 
-            // Notice that ArgumentNullException and ArgumentException take the parameters in opposite order :P
-            const string errorMessage = "The parameter can not be either null or empty or consist only of white space characters.";
+            const string ERROR_MESSAGE = "The parameter can not be either null or empty or consist only of white space characters.";
             if (null == value)
             {
-                throw new ArgumentNullException(name, errorMessage);
+                throw new ArgumentNullException(name, ERROR_MESSAGE);
             }
             if ("" == value.Trim())
             {
-                throw new ArgumentException(errorMessage, name);
+                throw new ArgumentException(ERROR_MESSAGE, name);
             }
         }
 
-        /// <summary>Verifies that an argument is not null.</summary>
-        /// <typeparam name="T">Type of the object to validate.  Must be a class.</typeparam>
-        /// <param name="obj">The object to validate.</param>
-        /// <param name="name">The name of the parameter that will be presented if an exception is thrown.</param>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DebuggerStepThrough]
         public static void IsNotDefault<T>(T obj, string name) where T : struct
@@ -124,10 +68,6 @@ namespace Standard
             }
         }
 
-        /// <summary>Verifies that an argument is not null.</summary>
-        /// <typeparam name="T">Type of the object to validate.  Must be a class.</typeparam>
-        /// <param name="obj">The object to validate.</param>
-        /// <param name="name">The name of the parameter that will be presented if an exception is thrown.</param>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DebuggerStepThrough]
         public static void IsNotNull<T>(T obj, string name) where T : class
@@ -138,10 +78,6 @@ namespace Standard
             }
         }
 
-        /// <summary>Verifies that an argument is null.</summary>
-        /// <typeparam name="T">Type of the object to validate.  Must be a class.</typeparam>
-        /// <param name="obj">The object to validate.</param>
-        /// <param name="name">The name of the parameter that will be presented if an exception is thrown.</param>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DebuggerStepThrough]
         public static void IsNull<T>(T obj, string name) where T : class
@@ -172,11 +108,6 @@ namespace Standard
             }
         }
 
-        /// <summary>
-        /// Verifies the specified statement is true.  Throws an ArgumentException if it's not.
-        /// </summary>
-        /// <param name="statement">The statement to be verified as true.</param>
-        /// <param name="name">Name of the parameter to include in the ArgumentException.</param>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DebuggerStepThrough]
         public static void IsTrue(bool statement, string name)
@@ -187,12 +118,6 @@ namespace Standard
             }
         }
 
-        /// <summary>
-        /// Verifies the specified statement is true.  Throws an ArgumentException if it's not.
-        /// </summary>
-        /// <param name="statement">The statement to be verified as true.</param>
-        /// <param name="name">Name of the parameter to include in the ArgumentException.</param>
-        /// <param name="message">The message to include in the ArgumentException.</param>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DebuggerStepThrough]
         public static void IsTrue(bool statement, string name, string message)
@@ -209,7 +134,6 @@ namespace Standard
         {
             if (null == expected)
             {
-                // Two nulls are considered equal, regardless of type semantics.
                 if (null != actual && !actual.Equals(expected))
                 {
                     throw new ArgumentException(message, parameterName);
@@ -227,7 +151,6 @@ namespace Standard
         {
             if (null == notExpected)
             {
-                // Two nulls are considered equal, regardless of type semantics.
                 if (null == actual || actual.Equals(notExpected))
                 {
                     throw new ArgumentException(message, parameterName);
@@ -250,12 +173,6 @@ namespace Standard
             }
         }
 
-        /// <summary>
-        /// Verifies that the specified value is within the expected range.  The assertion fails if it isn't.
-        /// </summary>
-        /// <param name="lowerBoundInclusive">The lower bound inclusive value.</param>
-        /// <param name="value">The value to verify.</param>
-        /// <param name="upperBoundExclusive">The upper bound exclusive value.</param>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DebuggerStepThrough]
         public static void BoundedInteger(int lowerBoundInclusive, int value, int upperBoundExclusive, string parameterName)
@@ -309,20 +226,14 @@ namespace Standard
             Assert.IsNotNull(interfaceType);
             Assert.IsTrue(interfaceType.IsInterface);
 
-            bool isImplemented = false;
-            foreach (var ifaceType in parameter.GetType().GetInterfaces())
-            {
-                if (ifaceType == interfaceType)
-                {
-                    isImplemented = true;
-                    break;
-                }
-            }
+            bool isImplemented = parameter.GetType().GetInterfaces().Any(ifaceType => ifaceType == interfaceType);
 
             if (!isImplemented)
             {
-                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "The parameter must implement interface {0}.", interfaceType.ToString()), parameterName);
+                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "The parameter must implement interface {0}.", interfaceType), parameterName);
             }
         }
+
+        #endregion
     }
 }

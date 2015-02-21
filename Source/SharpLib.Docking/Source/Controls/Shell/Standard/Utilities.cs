@@ -1,55 +1,60 @@
-﻿/************************************************************************
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Text;
+using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
-   AvalonDock
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
-
-   This program is provided to you under the terms of the New BSD
-   License (BSD) as published at http://avalondock.codeplex.com/license 
-
-   For more features, controls, and fast professional support,
-   pick up AvalonDock in Extended WPF Toolkit Plus at http://xceed.com/wpf_toolkit
-
-   Stay informed: follow @datagrid on Twitter or Like facebook.com/datagrids
-
-  **********************************************************************/
-
-/**************************************************************************\
-    Copyright Microsoft Corporation. All Rights Reserved.
-\**************************************************************************/
-
-// This file contains general utilities to aid in development.
-// Classes here generally shouldn't be exposed publicly since
-// they're not particular to any library functionality.
-// Because the classes here are internal, it's likely this file
-// might be included in multiple assemblies.
 namespace Standard
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
-    using System.IO;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
-    using System.Security.Cryptography;
-    using System.Text;
-    using System.Windows;
-    using System.Windows.Media;
-    using System.Windows.Media.Imaging;
-
-    internal static partial class Utility
+    internal static class Utility
     {
+        #region Поля
+
         private static readonly Version _osVersion = Environment.OSVersion.Version;
+
         private static readonly Version _presentationFrameworkVersion = Assembly.GetAssembly(typeof(Window)).GetName().Version;
+
+        private static int _sBitDepth;
+
+        #endregion
+
+        #region Свойства
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static bool IsOsVistaOrNewer
+        {
+            get { return _osVersion >= new Version(6, 0); }
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static bool IsOsWindows7OrNewer
+        {
+            get { return _osVersion >= new Version(6, 1); }
+        }
+
+        public static bool IsPresentationFrameworkVersionLessThan4
+        {
+            get { return _presentationFrameworkVersion < new Version(4, 0); }
+        }
+
+        #endregion
+
+        #region Методы
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static bool _MemCmp(IntPtr left, IntPtr right, long cb)
         {
             int offset = 0;
 
-            for (; offset < (cb - sizeof(Int64)); offset += sizeof(Int64))
+            for (; offset < (cb - sizeof (Int64)); offset += sizeof (Int64))
             {
                 Int64 left64 = Marshal.ReadInt64(left, offset);
                 Int64 right64 = Marshal.ReadInt64(right, offset);
@@ -60,7 +65,7 @@ namespace Standard
                 }
             }
 
-            for (; offset < cb; offset += sizeof(byte))
+            for (; offset < cb; offset += sizeof (byte))
             {
                 byte left8 = Marshal.ReadByte(left, offset);
                 byte right8 = Marshal.ReadByte(right, offset);
@@ -74,18 +79,12 @@ namespace Standard
             return true;
         }
 
-        /// <summary>The native RGB macro.</summary>
-        /// <param name="c"></param>
-        /// <returns></returns>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static int RGB(Color c)
+        public static int Rgb(Color c)
         {
             return c.R | (c.G << 8) | (c.B << 16);
         }
 
-        /// <summary>Convert a native integer that represent a color with an alpha channel into a Color struct.</summary>
-        /// <param name="color">The integer that represents the color.  Its bits are of the format 0xAARRGGBB.</param>
-        /// <returns>A Color representation of the parameter.</returns>
         public static Color ColorFromArgbDword(uint color)
         {
             return Color.FromArgb(
@@ -95,27 +94,26 @@ namespace Standard
                 (byte)((color & 0x000000FF) >> 0));
         }
 
-
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static int GET_X_LPARAM(IntPtr lParam)
         {
-            return LOWORD(lParam.ToInt32());
+            return Loword(lParam.ToInt32());
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static int GET_Y_LPARAM(IntPtr lParam)
         {
-            return HIWORD(lParam.ToInt32());
+            return Hiword(lParam.ToInt32());
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static int HIWORD(int i)
+        public static int Hiword(int i)
         {
             return (short)(i >> 16);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static int LOWORD(int i)
+        public static int Loword(int i)
         {
             return (short)(i & 0xFFFF);
         }
@@ -145,29 +143,23 @@ namespace Standard
 
             var length = (int)left.Length;
 
-            // seek to beginning
             left.Position = 0;
             right.Position = 0;
 
-            // total bytes read
             int totalReadLeft = 0;
             int totalReadRight = 0;
 
-            // bytes read on this iteration
             int cbReadLeft = 0;
             int cbReadRight = 0;
 
-            // where to store the read data
             var leftBuffer = new byte[512];
             var rightBuffer = new byte[512];
 
-            // pin the left buffer
-            GCHandle handleLeft = GCHandle.Alloc(leftBuffer, GCHandleType.Pinned);
-            IntPtr ptrLeft = handleLeft.AddrOfPinnedObject();
+            var handleLeft = GCHandle.Alloc(leftBuffer, GCHandleType.Pinned);
+            var ptrLeft = handleLeft.AddrOfPinnedObject();
 
-            // pin the right buffer
-            GCHandle handleRight = GCHandle.Alloc(rightBuffer, GCHandleType.Pinned);
-            IntPtr ptrRight = handleRight.AddrOfPinnedObject();
+            var handleRight = GCHandle.Alloc(rightBuffer, GCHandleType.Pinned);
+            var ptrRight = handleRight.AddrOfPinnedObject();
 
             try
             {
@@ -178,7 +170,6 @@ namespace Standard
                     cbReadLeft = left.Read(leftBuffer, 0, leftBuffer.Length);
                     cbReadRight = right.Read(rightBuffer, 0, rightBuffer.Length);
 
-                    // verify the contents are an exact match
                     if (cbReadLeft != cbReadRight)
                     {
                         return false;
@@ -222,7 +213,7 @@ namespace Standard
             catch (OverflowException)
             {
             }
-            // Doesn't seem to be a valid guid.
+
             guid = default(Guid);
             return false;
         }
@@ -251,44 +242,15 @@ namespace Standard
             return 0 != (value & mask);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static bool IsOSVistaOrNewer
-        {
-            get { return _osVersion >= new Version(6, 0); }
-        }
-
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static bool IsOSWindows7OrNewer
-        {
-            get { return _osVersion >= new Version(6, 1); }
-        }
-
-        /// <summary>
-        /// Is this using WPF4?
-        /// </summary>
-        /// <remarks>
-        /// There are a few specific bugs in Window in 3.5SP1 and below that require workarounds
-        /// when handling WM_NCCALCSIZE on the HWND.
-        /// </remarks>
-        public static bool IsPresentationFrameworkVersionLessThan4
-        {
-            get { return _presentationFrameworkVersion < new Version(4, 0); }
-        }
-
-        // Caller is responsible for destroying the HICON
-        // Caller is responsible to ensure that GDI+ has been initialized.
         [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static IntPtr GenerateHICON(ImageSource image, Size dimensions)
+        public static IntPtr GenerateHicon(ImageSource image, Size dimensions)
         {
             if (image == null)
             {
                 return IntPtr.Zero;
             }
 
-            // If we're getting this from a ".ico" resource, then it comes through as a BitmapFrame.
-            // We can use leverage this as a shortcut to get the right 16x16 representation
-            // because DrawImage doesn't do that for us.
             var bf = image as BitmapFrame;
             if (bf != null)
             {
@@ -296,14 +258,11 @@ namespace Standard
             }
             else
             {
-                // Constrain the dimensions based on the aspect ratio.
                 var drawingDimensions = new Rect(0, 0, dimensions.Width, dimensions.Height);
 
-                // There's no reason to assume that the requested image dimensions are square.
                 double renderRatio = dimensions.Width / dimensions.Height;
                 double aspectRatio = image.Width / image.Height;
 
-                // If it's smaller than the requested size, then place it in the middle and pad the image.
                 if (image.Width <= dimensions.Width && image.Height <= dimensions.Height)
                 {
                     drawingDimensions = new Rect((dimensions.Width - image.Width) / 2, (dimensions.Height - image.Height) / 2, image.Width, image.Height);
@@ -320,7 +279,7 @@ namespace Standard
                 }
 
                 var dv = new DrawingVisual();
-                DrawingContext dc = dv.RenderOpen();
+                var dc = dv.RenderOpen();
                 dc.DrawImage(image, drawingDimensions);
                 dc.Close();
 
@@ -329,9 +288,7 @@ namespace Standard
                 bf = BitmapFrame.Create(bmp);
             }
 
-            // Using GDI+ to convert to an HICON.
-            // I'd rather not duplicate their code.
-            using (MemoryStream memstm = new MemoryStream())
+            using (var memstm = new MemoryStream())
             {
                 BitmapEncoder enc = new PngBitmapEncoder();
                 enc.Frames.Add(bf);
@@ -339,11 +296,10 @@ namespace Standard
 
                 using (var istm = new ManagedIStream(memstm))
                 {
-                    // We are not bubbling out GDI+ errors when creating the native image fails.
-                    IntPtr bitmap = IntPtr.Zero;
+                    var bitmap = IntPtr.Zero;
                     try
                     {
-                        Status gpStatus = NativeMethods.GdipCreateBitmapFromStream(istm, out bitmap);
+                        var gpStatus = NativeMethods.GdipCreateBitmapFromStream(istm, out bitmap);
                         if (Status.Ok != gpStatus)
                         {
                             return IntPtr.Zero;
@@ -356,12 +312,11 @@ namespace Standard
                             return IntPtr.Zero;
                         }
 
-                        // Caller is responsible for freeing this.
                         return hicon;
                     }
                     finally
                     {
-                        Utility.SafeDisposeImage(ref bitmap);
+                        SafeDisposeImage(ref bitmap);
                     }
                 }
             }
@@ -375,8 +330,8 @@ namespace Standard
         private static int _MatchImage(BitmapFrame frame, int bitDepth, int width, int height, int bpp)
         {
             int score = 2 * _WeightedAbs(bpp, bitDepth, false) +
-                    _WeightedAbs(frame.PixelWidth, width, true) +
-                    _WeightedAbs(frame.PixelHeight, height, true);
+                        _WeightedAbs(frame.PixelWidth, width, true) +
+                        _WeightedAbs(frame.PixelHeight, height, true);
 
             return score;
         }
@@ -393,9 +348,6 @@ namespace Standard
             return diff;
         }
 
-        /// From a list of BitmapFrames find the one that best matches the requested dimensions.
-        /// The methods used here are copied from Win32 sources.  We want to be consistent with
-        /// system behaviors.
         private static BitmapFrame _GetBestMatch(IList<BitmapFrame> frames, int bitDepth, int width, int height)
         {
             int bestScore = int.MaxValue;
@@ -422,7 +374,6 @@ namespace Standard
                 }
                 else if (score == bestScore)
                 {
-                    // Tie breaker: choose the higher color depth.  If that fails, choose first one.
                     if (bestBpp < currentIconBitDepth)
                     {
                         bestIndex = i;
@@ -434,43 +385,31 @@ namespace Standard
             return frames[bestIndex];
         }
 
-        // This can be cached.  It's not going to change under reasonable circumstances.
-        private static int s_bitDepth; // = 0;
         private static int _GetBitDepth()
         {
-            if (s_bitDepth == 0)
+            if (_sBitDepth == 0)
             {
-                using (SafeDC dc = SafeDC.GetDesktop())
+                using (var dc = SafeDC.GetDesktop())
                 {
-                    s_bitDepth = NativeMethods.GetDeviceCaps(dc, DeviceCap.BITSPIXEL) * NativeMethods.GetDeviceCaps(dc, DeviceCap.PLANES);
+                    _sBitDepth = NativeMethods.GetDeviceCaps(dc, DeviceCap.BITSPIXEL) * NativeMethods.GetDeviceCaps(dc, DeviceCap.PLANES);
                 }
             }
-            return s_bitDepth;
+            return _sBitDepth;
         }
 
-        /// <summary>
-        /// Simple guard against the exceptions that File.Delete throws on null and empty strings.
-        /// </summary>
-        /// <param name="path">The path to delete.  Unlike File.Delete, this can be null or empty.</param>
-        /// <remarks>
-        /// Note that File.Delete, and by extension SafeDeleteFile, does not throw an exception
-        /// if the file does not exist.
-        /// </remarks>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void SafeDeleteFile(string path)
         {
             if (!string.IsNullOrEmpty(path))
             {
-
                 File.Delete(path);
             }
         }
 
-        /// <summary>GDI's DeleteObject</summary>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void SafeDeleteObject(ref IntPtr gdiObject)
         {
-            IntPtr p = gdiObject;
+            var p = gdiObject;
             gdiObject = IntPtr.Zero;
             if (IntPtr.Zero != p)
             {
@@ -481,7 +420,7 @@ namespace Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void SafeDestroyIcon(ref IntPtr hicon)
         {
-            IntPtr p = hicon;
+            var p = hicon;
             hicon = IntPtr.Zero;
             if (IntPtr.Zero != p)
             {
@@ -492,7 +431,7 @@ namespace Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void SafeDestroyWindow(ref IntPtr hwnd)
         {
-            IntPtr p = hwnd;
+            var p = hwnd;
             hwnd = IntPtr.Zero;
             if (NativeMethods.IsWindow(p))
             {
@@ -500,11 +439,9 @@ namespace Standard
             }
         }
 
-
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void SafeDispose<T>(ref T disposable) where T : IDisposable
         {
-            // Dispose can safely be called on an object multiple times.
             IDisposable t = disposable;
             disposable = default(T);
             if (null != t)
@@ -513,12 +450,10 @@ namespace Standard
             }
         }
 
-        /// <summary>GDI+'s DisposeImage</summary>
-        /// <param name="gdipImage"></param>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void SafeDisposeImage(ref IntPtr gdipImage)
         {
-            IntPtr p = gdipImage;
+            var p = gdipImage;
             gdipImage = IntPtr.Zero;
             if (IntPtr.Zero != p)
             {
@@ -530,7 +465,7 @@ namespace Standard
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public static void SafeCoTaskMemFree(ref IntPtr ptr)
         {
-            IntPtr p = ptr;
+            var p = ptr;
             ptr = IntPtr.Zero;
             if (IntPtr.Zero != p)
             {
@@ -542,7 +477,7 @@ namespace Standard
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public static void SafeFreeHGlobal(ref IntPtr hglobal)
         {
-            IntPtr p = hglobal;
+            var p = hglobal;
             hglobal = IntPtr.Zero;
             if (IntPtr.Zero != p)
             {
@@ -554,7 +489,7 @@ namespace Standard
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public static void SafeRelease<T>(ref T comObject) where T : class
         {
-            T t = comObject;
+            var t = comObject;
             comObject = default(T);
             if (null != t)
             {
@@ -563,12 +498,6 @@ namespace Standard
             }
         }
 
-        /// <summary>
-        /// Utility to help classes catenate their properties for implementing ToString().
-        /// </summary>
-        /// <param name="source">The StringBuilder to catenate the results into.</param>
-        /// <param name="propertyName">The name of the property to be catenated.</param>
-        /// <param name="value">The value of the property to be catenated.</param>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void GeneratePropertyString(StringBuilder source, string propertyName, string value)
         {
@@ -594,15 +523,6 @@ namespace Standard
             }
         }
 
-        /// <summary>
-        /// Generates ToString functionality for a struct.  This is an expensive way to do it,
-        /// it exists for the sake of debugging while classes are in flux.
-        /// Eventually this should just be removed and the classes should
-        /// do this without reflection.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="object"></param>
-        /// <returns></returns>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [Obsolete]
         public static string GenerateToString<T>(T @object) where T : struct
@@ -615,7 +535,7 @@ namespace Standard
                     sbRet.Append(", ");
                 }
                 Assert.AreEqual(0, property.GetIndexParameters().Length);
-                object value = property.GetValue(@object, null);
+                var value = property.GetValue(@object, null);
                 string format = null == value ? "{0}: <null>" : "{0}: \"{1}\"";
                 sbRet.AppendFormat(format, property.Name, value);
             }
@@ -630,13 +550,10 @@ namespace Standard
 
             destination.Position = 0;
 
-            // If we're copying from, say, a web stream, don't fail because of this.
             if (source.CanSeek)
             {
                 source.Position = 0;
 
-                // Consider that this could throw because 
-                // the source stream doesn't know it's size...
                 destination.SetLength(source.Length);
             }
 
@@ -650,19 +567,17 @@ namespace Standard
                 {
                     destination.Write(buffer, 0, cbRead);
                 }
-            }
-            while (buffer.Length == cbRead);
+            } while (buffer.Length == cbRead);
 
-            // Reset the Seek pointer before returning.
             destination.Position = 0;
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static string HashStreamMD5(Stream stm)
+        public static string HashStreamMd5(Stream stm)
         {
             stm.Position = 0;
             var hashBuilder = new StringBuilder();
-            using (MD5 md5 = MD5.Create())
+            using (var md5 = MD5.Create())
             {
                 foreach (byte b in md5.ComputeHash(stm))
                 {
@@ -690,13 +605,11 @@ namespace Standard
 
             Assert.IsTrue(cb <= Math.Min(left.Length, right.Length));
 
-            // pin this buffer
-            GCHandle handleLeft = GCHandle.Alloc(left, GCHandleType.Pinned);
-            IntPtr ptrLeft = handleLeft.AddrOfPinnedObject();
+            var handleLeft = GCHandle.Alloc(left, GCHandleType.Pinned);
+            var ptrLeft = handleLeft.AddrOfPinnedObject();
 
-            // pin the other buffer
-            GCHandle handleRight = GCHandle.Alloc(right, GCHandleType.Pinned);
-            IntPtr ptrRight = handleRight.AddrOfPinnedObject();
+            var handleRight = GCHandle.Alloc(right, GCHandleType.Pinned);
+            var ptrRight = handleRight.AddrOfPinnedObject();
 
             bool fRet = _MemCmp(ptrLeft, ptrRight, cb);
 
@@ -704,57 +617,6 @@ namespace Standard
             handleRight.Free();
 
             return fRet;
-        }
-
-        private class _UrlDecoder
-        {
-            private readonly Encoding _encoding;
-            private readonly char[] _charBuffer;
-            private readonly byte[] _byteBuffer;
-            private int _byteCount;
-            private int _charCount;
-
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-            public _UrlDecoder(int size, Encoding encoding)
-            {
-                _encoding = encoding;
-                _charBuffer = new char[size];
-                _byteBuffer = new byte[size];
-            }
-
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-            public void AddByte(byte b)
-            {
-                _byteBuffer[_byteCount++] = b;
-            }
-
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-            public void AddChar(char ch)
-            {
-                _FlushBytes();
-                _charBuffer[_charCount++] = ch;
-            }
-
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-            private void _FlushBytes()
-            {
-                if (_byteCount > 0)
-                {
-                    _charCount += _encoding.GetChars(_byteBuffer, 0, _byteCount, _charBuffer, _charCount);
-                    _byteCount = 0;
-                }
-            }
-
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-            public string GetString()
-            {
-                _FlushBytes();
-                if (_charCount > 0)
-                {
-                    return new string(_charBuffer, 0, _charCount);
-                }
-                return "";
-            }
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
@@ -765,7 +627,7 @@ namespace Standard
                 return null;
             }
 
-            var decoder = new _UrlDecoder(url.Length, Encoding.UTF8);
+            var decoder = new UrlDecoder(url.Length, Encoding.UTF8);
             int length = url.Length;
             for (int i = 0; i < length; ++i)
             {
@@ -779,7 +641,6 @@ namespace Standard
 
                 if (ch == '%' && i < length - 2)
                 {
-                    // decode %uXXXX into a Unicode character.
                     if (url[i + 1] == 'u' && i < length - 5)
                     {
                         int a = _HexToInt(url[i + 2]);
@@ -796,7 +657,6 @@ namespace Standard
                     }
                     else
                     {
-                        // decode %XX into a Unicode character.
                         int a = _HexToInt(url[i + 1]);
                         int b = _HexToInt(url[i + 2]);
 
@@ -810,7 +670,6 @@ namespace Standard
                     }
                 }
 
-                // Add any 7bit character as a byte.
                 if ((ch & 0xFF80) == 0)
                 {
                     decoder.AddByte((byte)ch);
@@ -824,18 +683,6 @@ namespace Standard
             return decoder.GetString();
         }
 
-        /// <summary>
-        /// Encodes a URL string.  Duplicated functionality from System.Web.HttpUtility.UrlEncode.
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Duplicated from System.Web.HttpUtility because System.Web isn't part of the client profile.
-        /// URL Encoding replaces ' ' with '+' and unsafe ASCII characters with '%XX'.
-        /// Safe characters are defined in RFC2396 (http://www.ietf.org/rfc/rfc2396.txt).
-        /// They are the 7-bit ASCII alphanumerics and the mark characters "-_.!~*'()".
-        /// This implementation does not treat '~' as a safe character to be consistent with the System.Web version.
-        /// </remarks>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static string UrlEncode(string url)
         {
@@ -844,7 +691,7 @@ namespace Standard
                 return null;
             }
 
-            byte[] bytes = Encoding.UTF8.GetBytes(url);
+            var bytes = Encoding.UTF8.GetBytes(url);
 
             bool needsEncoding = false;
             int unsafeCharCount = 0;
@@ -889,11 +736,6 @@ namespace Standard
             return Encoding.ASCII.GetString(bytes);
         }
 
-        // HttpUtility's UrlEncode is slightly different from the RFC.
-        // RFC2396 describes unreserved characters as alphanumeric or
-        // the list "-" | "_" | "." | "!" | "~" | "*" | "'" | "(" | ")"
-        // The System.Web version unnecessarily escapes '~', which should be okay...
-        // Keeping that same pattern here just to be consistent.
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static bool _UrlEncodeIsSafe(byte b)
         {
@@ -908,7 +750,7 @@ namespace Standard
                 case '_':
                 case '.':
                 case '!':
-                //case '~':
+
                 case '*':
                 case '\'':
                 case '(':
@@ -923,8 +765,8 @@ namespace Standard
         private static bool _IsAsciiAlphaNumeric(byte b)
         {
             return (b >= 'a' && b <= 'z')
-                || (b >= 'A' && b <= 'Z')
-                || (b >= '0' && b <= '9');
+                   || (b >= 'A' && b <= 'Z')
+                   || (b >= '0' && b <= '9');
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
@@ -969,7 +811,7 @@ namespace Standard
             Assert.IsNotNull(property);
             Assert.IsNotNull(listener);
 
-            DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(property, component.GetType());
+            var dpd = DependencyPropertyDescriptor.FromProperty(property, component.GetType());
             dpd.AddValueChanged(component, listener);
         }
 
@@ -982,11 +824,9 @@ namespace Standard
             Assert.IsNotNull(property);
             Assert.IsNotNull(listener);
 
-            DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(property, component.GetType());
+            var dpd = DependencyPropertyDescriptor.FromProperty(property, component.GetType());
             dpd.RemoveValueChanged(component, listener);
         }
-
-        #region Extension Methods
 
         public static bool IsThicknessNonNegative(Thickness thickness)
         {
@@ -1046,6 +886,77 @@ namespace Standard
             }
 
             return true;
+        }
+
+        #endregion
+
+        #region Вложенный класс: _UrlDecoder
+
+        private class UrlDecoder
+        {
+            #region Поля
+
+            private readonly byte[] _byteBuffer;
+
+            private readonly char[] _charBuffer;
+
+            private readonly Encoding _encoding;
+
+            private int _byteCount;
+
+            private int _charCount;
+
+            #endregion
+
+            #region Конструктор
+
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+            public UrlDecoder(int size, Encoding encoding)
+            {
+                _encoding = encoding;
+                _charBuffer = new char[size];
+                _byteBuffer = new byte[size];
+            }
+
+            #endregion
+
+            #region Методы
+
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+            public void AddByte(byte b)
+            {
+                _byteBuffer[_byteCount++] = b;
+            }
+
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+            public void AddChar(char ch)
+            {
+                _FlushBytes();
+                _charBuffer[_charCount++] = ch;
+            }
+
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+            private void _FlushBytes()
+            {
+                if (_byteCount > 0)
+                {
+                    _charCount += _encoding.GetChars(_byteBuffer, 0, _byteCount, _charBuffer, _charCount);
+                    _byteCount = 0;
+                }
+            }
+
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+            public string GetString()
+            {
+                _FlushBytes();
+                if (_charCount > 0)
+                {
+                    return new string(_charBuffer, 0, _charCount);
+                }
+                return "";
+            }
+
+            #endregion
         }
 
         #endregion
