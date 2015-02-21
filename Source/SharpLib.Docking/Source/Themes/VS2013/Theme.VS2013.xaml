@@ -499,7 +499,7 @@
                                                                                                         RelativeSource={RelativeSource TemplatedParent}}"
                                                                Focusable="False"
                                                                Style="{StaticResource ThemeVs2013ToolButtonStyle}"
-                                                               ToolTip="{x:Static dockProperties:Resources.Anchorable_CxMenu_Hint}">
+                                                               ToolTip="{x:Static dockProperties:Resources.AnchorableCxMenuHint}">
                                 <Rectangle x:Name="PART_ImgMenuPin"
                                            Fill="{DynamicResource ThemeVs2013ToolWindowCaptionButtonInactiveGlyph}"
                                            Width="13" Height="13">
@@ -517,7 +517,7 @@
                                                       RelativeSource={RelativeSource TemplatedParent}}"
                                     Focusable="False"
                                     Style="{StaticResource ThemeVs2013ButtonStyle}"
-                                    ToolTip="{x:Static dockProperties:Resources.Anchorable_BtnAutoHide_Hint}"
+                                    ToolTip="{x:Static dockProperties:Resources.AnchorableBtnAutoHideHint}"
                                     Visibility="{Binding Path=IsEnabled,
                                                          RelativeSource={RelativeSource Self},
                                                          Mode=OneWay,
@@ -538,7 +538,7 @@
                                                       RelativeSource={RelativeSource TemplatedParent}}"
                                     Focusable="False"
                                     Style="{StaticResource ThemeVs2013ButtonStyle}"
-                                    ToolTip="{x:Static dockProperties:Resources.Anchorable_BtnClose_Hint}"
+                                    ToolTip="{x:Static dockProperties:Resources.AnchorableBtnCloseHint}"
                                     Visibility="{Binding Path=IsEnabled,
                                                          RelativeSource={RelativeSource Self},
                                                          Mode=OneWay,
@@ -978,12 +978,12 @@
     </DataTemplate>
 
     <ContextMenu x:Key="ThemeVs2013AnchorableContextMenu">
-        <MenuItem Command="{Binding Path=FloatCommand}" Header="{x:Static dockProperties:Resources.Anchorable_Float}" />
-        <MenuItem Command="{Binding Path=DockCommand}" Header="{x:Static dockProperties:Resources.Anchorable_Dock}" />
-        <MenuItem Command="{Binding Path=DockAsDocumentCommand}" Header="{x:Static dockProperties:Resources.Anchorable_DockAsDocument}" />
-        <MenuItem Command="{Binding Path=AutoHideCommand}" Header="{x:Static dockProperties:Resources.Anchorable_AutoHide}" />
+        <MenuItem Command="{Binding Path=FloatCommand}" Header="{x:Static dockProperties:Resources.AnchorableFloat}" />
+        <MenuItem Command="{Binding Path=DockCommand}" Header="{x:Static dockProperties:Resources.AnchorableDock}" />
+        <MenuItem Command="{Binding Path=DockAsDocumentCommand}" Header="{x:Static dockProperties:Resources.AnchorableDockAsDocument}" />
+        <MenuItem Command="{Binding Path=AutoHideCommand}" Header="{x:Static dockProperties:Resources.AnchorableAutoHide}" />
         <MenuItem Command="{Binding Path=HideCommand}"
-                  Header="{x:Static dockProperties:Resources.Anchorable_Hide}"
+                  Header="{x:Static dockProperties:Resources.AnchorableHide}"
                   Visibility="{Binding Path=IsEnabled,
                                        RelativeSource={RelativeSource Self},
                                        Mode=OneWay,
@@ -992,16 +992,16 @@
 
     <ContextMenu x:Key="ThemeVs2013DocumentContextMenu">
         <MenuItem Command="{Binding Path=CloseCommand}"
-                  Header="{x:Static dockProperties:Resources.Document_Close}"
+                  Header="{x:Static dockProperties:Resources.DocumentClose}"
                   Visibility="{Binding Path=IsEnabled,
                                        RelativeSource={RelativeSource Self},
                                        Mode=OneWay,
                                        Converter={StaticResource BoolToVisibilityConverter}}" />
-        <MenuItem Command="{Binding Path=CloseAllButThisCommand}" Header="{x:Static dockProperties:Resources.Document_CloseAllButThis}" />
-        <MenuItem Command="{Binding Path=FloatCommand}" Header="{x:Static dockProperties:Resources.Document_Float}" />
-        <MenuItem Command="{Binding Path=DockAsDocumentCommand}" Header="{x:Static dockProperties:Resources.Document_DockAsDocument}" />
+        <MenuItem Command="{Binding Path=CloseAllButThisCommand}" Header="{x:Static dockProperties:Resources.DocumentCloseAllButThis}" />
+        <MenuItem Command="{Binding Path=FloatCommand}" Header="{x:Static dockProperties:Resources.DocumentFloat}" />
+        <MenuItem Command="{Binding Path=DockAsDocumentCommand}" Header="{x:Static dockProperties:Resources.DocumentDockAsDocument}" />
         <MenuItem Command="{Binding Path=NewHorizontalTabGroupCommand}"
-                  Header="{x:Static dockProperties:Resources.Document_NewHorizontalTabGroup}"
+                  Header="{x:Static dockProperties:Resources.DocumentNewHorizontalTabGroup}"
                   Visibility="{Binding Path=IsEnabled,
                                        RelativeSource={RelativeSource Self},
                                        Mode=OneWay,
@@ -1012,7 +1012,7 @@
         </MenuItem>
 
         <MenuItem Command="{Binding Path=NewVerticalTabGroupCommand}"
-                  Header="{x:Static dockProperties:Resources.Document_NewVerticalTabGroup}"
+                  Header="{x:Static dockProperties:Resources.DocumentNewVerticalTabGroup}"
                   Visibility="{Binding Path=IsEnabled,
                                        RelativeSource={RelativeSource Self},
                                        Mode=OneWay,
@@ -1024,13 +1024,13 @@
             </MenuItem.Icon>
         </MenuItem>
         <MenuItem Command="{Binding Path=MoveToNextTabGroupCommand}"
-                  Header="{x:Static dockProperties:Resources.Document_MoveToNextTabGroup}"
+                  Header="{x:Static dockProperties:Resources.DocumentMoveToNextTabGroup}"
                   Visibility="{Binding Path=IsEnabled,
                                        RelativeSource={RelativeSource Self},
                                        Mode=OneWay,
                                        Converter={StaticResource BoolToVisibilityConverter}}" />
         <MenuItem Command="{Binding Path=MoveToPreviousTabGroupCommand}"
-                  Header="{x:Static dockProperties:Resources.Document_MoveToPreviousTabGroup}"
+                  Header="{x:Static dockProperties:Resources.DocumentMoveToPreviousTabGroup}"
                   Visibility="{Binding Path=IsEnabled,
                                        RelativeSource={RelativeSource Self},
                                        Mode=OneWay,
@@ -1162,7 +1162,7 @@
                                         Command="{Binding Path=LayoutItem.CloseCommand,
                                                           RelativeSource={RelativeSource TemplatedParent}}"
                                         Style="{StaticResource ThemeVs2013ButtonStyle}"
-                                        ToolTip="{x:Static dockProperties:Resources.Document_Close}"
+                                        ToolTip="{x:Static dockProperties:Resources.DocumentClose}"
                                         Visibility="Hidden">
                                     <Rectangle x:Name="PART_ImgPinClose"
                                                Width="13" Height="13">
@@ -1413,7 +1413,7 @@
                                                                                                                     RelativeSource={RelativeSource TemplatedParent}}"
                                                                            Focusable="False"
                                                                            Style="{StaticResource ThemeVs2013ToolButtonStyle}"
-                                                                           ToolTip="{x:Static dockProperties:Resources.Document_CxMenu_Hint}"
+                                                                           ToolTip="{x:Static dockProperties:Resources.DocumentCxMenuHint}"
                                                                            shell:WindowChrome.IsHitTestVisibleInChrome="True">
                                             <Rectangle x:Name="PART_ImgPinMenu"
                                                        Fill="{DynamicResource ThemeVs2013DocumentWellTabButtonSelectedInactiveGlyph}"
@@ -1432,7 +1432,7 @@
                                                 CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                                 Focusable="False"
                                                 Style="{StaticResource ThemeVs2013ButtonStyle}"
-                                                ToolTip="{x:Static dockProperties:Resources.Window_Maximize}"
+                                                ToolTip="{x:Static dockProperties:Resources.WindowMaximize}"
                                                 Visibility="{Binding IsMaximized,
                                                                      RelativeSource={RelativeSource TemplatedParent},
                                                                      Converter={StaticResource InverseBoolToVisibilityConverter}}"
@@ -1454,7 +1454,7 @@
                                                 CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                                 Focusable="False"
                                                 Style="{StaticResource ThemeVs2013ButtonStyle}"
-                                                ToolTip="{x:Static dockProperties:Resources.Window_Restore}"
+                                                ToolTip="{x:Static dockProperties:Resources.WindowRestore}"
                                                 Visibility="{Binding IsMaximized,
                                                                      RelativeSource={RelativeSource TemplatedParent},
                                                                      Converter={StaticResource BoolToVisibilityConverter}}"
@@ -1476,7 +1476,7 @@
                                                                   RelativeSource={RelativeSource TemplatedParent}}"
                                                 Focusable="False"
                                                 Style="{StaticResource ThemeVs2013ButtonStyle}"
-                                                ToolTip="{x:Static dockProperties:Resources.Document_Close}"
+                                                ToolTip="{x:Static dockProperties:Resources.DocumentClose}"
                                                 Visibility="{Binding Path=IsEnabled,
                                                                      RelativeSource={RelativeSource Self},
                                                                      Mode=OneWay,
@@ -1741,7 +1741,7 @@
                                                                                                                     RelativeSource={RelativeSource TemplatedParent}}"
                                                                            Focusable="False"
                                                                            Style="{StaticResource ThemeVs2013ToolButtonStyle}"
-                                                                           ToolTip="{x:Static dockProperties:Resources.Anchorable_CxMenu_Hint}"
+                                                                           ToolTip="{x:Static dockProperties:Resources.AnchorableCxMenuHint}"
                                                                            Visibility="{Binding Path=Model.IsSinglePane,
                                                                                                 RelativeSource={RelativeSource TemplatedParent},
                                                                                                 Converter={StaticResource BoolToVisibilityConverter}}"
@@ -1765,7 +1765,7 @@
                                                 CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                                 Focusable="False"
                                                 Style="{StaticResource ThemeVs2013ButtonStyle}"
-                                                ToolTip="{x:Static dockProperties:Resources.Window_Maximize}"
+                                                ToolTip="{x:Static dockProperties:Resources.WindowMaximize}"
                                                 Visibility="{Binding IsMaximized,
                                                                      RelativeSource={RelativeSource TemplatedParent},
                                                                      Converter={StaticResource InverseBoolToVisibilityConverter}}"
@@ -1787,7 +1787,7 @@
                                                 CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                                 Focusable="False"
                                                 Style="{StaticResource ThemeVs2013ButtonStyle}"
-                                                ToolTip="{x:Static dockProperties:Resources.Window_Restore}"
+                                                ToolTip="{x:Static dockProperties:Resources.WindowRestore}"
                                                 Visibility="{Binding IsMaximized,
                                                                      RelativeSource={RelativeSource TemplatedParent},
                                                                      Converter={StaticResource BoolToVisibilityConverter}}"
@@ -1809,7 +1809,7 @@
                                                                   RelativeSource={RelativeSource TemplatedParent}}"
                                                 Focusable="False"
                                                 Style="{StaticResource ThemeVs2013ButtonStyle}"
-                                                ToolTip="{x:Static dockProperties:Resources.Anchorable_BtnClose_Hint}"
+                                                ToolTip="{x:Static dockProperties:Resources.AnchorableBtnCloseHint}"
                                                 Visibility="{Binding Path=IsEnabled,
                                                                      RelativeSource={RelativeSource Self},
                                                                      Mode=OneWay,

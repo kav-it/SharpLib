@@ -2,97 +2,97 @@
 {
     internal static class Resources
     {
-        public static string Anchorable_AutoHide
+        public static string AnchorableAutoHide
         {
             get { return "Auto Hide"; }
         }
 
-        public static string Anchorable_BtnAutoHide_Hint
+        public static string AnchorableBtnAutoHideHint
         {
             get { return "Auto Hide"; }
         }
 
-        public static string Anchorable_BtnClose_Hint
+        public static string AnchorableBtnCloseHint
         {
             get { return "Hide"; }
         }
 
-        public static string Anchorable_CxMenu_Hint
+        public static string AnchorableCxMenuHint
         {
             get { return "Window Position"; }
         }
 
-        public static string Anchorable_Dock
+        public static string AnchorableDock
         {
             get { return "Dock"; }
         }
 
-        public static string Anchorable_DockAsDocument
+        public static string AnchorableDockAsDocument
         {
             get { return "Dock as Tabbed Document"; }
         }
 
-        public static string Anchorable_Float
+        public static string AnchorableFloat
         {
             get { return "Float"; }
         }
 
-        public static string Anchorable_Hide
+        public static string AnchorableHide
         {
             get { return "Hide"; }
         }
 
-        public static string Document_Close
+        public static string DocumentClose
         {
             get { return "Close"; }
         }
 
-        public static string Document_CloseAllButThis
+        public static string DocumentCloseAllButThis
         {
             get { return "Close All But This"; }
         }
 
-        public static string Document_CxMenu_Hint
+        public static string DocumentCxMenuHint
         {
             get { return "Window Position"; }
         }
 
-        public static string Document_DockAsDocument
+        public static string DocumentDockAsDocument
         {
             get { return "Dock as Tabbed Document"; }
         }
 
-        public static string Document_Float
+        public static string DocumentFloat
         {
             get { return "Float"; }
         }
 
-        public static string Document_MoveToNextTabGroup
+        public static string DocumentMoveToNextTabGroup
         {
             get { return "Move To Next Tab Group"; }
         }
 
-        public static string Document_MoveToPreviousTabGroup
+        public static string DocumentMoveToPreviousTabGroup
         {
             get { return "Move To Previous Tab Group"; }
         }
 
-        public static string Document_NewHorizontalTabGroup
+        public static string DocumentNewHorizontalTabGroup
         {
             get { return "New Horizontal Tab Group"; }
         }
 
-        public static string Document_NewVerticalTabGroup
+        public static string DocumentNewVerticalTabGroup
         {
             get { return "New Vertical Tab Group"; }
         }
 
-        public static string Window_Maximize
+        public static string WindowMaximize
         {
             get { return "Maximize"; }
         }
 
-        public static string Window_Restore
+        public static string WindowRestore
         {
             get { return "Restore"; }
         }

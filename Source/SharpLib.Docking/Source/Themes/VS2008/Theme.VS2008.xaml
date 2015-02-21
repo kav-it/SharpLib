@@ -211,7 +211,7 @@
                                 Grid.Column="1"
                                 DropDownContextMenu="{Binding Model.Root.Manager.AnchorableContextMenu, RelativeSource={RelativeSource TemplatedParent}}"
                                 DropDownContextMenuDataContext="{Binding Path=LayoutItem, RelativeSource={RelativeSource TemplatedParent}}"
-                                ToolTip="{x:Static dockProperties:Resources.Anchorable_CxMenu_Hint}"
+                                ToolTip="{x:Static dockProperties:Resources.AnchorableCxMenuHint}"
                                 >
                                 <Image Source="/SharpLib.Docking;component/Source/Themes/VS2008/Images/PinMenu.png"/>
                             </dockControls:DropDownButton>
@@ -222,7 +222,7 @@
                                 Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                                 Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                                 Command="{Binding Path=LayoutItem.AutoHideCommand, RelativeSource={RelativeSource TemplatedParent}}" 
-                                ToolTip="{x:Static dockProperties:Resources.Anchorable_BtnAutoHide_Hint}">
+                                ToolTip="{x:Static dockProperties:Resources.AnchorableBtnAutoHideHint}">
                                 <Image Source="/SharpLib.Docking;component/Source/Themes/VS2008/Images/PinAutoHide.png"/>
                             </Button>
 
@@ -232,7 +232,7 @@
                                 Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                                 Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                                 Command="{Binding Path=LayoutItem.HideCommand, RelativeSource={RelativeSource TemplatedParent}}" 
-                                ToolTip="{x:Static dockProperties:Resources.Anchorable_BtnClose_Hint}">
+                                ToolTip="{x:Static dockProperties:Resources.AnchorableBtnCloseHint}">
                                 <Image Source="/SharpLib.Docking;component/Source/Themes/VS2008/Images/PinClose.png"/>
                             </Button>
 
@@ -411,34 +411,34 @@
 
     <!--AnchorableContextMenu-->
     <ContextMenu x:Key="AnchorableContextMenu">
-        <MenuItem Header="{x:Static dockProperties:Resources.Anchorable_Float}" Command="{Binding Path=FloatCommand}"/>
-        <MenuItem Header="{x:Static dockProperties:Resources.Anchorable_Dock}" Command="{Binding Path=DockCommand}"/>
-        <MenuItem Header="{x:Static dockProperties:Resources.Anchorable_DockAsDocument}" Command="{Binding Path=DockAsDocumentCommand}"/>
-        <MenuItem Header="{x:Static dockProperties:Resources.Anchorable_AutoHide}" Command="{Binding Path=AutoHideCommand}"/>
-        <MenuItem Header="{x:Static dockProperties:Resources.Anchorable_Hide}" Command="{Binding Path=HideCommand}" Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        <MenuItem Header="{x:Static dockProperties:Resources.AnchorableFloat}" Command="{Binding Path=FloatCommand}"/>
+        <MenuItem Header="{x:Static dockProperties:Resources.AnchorableDock}" Command="{Binding Path=DockCommand}"/>
+        <MenuItem Header="{x:Static dockProperties:Resources.AnchorableDockAsDocument}" Command="{Binding Path=DockAsDocumentCommand}"/>
+        <MenuItem Header="{x:Static dockProperties:Resources.AnchorableAutoHide}" Command="{Binding Path=AutoHideCommand}"/>
+        <MenuItem Header="{x:Static dockProperties:Resources.AnchorableHide}" Command="{Binding Path=HideCommand}" Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
     </ContextMenu>
 
     <!--DocumentContextMenu-->
     <ContextMenu x:Key="DocumentContextMenu">
-        <MenuItem Header="{x:Static dockProperties:Resources.Document_Close}" 
+        <MenuItem Header="{x:Static dockProperties:Resources.DocumentClose}" 
                   Command="{Binding Path=CloseCommand}"
                   Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
-        <MenuItem Header="{x:Static dockProperties:Resources.Document_CloseAllButThis}" 
+        <MenuItem Header="{x:Static dockProperties:Resources.DocumentCloseAllButThis}" 
                 Command="{Binding Path=CloseAllButThisCommand}"/>
-        <MenuItem Header="{x:Static dockProperties:Resources.Document_Float}" 
+        <MenuItem Header="{x:Static dockProperties:Resources.DocumentFloat}" 
                 Command="{Binding Path=FloatCommand}"/>
-        <MenuItem Header="{x:Static dockProperties:Resources.Document_DockAsDocument}" 
+        <MenuItem Header="{x:Static dockProperties:Resources.DocumentDockAsDocument}" 
                 Command="{Binding Path=DockAsDocumentCommand}"/>
-        <MenuItem Header="{x:Static dockProperties:Resources.Document_NewHorizontalTabGroup}" 
+        <MenuItem Header="{x:Static dockProperties:Resources.DocumentNewHorizontalTabGroup}" 
                 Command="{Binding Path=NewHorizontalTabGroupCommand}"
                 Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
-        <MenuItem Header="{x:Static dockProperties:Resources.Document_NewVerticalTabGroup}" 
+        <MenuItem Header="{x:Static dockProperties:Resources.DocumentNewVerticalTabGroup}" 
                 Command="{Binding Path=NewVerticalTabGroupCommand}"
                 Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
-        <MenuItem Header="{x:Static dockProperties:Resources.Document_MoveToNextTabGroup}" 
+        <MenuItem Header="{x:Static dockProperties:Resources.DocumentMoveToNextTabGroup}" 
                 Command="{Binding Path=MoveToNextTabGroupCommand}"
                 Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
-        <MenuItem Header="{x:Static dockProperties:Resources.Document_MoveToPreviousTabGroup}" 
+        <MenuItem Header="{x:Static dockProperties:Resources.DocumentMoveToPreviousTabGroup}" 
                 Command="{Binding Path=MoveToPreviousTabGroupCommand}"
                 Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
     </ContextMenu>
@@ -543,7 +543,7 @@
                                 <!-- Close button should be moved out to the container style -->
                                 <Button x:Name="DocumentCloseButton" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Grid.Column="1" Margin="5,0,0,0" Visibility="Hidden" 
                                         Command="{Binding Path=LayoutItem.CloseCommand, RelativeSource={RelativeSource TemplatedParent}}"
-                                        ToolTip="{x:Static dockProperties:Resources.Document_Close}">
+                                        ToolTip="{x:Static dockProperties:Resources.DocumentClose}">
                                     <Image Source="/SharpLib.Docking;component/Source/Themes/VS2008/Images/PinClose.png"/>
                                 </Button>
                             </Grid>
@@ -671,7 +671,7 @@
                                         Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                                         Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}"
                                         CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                                        ToolTip="{x:Static dockProperties:Resources.Window_Maximize}"
+                                        ToolTip="{x:Static dockProperties:Resources.WindowMaximize}"
                                         Grid.Column="2">
                                         <Image Source="/SharpLib.Docking;component/Source/Themes/VS2008/Images/PinMaximize.png"/>
                                     </Button>
@@ -682,7 +682,7 @@
                                         Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                                         Command="{x:Static shell:SystemCommands.RestoreWindowCommand}"
                                         CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                                        ToolTip="{x:Static dockProperties:Resources.Window_Restore}"
+                                        ToolTip="{x:Static dockProperties:Resources.WindowRestore}"
                                         Grid.Column="2">
                                         <Image Source="/SharpLib.Docking;component/Source/Themes/VS2008/Images/PinRestore.png"/>
                                     </Button>
@@ -691,7 +691,7 @@
                                             Focusable="False"
                                             Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                                             Command="{Binding Path=RootDocumentLayoutItem.CloseCommand, RelativeSource={RelativeSource TemplatedParent}}"
-                                            ToolTip="{x:Static dockProperties:Resources.Document_Close}"
+                                            ToolTip="{x:Static dockProperties:Resources.DocumentClose}"
                                             Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                                             Grid.Column="3">
                                         <Image Source="/SharpLib.Docking;component/Source/Themes/VS2008/Images/PinClose.png"/>
@@ -763,7 +763,7 @@
                                         Grid.Column="1"
                                         DropDownContextMenu="{Binding Model.Root.Manager.AnchorableContextMenu, RelativeSource={RelativeSource TemplatedParent}}"
                                         DropDownContextMenuDataContext="{Binding Path=SingleContentLayoutItem, RelativeSource={RelativeSource TemplatedParent}}"
-                                        ToolTip="{x:Static dockProperties:Resources.Anchorable_CxMenu_Hint}">
+                                        ToolTip="{x:Static dockProperties:Resources.AnchorableCxMenuHint}">
                                         <Image Source="/SharpLib.Docking;component/Source/Themes/VS2008/Images/PinMenu.png"/>
                                     </dockControls:DropDownButton>
 
@@ -774,7 +774,7 @@
                                         Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                                         Command="{x:Static shell:SystemCommands.MaximizeWindowCommand}"
                                         CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                                        ToolTip="{x:Static dockProperties:Resources.Window_Maximize}"
+                                        ToolTip="{x:Static dockProperties:Resources.WindowMaximize}"
                                         Grid.Column="2">
                                         <Image Source="/SharpLib.Docking;component/Source/Themes/VS2008/Images/PinMaximize.png"/>
                                     </Button>
@@ -786,7 +786,7 @@
                                         Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                                         Command="{x:Static shell:SystemCommands.RestoreWindowCommand}"
                                         CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                                        ToolTip="{x:Static dockProperties:Resources.Window_Restore}"
+                                        ToolTip="{x:Static dockProperties:Resources.WindowRestore}"
                                         Grid.Column="2">
                                         <Image Source="/SharpLib.Docking;component/Source/Themes/VS2008/Images/PinRestore.png"/>
                                     </Button>
@@ -796,7 +796,7 @@
                                         Focusable="False"
                                         Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                                         Command="{Binding HideWindowCommand, RelativeSource={RelativeSource TemplatedParent}}"
-                                        ToolTip="{x:Static dockProperties:Resources.Anchorable_BtnClose_Hint}"
+                                        ToolTip="{x:Static dockProperties:Resources.AnchorableBtnCloseHint}"
                                         Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                                         Grid.Column="3">
                                         <Image Source="/SharpLib.Docking;component/Source/Themes/VS2008/Images/PinClose.png"/>
