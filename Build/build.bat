@@ -7,6 +7,7 @@
 %WINDIR%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe "..\Source\SharpLib.Audio\SharpLib.Audio.csproj" /t:rebuild /p:Configuration=Debug
 %WINDIR%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe "..\Source\SharpLib.Json\SharpLib.Json.csproj" /t:rebuild /p:Configuration=Debug
 %WINDIR%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe "..\Source\SharpLib.Log\SharpLib.Log.csproj" /t:rebuild /p:Configuration=Debug
+%WINDIR%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe "..\Source\SharpLib.Docking\SharpLib.Docking.csproj" /t:rebuild /p:Configuration=Debug
 
 copy /Y "..\Source\SharpLib\bin\Debug\SharpLib.dll" "..\BuildResult\"
 copy /Y "..\Source\SharpLib\bin\Debug\SharpLib.pdb" "..\BuildResult\"
@@ -24,6 +25,8 @@ copy /Y "..\Source\SharpLib.Log\bin\Debug\SharpLib.Log.dll" "..\BuildResult\"
 copy /Y "..\Source\SharpLib.Log\bin\Debug\SharpLib.Log.pdb" "..\BuildResult\"
 copy /Y "..\Source\SharpLib.Json\bin\Debug\SharpLib.Json.dll" "..\BuildResult\"
 copy /Y "..\Source\SharpLib.Json\bin\Debug\SharpLib.Json.pdb" "..\BuildResult\"
+copy /Y "..\Source\SharpLib\bin\Debug\SharpLib.Docking.dll" "..\BuildResult\"
+copy /Y "..\Source\SharpLib\bin\Debug\SharpLib.Docking.pdb" "..\BuildResult\"
 
 pause
 

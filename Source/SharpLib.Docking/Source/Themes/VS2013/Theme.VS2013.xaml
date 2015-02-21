@@ -7,7 +7,11 @@
         xmlns:dockConverters="clr-namespace:SharpLib.Docking.Converters"
         xmlns:dockProperties="clr-namespace:SharpLib.Docking.Properties"
     >
-    
+
+    <Style TargetType="{x:Type dockControls:MenuItemEx}" BasedOn="{StaticResource {x:Type MenuItem}}" >
+        <Setter Property="HeaderTemplate" Value="{Binding Path=Root.Manager.DocumentPaneMenuItemHeaderTemplate}" />
+    </Style>
+
     <dockConverters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     <dockConverters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
     <dockConverters:AnchorSideToOrientationConverter x:Key="AnchorSideToOrientationConverter" />
@@ -105,7 +109,7 @@
                                 <dockControls:DropDownButton.DropDownContextMenu>
                                     <dockControls:ContextMenuEx ItemsSource="{Binding Model.ChildrenSorted, RelativeSource={RelativeSource TemplatedParent}}">
                                         <dockControls:ContextMenuEx.ItemContainerStyle>
-                                            <Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="{x:Type dockControls:MenuItemEx}">
+                                            <Style TargetType="{x:Type dockControls:MenuItemEx}" BasedOn="{StaticResource {x:Type MenuItem}}" >
                                                 <Setter Property="HeaderTemplate" Value="{Binding Path=Root.Manager.DocumentPaneMenuItemHeaderTemplate}" />
                                                 <Setter Property="HeaderTemplateSelector" Value="{Binding Path=Root.Manager.DocumentPaneMenuItemHeaderTemplateSelector}" />
                                                 <Setter Property="IconTemplate" Value="{Binding Path=Root.Manager.IconContentTemplate}" />
@@ -119,7 +123,7 @@
                                            Fill="{DynamicResource ThemeVs2013DocumentWellOverflowButtonDefaultGlyph}"
                                            Width="12" Height="12">
                                     <Rectangle.OpacityMask>
-                                        <ImageBrush ImageSource="Images/PinDocMenu.png" />
+                                        <ImageBrush ImageSource="/SharpLib.Docking;component/Source/Themes/VS2013/Images/PinDocMenu.png" />
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </dockControls:DropDownButton>
@@ -500,7 +504,7 @@
                                            Fill="{DynamicResource ThemeVs2013ToolWindowCaptionButtonInactiveGlyph}"
                                            Width="13" Height="13">
                                     <Rectangle.OpacityMask>
-                                        <ImageBrush ImageSource="Images/PinMenu.png" />
+                                        <ImageBrush ImageSource="/SharpLib.Docking;component/Source/Themes/VS2013/Images/PinMenu.png" />
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </dockControls:DropDownButton>
@@ -522,7 +526,7 @@
                                            Fill="{DynamicResource ThemeVs2013ToolWindowCaptionButtonInactiveGlyph}"
                                            Width="13" Height="13">
                                     <Rectangle.OpacityMask>
-                                        <ImageBrush ImageSource="Images/PinAutoHide.png" />
+                                        <ImageBrush ImageSource="/SharpLib.Docking;component/Source/Themes/VS2013/Images/PinAutoHide.png" />
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </Button>
@@ -543,7 +547,7 @@
                                            Fill="{DynamicResource ThemeVs2013ToolWindowCaptionButtonInactiveGlyph}"
                                            Width="13" Height="13">
                                     <Rectangle.OpacityMask>
-                                        <ImageBrush ImageSource="Images/PinClose.png" />
+                                        <ImageBrush ImageSource="/SharpLib.Docking;component/Source/Themes/VS2013/Images/PinClose.png" />
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </Button>
@@ -735,22 +739,22 @@
                             <Image x:Name="PART_DockingManagerDropTargetLeft"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
-                                   Source="Images/DockAnchorableLeft.PNG"
+                                   Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockAnchorableLeft.PNG"
                                    Stretch="None" />
                             <Image x:Name="PART_DockingManagerDropTargetRight"
                                    HorizontalAlignment="Right"
                                    VerticalAlignment="Center"
-                                   Source="Images/DockAnchorableRight.PNG"
+                                   Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockAnchorableRight.PNG"
                                    Stretch="None" />
                             <Image x:Name="PART_DockingManagerDropTargetBottom"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Bottom"
-                                   Source="Images/DockAnchorableBottom.PNG"
+                                   Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockAnchorableBottom.PNG"
                                    Stretch="None" />
                             <Image x:Name="PART_DockingManagerDropTargetTop"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Top"
-                                   Source="Images/DockAnchorableTop.PNG"
+                                   Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockAnchorableTop.PNG"
                                    Stretch="None" />
                         </Grid>
                         <Grid x:Name="PART_AnchorablePaneDropTargets">
@@ -771,37 +775,37 @@
                                 <Image Grid.RowSpan="3"
                                        Grid.ColumnSpan="3"
                                        Margin="0,0.5,0,-0.5"
-                                       Source="Images/DockPaneEmpty.png"
+                                       Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockPaneEmpty.png"
                                        Stretch="None" />
                                 <Border Name="PART_AnchorablePaneDropTargetTop"
                                         Grid.Row="0"
                                         Grid.Column="1"
                                         Margin="0,3.5,0, 0">
-                                    <Image Source="Images/DockDocumentAsAnchorableTop.png" Stretch="None" />
+                                    <Image Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentAsAnchorableTop.png" Stretch="None" />
                                 </Border>
                                 <Border Name="PART_AnchorablePaneDropTargetRight"
                                         Grid.Row="1"
                                         Grid.Column="2"
                                         Margin="2">
-                                    <Image Source="Images/DockDocumentAsAnchorableRight.png" Stretch="None" />
+                                    <Image Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentAsAnchorableRight.png" Stretch="None" />
                                 </Border>
                                 <Border Name="PART_AnchorablePaneDropTargetBottom"
                                         Grid.Row="2"
                                         Grid.Column="1"
                                         Margin="0,-0.5,0,0">
-                                    <Image Source="Images/DockDocumentAsAnchorableBottom.png" Stretch="None" />
+                                    <Image Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentAsAnchorableBottom.png" Stretch="None" />
                                 </Border>
                                 <Border Name="PART_AnchorablePaneDropTargetLeft"
                                         Grid.Row="1"
                                         Grid.Column="0"
                                         Margin="2">
-                                    <Image Source="Images/DockDocumentAsAnchorableLeft.png" Stretch="None" />
+                                    <Image Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentAsAnchorableLeft.png" Stretch="None" />
                                 </Border>
                                 <Border Name="PART_AnchorablePaneDropTargetInto"
                                         Grid.Row="1"
                                         Grid.Column="1"
                                         Margin="0,0.5,0,0">
-                                    <Image Source="Images/DockDocumentInside.png" Stretch="None" />
+                                    <Image Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentInside.png" Stretch="None" />
                                 </Border>
                             </Grid>
                         </Grid>
@@ -822,36 +826,36 @@
                                 </Grid.RowDefinitions>
                                 <Image Grid.RowSpan="3"
                                        Grid.ColumnSpan="3"
-                                       Source="Images/DockPaneEmpty.PNG"
+                                       Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockPaneEmpty.PNG"
                                        Stretch="None" />
                                 <Border Name="PART_DocumentPaneDropTargetTop"
                                         Grid.Row="0"
                                         Grid.Column="1"
                                         Margin="2">
-                                    <Image Source="Images/DockDocumentTop.png" Stretch="None" />
+                                    <Image Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentTop.png" Stretch="None" />
                                 </Border>
                                 <Border Name="PART_DocumentPaneDropTargetRight"
                                         Grid.Row="1"
                                         Grid.Column="2"
                                         Margin="2">
-                                    <Image Source="Images/DockDocumentRight.png" Stretch="None" />
+                                    <Image Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentRight.png" Stretch="None" />
                                 </Border>
                                 <Border Name="PART_DocumentPaneDropTargetBottom"
                                         Grid.Row="2"
                                         Grid.Column="1"
                                         Margin="2">
-                                    <Image Source="Images/DockDocumentBottom.png" Stretch="None" />
+                                    <Image Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentBottom.png" Stretch="None" />
                                 </Border>
                                 <Border Name="PART_DocumentPaneDropTargetLeft"
                                         Grid.Row="1"
                                         Grid.Column="0"
                                         Margin="2">
-                                    <Image Source="Images/DockDocumentLeft.png" Stretch="None" />
+                                    <Image Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentLeft.png" Stretch="None" />
                                 </Border>
                                 <Border Name="PART_DocumentPaneDropTargetInto"
                                         Grid.Row="1"
                                         Grid.Column="1">
-                                    <Image Source="Images/DockDocumentInside.png" Stretch="None" />
+                                    <Image Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentInside.png" Stretch="None" />
                                 </Border>
                             </Grid>
                         </Grid>
@@ -877,68 +881,68 @@
                                 </Grid.RowDefinitions>
                                 <Image Grid.RowSpan="5"
                                        Grid.ColumnSpan="5"
-                                       Source="Images/DockPaneLargeEmpty.PNG"
+                                       Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockPaneLargeEmpty.PNG"
                                        Stretch="None" />
                                 <Border Name="PART_DocumentPaneFullDropTargetTop"
                                         Grid.Row="1"
                                         Grid.Column="2">
                                     <Image Margin="2"
-                                           Source="Images/DockDocumentTop.png"
+                                           Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentTop.png"
                                            Stretch="None" />
                                 </Border>
                                 <Border Name="PART_DocumentPaneFullDropTargetRight"
                                         Grid.Row="2"
                                         Grid.Column="3">
                                     <Image Margin="2"
-                                           Source="Images/DockDocumentRight.png"
+                                           Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentRight.png"
                                            Stretch="None" />
                                 </Border>
                                 <Border Name="PART_DocumentPaneFullDropTargetBottom"
                                         Grid.Row="3"
                                         Grid.Column="2">
                                     <Image Margin="2"
-                                           Source="Images/DockDocumentBottom.png"
+                                           Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentBottom.png"
                                            Stretch="None" />
                                 </Border>
                                 <Border Name="PART_DocumentPaneFullDropTargetLeft"
                                         Grid.Row="2"
                                         Grid.Column="1">
                                     <Image Margin="2"
-                                           Source="Images/DockDocumentLeft.png"
+                                           Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentLeft.png"
                                            Stretch="None" />
                                 </Border>
                                 <Border Name="PART_DocumentPaneFullDropTargetInto"
                                         Grid.Row="2"
                                         Grid.Column="2">
-                                    <Image Source="Images/DockDocumentInside.png" Stretch="None" />
+                                    <Image Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentInside.png" Stretch="None" />
                                 </Border>
 
                                 <Border Name="PART_DocumentPaneDropTargetTopAsAnchorablePane"
                                         Grid.Row="0"
                                         Grid.Column="2">
                                     <Image Margin="2"
-                                           Source="Images/DockDocumentAsAnchorableTop.png"
+                                           Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentAsAnchorableTop.png"
                                            Stretch="None" />
                                 </Border>
                                 <Border Name="PART_DocumentPaneDropTargetRightAsAnchorablePane"
                                         Grid.Row="2"
                                         Grid.Column="4">
                                     <Image Margin="2"
-                                           Source="Images/DockDocumentAsAnchorableRight.png"
+                                           Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentAsAnchorableRight.png"
                                            Stretch="None" />
                                 </Border>
                                 <Border Name="PART_DocumentPaneDropTargetBottomAsAnchorablePane"
                                         Grid.Row="4"
                                         Grid.Column="2">
                                     <Image Margin="2"
-                                           Source="Images/DockDocumentAsAnchorableBottom.png"
+                                           Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentAsAnchorableBottom.png"
                                            Stretch="None" />
                                 </Border>
                                 <Border Name="PART_DocumentPaneDropTargetLeftAsAnchorablePane"
                                         Grid.Row="2"
                                         Grid.Column="0">
                                     <Image Margin="2"
-                                           Source="Images/DockDocumentAsAnchorableLeft.png"
+                                           Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/DockDocumentAsAnchorableLeft.png"
                                            Stretch="None" />
                                 </Border>
 
@@ -1003,9 +1007,7 @@
                                        Mode=OneWay,
                                        Converter={StaticResource BoolToVisibilityConverter}}">
             <MenuItem.Icon>
-                <Image Width="14"
-                       Source="/Images\HTabGroup.png"
-                       Stretch="Uniform" />
+                <Image Width="14" Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/HTabGroup.png" Stretch="Uniform" />
             </MenuItem.Icon>
         </MenuItem>
 
@@ -1017,7 +1019,7 @@
                                        Converter={StaticResource BoolToVisibilityConverter}}">
             <MenuItem.Icon>
                 <Image Width="14"
-                       Source="/Images/VTabGroup.png"
+                       Source="/SharpLib.Docking;component/Source/Themes/VS2013/Images/VTabGroup.png"
                        Stretch="Uniform" />
             </MenuItem.Icon>
         </MenuItem>
@@ -1165,7 +1167,7 @@
                                     <Rectangle x:Name="PART_ImgPinClose"
                                                Width="13" Height="13">
                                         <Rectangle.OpacityMask>
-                                            <ImageBrush ImageSource="Images/PinClose.png" />
+                                            <ImageBrush ImageSource="/SharpLib.Docking;component/Source/Themes/VS2013/Images/PinClose.png" />
                                         </Rectangle.OpacityMask>
                                     </Rectangle>
                                 </Button>
@@ -1417,7 +1419,7 @@
                                                        Fill="{DynamicResource ThemeVs2013DocumentWellTabButtonSelectedInactiveGlyph}"
                                                        Width="13" Height="13">
                                                 <Rectangle.OpacityMask>
-                                                    <ImageBrush ImageSource="Images/PinMenu.png" />
+                                                    <ImageBrush ImageSource="/SharpLib.Docking;component/Source/Themes/VS2013/Images/PinMenu.png" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
                                         </dockControls:DropDownButton>
@@ -1439,7 +1441,7 @@
                                                        Fill="{DynamicResource ThemeVs2013DocumentWellTabButtonSelectedInactiveGlyph}"
                                                        Width="13" Height="13">
                                                 <Rectangle.OpacityMask>
-                                                    <ImageBrush ImageSource="Images/PinMaximize.png" />
+                                                    <ImageBrush ImageSource="/SharpLib.Docking;component/Source/Themes/VS2013/Images/PinMaximize.png" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
                                         </Button>
@@ -1461,7 +1463,7 @@
                                                        Fill="{DynamicResource ThemeVs2013DocumentWellTabButtonSelectedInactiveGlyph}"
                                                        Width="13" Height="13">
                                                 <Rectangle.OpacityMask>
-                                                    <ImageBrush ImageSource="Images/PinRestore.png" />
+                                                    <ImageBrush ImageSource="/SharpLib.Docking;component/Source/Themes/VS2013/Images/PinRestore.png" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
                                         </Button>
@@ -1484,7 +1486,7 @@
                                                        Fill="{DynamicResource ThemeVs2013DocumentWellTabButtonSelectedInactiveGlyph}"
                                                        Width="13" Height="13">
                                                 <Rectangle.OpacityMask>
-                                                    <ImageBrush ImageSource="Images/PinClose.png" />
+                                                    <ImageBrush ImageSource="/SharpLib.Docking;component/Source/Themes/VS2013/Images/PinClose.png" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
                                         </Button>
@@ -1748,7 +1750,7 @@
                                                        Fill="{DynamicResource ThemeVs2013DocumentWellTabButtonSelectedInactiveGlyph}"
                                                        Width="13" Height="13">
                                                 <Rectangle.OpacityMask>
-                                                    <ImageBrush ImageSource="Images/PinMenu.png" />
+                                                    <ImageBrush ImageSource="/SharpLib.Docking;component/Source/Themes/VS2013/Images/PinMenu.png" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
                                         </dockControls:DropDownButton>
@@ -1772,7 +1774,7 @@
                                                        Fill="{DynamicResource ThemeVs2013DocumentWellTabButtonSelectedInactiveGlyph}"
                                                        Width="13" Height="13">
                                                 <Rectangle.OpacityMask>
-                                                    <ImageBrush ImageSource="Images/PinMaximize.png" />
+                                                    <ImageBrush ImageSource="/SharpLib.Docking;component/Source/Themes/VS2013/Images/PinMaximize.png" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
                                         </Button>
@@ -1794,7 +1796,7 @@
                                                        Fill="{DynamicResource ThemeVs2013DocumentWellTabButtonSelectedInactiveGlyph}"
                                                        Width="13" Height="13">
                                                 <Rectangle.OpacityMask>
-                                                    <ImageBrush ImageSource="Images/PinRestore.png" />
+                                                    <ImageBrush ImageSource="/SharpLib.Docking;component/Source/Themes/VS2013/Images/PinRestore.png" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
                                         </Button>
@@ -1817,7 +1819,7 @@
                                                        Fill="{DynamicResource ThemeVs2013DocumentWellTabButtonSelectedInactiveGlyph}"
                                                        Width="13" Height="13">
                                                 <Rectangle.OpacityMask>
-                                                    <ImageBrush ImageSource="Images/PinClose.png" />
+                                                    <ImageBrush ImageSource="/SharpLib.Docking;component/Source/Themes/VS2013/Images/PinClose.png" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
                                         </Button>
