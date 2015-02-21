@@ -6,7 +6,7 @@ namespace SharpLib.Docking.Themes
     {
         public override Uri GetResourceUri()
         {
-            return new Uri("/SharpLib.Docking;component/Themes/metro.xaml", UriKind.Relative);
+            return new Uri("/SharpLib.Docking;component/Source/Themes/Metro/Theme.Metro.xaml", UriKind.Relative);
         }
     }
 }

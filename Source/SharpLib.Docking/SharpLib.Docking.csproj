@@ -57,6 +57,7 @@
     <Compile Include="Source\Controls\AnchorablePane\AnchorablePane.Title.cs" />
     <Compile Include="Source\Controls\AutoHideWindowManager.cs" />
     <Compile Include="Source\Themes\Theme.Metro.cs" />
+    <Compile Include="Source\Themes\Theme.VS2010.cs" />
     <Compile Include="Source\Utils\BindingHelper.cs" />
     <Compile Include="Source\Controls\Menu\ContextMenuEx.cs" />
     <Compile Include="Source\Controls\DockingManager\DockingManager.DropTarget.cs" />
@@ -193,7 +194,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Source\Version\AssemblyInfo.cs" />
-    <Compile Include="Source\Themes\Theme.Generic.cs" />
+    <Compile Include="Source\Themes\Theme.VS2008.cs" />
     <Compile Include="Source\Themes\Theme.cs" />
     <Compile Include="Source\Utils\Win32Helper.cs" />
     <Compile Include="Source\Utils\WindowHelper.cs" />
@@ -208,7 +209,19 @@
     <EmbeddedResource Include="Properties\Resources.resx" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Themes\Metro.xaml">
+    <Page Include="Source\Themes\VS2008\Theme.VS2008.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Themes\Metro\Theme.Metro.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Themes\VS2010\Theme.VS2010.Brushes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Themes\VS2010\Theme.VS2010.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -216,74 +229,111 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\Metro.Brushes.xaml">
+    <Page Include="Source\Themes\Metro\Theme.Metro.Brushes.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Themes\Generic\Images\DockBottom.PNG" />
-    <Resource Include="Themes\Generic\Images\DockLeft.PNG" />
-    <Resource Include="Themes\Generic\Images\DockPane.PNG" />
-    <Resource Include="Themes\Generic\Images\DockPaneEmpty.png" />
-    <Resource Include="Themes\Generic\Images\DockRight.PNG" />
-    <Resource Include="Themes\Generic\Images\DockTop.PNG" />
-    <Resource Include="Themes\Generic\Images\HTabGroup.png" />
-    <Resource Include="Themes\Generic\Images\InnerDockDocPaneBottom.png" />
-    <Resource Include="Themes\Generic\Images\InnerDockDocPaneLeft.png" />
-    <Resource Include="Themes\Generic\Images\InnerDockDocPaneRight.png" />
-    <Resource Include="Themes\Generic\Images\InnerDockDocPaneTop.png" />
-    <Resource Include="Themes\Generic\Images\InnerDockPaneBottom.png" />
-    <Resource Include="Themes\Generic\Images\InnerDockPaneInside.png" />
-    <Resource Include="Themes\Generic\Images\InnerDockPaneLeft.png" />
-    <Resource Include="Themes\Generic\Images\InnerDockPaneRight.png" />
-    <Resource Include="Themes\Generic\Images\InnerDockPaneTop.png" />
-    <Resource Include="Themes\Generic\Images\Locked.png" />
-    <Resource Include="Themes\Generic\Images\PinAutoHide.png" />
-    <Resource Include="Themes\Generic\Images\PinClose.png" />
-    <Resource Include="Themes\Generic\Images\PinDocMenu.png" />
-    <Resource Include="Themes\Generic\Images\PinMaximize.png" />
-    <Resource Include="Themes\Generic\Images\PinMenu.png" />
-    <Resource Include="Themes\Generic\Images\PinRestore.png" />
-    <Resource Include="Themes\Generic\Images\VTabGroup.png" />
+    <Resource Include="Source\Themes\VS2008\Images\DockBottom.PNG" />
+    <Resource Include="Source\Themes\VS2008\Images\DockLeft.PNG" />
+    <Resource Include="Source\Themes\VS2008\Images\DockPane.PNG" />
+    <Resource Include="Source\Themes\VS2008\Images\DockPaneEmpty.png" />
+    <Resource Include="Source\Themes\VS2008\Images\DockRight.PNG" />
+    <Resource Include="Source\Themes\VS2008\Images\DockTop.PNG" />
+    <Resource Include="Source\Themes\VS2008\Images\HTabGroup.png" />
+    <Resource Include="Source\Themes\VS2008\Images\InnerDockDocPaneBottom.png" />
+    <Resource Include="Source\Themes\VS2008\Images\InnerDockDocPaneLeft.png" />
+    <Resource Include="Source\Themes\VS2008\Images\InnerDockDocPaneRight.png" />
+    <Resource Include="Source\Themes\VS2008\Images\InnerDockDocPaneTop.png" />
+    <Resource Include="Source\Themes\VS2008\Images\InnerDockPaneBottom.png" />
+    <Resource Include="Source\Themes\VS2008\Images\InnerDockPaneInside.png" />
+    <Resource Include="Source\Themes\VS2008\Images\InnerDockPaneLeft.png" />
+    <Resource Include="Source\Themes\VS2008\Images\InnerDockPaneRight.png" />
+    <Resource Include="Source\Themes\VS2008\Images\InnerDockPaneTop.png" />
+    <Resource Include="Source\Themes\VS2008\Images\Locked.png" />
+    <Resource Include="Source\Themes\VS2008\Images\PinAutoHide.png" />
+    <Resource Include="Source\Themes\VS2008\Images\PinClose.png" />
+    <Resource Include="Source\Themes\VS2008\Images\PinDocMenu.png" />
+    <Resource Include="Source\Themes\VS2008\Images\PinMaximize.png" />
+    <Resource Include="Source\Themes\VS2008\Images\PinMenu.png" />
+    <Resource Include="Source\Themes\VS2008\Images\PinRestore.png" />
+    <Resource Include="Source\Themes\VS2008\Images\VTabGroup.png" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Resource Include="Themes\Metro\Images\DockAnchorableBottom.png" />
-    <Resource Include="Themes\Metro\Images\DockAnchorableLeft.png" />
-    <Resource Include="Themes\Metro\Images\DockAnchorableRight.png" />
-    <Resource Include="Themes\Metro\Images\DockAnchorableTop.png" />
-    <Resource Include="Themes\Metro\Images\DockDocumentAsAnchorableBottom.png" />
-    <Resource Include="Themes\Metro\Images\DockDocumentAsAnchorableLeft.png" />
-    <Resource Include="Themes\Metro\Images\DockDocumentAsAnchorableRight.png" />
-    <Resource Include="Themes\Metro\Images\DockDocumentAsAnchorableTop.png" />
-    <Resource Include="Themes\Metro\Images\DockDocumentBottom.png" />
-    <Resource Include="Themes\Metro\Images\DockDocumentInside.png" />
-    <Resource Include="Themes\Metro\Images\DockDocumentLeft.png" />
-    <Resource Include="Themes\Metro\Images\DockDocumentRight.png" />
-    <Resource Include="Themes\Metro\Images\DockDocumentTop.png" />
-    <Resource Include="Themes\Metro\Images\DockPaneEmpty.png" />
-    <Resource Include="Themes\Metro\Images\DockPaneLargeEmpty.png" />
-    <Resource Include="Themes\Metro\Images\HTabGroup.png" />
-    <Resource Include="Themes\Metro\Images\Locked.png" />
-    <Resource Include="Themes\Metro\Images\PinAutoHide.png" />
-    <Resource Include="Themes\Metro\Images\PinAutoHide_Black.png" />
-    <Resource Include="Themes\Metro\Images\PinAutoHide_Dark.png" />
-    <Resource Include="Themes\Metro\Images\PinClose.png" />
-    <Resource Include="Themes\Metro\Images\PinClose_Black.png" />
-    <Resource Include="Themes\Metro\Images\PinClose_Dark.png" />
-    <Resource Include="Themes\Metro\Images\PinDocMenu.png" />
-    <Resource Include="Themes\Metro\Images\PinDocMenu_Black.png" />
-    <Resource Include="Themes\Metro\Images\PinMaximize.png" />
-    <Resource Include="Themes\Metro\Images\PinMaximize_Black.png" />
-    <Resource Include="Themes\Metro\Images\PinMaximize_Dark.png" />
-    <Resource Include="Themes\Metro\Images\PinMenu.png" />
-    <Resource Include="Themes\Metro\Images\PinMenu_Black.png" />
-    <Resource Include="Themes\Metro\Images\PinMenu_Dark.png" />
-    <Resource Include="Themes\Metro\Images\PinRestore.png" />
-    <Resource Include="Themes\Metro\Images\PinRestore_Black.png" />
-    <Resource Include="Themes\Metro\Images\PinRestore_Dark.png" />
-    <Resource Include="Themes\Metro\Images\VTabGroup.png" />
+    <Resource Include="Source\Themes\Metro\Images\DockAnchorableBottom.png" />
+    <Resource Include="Source\Themes\Metro\Images\DockAnchorableLeft.png" />
+    <Resource Include="Source\Themes\Metro\Images\DockAnchorableRight.png" />
+    <Resource Include="Source\Themes\Metro\Images\DockAnchorableTop.png" />
+    <Resource Include="Source\Themes\Metro\Images\DockDocumentAsAnchorableBottom.png" />
+    <Resource Include="Source\Themes\Metro\Images\DockDocumentAsAnchorableLeft.png" />
+    <Resource Include="Source\Themes\Metro\Images\DockDocumentAsAnchorableRight.png" />
+    <Resource Include="Source\Themes\Metro\Images\DockDocumentAsAnchorableTop.png" />
+    <Resource Include="Source\Themes\Metro\Images\DockDocumentBottom.png" />
+    <Resource Include="Source\Themes\Metro\Images\DockDocumentInside.png" />
+    <Resource Include="Source\Themes\Metro\Images\DockDocumentLeft.png" />
+    <Resource Include="Source\Themes\Metro\Images\DockDocumentRight.png" />
+    <Resource Include="Source\Themes\Metro\Images\DockDocumentTop.png" />
+    <Resource Include="Source\Themes\Metro\Images\DockPaneEmpty.png" />
+    <Resource Include="Source\Themes\Metro\Images\DockPaneLargeEmpty.png" />
+    <Resource Include="Source\Themes\Metro\Images\HTabGroup.png" />
+    <Resource Include="Source\Themes\Metro\Images\Locked.png" />
+    <Resource Include="Source\Themes\Metro\Images\PinAutoHide.png" />
+    <Resource Include="Source\Themes\Metro\Images\PinAutoHide_Black.png" />
+    <Resource Include="Source\Themes\Metro\Images\PinAutoHide_Dark.png" />
+    <Resource Include="Source\Themes\Metro\Images\PinClose.png" />
+    <Resource Include="Source\Themes\Metro\Images\PinClose_Black.png" />
+    <Resource Include="Source\Themes\Metro\Images\PinClose_Dark.png" />
+    <Resource Include="Source\Themes\Metro\Images\PinDocMenu.png" />
+    <Resource Include="Source\Themes\Metro\Images\PinDocMenu_Black.png" />
+    <Resource Include="Source\Themes\Metro\Images\PinMaximize.png" />
+    <Resource Include="Source\Themes\Metro\Images\PinMaximize_Black.png" />
+    <Resource Include="Source\Themes\Metro\Images\PinMaximize_Dark.png" />
+    <Resource Include="Source\Themes\Metro\Images\PinMenu.png" />
+    <Resource Include="Source\Themes\Metro\Images\PinMenu_Black.png" />
+    <Resource Include="Source\Themes\Metro\Images\PinMenu_Dark.png" />
+    <Resource Include="Source\Themes\Metro\Images\PinRestore.png" />
+    <Resource Include="Source\Themes\Metro\Images\PinRestore_Black.png" />
+    <Resource Include="Source\Themes\Metro\Images\PinRestore_Dark.png" />
+    <Resource Include="Source\Themes\Metro\Images\VTabGroup.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Source\Themes\VS2010\Images\DockAnchorableBottom.png" />
+    <Resource Include="Source\Themes\VS2010\Images\DockAnchorableLeft.png" />
+    <Resource Include="Source\Themes\VS2010\Images\DockAnchorableRight.png" />
+    <Resource Include="Source\Themes\VS2010\Images\DockAnchorableTop.png" />
+    <Resource Include="Source\Themes\VS2010\Images\DockDocumentAsAnchorableBottom.png" />
+    <Resource Include="Source\Themes\VS2010\Images\DockDocumentAsAnchorableLeft.png" />
+    <Resource Include="Source\Themes\VS2010\Images\DockDocumentAsAnchorableRight.png" />
+    <Resource Include="Source\Themes\VS2010\Images\DockDocumentAsAnchorableTop.png" />
+    <Resource Include="Source\Themes\VS2010\Images\DockDocumentBottom.png" />
+    <Resource Include="Source\Themes\VS2010\Images\DockDocumentInside.png" />
+    <Resource Include="Source\Themes\VS2010\Images\DockDocumentLeft.png" />
+    <Resource Include="Source\Themes\VS2010\Images\DockDocumentRight.png" />
+    <Resource Include="Source\Themes\VS2010\Images\DockDocumentTop.png" />
+    <Resource Include="Source\Themes\VS2010\Images\DockPaneEmpty.png" />
+    <Resource Include="Source\Themes\VS2010\Images\DockPaneLargeEmpty.png" />
+    <Resource Include="Source\Themes\VS2010\Images\HTabGroup.png" />
+    <Resource Include="Source\Themes\VS2010\Images\Locked.png" />
+    <Resource Include="Source\Themes\VS2010\Images\PinAutoHide.png" />
+    <Resource Include="Source\Themes\VS2010\Images\PinAutoHide_Black.png" />
+    <Resource Include="Source\Themes\VS2010\Images\PinAutoHide_Dark.png" />
+    <Resource Include="Source\Themes\VS2010\Images\PinClose.png" />
+    <Resource Include="Source\Themes\VS2010\Images\PinClose_Black.png" />
+    <Resource Include="Source\Themes\VS2010\Images\PinClose_Dark.png" />
+    <Resource Include="Source\Themes\VS2010\Images\PinDocMenu.png" />
+    <Resource Include="Source\Themes\VS2010\Images\PinDocMenu_Black.png" />
+    <Resource Include="Source\Themes\VS2010\Images\PinMaximize.png" />
+    <Resource Include="Source\Themes\VS2010\Images\PinMaximize_Black.png" />
+    <Resource Include="Source\Themes\VS2010\Images\PinMaximize_Dark.png" />
+    <Resource Include="Source\Themes\VS2010\Images\PinMenu.png" />
+    <Resource Include="Source\Themes\VS2010\Images\PinMenu_Black.png" />
+    <Resource Include="Source\Themes\VS2010\Images\PinMenu_Dark.png" />
+    <Resource Include="Source\Themes\VS2010\Images\PinRestore.png" />
+    <Resource Include="Source\Themes\VS2010\Images\PinRestore_Black.png" />
+    <Resource Include="Source\Themes\VS2010\Images\PinRestore_Dark.png" />
+    <Resource Include="Source\Themes\VS2010\Images\VTabGroup.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
