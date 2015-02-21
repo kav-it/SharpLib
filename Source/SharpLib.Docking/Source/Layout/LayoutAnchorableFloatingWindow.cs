@@ -35,7 +35,7 @@ namespace SharpLib.Docking.Layout
 
                 if (_rootPanel != null)
                 {
-                    _rootPanel.ChildrenTreeChanged -= _rootPanel_ChildrenTreeChanged;
+                    _rootPanel.ChildrenTreeChanged -= RootPanelChildrenTreeChanged;
                 }
 
                 _rootPanel = value;
@@ -46,7 +46,7 @@ namespace SharpLib.Docking.Layout
 
                 if (_rootPanel != null)
                 {
-                    _rootPanel.ChildrenTreeChanged += _rootPanel_ChildrenTreeChanged;
+                    _rootPanel.ChildrenTreeChanged += RootPanelChildrenTreeChanged;
                 }
 
                 RaisePropertyChanged("RootPanel");
@@ -135,7 +135,7 @@ namespace SharpLib.Docking.Layout
 
         #region Методы
 
-        private void _rootPanel_ChildrenTreeChanged(object sender, ChildrenTreeChangedEventArgs e)
+        private void RootPanelChildrenTreeChanged(object sender, ChildrenTreeChangedEventArgs e)
         {
             RaisePropertyChanged("IsSinglePane");
             RaisePropertyChanged("SinglePane");

@@ -100,7 +100,7 @@ namespace SharpLib.Docking.Controls
         protected override void Close()
         {
             var dockingManager = _anchorable.Root.Manager;
-            dockingManager._ExecuteCloseCommand(_anchorable);
+            dockingManager.ExecuteCloseCommand(_anchorable);
         }
 
         protected override void InitDefaultCommands()
@@ -176,7 +176,7 @@ namespace SharpLib.Docking.Controls
         {
             if (_anchorable != null && _anchorable.Root != null && _anchorable.Root.Manager != null)
             {
-                _anchorable.Root.Manager._ExecuteHideCommand(_anchorable);
+                _anchorable.Root.Manager.ExecuteHideCommand(_anchorable);
             }
         }
 
@@ -213,7 +213,7 @@ namespace SharpLib.Docking.Controls
         {
             if (_anchorable != null && _anchorable.Root != null && _anchorable.Root.Manager != null)
             {
-                _anchorable.Root.Manager._ExecuteAutoHideCommand(_anchorable);
+                _anchorable.Root.Manager.ExecuteAutoHideCommand(_anchorable);
             }
         }
 
@@ -242,7 +242,7 @@ namespace SharpLib.Docking.Controls
 
         private void ExecuteDockCommand(object parameter)
         {
-            LayoutElement.Root.Manager._ExecuteDockCommand(_anchorable);
+            LayoutElement.Root.Manager.ExecuteDockCommand(_anchorable);
         }
 
         protected override void OnVisibilityChanged()

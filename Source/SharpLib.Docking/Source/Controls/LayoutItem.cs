@@ -573,7 +573,7 @@ namespace SharpLib.Docking.Controls
 
         private void ExecuteFloatCommand(object parameter)
         {
-            LayoutElement.Root.Manager._ExecuteFloatCommand(LayoutElement);
+            LayoutElement.Root.Manager.ExecuteFloatCommand(LayoutElement);
         }
 
         protected virtual void Float()
@@ -601,7 +601,7 @@ namespace SharpLib.Docking.Controls
 
         private void ExecuteDockAsDocumentCommand(object parameter)
         {
-            LayoutElement.Root.Manager._ExecuteDockAsDocumentCommand(LayoutElement);
+            LayoutElement.Root.Manager.ExecuteDockAsDocumentCommand(LayoutElement);
         }
 
         private static void OnCloseAllButThisCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -636,7 +636,7 @@ namespace SharpLib.Docking.Controls
 
         private void ExecuteCloseAllButThisCommand(object parameter)
         {
-            LayoutElement.Root.Manager._ExecuteCloseAllButThisCommand(LayoutElement);
+            LayoutElement.Root.Manager.ExecuteCloseAllButThisCommand(LayoutElement);
         }
 
         private static void OnActivateCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -660,7 +660,7 @@ namespace SharpLib.Docking.Controls
 
         private void ExecuteActivateCommand(object parameter)
         {
-            LayoutElement.Root.Manager._ExecuteContentActivateCommand(LayoutElement);
+            LayoutElement.Root.Manager.ExecuteContentActivateCommand(LayoutElement);
         }
 
         private static void OnNewVerticalTabGroupCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

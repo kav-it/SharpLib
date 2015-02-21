@@ -46,6 +46,7 @@
       <Link>Source\Version\SharpLib.Version.cs</Link>
     </Compile>
     <Compile Include="Source\Args\EventArgs.FocusChange.cs" />
+    <Compile Include="Source\DockingManager.Events.cs" />
     <Compile Include="Source\Enums\Enum.DropAreaType.cs" />
     <Compile Include="Source\Interfaces\IDropArea.cs" />
     <Compile Include="Source\Enums\Enum.ChildrenTreeChange.cs" />

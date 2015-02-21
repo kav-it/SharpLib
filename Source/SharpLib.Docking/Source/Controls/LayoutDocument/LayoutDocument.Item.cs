@@ -48,7 +48,7 @@ namespace SharpLib.Docking.Controls
         protected override void Close()
         {
             var dockingManager = _document.Root.Manager;
-            dockingManager._ExecuteCloseCommand(_document);
+            dockingManager.ExecuteCloseCommand(_document);
         }
 
         private static void OnDescriptionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

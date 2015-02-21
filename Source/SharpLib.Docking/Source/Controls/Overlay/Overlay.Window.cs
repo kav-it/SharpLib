@@ -129,19 +129,16 @@ namespace SharpLib.Docking.Controls
         {
             base.OnApplyTemplate();
 
-            _mainCanvasPanel = GetTemplateChild("PART_DropTargetsContainer") as Canvas;
-            _gridDockingManagerDropTargets = GetTemplateChild("PART_DockingManagerDropTargets") as Grid;
-            _gridAnchorablePaneDropTargets = GetTemplateChild("PART_AnchorablePaneDropTargets") as Grid;
-            _gridDocumentPaneDropTargets = GetTemplateChild("PART_DocumentPaneDropTargets") as Grid;
-            _gridDocumentPaneFullDropTargets = GetTemplateChild("PART_DocumentPaneFullDropTargets") as Grid;
+            _mainCanvasPanel = (Canvas)GetTemplateChild("PART_DropTargetsContainer");
+            _gridDockingManagerDropTargets = (Grid)GetTemplateChild("PART_DockingManagerDropTargets");
+            _gridAnchorablePaneDropTargets = (Grid)GetTemplateChild("PART_AnchorablePaneDropTargets");
+            _gridDocumentPaneDropTargets = (Grid)GetTemplateChild("PART_DocumentPaneDropTargets");
+            _gridDocumentPaneFullDropTargets = (Grid)GetTemplateChild("PART_DocumentPaneFullDropTargets");
 
             _gridDockingManagerDropTargets.Visibility = Visibility.Hidden;
             _gridAnchorablePaneDropTargets.Visibility = Visibility.Hidden;
             _gridDocumentPaneDropTargets.Visibility = Visibility.Hidden;
-            if (_gridDocumentPaneFullDropTargets != null)
-            {
-                _gridDocumentPaneFullDropTargets.Visibility = Visibility.Hidden;
-            }
+            _gridDocumentPaneFullDropTargets.Visibility = Visibility.Hidden;
 
             _dockingManagerDropTargetBottom = GetTemplateChild("PART_DockingManagerDropTargetBottom") as FrameworkElement;
             _dockingManagerDropTargetTop = GetTemplateChild("PART_DockingManagerDropTargetTop") as FrameworkElement;
@@ -441,8 +438,7 @@ namespace SharpLib.Docking.Controls
                             var layoutDocumentPane = dropAreaDocumentPaneGroup.AreaElement.Model as LayoutDocumentPane;
                             var parentDocumentPaneGroup = layoutDocumentPane.Parent as LayoutDocumentPaneGroup;
 
-                            if (parentDocumentPaneGroup != null &&
-                                parentDocumentPaneGroup.Children.Where(c => c.IsVisible).Count() > 1)
+                            if (parentDocumentPaneGroup != null && parentDocumentPaneGroup.Children.Count(c => c.IsVisible) > 1)
                             {
                                 var manager = parentDocumentPaneGroup.Root.Manager;
                                 if (!manager.AllowMixedOrientation)

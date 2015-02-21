@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Markup;
 using System.Xml.Serialization;
@@ -158,7 +158,7 @@ namespace SharpLib.Docking.Layout
                 if (_floatingWindows == null)
                 {
                     _floatingWindows = new ObservableCollection<LayoutFloatingWindow>();
-                    _floatingWindows.CollectionChanged += _floatingWindows_CollectionChanged;
+                    _floatingWindows.CollectionChanged += FloatingWindowsCollectionChanged;
                 }
 
                 return _floatingWindows;
@@ -172,7 +172,7 @@ namespace SharpLib.Docking.Layout
                 if (_hiddenAnchorables == null)
                 {
                     _hiddenAnchorables = new ObservableCollection<LayoutAnchorable>();
-                    _hiddenAnchorables.CollectionChanged += _hiddenAnchorables_CollectionChanged;
+                    _hiddenAnchorables.CollectionChanged += HiddenAnchorablesCollectionChanged;
                 }
 
                 return _hiddenAnchorables;
@@ -313,7 +313,7 @@ namespace SharpLib.Docking.Layout
 
         #region Методы
 
-        private void _floatingWindows_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void FloatingWindowsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.OldItems != null && (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
                                        e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace))
@@ -337,10 +337,9 @@ namespace SharpLib.Docking.Layout
             }
         }
 
-        private void _hiddenAnchorables_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void HiddenAnchorablesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+            if (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace)
             {
                 if (e.OldItems != null)
                 {
@@ -354,8 +353,7 @@ namespace SharpLib.Docking.Layout
                 }
             }
 
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+            if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace)
             {
                 if (e.NewItems != null)
                 {
@@ -371,6 +369,76 @@ namespace SharpLib.Docking.Layout
                         }
                     }
                 }
+            }
+        }
+
+        private void InternalSetActiveContent(LayoutContent currentValue, LayoutContent newActiveContent)
+        {
+            RaisePropertyChanging("ActiveContent");
+            if (currentValue != null)
+            {
+                currentValue.IsActive = false;
+            }
+            _activeContent = new WeakReference(newActiveContent);
+            currentValue = ActiveContent;
+            if (currentValue != null)
+            {
+                currentValue.IsActive = true;
+            }
+            RaisePropertyChanged("ActiveContent");
+            _activeContentSet = currentValue != null;
+            if (currentValue != null)
+            {
+                if (currentValue.Parent is LayoutDocumentPane || currentValue is LayoutDocument)
+                {
+                    LastFocusedDocument = currentValue;
+                }
+            }
+            else
+            {
+                LastFocusedDocument = null;
+            }
+        }
+
+        private void UpdateActiveContentProperty()
+        {
+            var activeContent = ActiveContent;
+            if (_activeContentSet && (activeContent == null || !Equals(activeContent.Root, this)))
+            {
+                _activeContentSet = false;
+                InternalSetActiveContent(activeContent, null);
+            }
+        }
+
+        internal void FireLayoutUpdated()
+        {
+            if (Updated != null)
+            {
+                Updated(this, EventArgs.Empty);
+            }
+        }
+
+        internal void OnLayoutElementAdded(LayoutElement element)
+        {
+            if (ElementAdded != null)
+            {
+                ElementAdded(this, new LayoutElementEventArgs(element));
+            }
+        }
+
+        internal void OnLayoutElementRemoved(LayoutElement element)
+        {
+            if (element.Descendents().OfType<LayoutContent>().Any(c => Equals(c, LastFocusedDocument)))
+            {
+                LastFocusedDocument = null;
+            }
+            if (element.Descendents().OfType<LayoutContent>().Any(c => Equals(c, ActiveContent)))
+            {
+                ActiveContent = null;
+            }
+            if (ElementRemoved != null)
+            {
+                ElementRemoved(this, new LayoutElementEventArgs(element));
             }
         }
 
@@ -442,44 +510,6 @@ namespace SharpLib.Docking.Layout
             }
         }
 
-        private void InternalSetActiveContent(LayoutContent currentValue, LayoutContent newActiveContent)
-        {
-            RaisePropertyChanging("ActiveContent");
-            if (currentValue != null)
-            {
-                currentValue.IsActive = false;
-            }
-            _activeContent = new WeakReference(newActiveContent);
-            currentValue = ActiveContent;
-            if (currentValue != null)
-            {
-                currentValue.IsActive = true;
-            }
-            RaisePropertyChanged("ActiveContent");
-            _activeContentSet = currentValue != null;
-            if (currentValue != null)
-            {
-                if (currentValue.Parent is LayoutDocumentPane || currentValue is LayoutDocument)
-                {
-                    LastFocusedDocument = currentValue;
-                }
-            }
-            else
-            {
-                LastFocusedDocument = null;
-            }
-        }
-
-        private void UpdateActiveContentProperty()
-        {
-            var activeContent = ActiveContent;
-            if (_activeContentSet && (activeContent == null || !Equals(activeContent.Root, this)))
-            {
-                _activeContentSet = false;
-                InternalSetActiveContent(activeContent, null);
-            }
-        }
-
         public void CollectGarbage()
         {
             bool exitFlag;
@@ -497,7 +527,7 @@ namespace SharpLib.Docking.Layout
 
                 foreach (var emptyPane in this.Descendents().OfType<ILayoutPane>().Where(p => p.ChildrenCount == 0))
                 {
-                    ILayoutPane pane = emptyPane;
+                    var pane = emptyPane;
                     foreach (var contentReferencingEmptyPane in this.Descendents().OfType<LayoutContent>()
                         .Where(c => ((ILayoutPreviousContainer)c).PreviousContainer == pane && !c.IsFloating))
                     {
@@ -641,38 +671,6 @@ namespace SharpLib.Docking.Layout
             } while (!exitFlag);
 
             UpdateActiveContentProperty();
-        }
-
-        internal void FireLayoutUpdated()
-        {
-            if (Updated != null)
-            {
-                Updated(this, EventArgs.Empty);
-            }
-        }
-
-        internal void OnLayoutElementAdded(LayoutElement element)
-        {
-            if (ElementAdded != null)
-            {
-                ElementAdded(this, new LayoutElementEventArgs(element));
-            }
-        }
-
-        internal void OnLayoutElementRemoved(LayoutElement element)
-        {
-            if (element.Descendents().OfType<LayoutContent>().Any(c => Equals(c, LastFocusedDocument)))
-            {
-                LastFocusedDocument = null;
-            }
-            if (element.Descendents().OfType<LayoutContent>().Any(c => Equals(c, ActiveContent)))
-            {
-                ActiveContent = null;
-            }
-            if (ElementRemoved != null)
-            {
-                ElementRemoved(this, new LayoutElementEventArgs(element));
-            }
         }
 
         public override void ConsoleDump(int tab)
