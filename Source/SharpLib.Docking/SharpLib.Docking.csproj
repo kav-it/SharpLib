@@ -58,6 +58,9 @@
     <Compile Include="Source\Controls\AutoHideWindowManager.cs" />
     <Compile Include="Source\Themes\Theme.Metro.cs" />
     <Compile Include="Source\Themes\Theme.VS2010.cs" />
+    <Compile Include="Source\Themes\Theme.VS2013.Blue.cs" />
+    <Compile Include="Source\Themes\Theme.VS2013.Dark.cs" />
+    <Compile Include="Source\Themes\Theme.VS2013.Light.cs" />
     <Compile Include="Source\Utils\BindingHelper.cs" />
     <Compile Include="Source\Controls\Menu\ContextMenuEx.cs" />
     <Compile Include="Source\Controls\DockingManager\DockingManager.DropTarget.cs" />
@@ -225,6 +228,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Source\Themes\VS2013\Theme.VS2013.Blue.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Themes\VS2013\Theme.VS2013.Brushes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Themes\VS2013\Theme.VS2013.Dark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Themes\VS2013\Theme.VS2013.Light.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Source\Themes\VS2013\Theme.VS2013.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -260,7 +283,46 @@
     <Resource Include="Source\Themes\VS2008\Images\PinRestore.png" />
     <Resource Include="Source\Themes\VS2008\Images\VTabGroup.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Source\Themes\VS2013\Images\DockAnchorableBottom.png" />
+    <Resource Include="Source\Themes\VS2013\Images\DockAnchorableLeft.png" />
+    <Resource Include="Source\Themes\VS2013\Images\DockAnchorableRight.png" />
+    <Resource Include="Source\Themes\VS2013\Images\DockAnchorableTop.png" />
+    <Resource Include="Source\Themes\VS2013\Images\DockDocumentAsAnchorableBottom.png" />
+    <Resource Include="Source\Themes\VS2013\Images\DockDocumentAsAnchorableLeft.png" />
+    <Resource Include="Source\Themes\VS2013\Images\DockDocumentAsAnchorableRight.png" />
+    <Resource Include="Source\Themes\VS2013\Images\DockDocumentAsAnchorableTop.png" />
+    <Resource Include="Source\Themes\VS2013\Images\DockDocumentBottom.png" />
+    <Resource Include="Source\Themes\VS2013\Images\DockDocumentInside.png" />
+    <Resource Include="Source\Themes\VS2013\Images\DockDocumentLeft.png" />
+    <Resource Include="Source\Themes\VS2013\Images\DockDocumentRight.png" />
+    <Resource Include="Source\Themes\VS2013\Images\DockDocumentTop.png" />
+    <Resource Include="Source\Themes\VS2013\Images\DockPaneEmpty.png" />
+    <Resource Include="Source\Themes\VS2013\Images\DockPaneLargeEmpty.png" />
+    <Resource Include="Source\Themes\VS2013\Images\HTabGroup.png" />
+    <Resource Include="Source\Themes\VS2013\Images\Locked.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinAutoHide.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinAutoHide_Black.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinAutoHide_Dark.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinAutoHide_White.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinClose.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinClose_Black.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinClose_Dark.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinClose_White.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinDocMenu.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinDocMenu_Black.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinMaximize.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinMaximize_Black.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinMaximize_Dark.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinMenu.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinMenu_Black.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinMenu_Dark.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinMenu_White.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinRestore.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinRestore_Black.png" />
+    <Resource Include="Source\Themes\VS2013\Images\PinRestore_Dark.png" />
+    <Resource Include="Source\Themes\VS2013\Images\VTabGroup.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Source\Themes\Metro\Images\DockAnchorableBottom.png" />
     <Resource Include="Source\Themes\Metro\Images\DockAnchorableLeft.png" />

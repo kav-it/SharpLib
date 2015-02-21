@@ -19,7 +19,7 @@
         </StackPanel>
         <xcad:DockingManager Grid.Row="1">
             <xcad:DockingManager.Theme>
-                <themes:Vs2010Theme />
+                <themes:Vs2013LightTheme />
             </xcad:DockingManager.Theme>
             <layout:LayoutRoot x:Name="PART_rootLayout" />
         </xcad:DockingManager>

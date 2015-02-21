@@ -1,6 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/SharpLib.Docking;component/Source/Themes/VS2008/Theme.VS2008.xaml" />
-        <ResourceDictionary Source="/SharpLib.Docking;component/Source/Themes/Metro/Theme.Metro.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

@@ -1,0 +1,108 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Theme.VS2013.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    
+    <!-- General -->
+    <SolidColorBrush x:Key="ThemeVs2013Background" Color="#2D2D30" />
+    <SolidColorBrush x:Key="ThemeVs2013PanelBorderBrush" Color="#3F3F46" />
+    <SolidColorBrush x:Key="ThemeVs2013TabBackground" Color="#252526" />
+    
+    <!-- Auto Hide : Tab -->
+    <SolidColorBrush x:Key="ThemeVs2013AutoHideTabDefaultBackground" Color="#2D2D30" />
+    <SolidColorBrush x:Key="ThemeVs2013AutoHideTabDefaultBorder" Color="#3F3F46" />
+    <SolidColorBrush x:Key="ThemeVs2013AutoHideTabDefaultText" Color="#D0D0D0" />
+    <SolidColorBrush x:Key="ThemeVs2013AutoHideTabHoveredBackground" Color="#2D2D30" />
+    <SolidColorBrush x:Key="ThemeVs2013AutoHideTabHoveredBorder" Color="#007ACC" />
+    <SolidColorBrush x:Key="ThemeVs2013AutoHideTabHoveredText" Color="#0097FB" />
+    
+    <!-- Document Well : Overflow Button -->
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellOverflowButtonDefaultGlyph" Color="#F1F1F1" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellOverflowButtonHoveredBackground" Color="#3E3E40" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellOverflowButtonHoveredBorder" Color="#3E3E40" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellOverflowButtonHoveredGlyph" Color="#007ACC" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellOverflowButtonPressedBackground" Color="#007ACC" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellOverflowButtonPressedBorder" Color="#007ACC" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellOverflowButtonPressedGlyph" Color="#FFFFFF" />
+    
+    <!-- Document Well : Tab -->
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabSelectedActiveBackground" Color="#007ACC" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabSelectedActiveText" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabSelectedInactiveBackground" Color="#3F3F46" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabSelectedInactiveText" Color="#F1F1F1" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabUnselectedBackground" Color="#2D2D30" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabUnselectedText" Color="#F1F1F1" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabUnselectedHoveredBackground" Color="#1C97EA" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabUnselectedHoveredText" Color="#FFFFFF" />
+
+    <!-- Document Well : Tab : Button -->
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonSelectedActiveGlyph" Color="#D0E6F5" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonSelectedActiveHoveredBackground" Color="#1C97EA" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonSelectedActiveHoveredBorder" Color="#1C97EA" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonSelectedActiveHoveredGlyph" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonSelectedActivePressedBackground" Color="#0E6198" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonSelectedActivePressedBorder" Color="#0E6198" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonSelectedActivePressedGlyph" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonSelectedInactiveGlyph" Color="#6D6D70" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonSelectedInactiveHoveredBackground" Color="#555555" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonSelectedInactiveHoveredBorder" Color="#555555" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonSelectedInactiveHoveredGlyph" Color="#F1F1F1" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonSelectedInactivePressedBackground" Color="#1B1B1C" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonSelectedInactivePressedBorder" Color="#1B1B1C" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonSelectedInactivePressedGlyph" Color="#F1F1F1" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonUnselectedTabHoveredGlyph" Color="#D0E6F5" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonUnselectedTabHoveredButtonHoveredBackground" Color="#52B0EF" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonUnselectedTabHoveredButtonHoveredBorder" Color="#52B0EF" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonUnselectedTabHoveredButtonHoveredGlyph" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonUnselectedTabHoveredButtonPressedBackground" Color="#0E6198" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonUnselectedTabHoveredButtonPressedBorder" Color="#0E6198" />
+    <SolidColorBrush x:Key="ThemeVs2013DocumentWellTabButtonUnselectedTabHoveredButtonPressedGlyph" Color="#FFFFFF" />
+    
+    <!-- Tool Window : Caption -->
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionActiveBackground" Color="#007ACC" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionActiveGrip" Color="#59A8DE" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionActiveText" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionInactiveBackground" Color="#2D2D30" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionInactiveGrip" Color="#46464A" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionInactiveText" Color="#D0D0D0" />
+    
+    <!-- Tool Window : Caption : Button -->
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionButtonActiveGlyph" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionButtonActiveHoveredBackground" Color="#52B0EF" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionButtonActiveHoveredBorder" Color="#52B0EF" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionButtonActiveHoveredGlyph" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionButtonActivePressedBackground" Color="#0E6198" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionButtonActivePressedBorder" Color="#0E6198" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionButtonActivePressedGlyph" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionButtonInactiveGlyph" Color="#F1F1F1" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionButtonInactiveHoveredBackground" Color="#393939" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionButtonInactiveHoveredBorder" Color="#393939" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionButtonInactiveHoveredGlyph" Color="#F1F1F1" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionButtonInactivePressedBackground" Color="#0E6198" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionButtonInactivePressedBorder" Color="#0E6198" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowCaptionButtonInactivePressedGlyph" Color="#FFFFFF" />
+
+    <!-- Tool Window : Tab -->
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowTabSelectedActiveBackground" Color="#252526" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowTabSelectedActiveText" Color="#0097FB" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowTabSelectedInactiveBackground" Color="#252526" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowTabSelectedInactiveText" Color="#0097FB" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowTabUnselectedBackground" Color="#2D2D30" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowTabUnselectedText" Color="#D0D0D0" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowTabUnselectedHoveredBackground" Color="#3E3E40" />
+    <SolidColorBrush x:Key="ThemeVs2013ToolWindowTabUnselectedHoveredText" Color="#55AAFF" />
+    
+    <!-- Floating Document Window -->
+    <SolidColorBrush x:Key="ThemeVs2013FloatingDocumentWindowBackground" Color="#2D2D30" />
+    <SolidColorBrush x:Key="ThemeVs2013FloatingDocumentWindowBorder" Color="#3F3F46" />
+
+    <!-- Floating Tool Window -->
+    <SolidColorBrush x:Key="ThemeVs2013FloatingToolWindowBackground" Color="#2D2D30" />
+    <SolidColorBrush x:Key="ThemeVs2013FloatingToolWindowBorder" Color="#3F3F46" />
+    
+    <!-- Navigator Window -->
+    <SolidColorBrush x:Key="ThemeVs2013NavigatorWindowBackground" Color="#2D2D30" />
+    <SolidColorBrush x:Key="ThemeVs2013NavigatorWindowSelectedBackground" Color="#007ACC" />
+    <SolidColorBrush x:Key="ThemeVs2013NavigatorWindowSelectedText" Color="#FFFFFF" />
+</ResourceDictionary>

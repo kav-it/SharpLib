@@ -39,14 +39,13 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor31}"/>
-                <Setter Property="Background"
-									    Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor10}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeVS2010BaseColor31}"/>
+                <Setter Property="Background" Value="{DynamicResource ThemeVS2010BaseColor10}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor31}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeVS2010BaseColor31}"/>
                 <Setter Property="Background"
-									    Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor10}" />
+									    Value="{DynamicResource ThemeVS2010BaseColor10}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -70,16 +69,16 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor31}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeVS2010BaseColor31}"/>
                 <Setter Property="Background"
-									    Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor10}" />
+									    Value="{DynamicResource ThemeVS2010BaseColor10}" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <!--DocumentPaneControlStyle-->
     <Style x:Key="ThemeVS2010DocumentPaneControlStyle" TargetType="{x:Type dockControls:LayoutDocumentPaneControl}">
-        <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor33}"/>
+        <Setter Property="Background" Value="{DynamicResource ThemeVS2010BaseColor33}"/>
         <Setter Property="BorderBrush" Value="{x:Null}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -160,7 +159,7 @@
                                 <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Model.SelectedContent.IsLastFocusedDocument}" Value="True"/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="Background"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor31}" />
+									        Value="{DynamicResource ThemeVS2010BaseColor31}" />
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
@@ -168,7 +167,7 @@
                                 <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Model.SelectedContent.IsLastFocusedDocument}" Value="True"/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="Background"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor30}" />
+									        Value="{DynamicResource ThemeVS2010BaseColor30}" />
                         </MultiDataTrigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
@@ -183,9 +182,9 @@
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type TabItem}">
-                    <Setter Property="Foreground" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor10}"/>                   
-                    <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor4}"/>
-                    <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor4}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource ThemeVS2010BaseColor10}"/>                   
+                    <Setter Property="Background" Value="{DynamicResource ThemeVS2010BaseColor4}"/>
+                    <Setter Property="BorderBrush" Value="{DynamicResource ThemeVS2010BaseColor4}"/>
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
                     <Setter Property="ToolTip" Value="{Binding ToolTip}"/>
                     <Setter Property="Padding" Value="2,0,2,0"/>
@@ -213,11 +212,11 @@
                                     <Trigger Property="Selector.IsSelected"
 								            Value="true">
                                         <Setter Property="BorderBrush"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor33}" />
+									        Value="{DynamicResource ThemeVS2010BaseColor33}" />
                                         <Setter Property="Background"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor16}" />
+									        Value="{DynamicResource ThemeVS2010BaseColor16}" />
                                         <Setter Property="Foreground"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor2}"/>
+									        Value="{DynamicResource ThemeVS2010BaseColor2}"/>
                                         <Setter Property="Panel.ZIndex" 
                                             Value="1" />
                                         <Setter Property="Margin" Value="-1,0,-1,-4"/>
@@ -229,11 +228,11 @@
                                             <Condition Binding="{Binding IsLastFocusedDocument}" Value="True"/>
                                         </MultiDataTrigger.Conditions>
                                         <Setter Property="BorderBrush"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor31}" />
+									        Value="{DynamicResource ThemeVS2010BaseColor31}" />
                                         <Setter Property="Background"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor25}" />
+									        Value="{DynamicResource ThemeVS2010BaseColor25}" />
                                         <Setter Property="Foreground"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor3}"/>
+									        Value="{DynamicResource ThemeVS2010BaseColor3}"/>
                                         <Setter Property="Panel.ZIndex" 
                                             Value="1" />
                                     </MultiDataTrigger>
@@ -244,11 +243,11 @@
                                             <Condition Binding="{Binding IsLastFocusedDocument}" Value="True"/>
                                         </MultiDataTrigger.Conditions>
                                         <Setter Property="BorderBrush"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor30}" />
+									        Value="{DynamicResource ThemeVS2010BaseColor30}" />
                                         <Setter Property="Background"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor24}" />
+									        Value="{DynamicResource ThemeVS2010BaseColor24}" />
                                         <Setter Property="Foreground"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor3}"/>
+									        Value="{DynamicResource ThemeVS2010BaseColor3}"/>
                                         <Setter Property="Panel.ZIndex" 
                                             Value="1" />
                                     </MultiDataTrigger>
@@ -258,13 +257,13 @@
                                             <Condition Property="IsMouseOver" Value="true"/>
                                             <Condition Property="Selector.IsSelected" Value="false"/>
                                         </MultiTrigger.Conditions>
-                                        <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor14}"/>
-                                        <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor6}"/>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource ThemeVS2010BaseColor14}"/>
+                                        <Setter Property="Background" Value="{DynamicResource ThemeVS2010BaseColor6}"/>
                                         <Setter Property="Panel.ZIndex" Value="0" />
                                     </MultiTrigger>
                                     <Trigger Property="IsEnabled" Value="false">
-                                        <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor13}"/>
-                                        <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor9}"/>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource ThemeVS2010BaseColor13}"/>
+                                        <Setter Property="Background" Value="{DynamicResource ThemeVS2010BaseColor9}"/>
                                         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
@@ -339,9 +338,9 @@
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type TabItem}">
-                    <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor4}"/>
-                    <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor4}"/>
-                    <Setter Property="Foreground" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor2}"/>
+                    <Setter Property="Background" Value="{DynamicResource ThemeVS2010BaseColor4}"/>
+                    <Setter Property="BorderBrush" Value="{DynamicResource ThemeVS2010BaseColor4}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource ThemeVS2010BaseColor2}"/>
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
                     <Setter Property="ToolTip" Value="{Binding ToolTip}"/>
                     <Setter Property="Template">
@@ -367,11 +366,11 @@
                                     <Trigger Property="Selector.IsSelected"
 								        Value="true">
                                             <Setter Property="BorderBrush"
-									    Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor8}" />
+									    Value="{DynamicResource ThemeVS2010BaseColor8}" />
                                             <Setter Property="Background"
-									    Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor10}" />
+									    Value="{DynamicResource ThemeVS2010BaseColor10}" />
                                             <Setter Property="Foreground"
-									    Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor3}"/>
+									    Value="{DynamicResource ThemeVS2010BaseColor3}"/>
                                             <Setter Property="Panel.ZIndex" 
                                         Value="1" />
                                         <Setter Property="Margin" Value="0,-2,-1,0"/>
@@ -382,13 +381,13 @@
                                             <Condition Property="IsMouseOver" Value="true"/>
                                             <Condition Property="Selector.IsSelected" Value="false"/>
                                         </MultiTrigger.Conditions>
-                                        <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor14}"/>
-                                        <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor6}"/>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource ThemeVS2010BaseColor14}"/>
+                                        <Setter Property="Background" Value="{DynamicResource ThemeVS2010BaseColor6}"/>
                                         <Setter Property="Panel.ZIndex" Value="0" />
                                     </MultiTrigger>
                                     <Trigger Property="IsEnabled" Value="false">
-                                        <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor13}"/>
-                                        <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor9}"/>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource ThemeVS2010BaseColor13}"/>
+                                        <Setter Property="Background" Value="{DynamicResource ThemeVS2010BaseColor9}"/>
                                         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
@@ -443,7 +442,7 @@
                                 <ContentPresenter 
                                     x:Name="Header"            
                                     Margin="2,0,0,0"
-                                    TextElement.Foreground="{DynamicResource AvalonDock_ThemeVS2010_BaseColor2}"
+                                    TextElement.Foreground="{DynamicResource ThemeVS2010BaseColor2}"
                                     Content="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}" 
                                     ContentTemplate="{Binding Model.Root.Manager.AnchorableTitleTemplate, RelativeSource={RelativeSource TemplatedParent}}"
                                     ContentTemplateSelector="{Binding Model.Root.Manager.AnchorableTitleTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}"/>
@@ -498,8 +497,8 @@
                             </Setter>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Model.IsActive, RelativeSource={RelativeSource Mode=Self}}" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor15}" />
-                            <Setter Property="TextElement.Foreground" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor3}" TargetName="Header"/>
+                            <Setter Property="Background" Value="{DynamicResource ThemeVS2010BaseColor15}" />
+                            <Setter Property="TextElement.Foreground" Value="{DynamicResource ThemeVS2010BaseColor3}" TargetName="Header"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Model.IsActive, RelativeSource={RelativeSource Mode=Self}}" Value="True">
                             <Setter Property="Source" TargetName="PART_ImgAutoHidePin" Value="/SharpLib.Docking;component/Source/Themes/VS2010/Images/PinAutoHide_Dark.png"/>
@@ -553,13 +552,13 @@
     <ControlTemplate x:Key="ThemeVS2010AnchorTemplate" TargetType="{x:Type dockControls:LayoutAnchorControl}">
         <Border 
             x:Name="Bd"
-            Background="{DynamicResource AvalonDock_ThemeVS2010_BaseColor16}"
+            Background="{DynamicResource ThemeVS2010BaseColor16}"
             BorderThickness="1"
             CornerRadius="3,3,0,0"
             Margin="0,4,0,0"
             Padding="2">
                 <ContentPresenter 
-                    TextElement.Foreground="{DynamicResource AvalonDock_ThemeVS2010_BaseColor2}"
+                    TextElement.Foreground="{DynamicResource ThemeVS2010BaseColor2}"
                     Content="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}" 
                     ContentTemplate="{Binding AnchorableHeaderTemplate, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type dock:DockingManager}, Mode=FindAncestor}}"
                     ContentTemplateSelector="{Binding AnchorableHeaderTemplateSelector, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type dock:DockingManager}, Mode=FindAncestor}}"/>
@@ -582,8 +581,8 @@
                     <Condition Property="IsMouseOver" Value="true"/>
                     <Condition Property="Selector.IsSelected" Value="false"/>
                 </MultiTrigger.Conditions>
-                <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor14}" TargetName="Bd"/>
-                <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor6}" TargetName="Bd"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeVS2010BaseColor14}" TargetName="Bd"/>
+                <Setter Property="Background" Value="{DynamicResource ThemeVS2010BaseColor6}" TargetName="Bd"/>
             </MultiTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -764,7 +763,7 @@
         <MenuItem Header="{x:Static dockProperties:Resources.Document_DockAsDocument}" Command="{Binding Path=DockAsDocumentCommand}"/>
         <MenuItem Header="{x:Static dockProperties:Resources.Document_NewHorizontalTabGroup}" Command="{Binding Path=NewHorizontalTabGroupCommand}" Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
             <MenuItem.Icon>
-                <Image Source="/Xceed.Wpf.AvalonDock;component/Themes/Aero/Images/HTabGroup.png" Stretch="Uniform" Width="14"/>
+                <Image Source="/SharpLib.Docking;component/Source/Themes/VS2010/Images/HTabGroup.png" Stretch="Uniform" Width="14"/>
             </MenuItem.Icon>
         </MenuItem>
 
@@ -772,7 +771,7 @@
                 Command="{Binding Path=NewVerticalTabGroupCommand}"
                 Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
             <MenuItem.Icon>
-            <Image Source="/Xceed.Wpf.AvalonDock;component/Themes/Aero/Images/VTabGroup.png" Stretch="Uniform" Width="14"/>
+                <Image Source="/SharpLib.Docking;component/Source/Themes/VS2010/Images/VTabGroup.png" Stretch="Uniform" Width="14"/>
             </MenuItem.Icon>
         </MenuItem>
         <MenuItem Header="{x:Static dockProperties:Resources.Document_MoveToNextTabGroup}" 
@@ -785,7 +784,7 @@
 
     <!--DockingManager-->
     <Style x:Key="{x:Type dock:DockingManager}" TargetType="{x:Type dock:DockingManager}">
-        <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor1}"/>
+        <Setter Property="Background" Value="{DynamicResource ThemeVS2010BaseColor1}"/>
         <Setter Property="DocumentPaneControlStyle" Value="{StaticResource ThemeVS2010DocumentPaneControlStyle}"/>
         <Setter Property="AnchorablePaneControlStyle" Value="{StaticResource ThemeVS2010AnchorablePaneControlStyle}"/>
         <Setter Property="AnchorSideTemplate" Value="{StaticResource ThemeVS2010AnchorSideTemplate}"/>
@@ -856,9 +855,6 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <ContentPresenter Content="{Binding LayoutItem.View, RelativeSource={RelativeSource TemplatedParent}}"/>
-                        <!--<ContentPresenter Content="{Binding Model.Content, RelativeSource={RelativeSource TemplatedParent}}" 
-                                          ContentTemplate="{Binding LayoutItemTemplate, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type avalonDock:DockingManager}, Mode=FindAncestor}}"
-                                          ContentTemplateSelector="{Binding LayoutItemTemplateSelector, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type avalonDock:DockingManager}, Mode=FindAncestor}}"/>-->
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -972,7 +968,7 @@
                             </Grid.RowDefinitions>
                             <Border x:Name="Header"
                                     CornerRadius="2,2,0,0"
-                                Background="{DynamicResource AvalonDock_ThemeVS2010_BaseColor16}">
+                                Background="{DynamicResource ThemeVS2010BaseColor16}">
                                 <dockControls:AnchorablePaneTitle 
                                     Model="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"/>
                             </Border>
@@ -980,12 +976,6 @@
                                 Grid.Row="1"
                                 FlowDirection="{TemplateBinding FlowDirection}"
                                 Content="{Binding LayoutItem.View, RelativeSource={RelativeSource TemplatedParent}}"/>
-
-                            <!--<ContentPresenter 
-                                Content="{Binding Model.Content, RelativeSource={RelativeSource TemplatedParent}}" 
-                                ContentTemplate="{Binding LayoutItemTemplate, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type avalonDock:DockingManager}, Mode=FindAncestor}}"
-                                ContentTemplateSelector="{Binding LayoutItemTemplateSelector, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type avalonDock:DockingManager}, Mode=FindAncestor}}"
-                                Grid.Row="1"/>-->
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -1003,9 +993,9 @@
     </Style>
 
     <Style x:Key="{x:Type dockControls:LayoutDocumentFloatingWindowControl}" TargetType="{x:Type dockControls:LayoutDocumentFloatingWindowControl}">
-        <Setter Property="Foreground" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor10}"/>
-        <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor33}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor33}"/>
+        <Setter Property="Foreground" Value="{DynamicResource ThemeVS2010BaseColor10}"/>
+        <Setter Property="Background" Value="{DynamicResource ThemeVS2010BaseColor33}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeVS2010BaseColor33}"/>
         <Setter Property="shell:WindowChrome.WindowChrome">
             <Setter.Value>
                 <shell:WindowChrome
@@ -1112,13 +1102,13 @@
                                 <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Model.RootDocument.IsLastFocusedDocument}" Value="True"/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="BorderBrush"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor31}" />
+									        Value="{DynamicResource ThemeVS2010BaseColor31}" />
                             <Setter Property="Background"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor31}" />
+									        Value="{DynamicResource ThemeVS2010BaseColor31}" />
                             <Setter Property="Background"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor25}" TargetName="Header" />
+									        Value="{DynamicResource ThemeVS2010BaseColor25}" TargetName="Header" />
                             <Setter Property="TextElement.Foreground"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor3}"  TargetName="Header"/>
+									        Value="{DynamicResource ThemeVS2010BaseColor3}"  TargetName="Header"/>
                             <Setter Property="Source" TargetName="PART_ImgPinClose" Value="/SharpLib.Docking;component/Source/Themes/VS2010/Images/PinClose_Dark.png"/>
                             <Setter Property="Source" TargetName="PART_ImgPinRestore" Value="/SharpLib.Docking;component/Source/Themes/VS2010/Images/PinRestore_Dark.png"/>
                             <Setter Property="Source" TargetName="PART_ImgPinMaximize" Value="/SharpLib.Docking;component/Source/Themes/VS2010/Images/PinMaximize_Dark.png"/>
@@ -1131,13 +1121,13 @@
                                 <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Model.RootDocument.IsLastFocusedDocument}" Value="True"/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="BorderBrush"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor30}" />
+									        Value="{DynamicResource ThemeVS2010BaseColor30}" />
                             <Setter Property="Background"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor30}" />
+									        Value="{DynamicResource ThemeVS2010BaseColor30}" />
                             <Setter Property="Background"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor24}" TargetName="Header" />
+									        Value="{DynamicResource ThemeVS2010BaseColor24}" TargetName="Header" />
                             <Setter Property="TextElement.Foreground"
-									        Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor3}" TargetName="Header"/>
+									        Value="{DynamicResource ThemeVS2010BaseColor3}" TargetName="Header"/>
                             <Setter Property="Source" TargetName="PART_ImgPinClose" Value="/SharpLib.Docking;component/Source/Themes/VS2010/Images/PinClose_Dark.png"/>
                             <Setter Property="Source" TargetName="PART_ImgPinRestore" Value="/SharpLib.Docking;component/Source/Themes/VS2010/Images/PinRestore_Dark.png"/>
                             <Setter Property="Source" TargetName="PART_ImgPinMaximize" Value="/SharpLib.Docking;component/Source/Themes/VS2010/Images/PinMaximize_Dark.png"/>
@@ -1167,7 +1157,7 @@
     </Style>
 
     <Style x:Key="{x:Type dockControls:LayoutAnchorableFloatingWindowControl}" TargetType="{x:Type dockControls:LayoutAnchorableFloatingWindowControl}">
-        <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor5}"/>
+        <Setter Property="Background" Value="{DynamicResource ThemeVS2010BaseColor5}"/>
         <Setter Property="shell:WindowChrome.WindowChrome">
             <Setter.Value>
                 <shell:WindowChrome
@@ -1184,7 +1174,7 @@
                         <Border x:Name="WindowBorder" 
                                 BorderThickness="4"
                                 Background="{TemplateBinding Background}"
-                                BorderBrush="{DynamicResource AvalonDock_ThemeVS2010_BaseColor16}">
+                                BorderBrush="{DynamicResource ThemeVS2010BaseColor16}">
                             <Grid >
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="18"/>
@@ -1193,8 +1183,8 @@
                                 <Border x:Name="Header" 
                                         CornerRadius="1,1,0,0"
                                         Padding="2,0,2,0"
-                                        TextElement.Foreground="{DynamicResource AvalonDock_ThemeVS2010_BaseColor2}"
-                                        Background="{DynamicResource AvalonDock_ThemeVS2010_BaseColor16}">
+                                        TextElement.Foreground="{DynamicResource ThemeVS2010BaseColor2}"
+                                        Background="{DynamicResource ThemeVS2010BaseColor16}">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -1289,8 +1279,8 @@
                             <Setter Property="Padding" Value="3" TargetName="WindowBorder"/>
                         </Trigger>
                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Model.SinglePane.SelectedContent.IsActive}" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor15}" TargetName="Header"/>
-                            <Setter Property="TextElement.Foreground" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor3}" TargetName="Header"/>
+                            <Setter Property="Background" Value="{DynamicResource ThemeVS2010BaseColor15}" TargetName="Header"/>
+                            <Setter Property="TextElement.Foreground" Value="{DynamicResource ThemeVS2010BaseColor3}" TargetName="Header"/>
                             <Setter Property="Source" TargetName="PART_ImgPinClose" Value="/SharpLib.Docking;component/Source/Themes/VS2010/Images/PinClose_Dark.png"/>
                             <Setter Property="Source" TargetName="PART_ImgPinRestore" Value="/SharpLib.Docking;component/Source/Themes/VS2010/Images/PinRestore_Dark.png"/>
                             <Setter Property="Source" TargetName="PART_ImgPinMaximize" Value="/SharpLib.Docking;component/Source/Themes/VS2010/Images/PinMaximize_Dark.png"/>
@@ -1318,7 +1308,7 @@
     </Style>
 
     <Style x:Key="{x:Type dockControls:LayoutAutoHideWindowControl}" TargetType="{x:Type dockControls:LayoutAutoHideWindowControl}">
-        <Setter Property="Background" Value="{DynamicResource AvalonDock_ThemeVS2010_BaseColor5}"/>
+        <Setter Property="Background" Value="{DynamicResource ThemeVS2010BaseColor5}"/>
     </Style>
 
 
@@ -1391,14 +1381,6 @@
                             <Setter Property="Visibility" TargetName="UpperHighlight" Value="Visible"/>
                             <Setter Property="Fill" TargetName="UpperHighlight" Value="#40FFFFFF"/>
                         </Trigger>
-                        <!--<MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsSelected" Value="true"/>
-                                <Condition Property="IsMouseOver" Value="true"/>
-                            </MultiTrigger.Conditions>
-                            <Setter Property="Background" Value="{StaticResource AvalonDock_ThemeVS2010_NavigatorWindowListBoxItemSelectedHoverFill}"/>
-                            <Setter Property="BorderBrush" Value="#FF98DDFB"/>
-                        </MultiTrigger>-->
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                         </Trigger>
@@ -1427,7 +1409,7 @@
                     <Grid>
                         <Border x:Name="WindowBorder" BorderThickness="1"
                                 CornerRadius="3"
-                                Background="{DynamicResource AvalonDock_ThemeVS2010_BaseColor2}"
+                                Background="{DynamicResource ThemeVS2010BaseColor2}"
                                 BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}">
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -1456,9 +1438,9 @@
                                 </Grid>
 
                                 <Border Grid.Row="1" 
-                                        BorderBrush="{DynamicResource AvalonDock_ThemeVS2010_BaseColor11}"
+                                        BorderBrush="{DynamicResource ThemeVS2010BaseColor11}"
                                         BorderThickness="0,1,0,0"
-                                        Background="{DynamicResource AvalonDock_ThemeVS2010_BaseColor7}"
+                                        Background="{DynamicResource ThemeVS2010BaseColor7}"
                                         MinHeight="200" >
                                     <Grid  Margin="5">
                                         <Grid.ColumnDefinitions>
