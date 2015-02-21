@@ -138,7 +138,10 @@ namespace SharpLib.Docking.Controls
             _gridDockingManagerDropTargets.Visibility = Visibility.Hidden;
             _gridAnchorablePaneDropTargets.Visibility = Visibility.Hidden;
             _gridDocumentPaneDropTargets.Visibility = Visibility.Hidden;
-            _gridDocumentPaneFullDropTargets.Visibility = Visibility.Hidden;
+            if (_gridDocumentPaneFullDropTargets != null)
+            {
+                _gridDocumentPaneFullDropTargets.Visibility = Visibility.Hidden;
+            }
 
             _dockingManagerDropTargetBottom = GetTemplateChild("PART_DockingManagerDropTargetBottom") as FrameworkElement;
             _dockingManagerDropTargetTop = GetTemplateChild("PART_DockingManagerDropTargetTop") as FrameworkElement;
@@ -396,11 +399,6 @@ namespace SharpLib.Docking.Controls
             _floatingWindow = null;
         }
 
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
-        {
-            base.OnClosing(e);
-        }
-
         void IOverlayWindow.DragEnter(IDropArea area)
         {
             _visibleAreas.Add(area);
@@ -427,7 +425,6 @@ namespace SharpLib.Docking.Controls
                         _documentPaneDropTargetBottom.Visibility = Visibility.Hidden;
                     }
                     break;
-                case DropAreaType.DocumentPane:
                 default:
                     {
                         bool isDraggingAnchorables = _floatingWindow.Model is LayoutAnchorableFloatingWindow;
@@ -456,9 +453,7 @@ namespace SharpLib.Docking.Controls
                                     _documentPaneFullDropTargetBottom.Visibility = Visibility.Visible;
                                 }
                             }
-                            else if (parentDocumentPaneGroup == null &&
-                                     layoutDocumentPane != null &&
-                                     layoutDocumentPane.ChildrenCount == 0)
+                            else if (parentDocumentPaneGroup == null && layoutDocumentPane.ChildrenCount == 0)
                             {
                                 _documentPaneFullDropTargetLeft.Visibility = Visibility.Hidden;
                                 _documentPaneFullDropTargetRight.Visibility = Visibility.Hidden;
@@ -473,8 +468,7 @@ namespace SharpLib.Docking.Controls
                                 _documentPaneFullDropTargetBottom.Visibility = Visibility.Visible;
                             }
 
-                            if (parentDocumentPaneGroup != null &&
-                                parentDocumentPaneGroup.Children.Where(c => c.IsVisible).Count() > 1)
+                            if (parentDocumentPaneGroup != null && parentDocumentPaneGroup.Children.Count(c => c.IsVisible) > 1)
                             {
                                 int indexOfDocumentPane = parentDocumentPaneGroup.Children.Where(ch => ch.IsVisible).ToList().IndexOf(layoutDocumentPane);
                                 bool isFirstChild = indexOfDocumentPane == 0;
@@ -525,8 +519,7 @@ namespace SharpLib.Docking.Controls
                             var layoutDocumentPane = dropAreaDocumentPaneGroup.AreaElement.Model as LayoutDocumentPane;
                             var parentDocumentPaneGroup = layoutDocumentPane.Parent as LayoutDocumentPaneGroup;
 
-                            if (parentDocumentPaneGroup != null &&
-                                parentDocumentPaneGroup.Children.Where(c => c.IsVisible).Count() > 1)
+                            if (parentDocumentPaneGroup != null && parentDocumentPaneGroup.Children.Count(c => c.IsVisible) > 1)
                             {
                                 var manager = parentDocumentPaneGroup.Root.Manager;
                                 if (!manager.AllowMixedOrientation)
@@ -544,9 +537,7 @@ namespace SharpLib.Docking.Controls
                                     _documentPaneDropTargetBottom.Visibility = Visibility.Visible;
                                 }
                             }
-                            else if (parentDocumentPaneGroup == null &&
-                                     layoutDocumentPane != null &&
-                                     layoutDocumentPane.ChildrenCount == 0)
+                            else if (parentDocumentPaneGroup == null && layoutDocumentPane.ChildrenCount == 0)
                             {
                                 _documentPaneDropTargetLeft.Visibility = Visibility.Hidden;
                                 _documentPaneDropTargetRight.Visibility = Visibility.Hidden;
@@ -588,7 +579,6 @@ namespace SharpLib.Docking.Controls
                 case DropAreaType.DocumentPaneGroup:
                     areaElement = _gridDocumentPaneDropTargets;
                     break;
-                case DropAreaType.DocumentPane:
                 default:
                     {
                         bool isDraggingAnchorables = _floatingWindow.Model is LayoutAnchorableFloatingWindow;

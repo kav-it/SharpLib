@@ -213,30 +213,30 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Themes\Generic\Images\DockBottom.PNG" />
-    <Content Include="Themes\Generic\Images\DockLeft.PNG" />
-    <Content Include="Themes\Generic\Images\DockPane.PNG" />
-    <Content Include="Themes\Generic\Images\DockPaneEmpty.png" />
-    <Content Include="Themes\Generic\Images\DockRight.PNG" />
-    <Content Include="Themes\Generic\Images\DockTop.PNG" />
-    <Content Include="Themes\Generic\Images\HTabGroup.png" />
-    <Content Include="Themes\Generic\Images\InnerDockDocPaneBottom.png" />
-    <Content Include="Themes\Generic\Images\InnerDockDocPaneLeft.png" />
-    <Content Include="Themes\Generic\Images\InnerDockDocPaneRight.png" />
-    <Content Include="Themes\Generic\Images\InnerDockDocPaneTop.png" />
-    <Content Include="Themes\Generic\Images\InnerDockPaneBottom.png" />
-    <Content Include="Themes\Generic\Images\InnerDockPaneInside.png" />
-    <Content Include="Themes\Generic\Images\InnerDockPaneLeft.png" />
-    <Content Include="Themes\Generic\Images\InnerDockPaneRight.png" />
-    <Content Include="Themes\Generic\Images\InnerDockPaneTop.png" />
-    <Content Include="Themes\Generic\Images\Locked.png" />
-    <Content Include="Themes\Generic\Images\PinAutoHide.png" />
-    <Content Include="Themes\Generic\Images\PinClose.png" />
-    <Content Include="Themes\Generic\Images\PinDocMenu.png" />
-    <Content Include="Themes\Generic\Images\PinMaximize.png" />
-    <Content Include="Themes\Generic\Images\PinMenu.png" />
-    <Content Include="Themes\Generic\Images\PinRestore.png" />
-    <Content Include="Themes\Generic\Images\VTabGroup.png" />
+    <Resource Include="Themes\Generic\Images\DockBottom.PNG" />
+    <Resource Include="Themes\Generic\Images\DockLeft.PNG" />
+    <Resource Include="Themes\Generic\Images\DockPane.PNG" />
+    <Resource Include="Themes\Generic\Images\DockPaneEmpty.png" />
+    <Resource Include="Themes\Generic\Images\DockRight.PNG" />
+    <Resource Include="Themes\Generic\Images\DockTop.PNG" />
+    <Resource Include="Themes\Generic\Images\HTabGroup.png" />
+    <Resource Include="Themes\Generic\Images\InnerDockDocPaneBottom.png" />
+    <Resource Include="Themes\Generic\Images\InnerDockDocPaneLeft.png" />
+    <Resource Include="Themes\Generic\Images\InnerDockDocPaneRight.png" />
+    <Resource Include="Themes\Generic\Images\InnerDockDocPaneTop.png" />
+    <Resource Include="Themes\Generic\Images\InnerDockPaneBottom.png" />
+    <Resource Include="Themes\Generic\Images\InnerDockPaneInside.png" />
+    <Resource Include="Themes\Generic\Images\InnerDockPaneLeft.png" />
+    <Resource Include="Themes\Generic\Images\InnerDockPaneRight.png" />
+    <Resource Include="Themes\Generic\Images\InnerDockPaneTop.png" />
+    <Resource Include="Themes\Generic\Images\Locked.png" />
+    <Resource Include="Themes\Generic\Images\PinAutoHide.png" />
+    <Resource Include="Themes\Generic\Images\PinClose.png" />
+    <Resource Include="Themes\Generic\Images\PinDocMenu.png" />
+    <Resource Include="Themes\Generic\Images\PinMaximize.png" />
+    <Resource Include="Themes\Generic\Images\PinMenu.png" />
+    <Resource Include="Themes\Generic\Images\PinRestore.png" />
+    <Resource Include="Themes\Generic\Images\VTabGroup.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
