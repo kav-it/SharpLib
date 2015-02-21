@@ -1,25 +1,6 @@
-﻿/************************************************************************
-
-   AvalonDock
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
-
-   This program is provided to you under the terms of the New BSD
-   License (BSD) as published at http://avalondock.codeplex.com/license 
-
-   For more features, controls, and fast professional support,
-   pick up AvalonDock in Extended WPF Toolkit Plus at http://xceed.com/wpf_toolkit
-
-   Stay informed: follow @datagrid on Twitter or Like facebook.com/datagrids
-
-  **********************************************************************/
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Controls;
+﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 
 using SharpLib.Docking.Layout;
 
@@ -27,23 +8,35 @@ namespace SharpLib.Docking.Controls
 {
     public class LayoutPanelControl : LayoutGridControl<ILayoutPanelElement>, ILayoutControl
     {
+        #region Поля
+
+        private readonly LayoutPanel _model;
+
+        #endregion
+
+        #region Конструктор
+
         internal LayoutPanelControl(LayoutPanel model)
-            :base(model, model.Orientation)
+            : base(model, model.Orientation)
         {
             _model = model;
-
         }
 
-        LayoutPanel _model;
+        #endregion
+
+        #region Методы
 
         protected override void OnFixChildrenDockLengths()
         {
-            if (ActualWidth == 0.0 ||
-                ActualHeight == 0.0)
+            if (ActualWidth == 0.0 || ActualHeight == 0.0)
+            {
                 return;
+            }
 
             var modelAsPositionableElement = _model as ILayoutPositionableElementWithActualSize;
+
             #region Setup DockWidth/Height for children
+
             if (_model.Orientation == Orientation.Horizontal)
             {
                 if (_model.ContainsChildOfType<LayoutDocumentPane, LayoutDocumentPaneGroup>())
@@ -125,8 +118,10 @@ namespace SharpLib.Docking.Controls
                     }
                 }
             }
+
             #endregion
         }
 
+        #endregion
     }
 }

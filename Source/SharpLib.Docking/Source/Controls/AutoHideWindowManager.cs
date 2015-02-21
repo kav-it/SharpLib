@@ -1,32 +1,23 @@
-﻿/************************************************************************
-
-   AvalonDock
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
-
-   This program is provided to you under the terms of the New BSD
-   License (BSD) as published at http://avalondock.codeplex.com/license 
-
-   For more features, controls, and fast professional support,
-   pick up AvalonDock in Extended WPF Toolkit Plus at http://xceed.com/wpf_toolkit
-
-   Stay informed: follow @datagrid on Twitter or Like facebook.com/datagrids
-
-  **********************************************************************/
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Windows.Threading;
 
 using SharpLib.Docking.Layout;
 
 namespace SharpLib.Docking.Controls
 {
-    class AutoHideWindowManager
+    internal class AutoHideWindowManager
     {
-        DockingManager _manager;
+        #region Поля
+
+        private readonly DockingManager _manager;
+
+        private DispatcherTimer _closeTimer;
+
+        private WeakReference _currentAutohiddenAnchor;
+
+        #endregion
+
+        #region Конструктор
 
         internal AutoHideWindowManager(DockingManager manager)
         {
@@ -34,33 +25,34 @@ namespace SharpLib.Docking.Controls
             SetupCloseTimer();
         }
 
+        #endregion
 
-        WeakReference _currentAutohiddenAnchor = null;
+        #region Методы
 
         public void ShowAutoHideWindow(LayoutAnchorControl anchor)
         {
-          if( _currentAutohiddenAnchor.GetValueOrDefault<LayoutAnchorControl>() != anchor )
-          {
-            StopCloseTimer();
-            _currentAutohiddenAnchor = new WeakReference( anchor );
-            _manager.AutoHideWindow.Show( anchor );
-            StartCloseTimer();
-          }
+            if (_currentAutohiddenAnchor.GetValueOrDefault<LayoutAnchorControl>() != anchor)
+            {
+                StopCloseTimer();
+                _currentAutohiddenAnchor = new WeakReference(anchor);
+                _manager.AutoHideWindow.Show(anchor);
+                StartCloseTimer();
+            }
         }
 
         public void HideAutoWindow(LayoutAnchorControl anchor = null)
         {
-            if (anchor == null ||
-                anchor == _currentAutohiddenAnchor.GetValueOrDefault<LayoutAnchorControl>())
+            if (anchor == null || anchor == _currentAutohiddenAnchor.GetValueOrDefault<LayoutAnchorControl>())
             {
                 StopCloseTimer();
             }
             else
+            {
                 System.Diagnostics.Debug.Assert(false);
+            }
         }
 
-        DispatcherTimer _closeTimer = null;
-        void SetupCloseTimer()
+        private void SetupCloseTimer()
         {
             _closeTimer = new DispatcherTimer(DispatcherPriority.Background);
             _closeTimer.Interval = TimeSpan.FromMilliseconds(1500);
@@ -69,23 +61,26 @@ namespace SharpLib.Docking.Controls
                 if (_manager.AutoHideWindow.IsWin32MouseOver ||
                     ((LayoutAnchorable)_manager.AutoHideWindow.Model).IsActive ||
                     _manager.AutoHideWindow.IsResizing)
+                {
                     return;
+                }
 
                 StopCloseTimer();
             };
         }
 
-        void StartCloseTimer()
-        { 
+        private void StartCloseTimer()
+        {
             _closeTimer.Start();
-
         }
 
-        void StopCloseTimer()
+        private void StopCloseTimer()
         {
             _closeTimer.Stop();
             _manager.AutoHideWindow.Hide();
             _currentAutohiddenAnchor = null;
         }
+
+        #endregion
     }
 }

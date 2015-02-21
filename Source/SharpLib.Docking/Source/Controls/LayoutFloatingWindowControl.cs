@@ -1,178 +1,102 @@
-﻿/************************************************************************
-
-   AvalonDock
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
-
-   This program is provided to you under the terms of the New BSD
-   License (BSD) as published at http://avalondock.codeplex.com/license 
-
-   For more features, controls, and fast professional support,
-   pick up AvalonDock in Extended WPF Toolkit Plus at http://xceed.com/wpf_toolkit
-
-   Stay informed: follow @datagrid on Twitter or Like facebook.com/datagrids
-
-  **********************************************************************/
-
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Windows;
 using System.Runtime.InteropServices;
-using System.Windows.Interop;
-using System.Windows.Input;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 
 using SharpLib.Docking.Layout;
-
-using System.Diagnostics;
-using System.Windows.Documents;
 using SharpLib.Docking.Themes;
 
 namespace SharpLib.Docking.Controls
 {
     public abstract class LayoutFloatingWindowControl : Window, ILayoutControl
     {
+        #region Поля
+
+        public static readonly DependencyProperty IsDraggingProperty;
+
+        public static readonly DependencyProperty IsMaximizedProperty;
+
+        private static readonly DependencyPropertyKey _isDraggingPropertyKey;
+
+        private static readonly DependencyPropertyKey _isMaximizedPropertyKey;
+
+        private readonly ILayoutElement _model;
+
+        private bool _attachDrag;
+
+        private DragService _dragService;
+
+        private HwndSource _hwndSrc;
+
+        private HwndSourceHook _hwndSrcHook;
+
+        private bool _internalCloseFlag;
+
+        #endregion
+
+        #region Свойства
+
+        public abstract ILayoutElement Model { get; }
+
+        public bool IsDragging
+        {
+            get { return (bool)GetValue(IsDraggingProperty); }
+        }
+
+        protected bool CloseInitiatedByUser
+        {
+            get { return !_internalCloseFlag; }
+        }
+
+        internal bool KeepContentVisibleOnClose { get; set; }
+
+        public bool IsMaximized
+        {
+            get { return (bool)GetValue(IsMaximizedProperty); }
+        }
+
+        #endregion
+
+        #region Конструктор
+
         static LayoutFloatingWindowControl()
         {
-            LayoutFloatingWindowControl.ContentProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(null, null, new CoerceValueCallback(CoerceContentValue)));
+            _isDraggingPropertyKey = DependencyProperty.RegisterReadOnly("IsDragging", typeof(bool), typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(false, OnIsDraggingChanged));
+
+            IsMaximizedProperty = _isMaximizedPropertyKey.DependencyProperty;
+            _isMaximizedPropertyKey = DependencyProperty.RegisterReadOnly("IsMaximized", typeof(bool), typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(false));
+            IsDraggingProperty = _isDraggingPropertyKey.DependencyProperty;
+
+            ContentProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(null, null, CoerceContentValue));
             AllowsTransparencyProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(false));
             ShowInTaskbarProperty.OverrideMetadata(typeof(LayoutFloatingWindowControl), new FrameworkPropertyMetadata(false));
-        } 
-
-        static object CoerceContentValue(DependencyObject sender, object content)
-        {
-            return new FloatingWindowContentHost(sender as LayoutFloatingWindowControl) { Content = content as UIElement };
         }
-
-        protected class FloatingWindowContentHost : HwndHost
-        {
-            LayoutFloatingWindowControl _owner;
-            public FloatingWindowContentHost(LayoutFloatingWindowControl owner)
-            {
-                _owner = owner;
-                var manager = _owner.Model.Root.Manager;
-            }
-
-
-            HwndSource _wpfContentHost = null;
-            Border _rootPresenter = null;
-            DockingManager _manager = null;
-
-            protected override System.Runtime.InteropServices.HandleRef BuildWindowCore(System.Runtime.InteropServices.HandleRef hwndParent)
-            {
-                _wpfContentHost = new HwndSource(new HwndSourceParameters()
-                {
-                    ParentWindow = hwndParent.Handle,
-                    WindowStyle = Win32Helper.WS_CHILD | Win32Helper.WS_VISIBLE | Win32Helper.WS_CLIPSIBLINGS | Win32Helper.WS_CLIPCHILDREN,
-                    Width = 1,
-                    Height = 1
-                });
-
-                _rootPresenter = new Border() { Child = new AdornerDecorator() { Child = Content }, Focusable = true };
-                _rootPresenter.SetBinding(Border.BackgroundProperty, new Binding("Background") { Source = _owner });
-                _wpfContentHost.RootVisual = _rootPresenter;
-                _wpfContentHost.SizeToContent = SizeToContent.Manual;
-                _manager = _owner.Model.Root.Manager;
-                _manager.InternalAddLogicalChild(_rootPresenter);
-
-                return new HandleRef(this, _wpfContentHost.Handle);
-            }
-
-
-            protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
-            {
-                Trace.WriteLine("FloatingWindowContentHost.GotKeyboardFocus");
-                base.OnGotKeyboardFocus(e);
-            }
-            protected override void DestroyWindowCore(HandleRef hwnd)
-            {
-                _manager.InternalRemoveLogicalChild(_rootPresenter);
-                if (_wpfContentHost != null)
-                {
-                    _wpfContentHost.Dispose();
-                    _wpfContentHost = null;
-                }
-            }
-            protected override IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-            {
-                switch (msg)
-                {
-                    case Win32Helper.WM_SETFOCUS:
-                        Trace.WriteLine("FloatingWindowContentHost.WM_SETFOCUS");
-                        break;
-                    case Win32Helper.WM_KILLFOCUS:
-                        Trace.WriteLine("FloatingWindowContentHost.WM_KILLFOCUS");
-                        break;
-                }                
-                return base.WndProc(hwnd, msg, wParam, lParam, ref handled);
-            }
-
-            public Visual RootVisual
-            {
-                get { return _rootPresenter; }
-            }
-
-            protected override Size MeasureOverride(Size constraint)
-            {
-                if (Content == null)
-                    return base.MeasureOverride(constraint);
-
-                Content.Measure(constraint);
-                return Content.DesiredSize;
-            }
-
-            #region Content
-
-            /// <summary>
-            /// Content Dependency Property
-            /// </summary>
-            public static readonly DependencyProperty ContentProperty =
-                DependencyProperty.Register("Content", typeof(UIElement), typeof(FloatingWindowContentHost),
-                    new FrameworkPropertyMetadata((UIElement)null,
-                        new PropertyChangedCallback(OnContentChanged)));
-
-            /// <summary>
-            /// Gets or sets the Content property.  This dependency property 
-            /// indicates ....
-            /// </summary>
-            public UIElement Content
-            {
-                get { return (UIElement)GetValue(ContentProperty); }
-                set { SetValue(ContentProperty, value); }
-            }
-
-            /// <summary>
-            /// Handles changes to the Content property.
-            /// </summary>
-            private static void OnContentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-            {
-                ((FloatingWindowContentHost)d).OnContentChanged(e);
-            }
-
-            /// <summary>
-            /// Provides derived classes an opportunity to handle changes to the Content property.
-            /// </summary>
-            protected virtual void OnContentChanged(DependencyPropertyChangedEventArgs e)
-            {
-                if (_rootPresenter != null)
-                    _rootPresenter.Child = Content;
-            }
-
-            #endregion
-        }
-
-        ILayoutElement _model;
 
         protected LayoutFloatingWindowControl(ILayoutElement model)
         {
-            this.Loaded += new RoutedEventHandler(OnLoaded);
-            this.Unloaded += new RoutedEventHandler(OnUnloaded);
+            Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
             _model = model;
             UpdateThemeResources();
+        }
+
+        #endregion
+
+        #region Методы
+
+        private static object CoerceContentValue(DependencyObject sender, object content)
+        {
+            return new FloatingWindowContentHost(sender as LayoutFloatingWindowControl)
+            {
+                Content = content as UIElement
+            };
         }
 
         internal virtual void UpdateThemeResources(Theme oldTheme = null)
@@ -182,14 +106,19 @@ namespace SharpLib.Docking.Controls
                 var resourceDictionaryToRemove =
                     Resources.MergedDictionaries.FirstOrDefault(r => r.Source == oldTheme.GetResourceUri());
                 if (resourceDictionaryToRemove != null)
+                {
                     Resources.MergedDictionaries.Remove(
                         resourceDictionaryToRemove);
+                }
             }
 
             var manager = _model.Root.Manager;
             if (manager.Theme != null)
             {
-                Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = manager.Theme.GetResourceUri() });
+                Resources.MergedDictionaries.Add(new ResourceDictionary
+                {
+                    Source = manager.Theme.GetResourceUri()
+                });
             }
         }
 
@@ -211,40 +140,35 @@ namespace SharpLib.Docking.Controls
             base.OnClosed(e);
         }
 
-        bool _attachDrag = false;
         internal void AttachDrag(bool onActivated = true)
         {
             if (onActivated)
             {
                 _attachDrag = true;
-                this.Activated += new EventHandler(OnActivated);
+                Activated += OnActivated;
             }
             else
             {
-                IntPtr windowHandle = new WindowInteropHelper(this).Handle;
-                IntPtr lParam = new IntPtr(((int)Left & (int)0xFFFF) | (((int)Top) << 16));
+                var windowHandle = new WindowInteropHelper(this).Handle;
+                var lParam = new IntPtr(((int)Left & 0xFFFF) | (((int)Top) << 16));
                 Win32Helper.SendMessage(windowHandle, Win32Helper.WM_NCLBUTTONDOWN, new IntPtr(Win32Helper.HT_CAPTION), lParam);
             }
         }
 
-        HwndSource _hwndSrc;
-        HwndSourceHook _hwndSrcHook;
-
-        void OnLoaded(object sender, RoutedEventArgs e)
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            this.Loaded -= new RoutedEventHandler(OnLoaded);
+            Loaded -= OnLoaded;
 
             this.SetParentToMainWindowOf(Model.Root.Manager);
 
-
-            _hwndSrc = HwndSource.FromDependencyObject(this) as HwndSource;
-            _hwndSrcHook = new HwndSourceHook(FilterMessage);
+            _hwndSrc = PresentationSource.FromDependencyObject(this) as HwndSource;
+            _hwndSrcHook = FilterMessage;
             _hwndSrc.AddHook(_hwndSrcHook);
         }
 
-        void OnUnloaded(object sender, RoutedEventArgs e)
+        private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            this.Unloaded -= new RoutedEventHandler(OnUnloaded);
+            Unloaded -= OnUnloaded;
 
             if (_hwndSrc != null)
             {
@@ -254,13 +178,13 @@ namespace SharpLib.Docking.Controls
             }
         }
 
-        void OnActivated(object sender, EventArgs e)
+        private void OnActivated(object sender, EventArgs e)
         {
-            this.Activated -= new EventHandler(OnActivated);
+            Activated -= OnActivated;
 
             if (_attachDrag && Mouse.LeftButton == MouseButtonState.Pressed)
             {
-                IntPtr windowHandle = new WindowInteropHelper(this).Handle;
+                var windowHandle = new WindowInteropHelper(this).Handle;
                 var mousePosition = this.PointToScreenDPI(Mouse.GetPosition(this));
                 var clientArea = Win32Helper.GetClientRect(windowHandle);
                 var windowArea = Win32Helper.GetWindowRect(windowHandle);
@@ -269,84 +193,40 @@ namespace SharpLib.Docking.Controls
                 Top = mousePosition.Y - (windowArea.Height - clientArea.Height) / 2.0;
                 _attachDrag = false;
 
-                IntPtr lParam = new IntPtr(((int)mousePosition.X & (int)0xFFFF) | (((int)mousePosition.Y) << 16));
+                var lParam = new IntPtr(((int)mousePosition.X & 0xFFFF) | (((int)mousePosition.Y) << 16));
                 Win32Helper.SendMessage(windowHandle, Win32Helper.WM_NCLBUTTONDOWN, new IntPtr(Win32Helper.HT_CAPTION), lParam);
             }
         }
 
-
         protected override void OnInitialized(EventArgs e)
         {
             CommandBindings.Add(new CommandBinding(Microsoft.Windows.Shell.SystemCommands.CloseWindowCommand,
-                new ExecutedRoutedEventHandler((s, args) => Microsoft.Windows.Shell.SystemCommands.CloseWindow((Window)args.Parameter))));
+                (s, args) => Microsoft.Windows.Shell.SystemCommands.CloseWindow((Window)args.Parameter)));
             CommandBindings.Add(new CommandBinding(Microsoft.Windows.Shell.SystemCommands.MaximizeWindowCommand,
-                new ExecutedRoutedEventHandler((s, args) => Microsoft.Windows.Shell.SystemCommands.MaximizeWindow((Window)args.Parameter))));
+                (s, args) => Microsoft.Windows.Shell.SystemCommands.MaximizeWindow((Window)args.Parameter)));
             CommandBindings.Add(new CommandBinding(Microsoft.Windows.Shell.SystemCommands.MinimizeWindowCommand,
-                new ExecutedRoutedEventHandler((s, args) => Microsoft.Windows.Shell.SystemCommands.MinimizeWindow((Window)args.Parameter))));
+                (s, args) => Microsoft.Windows.Shell.SystemCommands.MinimizeWindow((Window)args.Parameter)));
             CommandBindings.Add(new CommandBinding(Microsoft.Windows.Shell.SystemCommands.RestoreWindowCommand,
-                new ExecutedRoutedEventHandler((s, args) => Microsoft.Windows.Shell.SystemCommands.RestoreWindow((Window)args.Parameter))));
-            //Debug.Assert(this.Owner != null);
+                (s, args) => Microsoft.Windows.Shell.SystemCommands.RestoreWindow((Window)args.Parameter)));
+
             base.OnInitialized(e);
         }
 
-        public abstract ILayoutElement Model { get; }
-
-
-        #region IsDragging
-
-        /// <summary>
-        /// IsDragging Read-Only Dependency Property
-        /// </summary>
-        private static readonly DependencyPropertyKey IsDraggingPropertyKey
-            = DependencyProperty.RegisterReadOnly("IsDragging", typeof(bool), typeof(LayoutFloatingWindowControl),
-                new FrameworkPropertyMetadata((bool)false,
-                    new PropertyChangedCallback(OnIsDraggingChanged)));
-
-        public static readonly DependencyProperty IsDraggingProperty
-            = IsDraggingPropertyKey.DependencyProperty;
-
-        /// <summary>
-        /// Gets the IsDragging property.  This dependency property 
-        /// indicates that this floating window is being dragged.
-        /// </summary>
-        public bool IsDragging
-        {
-            get { return (bool)GetValue(IsDraggingProperty); }
-        }
-
-        /// <summary>
-        /// Provides a secure method for setting the IsDragging property.  
-        /// This dependency property indicates that this floating window is being dragged.
-        /// </summary>
-        /// <param name="value">The new value for the property.</param>
         protected void SetIsDragging(bool value)
         {
-            SetValue(IsDraggingPropertyKey, value);
+            SetValue(_isDraggingPropertyKey, value);
         }
 
-        /// <summary>
-        /// Handles changes to the IsDragging property.
-        /// </summary>
         private static void OnIsDraggingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ((LayoutFloatingWindowControl)d).OnIsDraggingChanged(e);
         }
 
-        /// <summary>
-        /// Provides derived classes an opportunity to handle changes to the IsDragging property.
-        /// </summary>
         protected virtual void OnIsDraggingChanged(DependencyPropertyChangedEventArgs e)
         {
-          //Trace.WriteLine("IsDragging={0}", e.NewValue);
         }
 
-        #endregion
-
-
-
-        DragService _dragService = null;
-
-        void UpdatePositionAndSizeOfPanes()
+        private void UpdatePositionAndSizeOfPanes()
         {
             foreach (var posElement in Model.Descendents().OfType<ILayoutElementForFloatingWindow>())
             {
@@ -357,14 +237,13 @@ namespace SharpLib.Docking.Controls
             }
         }
 
-        void UpdateMaximizedState( bool isMaximized )
+        private void UpdateMaximizedState(bool isMaximized)
         {
-          foreach( var posElement in Model.Descendents().OfType<ILayoutElementForFloatingWindow>() )
-          {
-            posElement.IsMaximized = isMaximized;
-          }
+            foreach (var posElement in Model.Descendents().OfType<ILayoutElementForFloatingWindow>())
+            {
+                posElement.IsMaximized = isMaximized;
+            }
         }
-
 
         protected virtual IntPtr FilterMessage(
             IntPtr hwnd,
@@ -400,7 +279,9 @@ namespace SharpLib.Docking.Controls
                         SetIsDragging(false);
 
                         if (dropFlag)
+                        {
                             InternalClose();
+                        }
                     }
 
                     break;
@@ -409,7 +290,7 @@ namespace SharpLib.Docking.Controls
                         UpdateDragPosition();
                     }
                     break;
-                case Win32Helper.WM_LBUTTONUP: //set as handled right button click on title area (after showing context menu)
+                case Win32Helper.WM_LBUTTONUP:
                     if (_dragService != null && Mouse.LeftButton == MouseButtonState.Released)
                     {
                         _dragService.Abort();
@@ -417,17 +298,15 @@ namespace SharpLib.Docking.Controls
                         SetIsDragging(false);
                     }
                     break;
-              case Win32Helper.WM_SYSCOMMAND:
-                    IntPtr wMaximize = new IntPtr( Win32Helper.SC_MAXIMIZE );
-                    IntPtr wRestore = new IntPtr( Win32Helper.SC_RESTORE );
-                    if( wParam == wMaximize || wParam == wRestore )
+                case Win32Helper.WM_SYSCOMMAND:
+                    var wMaximize = new IntPtr(Win32Helper.SC_MAXIMIZE);
+                    var wRestore = new IntPtr(Win32Helper.SC_RESTORE);
+                    if (wParam == wMaximize || wParam == wRestore)
                     {
-                      UpdateMaximizedState( wParam == wMaximize );
+                        UpdateMaximizedState(wParam == wMaximize);
                     }
                     break;
             }
-
-
 
             return IntPtr.Zero;
         }
@@ -444,24 +323,10 @@ namespace SharpLib.Docking.Controls
             _dragService.UpdateMouseLocation(mousePosition);
         }
 
-        bool _internalCloseFlag = false;
-
         internal void InternalClose()
         {
             _internalCloseFlag = true;
             Close();
-        }
-
-
-        protected bool CloseInitiatedByUser
-        {
-            get { return !_internalCloseFlag; }
-        }
-
-        internal bool KeepContentVisibleOnClose
-        {
-            get;
-            set;
         }
 
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
@@ -469,35 +334,9 @@ namespace SharpLib.Docking.Controls
             base.OnMouseLeftButtonUp(e);
         }
 
-        #region IsMaximized
-
-        /// <summary>
-        /// IsMaximized Read-Only Dependency Property
-        /// </summary>
-        private static readonly DependencyPropertyKey IsMaximizedPropertyKey
-            = DependencyProperty.RegisterReadOnly("IsMaximized", typeof(bool), typeof(LayoutFloatingWindowControl),
-                new FrameworkPropertyMetadata((bool)false));
-
-        public static readonly DependencyProperty IsMaximizedProperty
-            = IsMaximizedPropertyKey.DependencyProperty;
-
-        /// <summary>
-        /// Gets the IsMaximized property.  This dependency property 
-        /// indicates if the window is maximized.
-        /// </summary>
-        public bool IsMaximized
-        {
-            get { return (bool)GetValue(IsMaximizedProperty); }
-        }
-
-        /// <summary>
-        /// Provides a secure method for setting the IsMaximized property.  
-        /// This dependency property indicates if the window is maximized.
-        /// </summary>
-        /// <param name="value">The new value for the property.</param>
         protected void SetIsMaximized(bool value)
         {
-            SetValue(IsMaximizedPropertyKey, value);
+            SetValue(_isMaximizedPropertyKey, value);
         }
 
         protected override void OnStateChanged(EventArgs e)
@@ -508,11 +347,141 @@ namespace SharpLib.Docking.Controls
 
         #endregion
 
+        #region Вложенный класс: FloatingWindowContentHost
 
+        protected class FloatingWindowContentHost : HwndHost
+        {
+            #region Поля
 
+            public static readonly DependencyProperty ContentProperty =
+                DependencyProperty.Register("Content", typeof(UIElement), typeof(FloatingWindowContentHost),
+                    new FrameworkPropertyMetadata(null,
+                        OnContentChanged));
 
+            private readonly LayoutFloatingWindowControl _owner;
 
+            private DockingManager _manager;
 
+            private Border _rootPresenter;
 
+            private HwndSource _wpfContentHost;
+
+            #endregion
+
+            #region Свойства
+
+            public Visual RootVisual
+            {
+                get { return _rootPresenter; }
+            }
+
+            public UIElement Content
+            {
+                get { return (UIElement)GetValue(ContentProperty); }
+                set { SetValue(ContentProperty, value); }
+            }
+
+            #endregion
+
+            #region Конструктор
+
+            public FloatingWindowContentHost(LayoutFloatingWindowControl owner)
+            {
+                _owner = owner;
+                var manager = _owner.Model.Root.Manager;
+            }
+
+            #endregion
+
+            #region Методы
+
+            protected override System.Runtime.InteropServices.HandleRef BuildWindowCore(System.Runtime.InteropServices.HandleRef hwndParent)
+            {
+                _wpfContentHost = new HwndSource(new HwndSourceParameters
+                {
+                    ParentWindow = hwndParent.Handle,
+                    WindowStyle = Win32Helper.WS_CHILD | Win32Helper.WS_VISIBLE | Win32Helper.WS_CLIPSIBLINGS | Win32Helper.WS_CLIPCHILDREN,
+                    Width = 1,
+                    Height = 1
+                });
+
+                _rootPresenter = new Border
+                {
+                    Child = new AdornerDecorator
+                    {
+                        Child = Content
+                    },
+                    Focusable = true
+                };
+                _rootPresenter.SetBinding(Border.BackgroundProperty, new Binding("Background")
+                {
+                    Source = _owner
+                });
+                _wpfContentHost.RootVisual = _rootPresenter;
+                _wpfContentHost.SizeToContent = SizeToContent.Manual;
+                _manager = _owner.Model.Root.Manager;
+                _manager.InternalAddLogicalChild(_rootPresenter);
+
+                return new HandleRef(this, _wpfContentHost.Handle);
+            }
+
+            protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
+            {
+                Trace.WriteLine("FloatingWindowContentHost.GotKeyboardFocus");
+                base.OnGotKeyboardFocus(e);
+            }
+
+            protected override void DestroyWindowCore(HandleRef hwnd)
+            {
+                _manager.InternalRemoveLogicalChild(_rootPresenter);
+                if (_wpfContentHost != null)
+                {
+                    _wpfContentHost.Dispose();
+                    _wpfContentHost = null;
+                }
+            }
+
+            protected override IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+            {
+                switch (msg)
+                {
+                    case Win32Helper.WM_SETFOCUS:
+                        Trace.WriteLine("FloatingWindowContentHost.WM_SETFOCUS");
+                        break;
+                    case Win32Helper.WM_KILLFOCUS:
+                        Trace.WriteLine("FloatingWindowContentHost.WM_KILLFOCUS");
+                        break;
+                }
+                return base.WndProc(hwnd, msg, wParam, lParam, ref handled);
+            }
+
+            protected override Size MeasureOverride(Size constraint)
+            {
+                if (Content == null)
+                {
+                    return base.MeasureOverride(constraint);
+                }
+
+                Content.Measure(constraint);
+                return Content.DesiredSize;
+            }
+
+            private static void OnContentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+            {
+                ((FloatingWindowContentHost)d).OnContentChanged(e);
+            }
+
+            protected virtual void OnContentChanged(DependencyPropertyChangedEventArgs e)
+            {
+                if (_rootPresenter != null)
+                {
+                    _rootPresenter.Child = Content;
+                }
+            }
+
+            #endregion
+        }
+
+        #endregion
     }
 }
