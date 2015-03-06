@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Windows;
 
-using SharpLib.Docking;
-
 namespace SharpLib.Docking.Controls
 {
     public class NavigatorWindow : Window
@@ -78,13 +76,20 @@ namespace SharpLib.Docking.Controls
             _manager = manager;
 
             _internalSetSelectedDocument = true;
-            SetAnchorables(_manager.Layout.Descendents().OfType<LayoutAnchorable>().Where(a => a.IsVisible).Select(d => (LayoutAnchorableItem)_manager.GetLayoutItemFromModel(d)).ToArray());
-            SetDocuments(
-                _manager.Layout.Descendents()
-                    .OfType<LayoutDocument>()
-                    .OrderByDescending(d => d.LastActivationTimeStamp.GetValueOrDefault())
-                    .Select(d => (LayoutDocumentItem)_manager.GetLayoutItemFromModel(d))
-                    .ToArray());
+
+            var layouts = _manager.Layout.Descendents().ToList();
+
+            var anchorableItems = layouts.OfType<LayoutAnchorable>()
+                .Where(a => a.IsVisible)
+                .Select(d => (LayoutAnchorableItem)_manager.GetLayoutItemFromModel(d));
+
+            var documents = layouts.OfType<LayoutDocument>()
+                .OrderByDescending(d => d.LastActivationTimeStamp.GetValueOrDefault())
+                .Select(d => (LayoutDocumentItem)_manager.GetLayoutItemFromModel(d))
+                .ToArray();
+
+            SetAnchorables(anchorableItems);
+            SetDocuments(documents);
             _internalSetSelectedDocument = false;
 
             if (Documents.Length > 1)

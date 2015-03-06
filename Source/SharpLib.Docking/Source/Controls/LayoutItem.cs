@@ -246,17 +246,119 @@ namespace SharpLib.Docking.Controls
 
         #region Методы
 
-        internal virtual void Attach(LayoutContent model)
+        private static void OnIconSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            LayoutElement = model;
-            Model = model.Content;
+            ((LayoutItem)d).RaiseIconSourceChanged(e);
+        }
 
-            InitDefaultCommands();
+        private static void OnContentIdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutItem)d).RaiseContentIdChanged(e);
+        }
 
-            LayoutElement.IsSelectedChanged += LayoutElement_IsSelectedChanged;
-            LayoutElement.IsActiveChanged += LayoutElement_IsActiveChanged;
+        private static void OnTitleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutItem)d).RaiseTitleChanged(e);
+        }
 
-            DataContext = this;
+        private static void OnToolTipChanged(DependencyObject s, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutItem)s).RaiseToolTipChanged();
+        }
+
+        private static void OnIsSelectedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutItem)d).RaiseIsSelectedChanged(e);
+        }
+
+        private static void OnIsActiveChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutItem)d).RaiseIsActiveChanged(e);
+        }
+
+        private static void OnCanCloseChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutItem)d).RaiseCanCloseChanged(e);
+        }
+
+        private static void OnVisibilityChanged(DependencyObject s, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutItem)s).RaiseVisibilityChanged();
+        }
+
+        private static void OnCanFloatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutItem)d).RaiseCanFloatChanged(e);
+        }
+
+        private static void OnCloseCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutItem)d).RaiseCloseCommandChanged(e);
+        }
+
+        private static object CoerceCloseCommandValue(DependencyObject d, object value)
+        {
+            return value;
+        }
+
+        private static void OnCloseAllButThisCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutItem)d).RaiseCloseAllButThisCommandChanged(e);
+        }
+
+        private static object CoerceCloseAllButThisCommandValue(DependencyObject d, object value)
+        {
+            return value;
+        }
+
+        private static object CoerceActivateCommandValue(DependencyObject d, object value)
+        {
+            return value;
+        }
+
+        private static void OnNewVerticalTabGroupCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutItem)d).RaiseNewVerticalTabGroupCommandChanged(e);
+        }
+
+        private static void OnNewHorizontalTabGroupCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutItem)d).RaiseNewHorizontalTabGroupCommandChanged(e);
+        }
+
+        private static void OnMoveToNextTabGroupCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutItem)d).RaiseMoveToNextTabGroupCommandChanged(e);
+        }
+
+        private static void OnMoveToPreviousTabGroupCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutItem)d).RaiseMoveToPreviousTabGroupCommandChanged(e);
+        }
+
+        private static void OnFloatCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutItem)d).RaiseFloatCommandChanged(e);
+        }
+
+        private static object CoerceFloatCommandValue(DependencyObject d, object value)
+        {
+            return value;
+        }
+
+        private static object CoerceDockAsDocumentCommandValue(DependencyObject d, object value)
+        {
+            return value;
+        }
+
+        private static void OnActivateCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutItem)d).RaiseActivateCommandChanged(e);
+        }
+
+        private static void OnDockAsDocumentCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutItem)d).RaiseDockAsDocumentCommandChanged(e);
         }
 
         private void LayoutElement_IsActiveChanged(object sender, EventArgs e)
@@ -283,12 +385,206 @@ namespace SharpLib.Docking.Controls
             }
         }
 
-        internal virtual void Detach()
+        private void RaiseToolTipChanged()
         {
-            LayoutElement.IsSelectedChanged -= LayoutElement_IsSelectedChanged;
-            LayoutElement.IsActiveChanged -= LayoutElement_IsActiveChanged;
-            LayoutElement = null;
-            Model = null;
+            if (LayoutElement != null)
+            {
+                LayoutElement.ToolTip = ToolTip;
+            }
+        }
+
+        private void ExecuteCloseCommand(object parameter)
+        {
+            Close();
+        }
+
+        private bool CanExecuteCloseCommand(object parameter)
+        {
+            return LayoutElement != null && LayoutElement.CanClose;
+        }
+
+        private bool CanExecuteFloatCommand(object anchorable)
+        {
+            return LayoutElement != null && LayoutElement.CanFloat && LayoutElement.FindParent<LayoutFloatingWindow>() == null;
+        }
+
+        private void ExecuteFloatCommand(object parameter)
+        {
+            LayoutElement.Root.Manager.ExecuteFloatCommand(LayoutElement);
+        }
+
+        private bool CanExecuteDockAsDocumentCommand(object parameter)
+        {
+            return LayoutElement != null && LayoutElement.FindParent<LayoutDocumentPane>() == null;
+        }
+
+        private void ExecuteDockAsDocumentCommand(object parameter)
+        {
+            LayoutElement.Root.Manager.ExecuteDockAsDocumentCommand(LayoutElement);
+        }
+
+        private bool CanExecuteCloseAllButThisCommand(object parameter)
+        {
+            if (LayoutElement == null)
+            {
+                return false;
+            }
+            var root = LayoutElement.Root;
+            if (root == null)
+            {
+                return false;
+            }
+
+            return LayoutElement.Root.Manager.Layout.
+                Descendents().OfType<LayoutContent>().Any(d => d != LayoutElement && (d.Parent is LayoutDocumentPane || d.Parent is LayoutDocumentFloatingWindow));
+        }
+
+        private void ExecuteCloseAllButThisCommand(object parameter)
+        {
+            LayoutElement.Root.Manager.ExecuteCloseAllButThisCommand(LayoutElement);
+        }
+
+        private bool CanExecuteActivateCommand(object parameter)
+        {
+            return LayoutElement != null;
+        }
+
+        private void ExecuteActivateCommand(object parameter)
+        {
+            LayoutElement.Root.Manager.ExecuteContentActivateCommand(LayoutElement);
+        }
+
+        private bool CanExecuteNewVerticalTabGroupCommand(object parameter)
+        {
+            if (LayoutElement == null)
+            {
+                return false;
+            }
+            var parentDocumentGroup = LayoutElement.FindParent<LayoutDocumentPaneGroup>();
+            var parentDocumentPane = LayoutElement.Parent as LayoutDocumentPane;
+            return ((parentDocumentGroup == null ||
+                     parentDocumentGroup.ChildrenCount == 1 ||
+                     parentDocumentGroup.Root.Manager.AllowMixedOrientation ||
+                     parentDocumentGroup.Orientation == Orientation.Horizontal) &&
+                    parentDocumentPane != null &&
+                    parentDocumentPane.ChildrenCount > 1);
+        }
+
+        private void ExecuteNewVerticalTabGroupCommand(object parameter)
+        {
+            var layoutElement = LayoutElement;
+            var parentDocumentGroup = layoutElement.FindParent<LayoutDocumentPaneGroup>();
+            var parentDocumentPane = layoutElement.Parent as LayoutDocumentPane;
+
+            if (parentDocumentGroup == null)
+            {
+                var grandParent = parentDocumentPane.Parent;
+                parentDocumentGroup = new LayoutDocumentPaneGroup
+                {
+                    Orientation = Orientation.Horizontal
+                };
+                grandParent.ReplaceChild(parentDocumentPane, parentDocumentGroup);
+                parentDocumentGroup.Children.Add(parentDocumentPane);
+            }
+            parentDocumentGroup.Orientation = Orientation.Horizontal;
+            int indexOfParentPane = parentDocumentGroup.IndexOfChild(parentDocumentPane);
+            parentDocumentGroup.InsertChildAt(indexOfParentPane + 1, new LayoutDocumentPane(layoutElement));
+            layoutElement.IsActive = true;
+            layoutElement.Root.CollectGarbage();
+        }
+
+        private bool CanExecuteNewHorizontalTabGroupCommand(object parameter)
+        {
+            if (LayoutElement == null)
+            {
+                return false;
+            }
+            var parentDocumentGroup = LayoutElement.FindParent<LayoutDocumentPaneGroup>();
+            var parentDocumentPane = LayoutElement.Parent as LayoutDocumentPane;
+            return ((parentDocumentGroup == null ||
+                     parentDocumentGroup.ChildrenCount == 1 ||
+                     parentDocumentGroup.Root.Manager.AllowMixedOrientation ||
+                     parentDocumentGroup.Orientation == Orientation.Vertical) &&
+                    parentDocumentPane != null &&
+                    parentDocumentPane.ChildrenCount > 1);
+        }
+
+        private void ExecuteNewHorizontalTabGroupCommand(object parameter)
+        {
+            var layoutElement = LayoutElement;
+            var parentDocumentGroup = layoutElement.FindParent<LayoutDocumentPaneGroup>();
+            var parentDocumentPane = layoutElement.Parent as LayoutDocumentPane;
+
+            if (parentDocumentGroup == null)
+            {
+                var grandParent = parentDocumentPane.Parent;
+                parentDocumentGroup = new LayoutDocumentPaneGroup
+                {
+                    Orientation = Orientation.Vertical
+                };
+                grandParent.ReplaceChild(parentDocumentPane, parentDocumentGroup);
+                parentDocumentGroup.Children.Add(parentDocumentPane);
+            }
+            parentDocumentGroup.Orientation = Orientation.Vertical;
+            int indexOfParentPane = parentDocumentGroup.IndexOfChild(parentDocumentPane);
+            parentDocumentGroup.InsertChildAt(indexOfParentPane + 1, new LayoutDocumentPane(layoutElement));
+            layoutElement.IsActive = true;
+            layoutElement.Root.CollectGarbage();
+        }
+
+        private bool CanExecuteMoveToNextTabGroupCommand(object parameter)
+        {
+            if (LayoutElement == null)
+            {
+                return false;
+            }
+
+            var parentDocumentGroup = LayoutElement.FindParent<LayoutDocumentPaneGroup>();
+            var parentDocumentPane = LayoutElement.Parent as LayoutDocumentPane;
+            return (parentDocumentGroup != null &&
+                    parentDocumentPane != null &&
+                    parentDocumentGroup.ChildrenCount > 1 &&
+                    parentDocumentGroup.IndexOfChild(parentDocumentPane) < parentDocumentGroup.ChildrenCount - 1 &&
+                    parentDocumentGroup.Children[parentDocumentGroup.IndexOfChild(parentDocumentPane) + 1] is LayoutDocumentPane);
+        }
+
+        private void ExecuteMoveToNextTabGroupCommand(object parameter)
+        {
+            var layoutElement = LayoutElement;
+            var parentDocumentGroup = layoutElement.FindParent<LayoutDocumentPaneGroup>();
+            var parentDocumentPane = layoutElement.Parent as LayoutDocumentPane;
+            int indexOfParentPane = parentDocumentGroup.IndexOfChild(parentDocumentPane);
+            var nextDocumentPane = parentDocumentGroup.Children[indexOfParentPane + 1] as LayoutDocumentPane;
+            nextDocumentPane.InsertChildAt(0, layoutElement);
+            layoutElement.IsActive = true;
+            layoutElement.Root.CollectGarbage();
+        }
+
+        private bool CanExecuteMoveToPreviousTabGroupCommand(object parameter)
+        {
+            if (LayoutElement == null)
+            {
+                return false;
+            }
+            var parentDocumentGroup = LayoutElement.FindParent<LayoutDocumentPaneGroup>();
+            var parentDocumentPane = LayoutElement.Parent as LayoutDocumentPane;
+            return (parentDocumentGroup != null &&
+                    parentDocumentPane != null &&
+                    parentDocumentGroup.ChildrenCount > 1 &&
+                    parentDocumentGroup.IndexOfChild(parentDocumentPane) > 0 &&
+                    parentDocumentGroup.Children[parentDocumentGroup.IndexOfChild(parentDocumentPane) - 1] is LayoutDocumentPane);
+        }
+
+        private void ExecuteMoveToPreviousTabGroupCommand(object parameter)
+        {
+            var layoutElement = LayoutElement;
+            var parentDocumentGroup = layoutElement.FindParent<LayoutDocumentPaneGroup>();
+            var parentDocumentPane = layoutElement.Parent as LayoutDocumentPane;
+            int indexOfParentPane = parentDocumentGroup.IndexOfChild(parentDocumentPane);
+            var nextDocumentPane = parentDocumentGroup.Children[indexOfParentPane - 1] as LayoutDocumentPane;
+            nextDocumentPane.InsertChildAt(0, layoutElement);
+            layoutElement.IsActive = true;
+            layoutElement.Root.CollectGarbage();
         }
 
         protected virtual void InitDefaultCommands()
@@ -387,22 +683,7 @@ namespace SharpLib.Docking.Controls
             IsActive = LayoutElement.IsActive;
         }
 
-        internal void _ClearDefaultBindings()
-        {
-            ClearDefaultBindings();
-        }
-
-        internal void _SetDefaultBindings()
-        {
-            SetDefaultBindings();
-        }
-
-        private static void OnTitleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutItem)d).OnTitleChanged(e);
-        }
-
-        protected virtual void OnTitleChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void RaiseTitleChanged(DependencyPropertyChangedEventArgs e)
         {
             if (LayoutElement != null)
             {
@@ -410,25 +691,7 @@ namespace SharpLib.Docking.Controls
             }
         }
 
-        private static void OnToolTipChanged(DependencyObject s, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutItem)s).OnToolTipChanged();
-        }
-
-        private void OnToolTipChanged()
-        {
-            if (LayoutElement != null)
-            {
-                LayoutElement.ToolTip = ToolTip;
-            }
-        }
-
-        private static void OnIconSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutItem)d).OnIconSourceChanged(e);
-        }
-
-        protected virtual void OnIconSourceChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void RaiseIconSourceChanged(DependencyPropertyChangedEventArgs e)
         {
             if (LayoutElement != null)
             {
@@ -436,12 +699,7 @@ namespace SharpLib.Docking.Controls
             }
         }
 
-        private static void OnVisibilityChanged(DependencyObject s, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutItem)s).OnVisibilityChanged();
-        }
-
-        protected virtual void OnVisibilityChanged()
+        protected virtual void RaiseVisibilityChanged()
         {
             if (LayoutElement != null && Visibility == Visibility.Collapsed)
             {
@@ -449,12 +707,7 @@ namespace SharpLib.Docking.Controls
             }
         }
 
-        private static void OnContentIdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutItem)d).OnContentIdChanged(e);
-        }
-
-        protected virtual void OnContentIdChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void RaiseContentIdChanged(DependencyPropertyChangedEventArgs e)
         {
             if (LayoutElement != null)
             {
@@ -462,12 +715,7 @@ namespace SharpLib.Docking.Controls
             }
         }
 
-        private static void OnIsSelectedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutItem)d).OnIsSelectedChanged(e);
-        }
-
-        protected virtual void OnIsSelectedChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void RaiseIsSelectedChanged(DependencyPropertyChangedEventArgs e)
         {
             if (_isSelectedReentrantFlag.CanEnter)
             {
@@ -481,12 +729,7 @@ namespace SharpLib.Docking.Controls
             }
         }
 
-        private static void OnIsActiveChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutItem)d).OnIsActiveChanged(e);
-        }
-
-        protected virtual void OnIsActiveChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void RaiseIsActiveChanged(DependencyPropertyChangedEventArgs e)
         {
             if (_isActiveReentrantFlag.CanEnter)
             {
@@ -500,12 +743,7 @@ namespace SharpLib.Docking.Controls
             }
         }
 
-        private static void OnCanCloseChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutItem)d).OnCanCloseChanged(e);
-        }
-
-        protected virtual void OnCanCloseChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void RaiseCanCloseChanged(DependencyPropertyChangedEventArgs e)
         {
             if (LayoutElement != null)
             {
@@ -513,12 +751,7 @@ namespace SharpLib.Docking.Controls
             }
         }
 
-        private static void OnCanFloatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutItem)d).OnCanFloatChanged(e);
-        }
-
-        protected virtual void OnCanFloatChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void RaiseCanFloatChanged(DependencyPropertyChangedEventArgs e)
         {
             if (LayoutElement != null)
             {
@@ -526,310 +759,77 @@ namespace SharpLib.Docking.Controls
             }
         }
 
-        private static void OnCloseCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        protected virtual void RaiseCloseCommandChanged(DependencyPropertyChangedEventArgs e)
         {
-            ((LayoutItem)d).OnCloseCommandChanged(e);
-        }
-
-        protected virtual void OnCloseCommandChanged(DependencyPropertyChangedEventArgs e)
-        {
-        }
-
-        private static object CoerceCloseCommandValue(DependencyObject d, object value)
-        {
-            return value;
-        }
-
-        private bool CanExecuteCloseCommand(object parameter)
-        {
-            return LayoutElement != null && LayoutElement.CanClose;
-        }
-
-        private void ExecuteCloseCommand(object parameter)
-        {
-            Close();
         }
 
         protected abstract void Close();
 
-        private static void OnFloatCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        protected virtual void RaiseFloatCommandChanged(DependencyPropertyChangedEventArgs e)
         {
-            ((LayoutItem)d).OnFloatCommandChanged(e);
-        }
-
-        protected virtual void OnFloatCommandChanged(DependencyPropertyChangedEventArgs e)
-        {
-        }
-
-        private static object CoerceFloatCommandValue(DependencyObject d, object value)
-        {
-            return value;
-        }
-
-        private bool CanExecuteFloatCommand(object anchorable)
-        {
-            return LayoutElement != null && LayoutElement.CanFloat && LayoutElement.FindParent<LayoutFloatingWindow>() == null;
-        }
-
-        private void ExecuteFloatCommand(object parameter)
-        {
-            LayoutElement.Root.Manager.ExecuteFloatCommand(LayoutElement);
         }
 
         protected virtual void Float()
         {
         }
 
-        private static void OnDockAsDocumentCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutItem)d).OnDockAsDocumentCommandChanged(e);
-        }
-
-        protected virtual void OnDockAsDocumentCommandChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void RaiseDockAsDocumentCommandChanged(DependencyPropertyChangedEventArgs e)
         {
         }
 
-        private static object CoerceDockAsDocumentCommandValue(DependencyObject d, object value)
-        {
-            return value;
-        }
-
-        private bool CanExecuteDockAsDocumentCommand(object parameter)
-        {
-            return LayoutElement != null && LayoutElement.FindParent<LayoutDocumentPane>() == null;
-        }
-
-        private void ExecuteDockAsDocumentCommand(object parameter)
-        {
-            LayoutElement.Root.Manager.ExecuteDockAsDocumentCommand(LayoutElement);
-        }
-
-        private static void OnCloseAllButThisCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutItem)d).OnCloseAllButThisCommandChanged(e);
-        }
-
-        protected virtual void OnCloseAllButThisCommandChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void RaiseCloseAllButThisCommandChanged(DependencyPropertyChangedEventArgs e)
         {
         }
 
-        private static object CoerceCloseAllButThisCommandValue(DependencyObject d, object value)
-        {
-            return value;
-        }
-
-        private bool CanExecuteCloseAllButThisCommand(object parameter)
-        {
-            if (LayoutElement == null)
-            {
-                return false;
-            }
-            var root = LayoutElement.Root;
-            if (root == null)
-            {
-                return false;
-            }
-
-            return LayoutElement.Root.Manager.Layout.
-                Descendents().OfType<LayoutContent>().Any(d => d != LayoutElement && (d.Parent is LayoutDocumentPane || d.Parent is LayoutDocumentFloatingWindow));
-        }
-
-        private void ExecuteCloseAllButThisCommand(object parameter)
-        {
-            LayoutElement.Root.Manager.ExecuteCloseAllButThisCommand(LayoutElement);
-        }
-
-        private static void OnActivateCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutItem)d).OnActivateCommandChanged(e);
-        }
-
-        protected virtual void OnActivateCommandChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void RaiseActivateCommandChanged(DependencyPropertyChangedEventArgs e)
         {
         }
 
-        private static object CoerceActivateCommandValue(DependencyObject d, object value)
-        {
-            return value;
-        }
-
-        private bool CanExecuteActivateCommand(object parameter)
-        {
-            return LayoutElement != null;
-        }
-
-        private void ExecuteActivateCommand(object parameter)
-        {
-            LayoutElement.Root.Manager.ExecuteContentActivateCommand(LayoutElement);
-        }
-
-        private static void OnNewVerticalTabGroupCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutItem)d).OnNewVerticalTabGroupCommandChanged(e);
-        }
-
-        protected virtual void OnNewVerticalTabGroupCommandChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void RaiseNewVerticalTabGroupCommandChanged(DependencyPropertyChangedEventArgs e)
         {
         }
 
-        private bool CanExecuteNewVerticalTabGroupCommand(object parameter)
-        {
-            if (LayoutElement == null)
-            {
-                return false;
-            }
-            var parentDocumentGroup = LayoutElement.FindParent<LayoutDocumentPaneGroup>();
-            var parentDocumentPane = LayoutElement.Parent as LayoutDocumentPane;
-            return ((parentDocumentGroup == null ||
-                     parentDocumentGroup.ChildrenCount == 1 ||
-                     parentDocumentGroup.Root.Manager.AllowMixedOrientation ||
-                     parentDocumentGroup.Orientation == Orientation.Horizontal) &&
-                    parentDocumentPane != null &&
-                    parentDocumentPane.ChildrenCount > 1);
-        }
-
-        private void ExecuteNewVerticalTabGroupCommand(object parameter)
-        {
-            var layoutElement = LayoutElement;
-            var parentDocumentGroup = layoutElement.FindParent<LayoutDocumentPaneGroup>();
-            var parentDocumentPane = layoutElement.Parent as LayoutDocumentPane;
-
-            if (parentDocumentGroup == null)
-            {
-                var grandParent = parentDocumentPane.Parent;
-                parentDocumentGroup = new LayoutDocumentPaneGroup
-                {
-                    Orientation = Orientation.Horizontal
-                };
-                grandParent.ReplaceChild(parentDocumentPane, parentDocumentGroup);
-                parentDocumentGroup.Children.Add(parentDocumentPane);
-            }
-            parentDocumentGroup.Orientation = Orientation.Horizontal;
-            int indexOfParentPane = parentDocumentGroup.IndexOfChild(parentDocumentPane);
-            parentDocumentGroup.InsertChildAt(indexOfParentPane + 1, new LayoutDocumentPane(layoutElement));
-            layoutElement.IsActive = true;
-            layoutElement.Root.CollectGarbage();
-        }
-
-        private static void OnNewHorizontalTabGroupCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutItem)d).OnNewHorizontalTabGroupCommandChanged(e);
-        }
-
-        protected virtual void OnNewHorizontalTabGroupCommandChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void RaiseNewHorizontalTabGroupCommandChanged(DependencyPropertyChangedEventArgs e)
         {
         }
 
-        private bool CanExecuteNewHorizontalTabGroupCommand(object parameter)
-        {
-            if (LayoutElement == null)
-            {
-                return false;
-            }
-            var parentDocumentGroup = LayoutElement.FindParent<LayoutDocumentPaneGroup>();
-            var parentDocumentPane = LayoutElement.Parent as LayoutDocumentPane;
-            return ((parentDocumentGroup == null ||
-                     parentDocumentGroup.ChildrenCount == 1 ||
-                     parentDocumentGroup.Root.Manager.AllowMixedOrientation ||
-                     parentDocumentGroup.Orientation == Orientation.Vertical) &&
-                    parentDocumentPane != null &&
-                    parentDocumentPane.ChildrenCount > 1);
-        }
-
-        private void ExecuteNewHorizontalTabGroupCommand(object parameter)
-        {
-            var layoutElement = LayoutElement;
-            var parentDocumentGroup = layoutElement.FindParent<LayoutDocumentPaneGroup>();
-            var parentDocumentPane = layoutElement.Parent as LayoutDocumentPane;
-
-            if (parentDocumentGroup == null)
-            {
-                var grandParent = parentDocumentPane.Parent;
-                parentDocumentGroup = new LayoutDocumentPaneGroup
-                {
-                    Orientation = Orientation.Vertical
-                };
-                grandParent.ReplaceChild(parentDocumentPane, parentDocumentGroup);
-                parentDocumentGroup.Children.Add(parentDocumentPane);
-            }
-            parentDocumentGroup.Orientation = Orientation.Vertical;
-            int indexOfParentPane = parentDocumentGroup.IndexOfChild(parentDocumentPane);
-            parentDocumentGroup.InsertChildAt(indexOfParentPane + 1, new LayoutDocumentPane(layoutElement));
-            layoutElement.IsActive = true;
-            layoutElement.Root.CollectGarbage();
-        }
-
-        private static void OnMoveToNextTabGroupCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutItem)d).OnMoveToNextTabGroupCommandChanged(e);
-        }
-
-        protected virtual void OnMoveToNextTabGroupCommandChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void RaiseMoveToNextTabGroupCommandChanged(DependencyPropertyChangedEventArgs e)
         {
         }
 
-        private bool CanExecuteMoveToNextTabGroupCommand(object parameter)
-        {
-            if (LayoutElement == null)
-            {
-                return false;
-            }
-
-            var parentDocumentGroup = LayoutElement.FindParent<LayoutDocumentPaneGroup>();
-            var parentDocumentPane = LayoutElement.Parent as LayoutDocumentPane;
-            return (parentDocumentGroup != null &&
-                    parentDocumentPane != null &&
-                    parentDocumentGroup.ChildrenCount > 1 &&
-                    parentDocumentGroup.IndexOfChild(parentDocumentPane) < parentDocumentGroup.ChildrenCount - 1 &&
-                    parentDocumentGroup.Children[parentDocumentGroup.IndexOfChild(parentDocumentPane) + 1] is LayoutDocumentPane);
-        }
-
-        private void ExecuteMoveToNextTabGroupCommand(object parameter)
-        {
-            var layoutElement = LayoutElement;
-            var parentDocumentGroup = layoutElement.FindParent<LayoutDocumentPaneGroup>();
-            var parentDocumentPane = layoutElement.Parent as LayoutDocumentPane;
-            int indexOfParentPane = parentDocumentGroup.IndexOfChild(parentDocumentPane);
-            var nextDocumentPane = parentDocumentGroup.Children[indexOfParentPane + 1] as LayoutDocumentPane;
-            nextDocumentPane.InsertChildAt(0, layoutElement);
-            layoutElement.IsActive = true;
-            layoutElement.Root.CollectGarbage();
-        }
-
-        private static void OnMoveToPreviousTabGroupCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutItem)d).OnMoveToPreviousTabGroupCommandChanged(e);
-        }
-
-        protected virtual void OnMoveToPreviousTabGroupCommandChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void RaiseMoveToPreviousTabGroupCommandChanged(DependencyPropertyChangedEventArgs e)
         {
         }
 
-        private bool CanExecuteMoveToPreviousTabGroupCommand(object parameter)
+        internal virtual void Detach()
         {
-            if (LayoutElement == null)
-            {
-                return false;
-            }
-            var parentDocumentGroup = LayoutElement.FindParent<LayoutDocumentPaneGroup>();
-            var parentDocumentPane = LayoutElement.Parent as LayoutDocumentPane;
-            return (parentDocumentGroup != null &&
-                    parentDocumentPane != null &&
-                    parentDocumentGroup.ChildrenCount > 1 &&
-                    parentDocumentGroup.IndexOfChild(parentDocumentPane) > 0 &&
-                    parentDocumentGroup.Children[parentDocumentGroup.IndexOfChild(parentDocumentPane) - 1] is LayoutDocumentPane);
+            LayoutElement.IsSelectedChanged -= LayoutElement_IsSelectedChanged;
+            LayoutElement.IsActiveChanged -= LayoutElement_IsActiveChanged;
+            LayoutElement = null;
+            Model = null;
         }
 
-        private void ExecuteMoveToPreviousTabGroupCommand(object parameter)
+        internal virtual void Attach(LayoutContent model)
         {
-            var layoutElement = LayoutElement;
-            var parentDocumentGroup = layoutElement.FindParent<LayoutDocumentPaneGroup>();
-            var parentDocumentPane = layoutElement.Parent as LayoutDocumentPane;
-            int indexOfParentPane = parentDocumentGroup.IndexOfChild(parentDocumentPane);
-            var nextDocumentPane = parentDocumentGroup.Children[indexOfParentPane - 1] as LayoutDocumentPane;
-            nextDocumentPane.InsertChildAt(0, layoutElement);
-            layoutElement.IsActive = true;
-            layoutElement.Root.CollectGarbage();
+            LayoutElement = model;
+            Model = model.Content;
+
+            InitDefaultCommands();
+
+            LayoutElement.IsSelectedChanged += LayoutElement_IsSelectedChanged;
+            LayoutElement.IsActiveChanged += LayoutElement_IsActiveChanged;
+
+            DataContext = this;
+        }
+
+        internal void _ClearDefaultBindings()
+        {
+            ClearDefaultBindings();
+        }
+
+        internal void _SetDefaultBindings()
+        {
+            SetDefaultBindings();
         }
 
         #endregion

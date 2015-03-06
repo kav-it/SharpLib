@@ -2,11 +2,9 @@
 using System.Windows;
 using System.Windows.Controls;
 
-using SharpLib.Docking;
-
 namespace SharpLib.Docking.Controls
 {
-    public class LayoutPanelControl : LayoutGridControl<ILayoutPanelElement>, ILayoutControl
+    public class LayoutPanelControl : LayoutGridControl<ILayoutPanelElement>
     {
         #region Поля
 

@@ -457,7 +457,6 @@
                                                                                     RelativeSource={RelativeSource TemplatedParent}}"
                                                   TextElement.Foreground="{TemplateBinding Foreground}" />
                             </dockControls:DropDownControlArea>
-
                             <Rectangle x:Name="DragHandleGeometryPlaceholder"
                                        Grid.Column="1"
                                        Fill="{DynamicResource ThemeVs2013ToolWindowCaptionInactiveGrip}"
@@ -489,7 +488,6 @@
                                     </DrawingBrush>
                                 </Rectangle.Fill>
                             </Rectangle>
-
                             <dockControls:DropDownButton x:Name="MenuDropDownButton"
                                                                Grid.Column="2"
                                                                VerticalAlignment="Center"
@@ -508,7 +506,6 @@
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </dockControls:DropDownButton>
-
                             <Button x:Name="PART_AutoHidePin"
                                     Grid.Column="3"
                                     HorizontalAlignment="Center"
@@ -534,15 +531,11 @@
                                     Grid.Column="4"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Command="{Binding Path=LayoutItem.HideCommand,
-                                                      RelativeSource={RelativeSource TemplatedParent}}"
+                                    Command="{Binding Path=LayoutItem.HideCommand, RelativeSource={RelativeSource TemplatedParent}}"
                                     Focusable="False"
                                     Style="{StaticResource ThemeVs2013ButtonStyle}"
                                     ToolTip="{x:Static dockProperties:Resources.AnchorableBtnCloseHint}"
-                                    Visibility="{Binding Path=IsEnabled,
-                                                         RelativeSource={RelativeSource Self},
-                                                         Mode=OneWay,
-                                                         Converter={StaticResource BoolToVisibilityConverter}}">
+                                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <Rectangle x:Name="PART_ImgHidePin" 
                                            Fill="{DynamicResource ThemeVs2013ToolWindowCaptionButtonInactiveGlyph}"
                                            Width="13" Height="13">
@@ -551,7 +544,6 @@
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </Button>
-
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -1141,17 +1133,10 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <Border Grid.ColumnSpan="2" Background="Transparent" />
-                                <ContentPresenter Margin="4,0"
-                                                  Content="{Binding Model,
-                                                                    RelativeSource={RelativeSource TemplatedParent}}"
-                                                  ContentTemplate="{Binding DocumentHeaderTemplate,
-                                                                            Mode=OneWay,
-                                                                            RelativeSource={RelativeSource AncestorType={x:Type dock:DockingManager},
-                                                                                                           Mode=FindAncestor}}"
-                                                  ContentTemplateSelector="{Binding DocumentHeaderTemplateSelector,
-                                                                                    Mode=OneWay,
-                                                                                    RelativeSource={RelativeSource AncestorType={x:Type dock:DockingManager},
-                                                                                                                   Mode=FindAncestor}}" />
+                                <ContentPresenter Grid.Column="0" Margin="4,0"
+                                                  Content="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"
+                                                  ContentTemplate="{Binding DocumentHeaderTemplate, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type dock:DockingManager}, Mode=FindAncestor}}"
+                                                  ContentTemplateSelector="{Binding DocumentHeaderTemplateSelector, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type dock:DockingManager}, Mode=FindAncestor}}" />
                                 <!--  Close button should be moved out to the container style  -->
                                 <Button x:Name="DocumentCloseButton"
                                         Grid.Column="1"
@@ -1159,13 +1144,11 @@
                                         Margin="3,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Command="{Binding Path=LayoutItem.CloseCommand,
-                                                          RelativeSource={RelativeSource TemplatedParent}}"
+                                        Command="{Binding Path=LayoutItem.CloseCommand, RelativeSource={RelativeSource TemplatedParent}}"
                                         Style="{StaticResource ThemeVs2013ButtonStyle}"
                                         ToolTip="{x:Static dockProperties:Resources.DocumentClose}"
                                         Visibility="Hidden">
-                                    <Rectangle x:Name="PART_ImgPinClose"
-                                               Width="13" Height="13">
+                                    <Rectangle x:Name="PART_ImgPinClose" Width="13" Height="13">
                                         <Rectangle.OpacityMask>
                                             <ImageBrush ImageSource="/SharpLib.Docking;component/Source/Themes/VS2013/Images/PinClose.png" />
                                         </Rectangle.OpacityMask>
@@ -2062,7 +2045,7 @@
                                 <Rectangle x:Name="UpperHighlight"
                                            Fill="#75FFFFFF"
                                            Visibility="Collapsed" />
-                                <ContentPresenter Grid.RowSpan="2"
+                                <ContentPresenter Grid.Row="0" Grid.RowSpan="2"
                                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                                   SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                             </Grid>

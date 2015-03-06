@@ -500,10 +500,13 @@ namespace SharpLib.Docking
             _logicalChildren = new List<WeakReference>();
             _layoutItems = new List<LayoutItem>();
             _fwList = new List<LayoutFloatingWindowControl>();
-            Layout = new LayoutRoot
-            {
-                RootPanel = new LayoutPanel(new LayoutDocumentPaneGroup(new LayoutDocumentPane()))
-            };
+
+            var pane = new LayoutDocumentPane();
+            var groupPane = new LayoutDocumentPaneGroup(pane);
+            var rootPanel = new LayoutPanel(groupPane);
+
+            Layout = new LayoutRoot();
+            Layout.RootPanel = rootPanel;
 
             Loaded += DockingManager_Loaded;
             Unloaded += DockingManager_Unloaded;

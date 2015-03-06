@@ -21,6 +21,12 @@ namespace SharpLib.Docking
 
         #region Свойства
 
+        /// <summary>
+        /// Тестовое описание (для внутреннего использования в отладке)
+        /// </summary>
+        [XmlIgnore]
+        public string InternalDesc { get; set; }
+
         [XmlIgnore]
         public ILayoutContainer Parent
         {
@@ -132,6 +138,19 @@ namespace SharpLib.Docking
         {
             // Trace.Write(new string(' ', tab * 4));
             // Trace.WriteLine(ToString());
+        }
+
+        /// <summary>
+        /// Текстовое представление объекта
+        /// </summary>
+        public override string ToString()
+        {
+            if (InternalDesc.IsValid())
+            {
+                return string.Format("{0} ({1})", InternalDesc, base.ToString());
+            }
+
+            return base.ToString();
         }
 
         #endregion

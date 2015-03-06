@@ -15,15 +15,15 @@ namespace SharpLib.Docking
 
         private double _autohideHeight;
 
-        private double _autohideMinHeight = 100.0;
+        private double _autohideMinHeight;
 
-        private double _autohideMinWidth = 100.0;
+        private double _autohideMinWidth;
 
         private double _autohideWidth;
 
-        private bool _canAutoHide = true;
+        private bool _canAutoHide;
 
-        private bool _canHide = true;
+        private bool _canHide;
 
         #endregion
 
@@ -159,6 +159,18 @@ namespace SharpLib.Docking
 
         #endregion
 
+        #region Конструктор
+
+        public LayoutAnchorable()
+        {
+            _canHide = true;
+            _canAutoHide = true;
+            _autohideMinWidth = 100.0;
+            _autohideMinHeight = 100.0;
+        }
+
+        #endregion
+
         #region Методы
 
         private void NotifyIsVisibleChanged()
@@ -188,102 +200,12 @@ namespace SharpLib.Docking
             }
         }
 
-        public void Hide(bool cancelable = true)
-        {
-            if (!IsVisible)
-            {
-                IsSelected = true;
-                IsActive = true;
-                return;
-            }
-
-            if (cancelable)
-            {
-                var args = new CancelEventArgs();
-                OnHiding(args);
-                if (args.Cancel)
-                {
-                    return;
-                }
-            }
-
-            RaisePropertyChanging("IsHidden");
-            RaisePropertyChanging("IsVisible");
-
-            {
-                var parentAsGroup = Parent as ILayoutGroup;
-                PreviousContainer = parentAsGroup;
-                if (parentAsGroup != null)
-                {
-                    PreviousContainerIndex = parentAsGroup.IndexOfChild(this);
-                }
-            }
-            Root.Hidden.Add(this);
-            RaisePropertyChanged("IsVisible");
-            RaisePropertyChanged("IsHidden");
-            NotifyIsVisibleChanged();
-        }
-
         protected virtual void OnHiding(CancelEventArgs args)
         {
             if (Hiding != null)
             {
                 Hiding(this, args);
             }
-        }
-
-        public void Show()
-        {
-            if (IsVisible)
-            {
-                return;
-            }
-
-            if (!IsHidden)
-            {
-                throw new InvalidOperationException();
-            }
-
-            RaisePropertyChanging("IsHidden");
-            RaisePropertyChanging("IsVisible");
-
-            bool added = false;
-            var root = Root;
-            if (root != null && root.Manager != null)
-            {
-                if (root.Manager.LayoutUpdateStrategy != null)
-                {
-                    added = root.Manager.LayoutUpdateStrategy.BeforeInsertAnchorable(root as LayoutRoot, this, PreviousContainer);
-                }
-            }
-
-            if (!added && PreviousContainer != null)
-            {
-                var previousContainerAsLayoutGroup = PreviousContainer as ILayoutGroup;
-                if (previousContainerAsLayoutGroup != null)
-                {
-                    previousContainerAsLayoutGroup.InsertChildAt(PreviousContainerIndex < previousContainerAsLayoutGroup.ChildrenCount
-                        ? PreviousContainerIndex
-                        : previousContainerAsLayoutGroup.ChildrenCount, this);
-                }
-                IsSelected = true;
-                IsActive = true;
-            }
-
-            if (root != null && root.Manager != null)
-            {
-                if (root.Manager.LayoutUpdateStrategy != null)
-                {
-                    root.Manager.LayoutUpdateStrategy.AfterInsertAnchorable(root as LayoutRoot, this);
-                }
-            }
-
-            PreviousContainer = null;
-            PreviousContainerIndex = -1;
-
-            RaisePropertyChanged("IsVisible");
-            RaisePropertyChanged("IsHidden");
-            NotifyIsVisibleChanged();
         }
 
         protected override void InternalDock()
@@ -680,6 +602,101 @@ namespace SharpLib.Docking
             // System.Diagnostics.Trace.WriteLine("Anchorable()");
         }
 
+        /// <summary>
+        /// Показ элемента (перевод из hidden)
+        /// </summary>
+        public void Show()
+        {
+            if (IsVisible)
+            {
+                return;
+            }
+
+            if (!IsHidden)
+            {
+                throw new InvalidOperationException();
+            }
+
+            RaisePropertyChanging("IsHidden");
+            RaisePropertyChanging("IsVisible");
+
+            bool added = false;
+            var root = Root;
+            if (root != null && root.Manager != null)
+            {
+                if (root.Manager.LayoutUpdateStrategy != null)
+                {
+                    added = root.Manager.LayoutUpdateStrategy.BeforeInsertAnchorable(root as LayoutRoot, this, PreviousContainer);
+                }
+            }
+
+            if (!added && PreviousContainer != null)
+            {
+                var previousContainerAsLayoutGroup = PreviousContainer as ILayoutGroup;
+                if (previousContainerAsLayoutGroup != null)
+                {
+                    previousContainerAsLayoutGroup.InsertChildAt(PreviousContainerIndex < previousContainerAsLayoutGroup.ChildrenCount
+                        ? PreviousContainerIndex
+                        : previousContainerAsLayoutGroup.ChildrenCount, this);
+                }
+                IsSelected = true;
+                IsActive = true;
+            }
+
+            if (root != null && root.Manager != null)
+            {
+                if (root.Manager.LayoutUpdateStrategy != null)
+                {
+                    root.Manager.LayoutUpdateStrategy.AfterInsertAnchorable(root as LayoutRoot, this);
+                }
+            }
+
+            PreviousContainer = null;
+            PreviousContainerIndex = -1;
+
+            RaisePropertyChanged("IsVisible");
+            RaisePropertyChanged("IsHidden");
+            NotifyIsVisibleChanged();
+        }
+
+        /// <summary>
+        /// Скрытие элемента (перевод в hidden)
+        /// </summary>
+        public void Hide(bool cancelable = true)
+        {
+            if (!IsVisible)
+            {
+                IsSelected = true;
+                IsActive = true;
+                return;
+            }
+
+            if (cancelable)
+            {
+                var args = new CancelEventArgs();
+                OnHiding(args);
+                if (args.Cancel)
+                {
+                    return;
+                }
+            }
+
+            RaisePropertyChanging("IsHidden");
+            RaisePropertyChanging("IsVisible");
+
+            {
+                var parentAsGroup = Parent as ILayoutGroup;
+                PreviousContainer = parentAsGroup;
+                if (parentAsGroup != null)
+                {
+                    PreviousContainerIndex = parentAsGroup.IndexOfChild(this);
+                }
+            }
+            Root.Hidden.Add(this);
+            RaisePropertyChanged("IsVisible");
+            RaisePropertyChanged("IsHidden");
+            NotifyIsVisibleChanged();
+        }
         #endregion
     }
 }

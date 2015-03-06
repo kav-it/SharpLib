@@ -4,8 +4,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-using SharpLib.Docking;
-
 namespace SharpLib.Docking.Controls
 {
     public class LayoutAnchorSideControl : Control, ILayoutControl

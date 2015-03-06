@@ -12,10 +12,14 @@
             <RowDefinition Height="9*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Button Content="Save" Click="SaveClick" Width="70" Margin="5"/>
+            <Button Content="Collect" Click="CollectClick" Width="70" Margin="5"/>
             <Button Content="Add left" Click="AddLeftClick" Width="70" Margin="5"/>
             <Button Content="Add center" Click="AddCenterClick" Width="70" Margin="5"/>
+            <Button Content="Add right" Click="AddRightClick" Width="70" Margin="5"/>
+            <Button Content="Show hidden" Click="ShowHidden" Width="70" Margin="5"/>
         </StackPanel>
-        <docking:DockingManager Grid.Row="1">
+        <docking:DockingManager Name="PART_dockingManager" Grid.Row="1">
             <docking:DockingManager.Theme>
                 <docking:Vs2013LightTheme />
             </docking:DockingManager.Theme>

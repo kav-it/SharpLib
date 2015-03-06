@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Markup;
 
@@ -14,7 +13,7 @@ namespace SharpLib.Docking
 
         private string _id;
 
-        private int _selectedIndex = -1;
+        private int _selectedIndex;
 
         #endregion
 
@@ -81,9 +80,10 @@ namespace SharpLib.Docking
 
         public LayoutDocumentPane()
         {
+            _selectedIndex = -1;
         }
 
-        public LayoutDocumentPane(LayoutContent firstChild)
+        public LayoutDocumentPane(LayoutContent firstChild): this()
         {
             Children.Add(firstChild);
         }

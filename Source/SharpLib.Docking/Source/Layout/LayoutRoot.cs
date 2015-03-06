@@ -60,12 +60,7 @@ namespace SharpLib.Docking
                 {
                     _rootPanel.Parent = null;
                 }
-                _rootPanel = value;
-
-                if (_rootPanel == null)
-                {
-                    _rootPanel = new LayoutPanel(new LayoutDocumentPane());
-                }
+                _rootPanel = value ?? new LayoutPanel(new LayoutDocumentPane());
 
                 if (_rootPanel != null)
                 {
@@ -315,20 +310,17 @@ namespace SharpLib.Docking
 
         private void FloatingWindowsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.OldItems != null && (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
-                                       e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace))
+            if (e.OldItems != null && (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace))
             {
-                foreach (LayoutFloatingWindow element in e.OldItems)
+                var temp = e.OldItems.Cast<LayoutFloatingWindow>().Where(element => Equals(element.Parent, this)).ToList();
+
+                foreach (var element in temp)
                 {
-                    if (Equals(element.Parent, this))
-                    {
-                        element.Parent = null;
-                    }
+                    element.Parent = null;
                 }
             }
 
-            if (e.NewItems != null && (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
-                                       e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace))
+            if (e.NewItems != null && (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace))
             {
                 foreach (LayoutFloatingWindow element in e.NewItems)
                 {
@@ -510,102 +502,129 @@ namespace SharpLib.Docking
             }
         }
 
+        /// <summary>
+        /// Удаление неиспользуемых элементов в разметке
+        /// </summary>
         public void CollectGarbage()
         {
             bool exitFlag;
 
+            // ========================================================================
             do
             {
                 exitFlag = true;
 
-                foreach (var content in this.Descendents()
-                    .OfType<ILayoutPreviousContainer>()
-                    .Where(c => c.PreviousContainer != null && (c.PreviousContainer.Parent == null || !Equals(c.PreviousContainer.Parent.Root, this))))
+                var previousItems1 = this.Descendents().ToList();
+                var previousItems2 = previousItems1.OfType<ILayoutPreviousContainer>().ToList();
+                var temp1 = previousItems2
+                    .Where(c => c.PreviousContainer != null && (c.PreviousContainer.Parent == null || !Equals(c.PreviousContainer.Parent.Root, this)))
+                    .ToList();
+
+                foreach (var content in temp1)
                 {
                     content.PreviousContainer = null;
                 }
 
-                foreach (var emptyPane in this.Descendents().OfType<ILayoutPane>().Where(p => p.ChildrenCount == 0))
+                // Панели, не имеющие дочерних элементов
+                var emptyPanels = this.Descendents().OfType<ILayoutPane>().Where(p => p.ChildrenCount == 0).ToList();
+
+                foreach (var emptyPane in emptyPanels)
                 {
                     var pane = emptyPane;
-                    foreach (var contentReferencingEmptyPane in this.Descendents().OfType<LayoutContent>()
-                        .Where(c => ((ILayoutPreviousContainer)c).PreviousContainer == pane && !c.IsFloating))
+
+                    // Элементы (не плавающие), которые были удалены с текущей (уже пустой) панели 
+                    var contents = this.Descendents().OfType<LayoutContent>().ToList();
+                    var contentsInPane = contents.Where(c => ((ILayoutPreviousContainer)c).PreviousContainer == pane && c.IsFloating == false);
+
+                    foreach (var contentInPane in contentsInPane)
                     {
-                        if (contentReferencingEmptyPane is LayoutAnchorable &&
-                            !((LayoutAnchorable)contentReferencingEmptyPane).IsVisible)
+                        var contentAnchorable = contentInPane as LayoutAnchorable;
+                        if (contentAnchorable  != null && contentAnchorable.IsVisible == false)
                         {
+                            // Контент был удален, но скрыт, поэтому в анализе не используется
                             continue;
                         }
 
-                        ((ILayoutPreviousContainer)contentReferencingEmptyPane).PreviousContainer = null;
-                        contentReferencingEmptyPane.PreviousContainerIndex = -1;
+                        ((ILayoutPreviousContainer)contentInPane).PreviousContainer = null;
+                        contentInPane.PreviousContainerIndex = -1;
                     }
-
-                    if (emptyPane is LayoutDocumentPane &&
-                        this.Descendents().OfType<LayoutDocumentPane>().Count(c => !Equals(c, emptyPane)) == 0)
+                    
+                    if (emptyPane is LayoutDocumentPane)
                     {
-                        continue;
+                        var temp11 = this.Descendents().OfType<LayoutDocumentPane>().ToList();
+                        if (temp11.Count(c => !Equals(c, emptyPane)) == 0)
+                        {
+                            continue;    
+                        }
                     }
 
-                    if (this.Descendents().OfType<ILayoutPreviousContainer>().All(c => c.PreviousContainer != emptyPane))
+                    var temp12 = this.Descendents().ToList();
+                    var temp13 = temp12.OfType<ILayoutPreviousContainer>().ToList();
+                    if (temp13.Any() && temp13.All(c => c.PreviousContainer != emptyPane))
                     {
-                        var parentGroup = emptyPane.Parent;
-                        parentGroup.RemoveChild(emptyPane);
-                        exitFlag = false;
-                        break;
+                        if (emptyPane is LayoutAnchorablePane == false)
+                        {
+                            // Удаление, за исключением панелей Anchorable (изменена логика на мою)
+                            var parentGroup = emptyPane.Parent;
+                            parentGroup.RemoveChild(emptyPane);
+                            exitFlag = false;
+                            break;
+                        }
                     }
-                }
+                } // ene foreach (var emptyPane in emptyPanels)
 
-                if (!exitFlag)
+                if (exitFlag)
                 {
-                    foreach (var emptyPaneGroup in this.Descendents().OfType<LayoutAnchorablePaneGroup>().Where(p => p.ChildrenCount == 0))
-                    {
-                        var parentGroup = emptyPaneGroup.Parent;
-                        parentGroup.RemoveChild(emptyPaneGroup);
-                        exitFlag = false;
-                        break;
-                    }
+                    break;
                 }
 
-                if (!exitFlag)
+                safasdfasdf
+
+                var allContainers = this.Descendents().ToList();
+                var allPaneGroups = allContainers.OfType<LayoutAnchorablePaneGroup>().Where(p => p.ChildrenCount == 0).ToList();
+                var allPanes = allContainers.OfType<LayoutPanel>().Where(p => p.ChildrenCount == 0).ToList();
+                var allFloatins = allContainers.OfType<LayoutFloatingWindow>().Where(p => p.ChildrenCount == 0);
+                var allGroups = allContainers.OfType<LayoutAnchorGroup>().Where(p => p.ChildrenCount == 0);
+
+                foreach (var emptyPaneGroup in allPaneGroups)
                 {
-                    foreach (var emptyPaneGroup in this.Descendents().OfType<LayoutPanel>().Where(p => p.ChildrenCount == 0))
-                    {
-                        var parentGroup = emptyPaneGroup.Parent;
-                        parentGroup.RemoveChild(emptyPaneGroup);
-                        exitFlag = false;
-                        break;
-                    }
+                    var parentGroup = emptyPaneGroup.Parent;
+                    parentGroup.RemoveChild(emptyPaneGroup);
+                    break;
                 }
 
-                if (!exitFlag)
+                foreach (var emptyPaneGroup in allPanes)
                 {
-                    foreach (var emptyPaneGroup in this.Descendents().OfType<LayoutFloatingWindow>().Where(p => p.ChildrenCount == 0))
-                    {
-                        var parentGroup = emptyPaneGroup.Parent;
-                        parentGroup.RemoveChild(emptyPaneGroup);
-                        exitFlag = false;
-                        break;
-                    }
+                    var parentGroup = emptyPaneGroup.Parent;
+                    parentGroup.RemoveChild(emptyPaneGroup);
+                    break;
                 }
 
-                if (!exitFlag)
+                foreach (var emptyPaneGroup in allFloatins)
                 {
-                    foreach (var emptyPaneGroup in this.Descendents().OfType<LayoutAnchorGroup>().Where(p => p.ChildrenCount == 0))
-                    {
-                        var parentGroup = emptyPaneGroup.Parent;
-                        parentGroup.RemoveChild(emptyPaneGroup);
-                        exitFlag = false;
-                        break;
-                    }
+                    var parentGroup = emptyPaneGroup.Parent;
+                    parentGroup.RemoveChild(emptyPaneGroup);
+                    break;
                 }
-            } while (!exitFlag);
 
+                foreach (var emptyPaneGroup in allGroups)
+                {
+                    var parentGroup = emptyPaneGroup.Parent;
+                    parentGroup.RemoveChild(emptyPaneGroup);
+                    break;
+                }
+            } while (true);
+            // ========================================================================
+
+            // =================      LayoutAnchorablePaneGroup           =============
             do
             {
                 exitFlag = true;
 
-                foreach (var paneGroupToCollapse in this.Descendents().OfType<LayoutAnchorablePaneGroup>().Where(p => p.ChildrenCount == 1 && p.Children[0] is LayoutAnchorablePaneGroup).ToArray())
+                var temp5 = this.Descendents().OfType<LayoutAnchorablePaneGroup>();
+                var temp6 = temp5.Where(p => p.ChildrenCount == 1 && p.Children[0] is LayoutAnchorablePaneGroup).ToList();
+
+                foreach (var paneGroupToCollapse in temp6)
                 {
                     var singleChild = paneGroupToCollapse.Children[0] as LayoutAnchorablePaneGroup;
                     if (singleChild != null)
@@ -614,8 +633,7 @@ namespace SharpLib.Docking
                         paneGroupToCollapse.RemoveChild(singleChild);
                         while (singleChild.ChildrenCount > 0)
                         {
-                            paneGroupToCollapse.InsertChildAt(
-                                paneGroupToCollapse.ChildrenCount, singleChild.Children[0]);
+                            paneGroupToCollapse.InsertChildAt(paneGroupToCollapse.ChildrenCount, singleChild.Children[0]);
                         }
                     }
 
@@ -623,12 +641,16 @@ namespace SharpLib.Docking
                     break;
                 }
             } while (!exitFlag);
+            // =================      LayoutAnchorablePaneGroup           =============
 
+            // =================      LayoutDocumentPaneGroup           =============
             do
             {
                 exitFlag = true;
+                var temp7 = this.Descendents().OfType<LayoutDocumentPaneGroup>();
+                var temp8 = temp7.Where(p => p.ChildrenCount == 1 && p.Children[0] is LayoutDocumentPaneGroup).ToList();
 
-                foreach (var paneGroupToCollapse in this.Descendents().OfType<LayoutDocumentPaneGroup>().Where(p => p.ChildrenCount == 1 && p.Children[0] is LayoutDocumentPaneGroup).ToArray())
+                foreach (var paneGroupToCollapse in temp8)
                 {
                     var singleChild = paneGroupToCollapse.Children[0] as LayoutDocumentPaneGroup;
                     if (singleChild != null)
@@ -646,12 +668,17 @@ namespace SharpLib.Docking
                     break;
                 }
             } while (!exitFlag);
+            // ======================================================================
 
+            // ======================      LayoutPanel           ====================
             do
             {
                 exitFlag = true;
 
-                foreach (var panelToCollapse in this.Descendents().OfType<LayoutPanel>().Where(p => p.ChildrenCount == 1 && p.Children[0] is LayoutPanel).ToArray())
+                var temp9 = this.Descendents().OfType<LayoutPanel>();
+                var temp10 = temp9.Where(p => p.ChildrenCount == 1 && p.Children[0] is LayoutPanel).ToList();
+
+                foreach (var panelToCollapse in temp10)
                 {
                     var singleChild = panelToCollapse.Children[0] as LayoutPanel;
                     if (singleChild != null)
@@ -660,8 +687,7 @@ namespace SharpLib.Docking
                         panelToCollapse.RemoveChild(singleChild);
                         while (singleChild.ChildrenCount > 0)
                         {
-                            panelToCollapse.InsertChildAt(
-                                panelToCollapse.ChildrenCount, singleChild.Children[0]);
+                            panelToCollapse.InsertChildAt(panelToCollapse.ChildrenCount, singleChild.Children[0]);
                         }
                     }
 
@@ -669,6 +695,7 @@ namespace SharpLib.Docking
                     break;
                 }
             } while (!exitFlag);
+            // ======================      LayoutPanel           ====================
 
             UpdateActiveContentProperty();
         }

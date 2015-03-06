@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace SharpLib.Docking
 {
-    internal static class Extensions
+    public static class ExtensionsLayout
     {
         #region Методы
 
@@ -17,7 +17,9 @@ namespace SharpLib.Docking
                 foreach (var childElement in container.Children)
                 {
                     yield return childElement;
-                    foreach (var childChildElement in childElement.Descendents())
+
+                    var childs = childElement.Descendents();
+                    foreach (var childChildElement in childs)
                     {
                         yield return childChildElement;
                     }

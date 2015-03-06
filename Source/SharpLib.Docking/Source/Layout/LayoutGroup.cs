@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Xml.Serialization;
 
@@ -11,9 +12,9 @@ namespace SharpLib.Docking
     {
         #region Поля
 
-        private readonly ObservableCollection<T> _children = new ObservableCollection<T>();
+        private readonly ObservableCollection<T> _children;
 
-        private bool _isVisible = true;
+        private bool _isVisible;
 
         #endregion
 
@@ -55,6 +56,8 @@ namespace SharpLib.Docking
 
         internal LayoutGroup()
         {
+            _isVisible = true;
+            _children = new ObservableCollection<T>();
             _children.CollectionChanged += _children_CollectionChanged;
         }
 
@@ -62,10 +65,9 @@ namespace SharpLib.Docking
 
         #region Методы
 
-        private void _children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void _children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+            if (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace)
             {
                 if (e.OldItems != null)
                 {
@@ -79,8 +81,7 @@ namespace SharpLib.Docking
                 }
             }
 
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
-                e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+            if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace)
             {
                 if (e.NewItems != null)
                 {

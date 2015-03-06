@@ -51,7 +51,7 @@ namespace SharpLib.Docking
         private ILayoutContainer _previousContainer;
 
         [field: NonSerialized]
-        private int _previousContainerIndex = -1;
+        private int _previousContainerIndex;
 
         private object _toolTip;
 
@@ -382,6 +382,7 @@ namespace SharpLib.Docking
 
         internal LayoutContent()
         {
+            _previousContainerIndex = -1;
             _canFloat = true;
             _canClose = true;
         }

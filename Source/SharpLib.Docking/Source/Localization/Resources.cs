@@ -14,7 +14,7 @@
 
         public static string AnchorableBtnCloseHint
         {
-            get { return "Hide"; }
+            get { return "Close"; }
         }
 
         public static string AnchorableCxMenuHint

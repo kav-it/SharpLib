@@ -4,7 +4,6 @@ using System.Windows.Data;
 using System.Windows.Input;
 
 using SharpLib.Docking.Commands;
-using SharpLib.Docking;
 
 namespace SharpLib.Docking.Controls
 {
@@ -82,17 +81,131 @@ namespace SharpLib.Docking.Controls
 
         #region Методы
 
+        private static void OnHideCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutAnchorableItem)d).RaiseHideCommandChanged(e);
+        }
+
+        private static object CoerceHideCommandValue(DependencyObject d, object value)
+        {
+            return value;
+        }
+
+        private static void OnAutoHideCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutAnchorableItem)d).RaiseAutoHideCommandChanged(e);
+        }
+
+        private static object CoerceAutoHideCommandValue(DependencyObject d, object value)
+        {
+            return value;
+        }
+
+        private static void OnDockCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutAnchorableItem)d).RaiseDockCommandChanged(e);
+        }
+
+        private static object CoerceDockCommandValue(DependencyObject d, object value)
+        {
+            return value;
+        }
+
+        private static void OnCanHideChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutAnchorableItem)d).RaiseCanHideChanged(e);
+        }
+
+        private bool CanExecuteAutoHideCommand(object parameter)
+        {
+            if (LayoutElement == null)
+            {
+                return false;
+            }
+
+            if (LayoutElement.FindParent<LayoutAnchorableFloatingWindow>() != null)
+            {
+                return false;
+            }
+
+            return _anchorable.CanAutoHide;
+        }
+
+        private void ExecuteAutoHideCommand(object parameter)
+        {
+            if (_anchorable != null && _anchorable.Root != null && _anchorable.Root.Manager != null)
+            {
+                _anchorable.Root.Manager.ExecuteAutoHideCommand(_anchorable);
+            }
+        }
+
+        private bool CanExecuteDockCommand(object parameter)
+        {
+            if (LayoutElement == null)
+            {
+                return false;
+            }
+            return LayoutElement.FindParent<LayoutAnchorableFloatingWindow>() != null;
+        }
+
+        private void ExecuteDockCommand(object parameter)
+        {
+            LayoutElement.Root.Manager.ExecuteDockCommand(_anchorable);
+        }
+
+        private bool CanExecuteHideCommand(object parameter)
+        {
+            if (LayoutElement == null)
+            {
+                return false;
+            }
+
+            return _anchorable.CanHide || _anchorable.CanClose;
+        }
+
+        private void ExecuteHideCommand(object parameter)
+        {
+            if (_anchorable != null && _anchorable.Root != null && _anchorable.Root.Manager != null)
+            {
+                if (_anchorable.CanClose)
+                {
+                    _anchorable.Root.Manager.ExecuteCloseCommand(_anchorable);
+                }
+                else
+                { 
+                    _anchorable.Root.Manager.ExecuteHideCommand(_anchorable);
+                }
+            }
+        }
+
+        private void AnchorableIsVisibleChanged(object sender, EventArgs e)
+        {
+            if (_anchorable != null && _anchorable.Root != null)
+            {
+                if (_visibilityReentrantFlag.CanEnter)
+                {
+                    using (_visibilityReentrantFlag.Enter())
+                    {
+                        Visibility = _anchorable.IsVisible ? Visibility.Visible : Visibility.Hidden;
+                    }
+                }
+            }
+        }
+
         internal override void Attach(LayoutContent model)
         {
             _anchorable = model as LayoutAnchorable;
-            _anchorable.IsVisibleChanged += _anchorable_IsVisibleChanged;
+            if (_anchorable != null)
+            {
+                _anchorable.IsVisibleChanged += AnchorableIsVisibleChanged;
+            }
 
             base.Attach(model);
         }
 
         internal override void Detach()
         {
-            _anchorable.IsVisibleChanged -= _anchorable_IsVisibleChanged;
+            _anchorable.IsVisibleChanged -= AnchorableIsVisibleChanged;
             _anchorable = null;
             base.Detach();
         }
@@ -149,103 +262,27 @@ namespace SharpLib.Docking.Controls
             base.SetDefaultBindings();
         }
 
-        private static void OnHideCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutAnchorableItem)d).OnHideCommandChanged(e);
-        }
-
-        protected virtual void OnHideCommandChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void RaiseHideCommandChanged(DependencyPropertyChangedEventArgs e)
         {
         }
 
-        private static object CoerceHideCommandValue(DependencyObject d, object value)
+        protected virtual void RaiseAutoHideCommandChanged(DependencyPropertyChangedEventArgs e)
         {
-            return value;
         }
 
-        private bool CanExecuteHideCommand(object parameter)
+        protected virtual void RaiseDockCommandChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (LayoutElement == null)
+        }
+
+        protected virtual void RaiseCanHideChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (_anchorable != null)
             {
-                return false;
-            }
-            return _anchorable.CanHide;
-        }
-
-        private void ExecuteHideCommand(object parameter)
-        {
-            if (_anchorable != null && _anchorable.Root != null && _anchorable.Root.Manager != null)
-            {
-                _anchorable.Root.Manager.ExecuteHideCommand(_anchorable);
+                _anchorable.CanHide = (bool)e.NewValue;
             }
         }
 
-        private static void OnAutoHideCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutAnchorableItem)d).OnAutoHideCommandChanged(e);
-        }
-
-        protected virtual void OnAutoHideCommandChanged(DependencyPropertyChangedEventArgs e)
-        {
-        }
-
-        private static object CoerceAutoHideCommandValue(DependencyObject d, object value)
-        {
-            return value;
-        }
-
-        private bool CanExecuteAutoHideCommand(object parameter)
-        {
-            if (LayoutElement == null)
-            {
-                return false;
-            }
-
-            if (LayoutElement.FindParent<LayoutAnchorableFloatingWindow>() != null)
-            {
-                return false;
-            }
-
-            return _anchorable.CanAutoHide;
-        }
-
-        private void ExecuteAutoHideCommand(object parameter)
-        {
-            if (_anchorable != null && _anchorable.Root != null && _anchorable.Root.Manager != null)
-            {
-                _anchorable.Root.Manager.ExecuteAutoHideCommand(_anchorable);
-            }
-        }
-
-        private static void OnDockCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutAnchorableItem)d).OnDockCommandChanged(e);
-        }
-
-        protected virtual void OnDockCommandChanged(DependencyPropertyChangedEventArgs e)
-        {
-        }
-
-        private static object CoerceDockCommandValue(DependencyObject d, object value)
-        {
-            return value;
-        }
-
-        private bool CanExecuteDockCommand(object parameter)
-        {
-            if (LayoutElement == null)
-            {
-                return false;
-            }
-            return LayoutElement.FindParent<LayoutAnchorableFloatingWindow>() != null;
-        }
-
-        private void ExecuteDockCommand(object parameter)
-        {
-            LayoutElement.Root.Manager.ExecuteDockCommand(_anchorable);
-        }
-
-        protected override void OnVisibilityChanged()
+        protected override void RaiseVisibilityChanged()
         {
             if (_anchorable != null && _anchorable.Root != null)
             {
@@ -265,34 +302,7 @@ namespace SharpLib.Docking.Controls
                 }
             }
 
-            base.OnVisibilityChanged();
-        }
-
-        private void _anchorable_IsVisibleChanged(object sender, EventArgs e)
-        {
-            if (_anchorable != null && _anchorable.Root != null)
-            {
-                if (_visibilityReentrantFlag.CanEnter)
-                {
-                    using (_visibilityReentrantFlag.Enter())
-                    {
-                        Visibility = _anchorable.IsVisible ? Visibility.Visible : Visibility.Hidden;
-                    }
-                }
-            }
-        }
-
-        private static void OnCanHideChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayoutAnchorableItem)d).OnCanHideChanged(e);
-        }
-
-        protected virtual void OnCanHideChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if (_anchorable != null)
-            {
-                _anchorable.CanHide = (bool)e.NewValue;
-            }
+            base.RaiseVisibilityChanged();
         }
 
         #endregion
