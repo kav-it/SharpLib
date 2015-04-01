@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.Audio", "SharpLib.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.Docking", "SharpLib.Docking\SharpLib.Docking.csproj", "{D01F976F-A09D-430D-9D6E-865383B22C52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.TextEditor", "SharpLib.TextEditor\SharpLib.TextEditor.csproj", "{63096C51-FECA-47EB-9A76-267FC197F5F2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLib.Notepad", "SharpLib.Notepad\SharpLib.Notepad.csproj", "{63096C51-FECA-47EB-9A76-267FC197F5F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

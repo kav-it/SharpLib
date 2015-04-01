@@ -183,6 +183,7 @@
     <Compile Include="Source\Helpers\DragDrop\Utilities\ItemsControlExtensions.cs" />
     <Compile Include="Source\Helpers\DragDrop\Utilities\TypeUtilities.cs" />
     <Compile Include="Source\Helpers\DragDrop\Utilities\VisualTreeExtensions.cs" />
+    <Compile Include="Source\Helpers\Font\FontHelper.cs" />
     <Compile Include="Source\Helpers\Gui\Gui.List-T.cs" />
     <Compile Include="Source\Helpers\Gui\Gui.Images.cs" />
     <Compile Include="Source\Helpers\Keyboard\Keyboarder.cs" />
