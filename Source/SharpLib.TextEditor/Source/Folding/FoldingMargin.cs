@@ -40,7 +40,7 @@ namespace ICSharpCode.AvalonEdit.Folding
 		/// </summary>
 		public FoldingManager FoldingManager { get; set; }
 		
-		internal const double SizeFactor = Constants.PixelPerPoint;
+		internal const double SizeFactor = Constants.PIXEL_PER_POINT;
 		
 		#region Brushes
 		/// <summary>

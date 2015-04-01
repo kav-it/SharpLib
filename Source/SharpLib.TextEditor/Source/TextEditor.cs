@@ -22,57 +22,48 @@ using ICSharpCode.AvalonEdit.Utils;
 namespace ICSharpCode.AvalonEdit
 {
     [Localizability(LocalizationCategory.Text), ContentProperty("Text")]
-    public class TextEditor : Control, ITextEditorComponent, IServiceProvider, IWeakEventListener
+    public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     {
-        #region Constructors
+        #region Поля
 
-        static TextEditor()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(TextEditor), new FrameworkPropertyMetadata(typeof(TextEditor)));
-            FocusableProperty.OverrideMetadata(typeof(TextEditor), new FrameworkPropertyMetadata(Boxes.True));
-        }
+        public static readonly DependencyProperty DocumentProperty;
 
-        public TextEditor()
-            : this(new TextArea())
-        {
-        }
+        public static readonly DependencyProperty EncodingProperty;
+        public static readonly DependencyProperty HorizontalScrollBarVisibilityProperty ;
 
-        protected TextEditor(TextArea textArea)
-        {
-            if (textArea == null)
-            {
-                throw new ArgumentNullException("textArea");
-            }
-            this.textArea = textArea;
+        public static readonly DependencyProperty IsModifiedProperty;
 
-            textArea.TextView.Services.AddService(typeof(TextEditor), this);
+        public static readonly DependencyProperty IsReadOnlyProperty;
 
-            SetCurrentValue(OptionsProperty, textArea.Options);
-            SetCurrentValue(DocumentProperty, new TextDocument());
-        }
+        public static readonly DependencyProperty LineNumbersForegroundProperty;
+
+        public static readonly RoutedEvent MouseHoverEvent;
+
+        public static readonly RoutedEvent MouseHoverStoppedEvent;
+
+        public static readonly DependencyProperty OptionsProperty;
+
+        public static readonly RoutedEvent PreviewMouseHoverEvent;
+
+        public static readonly RoutedEvent PreviewMouseHoverStoppedEvent;
+
+        public static readonly DependencyProperty ShowLineNumbersProperty;
+
+        public static readonly DependencyProperty SyntaxHighlightingProperty;
+
+        public static readonly DependencyProperty VerticalScrollBarVisibilityProperty ;
+
+        public static readonly DependencyProperty WordWrapProperty;
+
+        private readonly TextArea _textArea;
+
+        private IVisualLineTransformer _colorizer;
+
+        private ScrollViewer _scrollViewer;
 
         #endregion
 
-        protected override System.Windows.Automation.Peers.AutomationPeer OnCreateAutomationPeer()
-        {
-            return new TextEditorAutomationPeer(this);
-        }
-
-        protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
-        {
-            base.OnGotKeyboardFocus(e);
-            if (e.NewFocus == this)
-            {
-                Keyboard.Focus(TextArea);
-                e.Handled = true;
-            }
-        }
-
-        #region Document property
-
-        public static readonly DependencyProperty DocumentProperty
-            = TextView.DocumentProperty.AddOwner(
-                typeof(TextEditor), new FrameworkPropertyMetadata(OnDocumentChanged));
+        #region Свойства
 
         public TextDocument Document
         {
@@ -80,107 +71,11 @@ namespace ICSharpCode.AvalonEdit
             set { SetValue(DocumentProperty, value); }
         }
 
-        public event EventHandler DocumentChanged;
-
-        protected virtual void OnDocumentChanged(EventArgs e)
-        {
-            if (DocumentChanged != null)
-            {
-                DocumentChanged(this, e);
-            }
-        }
-
-        private static void OnDocumentChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e)
-        {
-            ((TextEditor)dp).OnDocumentChanged((TextDocument)e.OldValue, (TextDocument)e.NewValue);
-        }
-
-        private void OnDocumentChanged(TextDocument oldValue, TextDocument newValue)
-        {
-            if (oldValue != null)
-            {
-                TextDocumentWeakEventManager.TextChanged.RemoveListener(oldValue, this);
-                PropertyChangedEventManager.RemoveListener(oldValue.UndoStack, this, "IsOriginalFile");
-            }
-            textArea.Document = newValue;
-            if (newValue != null)
-            {
-                TextDocumentWeakEventManager.TextChanged.AddListener(newValue, this);
-                PropertyChangedEventManager.AddListener(newValue.UndoStack, this, "IsOriginalFile");
-            }
-            OnDocumentChanged(EventArgs.Empty);
-            OnTextChanged(EventArgs.Empty);
-        }
-
-        #endregion
-
-        #region Options property
-
-        public static readonly DependencyProperty OptionsProperty
-            = TextView.OptionsProperty.AddOwner(typeof(TextEditor), new FrameworkPropertyMetadata(OnOptionsChanged));
-
         public TextEditorOptions Options
         {
             get { return (TextEditorOptions)GetValue(OptionsProperty); }
             set { SetValue(OptionsProperty, value); }
         }
-
-        public event PropertyChangedEventHandler OptionChanged;
-
-        protected virtual void OnOptionChanged(PropertyChangedEventArgs e)
-        {
-            if (OptionChanged != null)
-            {
-                OptionChanged(this, e);
-            }
-        }
-
-        private static void OnOptionsChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e)
-        {
-            ((TextEditor)dp).OnOptionsChanged((TextEditorOptions)e.OldValue, (TextEditorOptions)e.NewValue);
-        }
-
-        private void OnOptionsChanged(TextEditorOptions oldValue, TextEditorOptions newValue)
-        {
-            if (oldValue != null)
-            {
-                PropertyChangedWeakEventManager.RemoveListener(oldValue, this);
-            }
-            textArea.Options = newValue;
-            if (newValue != null)
-            {
-                PropertyChangedWeakEventManager.AddListener(newValue, this);
-            }
-            OnOptionChanged(new PropertyChangedEventArgs(null));
-        }
-
-        protected virtual bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
-        {
-            if (managerType == typeof(PropertyChangedWeakEventManager))
-            {
-                OnOptionChanged((PropertyChangedEventArgs)e);
-                return true;
-            }
-            if (managerType == typeof(TextDocumentWeakEventManager.TextChanged))
-            {
-                OnTextChanged(e);
-                return true;
-            }
-            if (managerType == typeof(PropertyChangedEventManager))
-            {
-                return HandleIsOriginalChanged((PropertyChangedEventArgs)e);
-            }
-            return false;
-        }
-
-        bool IWeakEventListener.ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
-        {
-            return ReceiveWeakEvent(managerType, sender, e);
-        }
-
-        #endregion
-
-        #region Text property
 
         [Localizability(LocalizationCategory.Text), DefaultValue("")]
         public string Text
@@ -200,76 +95,15 @@ namespace ICSharpCode.AvalonEdit
             }
         }
 
-        private TextDocument GetDocument()
-        {
-            var document = Document;
-            if (document == null)
-            {
-                throw ThrowUtil.NoDocumentAssigned();
-            }
-            return document;
-        }
-
-        public event EventHandler TextChanged;
-
-        protected virtual void OnTextChanged(EventArgs e)
-        {
-            if (TextChanged != null)
-            {
-                TextChanged(this, e);
-            }
-        }
-
-        #endregion
-
-        #region TextArea / ScrollViewer properties
-
-        private readonly TextArea textArea;
-
-        private ScrollViewer scrollViewer;
-
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            scrollViewer = (ScrollViewer)Template.FindName("PART_ScrollViewer", this);
-        }
-
         public TextArea TextArea
         {
-            get { return textArea; }
+            get { return _textArea; }
         }
 
         internal ScrollViewer ScrollViewer
         {
-            get { return scrollViewer; }
+            get { return _scrollViewer; }
         }
-
-        private bool CanExecute(RoutedUICommand command)
-        {
-            var textArea = TextArea;
-            if (textArea == null)
-            {
-                return false;
-            }
-            return command.CanExecute(null, textArea);
-        }
-
-        private void Execute(RoutedUICommand command)
-        {
-            var textArea = TextArea;
-            if (textArea != null)
-            {
-                command.Execute(null, textArea);
-            }
-        }
-
-        #endregion
-
-        #region Syntax highlighting
-
-        public static readonly DependencyProperty SyntaxHighlightingProperty =
-            DependencyProperty.Register("SyntaxHighlighting", typeof(IHighlightingDefinition), typeof(TextEditor),
-                new FrameworkPropertyMetadata(OnSyntaxHighlightingChanged));
 
         public IHighlightingDefinition SyntaxHighlighting
         {
@@ -277,60 +111,11 @@ namespace ICSharpCode.AvalonEdit
             set { SetValue(SyntaxHighlightingProperty, value); }
         }
 
-        private IVisualLineTransformer colorizer;
-
-        private static void OnSyntaxHighlightingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((TextEditor)d).OnSyntaxHighlightingChanged(e.NewValue as IHighlightingDefinition);
-        }
-
-        private void OnSyntaxHighlightingChanged(IHighlightingDefinition newValue)
-        {
-            if (colorizer != null)
-            {
-                TextArea.TextView.LineTransformers.Remove(colorizer);
-                colorizer = null;
-            }
-            if (newValue != null)
-            {
-                colorizer = CreateColorizer(newValue);
-                if (colorizer != null)
-                {
-                    TextArea.TextView.LineTransformers.Insert(0, colorizer);
-                }
-            }
-        }
-
-        protected virtual IVisualLineTransformer CreateColorizer(IHighlightingDefinition highlightingDefinition)
-        {
-            if (highlightingDefinition == null)
-            {
-                throw new ArgumentNullException("highlightingDefinition");
-            }
-            return new HighlightingColorizer(highlightingDefinition);
-        }
-
-        #endregion
-
-        #region WordWrap
-
-        public static readonly DependencyProperty WordWrapProperty =
-            DependencyProperty.Register("WordWrap", typeof(bool), typeof(TextEditor),
-                new FrameworkPropertyMetadata(Boxes.False));
-
         public bool WordWrap
         {
             get { return (bool)GetValue(WordWrapProperty); }
             set { SetValue(WordWrapProperty, Boxes.Box(value)); }
         }
-
-        #endregion
-
-        #region IsReadOnly
-
-        public static readonly DependencyProperty IsReadOnlyProperty =
-            DependencyProperty.Register("IsReadOnly", typeof(bool), typeof(TextEditor),
-                new FrameworkPropertyMetadata(Boxes.False, OnIsReadOnlyChanged));
 
         public bool IsReadOnly
         {
@@ -338,87 +123,11 @@ namespace ICSharpCode.AvalonEdit
             set { SetValue(IsReadOnlyProperty, Boxes.Box(value)); }
         }
 
-        private static void OnIsReadOnlyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var editor = d as TextEditor;
-            if (editor != null)
-            {
-                if ((bool)e.NewValue)
-                {
-                    editor.TextArea.ReadOnlySectionProvider = ReadOnlySectionDocument.Instance;
-                }
-                else
-                {
-                    editor.TextArea.ReadOnlySectionProvider = NoReadOnlySections.Instance;
-                }
-
-                var peer = UIElementAutomationPeer.FromElement(editor) as TextEditorAutomationPeer;
-                if (peer != null)
-                {
-                    peer.RaiseIsReadOnlyChanged((bool)e.OldValue, (bool)e.NewValue);
-                }
-            }
-        }
-
-        #endregion
-
-        #region IsModified
-
-        public static readonly DependencyProperty IsModifiedProperty =
-            DependencyProperty.Register("IsModified", typeof(bool), typeof(TextEditor),
-                new FrameworkPropertyMetadata(Boxes.False, OnIsModifiedChanged));
-
         public bool IsModified
         {
             get { return (bool)GetValue(IsModifiedProperty); }
             set { SetValue(IsModifiedProperty, Boxes.Box(value)); }
         }
-
-        private static void OnIsModifiedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var editor = d as TextEditor;
-            if (editor != null)
-            {
-                var document = editor.Document;
-                if (document != null)
-                {
-                    var undoStack = document.UndoStack;
-                    if ((bool)e.NewValue)
-                    {
-                        if (undoStack.IsOriginalFile)
-                        {
-                            undoStack.DiscardOriginalFileMarker();
-                        }
-                    }
-                    else
-                    {
-                        undoStack.MarkAsOriginalFile();
-                    }
-                }
-            }
-        }
-
-        private bool HandleIsOriginalChanged(PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "IsOriginalFile")
-            {
-                var document = Document;
-                if (document != null)
-                {
-                    SetCurrentValue(IsModifiedProperty, Boxes.Box(!document.UndoStack.IsOriginalFile));
-                }
-                return true;
-            }
-            return false;
-        }
-
-        #endregion
-
-        #region ShowLineNumbers
-
-        public static readonly DependencyProperty ShowLineNumbersProperty =
-            DependencyProperty.Register("ShowLineNumbers", typeof(bool), typeof(TextEditor),
-                new FrameworkPropertyMetadata(Boxes.False, OnShowLineNumbersChanged));
 
         public bool ShowLineNumbers
         {
@@ -426,229 +135,10 @@ namespace ICSharpCode.AvalonEdit
             set { SetValue(ShowLineNumbersProperty, Boxes.Box(value)); }
         }
 
-        private static void OnShowLineNumbersChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var editor = (TextEditor)d;
-            var leftMargins = editor.TextArea.LeftMargins;
-            if ((bool)e.NewValue)
-            {
-                var lineNumbers = new LineNumberMargin();
-                var line = (Line)DottedLineMargin.Create();
-                leftMargins.Insert(0, lineNumbers);
-                leftMargins.Insert(1, line);
-                var lineNumbersForeground = new Binding("LineNumbersForeground")
-                {
-                    Source = editor
-                };
-                line.SetBinding(Shape.StrokeProperty, lineNumbersForeground);
-                lineNumbers.SetBinding(Control.ForegroundProperty, lineNumbersForeground);
-            }
-            else
-            {
-                for (int i = 0; i < leftMargins.Count; i++)
-                {
-                    if (leftMargins[i] is LineNumberMargin)
-                    {
-                        leftMargins.RemoveAt(i);
-                        if (i < leftMargins.Count && DottedLineMargin.IsDottedLineMargin(leftMargins[i]))
-                        {
-                            leftMargins.RemoveAt(i);
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-
-        #endregion
-
-        #region LineNumbersForeground
-
-        public static readonly DependencyProperty LineNumbersForegroundProperty =
-            DependencyProperty.Register("LineNumbersForeground", typeof(Brush), typeof(TextEditor),
-                new FrameworkPropertyMetadata(Brushes.Gray, OnLineNumbersForegroundChanged));
-
         public Brush LineNumbersForeground
         {
             get { return (Brush)GetValue(LineNumbersForegroundProperty); }
             set { SetValue(LineNumbersForegroundProperty, value); }
-        }
-
-        private static void OnLineNumbersForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var editor = (TextEditor)d;
-            var lineNumberMargin = editor.TextArea.LeftMargins.FirstOrDefault(margin => margin is LineNumberMargin) as LineNumberMargin;
-            ;
-
-            if (lineNumberMargin != null)
-            {
-                lineNumberMargin.SetValue(Control.ForegroundProperty, e.NewValue);
-            }
-        }
-
-        #endregion
-
-        #region TextBoxBase-like methods
-
-        public void AppendText(string textData)
-        {
-            var document = GetDocument();
-            document.Insert(document.TextLength, textData);
-        }
-
-        public void BeginChange()
-        {
-            GetDocument().BeginUpdate();
-        }
-
-        public void Copy()
-        {
-            Execute(ApplicationCommands.Copy);
-        }
-
-        public void Cut()
-        {
-            Execute(ApplicationCommands.Cut);
-        }
-
-        public IDisposable DeclareChangeBlock()
-        {
-            return GetDocument().RunUpdate();
-        }
-
-        public void EndChange()
-        {
-            GetDocument().EndUpdate();
-        }
-
-        public void LineDown()
-        {
-            if (scrollViewer != null)
-            {
-                scrollViewer.LineDown();
-            }
-        }
-
-        public void LineLeft()
-        {
-            if (scrollViewer != null)
-            {
-                scrollViewer.LineLeft();
-            }
-        }
-
-        public void LineRight()
-        {
-            if (scrollViewer != null)
-            {
-                scrollViewer.LineRight();
-            }
-        }
-
-        public void LineUp()
-        {
-            if (scrollViewer != null)
-            {
-                scrollViewer.LineUp();
-            }
-        }
-
-        public void PageDown()
-        {
-            if (scrollViewer != null)
-            {
-                scrollViewer.PageDown();
-            }
-        }
-
-        public void PageUp()
-        {
-            if (scrollViewer != null)
-            {
-                scrollViewer.PageUp();
-            }
-        }
-
-        public void PageLeft()
-        {
-            if (scrollViewer != null)
-            {
-                scrollViewer.PageLeft();
-            }
-        }
-
-        public void PageRight()
-        {
-            if (scrollViewer != null)
-            {
-                scrollViewer.PageRight();
-            }
-        }
-
-        public void Paste()
-        {
-            Execute(ApplicationCommands.Paste);
-        }
-
-        public bool Redo()
-        {
-            if (CanExecute(ApplicationCommands.Redo))
-            {
-                Execute(ApplicationCommands.Redo);
-                return true;
-            }
-            return false;
-        }
-
-        public void ScrollToEnd()
-        {
-            ApplyTemplate();
-            if (scrollViewer != null)
-            {
-                scrollViewer.ScrollToEnd();
-            }
-        }
-
-        public void ScrollToHome()
-        {
-            ApplyTemplate();
-            if (scrollViewer != null)
-            {
-                scrollViewer.ScrollToHome();
-            }
-        }
-
-        public void ScrollToHorizontalOffset(double offset)
-        {
-            ApplyTemplate();
-            if (scrollViewer != null)
-            {
-                scrollViewer.ScrollToHorizontalOffset(offset);
-            }
-        }
-
-        public void ScrollToVerticalOffset(double offset)
-        {
-            ApplyTemplate();
-            if (scrollViewer != null)
-            {
-                scrollViewer.ScrollToVerticalOffset(offset);
-            }
-        }
-
-        public void SelectAll()
-        {
-            Execute(ApplicationCommands.SelectAll);
-        }
-
-        public bool Undo()
-        {
-            if (CanExecute(ApplicationCommands.Undo))
-            {
-                Execute(ApplicationCommands.Undo);
-                return true;
-            }
-            return false;
         }
 
         public bool CanRedo
@@ -663,37 +153,33 @@ namespace ICSharpCode.AvalonEdit
 
         public double ExtentHeight
         {
-            get { return scrollViewer != null ? scrollViewer.ExtentHeight : 0; }
+            get { return _scrollViewer != null ? _scrollViewer.ExtentHeight : 0; }
         }
 
         public double ExtentWidth
         {
-            get { return scrollViewer != null ? scrollViewer.ExtentWidth : 0; }
+            get { return _scrollViewer != null ? _scrollViewer.ExtentWidth : 0; }
         }
 
         public double ViewportHeight
         {
-            get { return scrollViewer != null ? scrollViewer.ViewportHeight : 0; }
+            get { return _scrollViewer != null ? _scrollViewer.ViewportHeight : 0; }
         }
 
         public double ViewportWidth
         {
-            get { return scrollViewer != null ? scrollViewer.ViewportWidth : 0; }
+            get { return _scrollViewer != null ? _scrollViewer.ViewportWidth : 0; }
         }
 
         public double VerticalOffset
         {
-            get { return scrollViewer != null ? scrollViewer.VerticalOffset : 0; }
+            get { return _scrollViewer != null ? _scrollViewer.VerticalOffset : 0; }
         }
 
         public double HorizontalOffset
         {
-            get { return scrollViewer != null ? scrollViewer.HorizontalOffset : 0; }
+            get { return _scrollViewer != null ? _scrollViewer.HorizontalOffset : 0; }
         }
-
-        #endregion
-
-        #region TextBox methods
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string SelectedText
@@ -782,21 +268,6 @@ namespace ICSharpCode.AvalonEdit
             set { Select(SelectionStart, value); }
         }
 
-        public void Select(int start, int length)
-        {
-            int documentLength = Document != null ? Document.TextLength : 0;
-            if (start < 0 || start > documentLength)
-            {
-                throw new ArgumentOutOfRangeException("start", start, "Value must be between 0 and " + documentLength);
-            }
-            if (length < 0 || start + length > documentLength)
-            {
-                throw new ArgumentOutOfRangeException("length", length, "Value must be between 0 and " + (documentLength - start));
-            }
-            textArea.Selection = Selection.Create(textArea, start, start + length);
-            textArea.Caret.Offset = start + length;
-        }
-
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int LineCount
         {
@@ -811,14 +282,563 @@ namespace ICSharpCode.AvalonEdit
             }
         }
 
-        public void Clear()
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public Encoding Encoding
         {
-            Text = string.Empty;
+            get { return (Encoding)GetValue(EncodingProperty); }
+            set { SetValue(EncodingProperty, value); }
+        }
+
+        public ScrollBarVisibility HorizontalScrollBarVisibility
+        {
+            get { return (ScrollBarVisibility)GetValue(HorizontalScrollBarVisibilityProperty); }
+            set { SetValue(HorizontalScrollBarVisibilityProperty, value); }
+        }
+
+        public ScrollBarVisibility VerticalScrollBarVisibility
+        {
+            get { return (ScrollBarVisibility)GetValue(VerticalScrollBarVisibilityProperty); }
+            set { SetValue(VerticalScrollBarVisibilityProperty, value); }
         }
 
         #endregion
 
-        #region Loading from stream
+        #region События
+
+        public event EventHandler DocumentChanged;
+
+        public event MouseEventHandler MouseHover
+        {
+            add { AddHandler(MouseHoverEvent, value); }
+            remove { RemoveHandler(MouseHoverEvent, value); }
+        }
+
+        public event MouseEventHandler MouseHoverStopped
+        {
+            add { AddHandler(MouseHoverStoppedEvent, value); }
+            remove { RemoveHandler(MouseHoverStoppedEvent, value); }
+        }
+
+        public event PropertyChangedEventHandler OptionChanged;
+
+        public event MouseEventHandler PreviewMouseHover
+        {
+            add { AddHandler(PreviewMouseHoverEvent, value); }
+            remove { RemoveHandler(PreviewMouseHoverEvent, value); }
+        }
+
+        public event MouseEventHandler PreviewMouseHoverStopped
+        {
+            add { AddHandler(PreviewMouseHoverStoppedEvent, value); }
+            remove { RemoveHandler(PreviewMouseHoverStoppedEvent, value); }
+        }
+
+        public event EventHandler TextChanged;
+
+        #endregion
+
+        #region Конструктор
+
+        static TextEditor()
+        {
+            DocumentProperty = TextView.DocumentProperty.AddOwner( typeof(TextEditor), new FrameworkPropertyMetadata(OnDocumentChanged));
+            EncodingProperty =DependencyProperty.Register("Encoding", typeof(Encoding), typeof(TextEditor));
+            HorizontalScrollBarVisibilityProperty = ScrollViewer.HorizontalScrollBarVisibilityProperty.AddOwner(typeof(TextEditor), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible));
+            IsModifiedProperty = DependencyProperty.Register("IsModified", typeof(bool), typeof(TextEditor), new FrameworkPropertyMetadata(Boxes.False, OnIsModifiedChanged));
+            IsReadOnlyProperty = DependencyProperty.Register("IsReadOnly", typeof(bool), typeof(TextEditor), new FrameworkPropertyMetadata(Boxes.False, OnIsReadOnlyChanged));
+            LineNumbersForegroundProperty = DependencyProperty.Register("LineNumbersForeground", typeof(Brush), typeof(TextEditor), new FrameworkPropertyMetadata(Brushes.Gray, OnLineNumbersForegroundChanged));
+            MouseHoverEvent = TextView.MouseHoverEvent.AddOwner(typeof(TextEditor));
+            MouseHoverStoppedEvent = TextView.MouseHoverStoppedEvent.AddOwner(typeof(TextEditor));
+            OptionsProperty = TextView.OptionsProperty.AddOwner(typeof(TextEditor), new FrameworkPropertyMetadata(OnOptionsChanged));
+            PreviewMouseHoverEvent = TextView.PreviewMouseHoverEvent.AddOwner(typeof(TextEditor));
+            PreviewMouseHoverStoppedEvent = TextView.PreviewMouseHoverStoppedEvent.AddOwner(typeof(TextEditor));
+            ShowLineNumbersProperty = DependencyProperty.Register("ShowLineNumbers", typeof(bool), typeof(TextEditor), new FrameworkPropertyMetadata(Boxes.False, OnShowLineNumbersChanged));
+            SyntaxHighlightingProperty = DependencyProperty.Register("SyntaxHighlighting", typeof(IHighlightingDefinition), typeof(TextEditor), new FrameworkPropertyMetadata(OnSyntaxHighlightingChanged));
+            VerticalScrollBarVisibilityProperty = ScrollViewer.VerticalScrollBarVisibilityProperty.AddOwner(typeof(TextEditor), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible));
+            WordWrapProperty =DependencyProperty.Register("WordWrap", typeof(bool), typeof(TextEditor), new FrameworkPropertyMetadata(Boxes.False));
+
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(TextEditor), new FrameworkPropertyMetadata(typeof(TextEditor)));
+            FocusableProperty.OverrideMetadata(typeof(TextEditor), new FrameworkPropertyMetadata(Boxes.True));
+        }
+
+        public TextEditor()
+            : this(new TextArea())
+        {
+        }
+
+        protected TextEditor(TextArea textArea)
+        {
+            if (textArea == null)
+            {
+                throw new ArgumentNullException("textArea");
+            }
+            _textArea = textArea;
+
+            textArea.TextView.Services.AddService(typeof(TextEditor), this);
+
+            SetCurrentValue(OptionsProperty, textArea.Options);
+            SetCurrentValue(DocumentProperty, new TextDocument());
+        }
+
+        #endregion
+
+        #region Методы
+
+        protected override AutomationPeer OnCreateAutomationPeer()
+        {
+            return new TextEditorAutomationPeer(this);
+        }
+
+        protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
+        {
+            base.OnGotKeyboardFocus(e);
+            if (Equals(e.NewFocus, this))
+            {
+                Keyboard.Focus(TextArea);
+                e.Handled = true;
+            }
+        }
+
+        protected virtual void OnDocumentChanged(EventArgs e)
+        {
+            if (DocumentChanged != null)
+            {
+                DocumentChanged(this, e);
+            }
+        }
+
+        private static void OnDocumentChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e)
+        {
+            ((TextEditor)dp).OnDocumentChanged((TextDocument)e.OldValue, (TextDocument)e.NewValue);
+        }
+
+        private void OnDocumentChanged(TextDocument oldValue, TextDocument newValue)
+        {
+            if (oldValue != null)
+            {
+                TextDocumentWeakEventManager.TextChanged.RemoveListener(oldValue, this);
+                PropertyChangedEventManager.RemoveListener(oldValue.UndoStack, this, "IsOriginalFile");
+            }
+            _textArea.Document = newValue;
+            if (newValue != null)
+            {
+                TextDocumentWeakEventManager.TextChanged.AddListener(newValue, this);
+                PropertyChangedEventManager.AddListener(newValue.UndoStack, this, "IsOriginalFile");
+            }
+            OnDocumentChanged(EventArgs.Empty);
+            OnTextChanged(EventArgs.Empty);
+        }
+
+        protected virtual void OnOptionChanged(PropertyChangedEventArgs e)
+        {
+            if (OptionChanged != null)
+            {
+                OptionChanged(this, e);
+            }
+        }
+
+        private static void OnOptionsChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e)
+        {
+            ((TextEditor)dp).OnOptionsChanged((TextEditorOptions)e.OldValue, (TextEditorOptions)e.NewValue);
+        }
+
+        private void OnOptionsChanged(TextEditorOptions oldValue, TextEditorOptions newValue)
+        {
+            if (oldValue != null)
+            {
+                PropertyChangedWeakEventManager.RemoveListener(oldValue, this);
+            }
+            _textArea.Options = newValue;
+            if (newValue != null)
+            {
+                PropertyChangedWeakEventManager.AddListener(newValue, this);
+            }
+            OnOptionChanged(new PropertyChangedEventArgs(null));
+        }
+
+        protected virtual bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
+        {
+            if (managerType == typeof(PropertyChangedWeakEventManager))
+            {
+                OnOptionChanged((PropertyChangedEventArgs)e);
+                return true;
+            }
+            if (managerType == typeof(TextDocumentWeakEventManager.TextChanged))
+            {
+                OnTextChanged(e);
+                return true;
+            }
+            if (managerType == typeof(PropertyChangedEventManager))
+            {
+                return HandleIsOriginalChanged((PropertyChangedEventArgs)e);
+            }
+            return false;
+        }
+
+        bool IWeakEventListener.ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
+        {
+            return ReceiveWeakEvent(managerType, sender, e);
+        }
+
+        private TextDocument GetDocument()
+        {
+            var document = Document;
+            if (document == null)
+            {
+                throw ThrowUtil.NoDocumentAssigned();
+            }
+            return document;
+        }
+
+        protected virtual void OnTextChanged(EventArgs e)
+        {
+            if (TextChanged != null)
+            {
+                TextChanged(this, e);
+            }
+        }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            _scrollViewer = (ScrollViewer)Template.FindName("PART_ScrollViewer", this);
+        }
+
+        private bool CanExecute(RoutedUICommand command)
+        {
+            var textArea = TextArea;
+            if (textArea == null)
+            {
+                return false;
+            }
+            return command.CanExecute(null, textArea);
+        }
+
+        private void Execute(RoutedUICommand command)
+        {
+            var textArea = TextArea;
+            if (textArea != null)
+            {
+                command.Execute(null, textArea);
+            }
+        }
+
+        private static void OnSyntaxHighlightingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((TextEditor)d).OnSyntaxHighlightingChanged(e.NewValue as IHighlightingDefinition);
+        }
+
+        private void OnSyntaxHighlightingChanged(IHighlightingDefinition newValue)
+        {
+            if (_colorizer != null)
+            {
+                TextArea.TextView.LineTransformers.Remove(_colorizer);
+                _colorizer = null;
+            }
+            if (newValue != null)
+            {
+                _colorizer = CreateColorizer(newValue);
+                if (_colorizer != null)
+                {
+                    TextArea.TextView.LineTransformers.Insert(0, _colorizer);
+                }
+            }
+        }
+
+        protected virtual IVisualLineTransformer CreateColorizer(IHighlightingDefinition highlightingDefinition)
+        {
+            if (highlightingDefinition == null)
+            {
+                throw new ArgumentNullException("highlightingDefinition");
+            }
+            return new HighlightingColorizer(highlightingDefinition);
+        }
+
+        private static void OnIsReadOnlyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var editor = d as TextEditor;
+            if (editor != null)
+            {
+                if ((bool)e.NewValue)
+                {
+                    editor.TextArea.ReadOnlySectionProvider = ReadOnlySectionDocument.Instance;
+                }
+                else
+                {
+                    editor.TextArea.ReadOnlySectionProvider = NoReadOnlySections.Instance;
+                }
+
+                var peer = UIElementAutomationPeer.FromElement(editor) as TextEditorAutomationPeer;
+                if (peer != null)
+                {
+                    peer.RaiseIsReadOnlyChanged((bool)e.OldValue, (bool)e.NewValue);
+                }
+            }
+        }
+
+        private static void OnIsModifiedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var editor = d as TextEditor;
+            if (editor != null)
+            {
+                var document = editor.Document;
+                if (document != null)
+                {
+                    var undoStack = document.UndoStack;
+                    if ((bool)e.NewValue)
+                    {
+                        if (undoStack.IsOriginalFile)
+                        {
+                            undoStack.DiscardOriginalFileMarker();
+                        }
+                    }
+                    else
+                    {
+                        undoStack.MarkAsOriginalFile();
+                    }
+                }
+            }
+        }
+
+        private bool HandleIsOriginalChanged(PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "IsOriginalFile")
+            {
+                var document = Document;
+                if (document != null)
+                {
+                    SetCurrentValue(IsModifiedProperty, Boxes.Box(!document.UndoStack.IsOriginalFile));
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private static void OnShowLineNumbersChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var editor = (TextEditor)d;
+            var leftMargins = editor.TextArea.LeftMargins;
+            if ((bool)e.NewValue)
+            {
+                var lineNumbers = new LineNumberMargin();
+                var line = (Line)DottedLineMargin.Create();
+                leftMargins.Insert(0, lineNumbers);
+                leftMargins.Insert(1, line);
+                var lineNumbersForeground = new Binding("LineNumbersForeground")
+                {
+                    Source = editor
+                };
+                line.SetBinding(Shape.StrokeProperty, lineNumbersForeground);
+                lineNumbers.SetBinding(ForegroundProperty, lineNumbersForeground);
+            }
+            else
+            {
+                for (int i = 0; i < leftMargins.Count; i++)
+                {
+                    if (leftMargins[i] is LineNumberMargin)
+                    {
+                        leftMargins.RemoveAt(i);
+                        if (i < leftMargins.Count && DottedLineMargin.IsDottedLineMargin(leftMargins[i]))
+                        {
+                            leftMargins.RemoveAt(i);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        private static void OnLineNumbersForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var editor = (TextEditor)d;
+            var lineNumberMargin = editor.TextArea.LeftMargins.FirstOrDefault(margin => margin is LineNumberMargin) as LineNumberMargin;
+
+            if (lineNumberMargin != null)
+            {
+                lineNumberMargin.SetValue(ForegroundProperty, e.NewValue);
+            }
+        }
+
+        public void AppendText(string textData)
+        {
+            var document = GetDocument();
+            document.Insert(document.TextLength, textData);
+        }
+
+        public void BeginChange()
+        {
+            GetDocument().BeginUpdate();
+        }
+
+        public void Copy()
+        {
+            Execute(ApplicationCommands.Copy);
+        }
+
+        public void Cut()
+        {
+            Execute(ApplicationCommands.Cut);
+        }
+
+        public IDisposable DeclareChangeBlock()
+        {
+            return GetDocument().RunUpdate();
+        }
+
+        public void EndChange()
+        {
+            GetDocument().EndUpdate();
+        }
+
+        public void LineDown()
+        {
+            if (_scrollViewer != null)
+            {
+                _scrollViewer.LineDown();
+            }
+        }
+
+        public void LineLeft()
+        {
+            if (_scrollViewer != null)
+            {
+                _scrollViewer.LineLeft();
+            }
+        }
+
+        public void LineRight()
+        {
+            if (_scrollViewer != null)
+            {
+                _scrollViewer.LineRight();
+            }
+        }
+
+        public void LineUp()
+        {
+            if (_scrollViewer != null)
+            {
+                _scrollViewer.LineUp();
+            }
+        }
+
+        public void PageDown()
+        {
+            if (_scrollViewer != null)
+            {
+                _scrollViewer.PageDown();
+            }
+        }
+
+        public void PageUp()
+        {
+            if (_scrollViewer != null)
+            {
+                _scrollViewer.PageUp();
+            }
+        }
+
+        public void PageLeft()
+        {
+            if (_scrollViewer != null)
+            {
+                _scrollViewer.PageLeft();
+            }
+        }
+
+        public void PageRight()
+        {
+            if (_scrollViewer != null)
+            {
+                _scrollViewer.PageRight();
+            }
+        }
+
+        public void Paste()
+        {
+            Execute(ApplicationCommands.Paste);
+        }
+
+        public bool Redo()
+        {
+            if (CanExecute(ApplicationCommands.Redo))
+            {
+                Execute(ApplicationCommands.Redo);
+                return true;
+            }
+            return false;
+        }
+
+        public void ScrollToEnd()
+        {
+            ApplyTemplate();
+            if (_scrollViewer != null)
+            {
+                _scrollViewer.ScrollToEnd();
+            }
+        }
+
+        public void ScrollToHome()
+        {
+            ApplyTemplate();
+            if (_scrollViewer != null)
+            {
+                _scrollViewer.ScrollToHome();
+            }
+        }
+
+        public void ScrollToHorizontalOffset(double offset)
+        {
+            ApplyTemplate();
+            if (_scrollViewer != null)
+            {
+                _scrollViewer.ScrollToHorizontalOffset(offset);
+            }
+        }
+
+        public void ScrollToVerticalOffset(double offset)
+        {
+            ApplyTemplate();
+            if (_scrollViewer != null)
+            {
+                _scrollViewer.ScrollToVerticalOffset(offset);
+            }
+        }
+
+        public void SelectAll()
+        {
+            Execute(ApplicationCommands.SelectAll);
+        }
+
+        public bool Undo()
+        {
+            if (CanExecute(ApplicationCommands.Undo))
+            {
+                Execute(ApplicationCommands.Undo);
+                return true;
+            }
+            return false;
+        }
+
+        public void Select(int start, int length)
+        {
+            int documentLength = Document != null ? Document.TextLength : 0;
+            if (start < 0 || start > documentLength)
+            {
+                throw new ArgumentOutOfRangeException("start", start, "Value must be between 0 and " + documentLength);
+            }
+            if (length < 0 || start + length > documentLength)
+            {
+                throw new ArgumentOutOfRangeException("length", length, "Value must be between 0 and " + (documentLength - start));
+            }
+            _textArea.Selection = Selection.Create(_textArea, start, start + length);
+            _textArea.Caret.Offset = start + length;
+        }
+
+        public void Clear()
+        {
+            Text = string.Empty;
+        }
 
         public void Load(Stream stream)
         {
@@ -840,16 +860,6 @@ namespace ICSharpCode.AvalonEdit
             {
                 Load(fs);
             }
-        }
-
-        public static readonly DependencyProperty EncodingProperty =
-            DependencyProperty.Register("Encoding", typeof(Encoding), typeof(TextEditor));
-
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Encoding Encoding
-        {
-            get { return (Encoding)GetValue(EncodingProperty); }
-            set { SetValue(EncodingProperty, value); }
         }
 
         public void Save(Stream stream)
@@ -882,73 +892,9 @@ namespace ICSharpCode.AvalonEdit
             }
         }
 
-        #endregion
-
-        #region MouseHover events
-
-        public static readonly RoutedEvent PreviewMouseHoverEvent =
-            TextView.PreviewMouseHoverEvent.AddOwner(typeof(TextEditor));
-
-        public static readonly RoutedEvent MouseHoverEvent =
-            TextView.MouseHoverEvent.AddOwner(typeof(TextEditor));
-
-        public static readonly RoutedEvent PreviewMouseHoverStoppedEvent =
-            TextView.PreviewMouseHoverStoppedEvent.AddOwner(typeof(TextEditor));
-
-        public static readonly RoutedEvent MouseHoverStoppedEvent =
-            TextView.MouseHoverStoppedEvent.AddOwner(typeof(TextEditor));
-
-        public event MouseEventHandler PreviewMouseHover
-        {
-            add { AddHandler(PreviewMouseHoverEvent, value); }
-            remove { RemoveHandler(PreviewMouseHoverEvent, value); }
-        }
-
-        public event MouseEventHandler MouseHover
-        {
-            add { AddHandler(MouseHoverEvent, value); }
-            remove { RemoveHandler(MouseHoverEvent, value); }
-        }
-
-        public event MouseEventHandler PreviewMouseHoverStopped
-        {
-            add { AddHandler(PreviewMouseHoverStoppedEvent, value); }
-            remove { RemoveHandler(PreviewMouseHoverStoppedEvent, value); }
-        }
-
-        public event MouseEventHandler MouseHoverStopped
-        {
-            add { AddHandler(MouseHoverStoppedEvent, value); }
-            remove { RemoveHandler(MouseHoverStoppedEvent, value); }
-        }
-
-        #endregion
-
-        #region ScrollBarVisibility
-
-        public static readonly DependencyProperty HorizontalScrollBarVisibilityProperty = ScrollViewer.HorizontalScrollBarVisibilityProperty.AddOwner(typeof(TextEditor),
-            new FrameworkPropertyMetadata(ScrollBarVisibility.Visible));
-
-        public ScrollBarVisibility HorizontalScrollBarVisibility
-        {
-            get { return (ScrollBarVisibility)GetValue(HorizontalScrollBarVisibilityProperty); }
-            set { SetValue(HorizontalScrollBarVisibilityProperty, value); }
-        }
-
-        public static readonly DependencyProperty VerticalScrollBarVisibilityProperty = ScrollViewer.VerticalScrollBarVisibilityProperty.AddOwner(typeof(TextEditor),
-            new FrameworkPropertyMetadata(ScrollBarVisibility.Visible));
-
-        public ScrollBarVisibility VerticalScrollBarVisibility
-        {
-            get { return (ScrollBarVisibility)GetValue(VerticalScrollBarVisibilityProperty); }
-            set { SetValue(VerticalScrollBarVisibilityProperty, value); }
-        }
-
-        #endregion
-
         object IServiceProvider.GetService(Type serviceType)
         {
-            return textArea.GetService(serviceType);
+            return _textArea.GetService(serviceType);
         }
 
         public TextViewPosition? GetPositionFromPoint(Point point)
@@ -968,11 +914,11 @@ namespace ICSharpCode.AvalonEdit
 
         public void ScrollTo(int line, int column)
         {
-            const double MinimumScrollPercentage = 0.3;
+            const double MINIMUM_SCROLL_PERCENTAGE = 0.3;
 
-            var textView = textArea.TextView;
+            var textView = _textArea.TextView;
             var document = textView.Document;
-            if (scrollViewer != null && document != null)
+            if (_scrollViewer != null && document != null)
             {
                 if (line < 1)
                 {
@@ -987,7 +933,7 @@ namespace ICSharpCode.AvalonEdit
                 if (!scrollInfo.CanHorizontallyScroll)
                 {
                     var vl = textView.GetOrConstructVisualLine(document.GetLineByNumber(line));
-                    double remainingHeight = scrollViewer.ViewportHeight / 2;
+                    double remainingHeight = _scrollViewer.ViewportHeight / 2;
                     while (remainingHeight > 0)
                     {
                         var prevLine = vl.FirstDocumentLine.PreviousLine;
@@ -1000,28 +946,30 @@ namespace ICSharpCode.AvalonEdit
                     }
                 }
 
-                var p = textArea.TextView.GetVisualPosition(new TextViewPosition(line, Math.Max(1, column)), VisualYPosition.LineMiddle);
-                double verticalPos = p.Y - scrollViewer.ViewportHeight / 2;
-                if (Math.Abs(verticalPos - scrollViewer.VerticalOffset) > MinimumScrollPercentage * scrollViewer.ViewportHeight)
+                var p = _textArea.TextView.GetVisualPosition(new TextViewPosition(line, Math.Max(1, column)), VisualYPosition.LineMiddle);
+                double verticalPos = p.Y - _scrollViewer.ViewportHeight / 2;
+                if (Math.Abs(verticalPos - _scrollViewer.VerticalOffset) > MINIMUM_SCROLL_PERCENTAGE * _scrollViewer.ViewportHeight)
                 {
-                    scrollViewer.ScrollToVerticalOffset(Math.Max(0, verticalPos));
+                    _scrollViewer.ScrollToVerticalOffset(Math.Max(0, verticalPos));
                 }
                 if (column > 0)
                 {
-                    if (p.X > scrollViewer.ViewportWidth - Caret.MinimumDistanceToViewBorder * 2)
+                    if (p.X > _scrollViewer.ViewportWidth - Caret.MinimumDistanceToViewBorder * 2)
                     {
-                        double horizontalPos = Math.Max(0, p.X - scrollViewer.ViewportWidth / 2);
-                        if (Math.Abs(horizontalPos - scrollViewer.HorizontalOffset) > MinimumScrollPercentage * scrollViewer.ViewportWidth)
+                        double horizontalPos = Math.Max(0, p.X - _scrollViewer.ViewportWidth / 2);
+                        if (Math.Abs(horizontalPos - _scrollViewer.HorizontalOffset) > MINIMUM_SCROLL_PERCENTAGE * _scrollViewer.ViewportWidth)
                         {
-                            scrollViewer.ScrollToHorizontalOffset(horizontalPos);
+                            _scrollViewer.ScrollToHorizontalOffset(horizontalPos);
                         }
                     }
                     else
                     {
-                        scrollViewer.ScrollToHorizontalOffset(0);
+                        _scrollViewer.ScrollToHorizontalOffset(0);
                     }
                 }
             }
         }
+
+        #endregion
     }
 }

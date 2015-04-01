@@ -545,7 +545,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 				pos.Y = textView.ActualHeight;
 			pos += textView.ScrollOffset;
 			if (pos.Y > textView.DocumentHeight)
-				pos.Y = textView.DocumentHeight - ExtensionMethods.Epsilon;
+				pos.Y = textView.DocumentHeight - ExtensionMethods.EPSILON;
 			VisualLine line = textView.GetVisualLineFromVisualTop(pos.Y);
 			if (line != null) {
 				visualColumn = line.GetVisualColumn(pos, textArea.Selection.EnableVirtualSpace, out isAtEndOfLine);
@@ -566,7 +566,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 				pos.Y = textView.ActualHeight;
 			pos += textView.ScrollOffset;
 			if (pos.Y > textView.DocumentHeight)
-				pos.Y = textView.DocumentHeight - ExtensionMethods.Epsilon;
+				pos.Y = textView.DocumentHeight - ExtensionMethods.EPSILON;
 			VisualLine line = textView.GetVisualLineFromVisualTop(pos.Y);
 			if (line != null) {
 				visualColumn = line.GetVisualColumn(line.TextLines.First(), pos.X, textArea.Selection.EnableVirtualSpace);
