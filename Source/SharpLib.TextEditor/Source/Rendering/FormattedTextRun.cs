@@ -1,42 +1,35 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.TextFormatting;
 
 namespace ICSharpCode.AvalonEdit.Rendering
 {
-    public class InlineObjectRun : TextEmbeddedObject
+    public class FormattedTextRun : TextEmbeddedObject
     {
         #region Поля
 
-        private readonly UIElement element;
-
-        private readonly int length;
+        private readonly FormattedTextElement element;
 
         private readonly TextRunProperties properties;
-
-        internal Size desiredSize;
 
         #endregion
 
         #region Свойства
 
-        public UIElement Element
+        public FormattedTextElement Element
         {
             get { return element; }
         }
 
-        public VisualLine VisualLine { get; internal set; }
-
         public override LineBreakCondition BreakBefore
         {
-            get { return LineBreakCondition.BreakDesired; }
+            get { return element.BreakBefore; }
         }
 
         public override LineBreakCondition BreakAfter
         {
-            get { return LineBreakCondition.BreakDesired; }
+            get { return element.BreakAfter; }
         }
 
         public override bool HasFixedSize
@@ -51,7 +44,7 @@ namespace ICSharpCode.AvalonEdit.Rendering
 
         public override int Length
         {
-            get { return length; }
+            get { return element.VisualLength; }
         }
 
         public override TextRunProperties Properties
@@ -63,22 +56,16 @@ namespace ICSharpCode.AvalonEdit.Rendering
 
         #region Конструктор
 
-        public InlineObjectRun(int length, TextRunProperties properties, UIElement element)
+        public FormattedTextRun(FormattedTextElement element, TextRunProperties properties)
         {
-            if (length <= 0)
+            if (element == null)
             {
-                throw new ArgumentOutOfRangeException("length", length, "Value must be positive");
+                throw new ArgumentNullException("element");
             }
             if (properties == null)
             {
                 throw new ArgumentNullException("properties");
             }
-            if (element == null)
-            {
-                throw new ArgumentNullException("element");
-            }
-
-            this.length = length;
             this.properties = properties;
             this.element = element;
         }
@@ -89,30 +76,42 @@ namespace ICSharpCode.AvalonEdit.Rendering
 
         public override TextEmbeddedObjectMetrics Format(double remainingParagraphWidth)
         {
-            double baseline = TextBlock.GetBaselineOffset(element);
-            if (double.IsNaN(baseline))
+            var formattedText = element.formattedText;
+            if (formattedText != null)
             {
-                baseline = desiredSize.Height;
+                return new TextEmbeddedObjectMetrics(formattedText.WidthIncludingTrailingWhitespace,
+                    formattedText.Height,
+                    formattedText.Baseline);
             }
-            return new TextEmbeddedObjectMetrics(desiredSize.Width, desiredSize.Height, baseline);
+            var text = element.textLine;
+            return new TextEmbeddedObjectMetrics(text.WidthIncludingTrailingWhitespace,
+                text.Height,
+                text.Baseline);
         }
 
         public override Rect ComputeBoundingBox(bool rightToLeft, bool sideways)
         {
-            if (element.IsArrangeValid)
+            var formattedText = element.formattedText;
+            if (formattedText != null)
             {
-                double baseline = TextBlock.GetBaselineOffset(element);
-                if (double.IsNaN(baseline))
-                {
-                    baseline = desiredSize.Height;
-                }
-                return new Rect(new Point(0, -baseline), desiredSize);
+                return new Rect(0, 0, formattedText.WidthIncludingTrailingWhitespace, formattedText.Height);
             }
-            return Rect.Empty;
+            var text = element.textLine;
+            return new Rect(0, 0, text.WidthIncludingTrailingWhitespace, text.Height);
         }
 
         public override void Draw(DrawingContext drawingContext, Point origin, bool rightToLeft, bool sideways)
         {
+            if (element.formattedText != null)
+            {
+                origin.Y -= element.formattedText.Baseline;
+                drawingContext.DrawText(element.formattedText, origin);
+            }
+            else
+            {
+                origin.Y -= element.textLine.Baseline;
+                element.textLine.Draw(drawingContext, origin, InvertAxes.None);
+            }
         }
 
         #endregion
