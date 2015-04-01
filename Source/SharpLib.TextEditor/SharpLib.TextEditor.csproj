@@ -131,26 +131,29 @@
     <Compile Include="Source\Highlighting\HighlightingBrush.cs" />
     <Compile Include="Source\Highlighting\HighlightingColor.cs" />
     <Compile Include="Source\Highlighting\HighlightingColorizer.cs" />
-    <Compile Include="Source\Highlighting\HighlightingDefinitionInvalidException.cs" />
+    <Compile Include="Source\Exceptions\HighlightingDefinitionInvalidException.cs" />
     <Compile Include="Source\Highlighting\HighlightingDefinitionTypeConverter.cs" />
     <Compile Include="Source\Highlighting\HighlightingEngine.cs" />
     <Compile Include="Source\Highlighting\HighlightingManager.cs" />
     <Compile Include="Source\Highlighting\HighlightingRule.cs" />
     <Compile Include="Source\Highlighting\HighlightingRuleSet.cs" />
     <Compile Include="Source\Highlighting\HighlightingSpan.cs" />
+    <Compile Include="Source\Highlighting\HighlightingStateChangedEventHandler.cs" />
     <Compile Include="Source\Highlighting\HtmlClipboard.cs" />
     <Compile Include="Source\Highlighting\HtmlOptions.cs" />
     <Compile Include="Source\Highlighting\HtmlRichTextWriter.cs" />
-    <Compile Include="Source\Highlighting\IHighlighter.cs" />
-    <Compile Include="Source\Highlighting\IHighlightingDefinition.cs" />
-    <Compile Include="Source\Highlighting\IHighlightingDefinitionReferenceResolver.cs" />
+    <Compile Include="Source\Interfaces\IHighlighter.cs" />
+    <Compile Include="Source\Interfaces\IHighlightingDefinition.cs" />
+    <Compile Include="Source\Interfaces\IHighlightingDefinitionReferenceResolver.cs" />
     <Compile Include="Source\Highlighting\Resources\Resources.cs" />
     <Compile Include="Source\Highlighting\RichText.cs" />
     <Compile Include="Source\Highlighting\RichTextColorizer.cs" />
     <Compile Include="Source\Highlighting\RichTextModel.cs" />
     <Compile Include="Source\Highlighting\RichTextModelWriter.cs" />
+    <Compile Include="Source\Highlighting\SimpleHighlightingBrush.cs" />
+    <Compile Include="Source\Highlighting\SystemColorHighlightingBrush.cs" />
     <Compile Include="Source\Highlighting\Xshd\HighlightingLoader.cs" />
-    <Compile Include="Source\Highlighting\Xshd\IXshdVisitor.cs" />
+    <Compile Include="Source\Interfaces\IXshdVisitor.cs" />
     <Compile Include="Source\Highlighting\Xshd\SaveXshdVisitor.cs" />
     <Compile Include="Source\Highlighting\Xshd\V1Loader.cs" />
     <Compile Include="Source\Highlighting\Xshd\V2Loader.cs" />
@@ -160,16 +163,19 @@
     <Compile Include="Source\Highlighting\Xshd\XshdImport.cs" />
     <Compile Include="Source\Highlighting\Xshd\XshdKeywords.cs" />
     <Compile Include="Source\Highlighting\Xshd\XshdProperty.cs" />
-    <Compile Include="Source\Highlighting\Xshd\XshdReference.cs" />
+    <Compile Include="Source\Highlighting\Xshd\XshdReference-T.cs" />
+    <Compile Include="Source\Enums\XshdRegexType.cs" />
     <Compile Include="Source\Highlighting\Xshd\XshdRule.cs" />
     <Compile Include="Source\Highlighting\Xshd\XshdRuleSet.cs" />
     <Compile Include="Source\Highlighting\Xshd\XshdSpan.cs" />
     <Compile Include="Source\Highlighting\Xshd\XshdSyntaxDefinition.cs" />
     <Compile Include="Source\Indentation\CSharp\CSharpIndentationStrategy.cs" />
-    <Compile Include="Source\Indentation\CSharp\DocumentAccessor.cs" />
+    <Compile Include="Source\Indentation\CSharp\TextDocumentAccessor.cs" />
+    <Compile Include="Source\Interfaces\IDocumentAccessor.cs" />
     <Compile Include="Source\Indentation\CSharp\IndentationReformatter.cs" />
+    <Compile Include="Source\Indentation\CSharp\IndentationSettings.cs" />
     <Compile Include="Source\Indentation\DefaultIndentationStrategy.cs" />
-    <Compile Include="Source\Indentation\IIndentationStrategy.cs" />
+    <Compile Include="Source\Interfaces\IIndentationStrategy.cs" />
     <Compile Include="Source\Interfaces\ISearchResult.cs" />
     <Compile Include="Source\Enums\SearchMode.cs" />
     <Compile Include="Source\Exceptions\SearchPatternException.cs" />
@@ -311,29 +317,29 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Source\Highlighting\Resources\ASPX.xshd" />
-    <None Include="Source\Highlighting\Resources\Boo.xshd" />
-    <None Include="Source\Highlighting\Resources\Coco-Mode.xshd" />
-    <None Include="Source\Highlighting\Resources\CPP-Mode.xshd" />
-    <None Include="Source\Highlighting\Resources\CSharp-Mode.xshd" />
-    <None Include="Source\Highlighting\Resources\CSS-Mode.xshd" />
-    <None Include="Source\Highlighting\Resources\HTML-Mode.xshd" />
-    <None Include="Source\Highlighting\Resources\Java-Mode.xshd" />
-    <None Include="Source\Highlighting\Resources\JavaScript-Mode.xshd" />
-    <None Include="Source\Highlighting\Resources\MarkDown-Mode.xshd" />
-    <None Include="Source\Highlighting\Resources\ModeV1.xsd">
+    <EmbeddedResource Include="Source\Highlighting\Resources\ASPX.xshd" />
+    <EmbeddedResource Include="Source\Highlighting\Resources\Boo.xshd" />
+    <EmbeddedResource Include="Source\Highlighting\Resources\Coco-Mode.xshd" />
+    <EmbeddedResource Include="Source\Highlighting\Resources\CPP-Mode.xshd" />
+    <EmbeddedResource Include="Source\Highlighting\Resources\CSharp-Mode.xshd" />
+    <EmbeddedResource Include="Source\Highlighting\Resources\CSS-Mode.xshd" />
+    <EmbeddedResource Include="Source\Highlighting\Resources\HTML-Mode.xshd" />
+    <EmbeddedResource Include="Source\Highlighting\Resources\Java-Mode.xshd" />
+    <EmbeddedResource Include="Source\Highlighting\Resources\JavaScript-Mode.xshd" />
+    <EmbeddedResource Include="Source\Highlighting\Resources\MarkDown-Mode.xshd" />
+    <EmbeddedResource Include="Source\Highlighting\Resources\ModeV1.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Source\Highlighting\Resources\ModeV2.xsd">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Highlighting\Resources\ModeV2.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Source\Highlighting\Resources\Patch-Mode.xshd" />
-    <None Include="Source\Highlighting\Resources\PHP-Mode.xshd" />
-    <None Include="Source\Highlighting\Resources\PowerShell.xshd" />
-    <None Include="Source\Highlighting\Resources\Tex-Mode.xshd" />
-    <None Include="Source\Highlighting\Resources\VB-Mode.xshd" />
-    <None Include="Source\Highlighting\Resources\XML-Mode.xshd" />
-    <None Include="Source\Highlighting\Resources\XmlDoc.xshd" />
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Highlighting\Resources\Patch-Mode.xshd" />
+    <EmbeddedResource Include="Source\Highlighting\Resources\PHP-Mode.xshd" />
+    <EmbeddedResource Include="Source\Highlighting\Resources\PowerShell.xshd" />
+    <EmbeddedResource Include="Source\Highlighting\Resources\Tex-Mode.xshd" />
+    <EmbeddedResource Include="Source\Highlighting\Resources\VB-Mode.xshd" />
+    <EmbeddedResource Include="Source\Highlighting\Resources\XML-Mode.xshd" />
+    <EmbeddedResource Include="Source\Highlighting\Resources\XmlDoc.xshd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Source\Search\next.png" />
