@@ -52,6 +52,22 @@
     <Compile Include="..\SharpLib.Version.cs">
       <Link>Source\Version\SharpLib.Version.cs</Link>
     </Compile>
+    <Compile Include="Source\Enums\AnchorMovementType.cs" />
+    <Compile Include="Source\Document\AnchorSegment.cs" />
+    <Compile Include="Source\Enums\CaretPositioningMode.cs" />
+    <Compile Include="Source\Enums\CharacterClass.cs" />
+    <Compile Include="Source\Interfaces\IDocumentLine.cs" />
+    <Compile Include="Source\Interfaces\ISegment.cs" />
+    <Compile Include="Source\Extensions\SegmentExtensions.cs" />
+    <Compile Include="Source\Interfaces\ISegmentTree.cs" />
+    <Compile Include="Source\Interfaces\ITextSourceVersion.cs" />
+    <Compile Include="Source\Interfaces\IUndoableOperationWithContext.cs" />
+    <Compile Include="Source\Document\OffsetChangeMapEntry.cs" />
+    <Compile Include="Source\Enums\OffsetChangeMappingType.cs" />
+    <Compile Include="Source\Document\StringTextSource.cs" />
+    <Compile Include="Source\Document\TextChangeEventArgs.cs" />
+    <Compile Include="Source\Document\TextLocationConverter.cs" />
+    <Compile Include="Source\Document\TextUtilities.cs" />
     <Compile Include="Source\Interfaces\ITfThreadMgr.cs" />
     <Compile Include="Source\Enums\CaretMovementType.cs" />
     <Compile Include="Source\Interfaces\ITextAreaInputHandler.cs" />
@@ -74,12 +90,11 @@
     <Compile Include="Source\Document\DocumentLine.cs" />
     <Compile Include="Source\Document\DocumentLineTree.cs" />
     <Compile Include="Source\Document\DocumentTextWriter.cs" />
-    <Compile Include="Source\Document\GapTextBuffer.cs" />
-    <Compile Include="Source\Document\IDocument.cs" />
-    <Compile Include="Source\Document\ILineTracker.cs" />
-    <Compile Include="Source\Document\ITextAnchor.cs" />
-    <Compile Include="Source\Document\ITextSource.cs" />
-    <Compile Include="Source\Document\IUndoableOperation.cs" />
+    <Compile Include="Source\Interfaces\IDocument.cs" />
+    <Compile Include="Source\Interfaces\ILineTracker.cs" />
+    <Compile Include="Source\Interfaces\ITextAnchor.cs" />
+    <Compile Include="Source\Interfaces\ITextSource.cs" />
+    <Compile Include="Source\Interfaces\IUndoableOperation.cs" />
     <Compile Include="Source\Document\LineManager.cs" />
     <Compile Include="Source\Document\LineNode.cs" />
     <Compile Include="Source\Document\NewLineFinder.cs" />
@@ -93,9 +108,8 @@
     <Compile Include="Source\Document\TextDocumentWeakEventManager.cs" />
     <Compile Include="Source\Document\TextLocation.cs" />
     <Compile Include="Source\Document\TextSegment.cs" />
-    <Compile Include="Source\Document\TextSegmentCollection.cs" />
+    <Compile Include="Source\Document\TextSegmentCollection-T.cs" />
     <Compile Include="Source\Document\TextSourceVersionProvider.cs" />
-    <Compile Include="Source\Document\TextUtilities.cs" />
     <Compile Include="Source\Document\UndoOperationGroup.cs" />
     <Compile Include="Source\Document\UndoStack.cs" />
     <Compile Include="Source\Document\WeakLineTracker.cs" />
