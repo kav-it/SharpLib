@@ -52,6 +52,13 @@
     <Compile Include="..\SharpLib.Version.cs">
       <Link>Source\Version\SharpLib.Version.cs</Link>
     </Compile>
+    <Compile Include="Source\Interfaces\ITfThreadMgr.cs" />
+    <Compile Include="Source\Enums\CaretMovementType.cs" />
+    <Compile Include="Source\Interfaces\ITextAreaInputHandler.cs" />
+    <Compile Include="Source\Editing\ReadOnlySectionDocument.cs" />
+    <Compile Include="Source\Editing\TextAreaStackedInputHandler.cs" />
+    <Compile Include="Source\EventArgs\TextEventArgs.cs" />
+    <Compile Include="Source\Folding\XmlFoldStart.cs" />
     <Compile Include="Source\Helpers\AvalonEditCommands.cs" />
     <Compile Include="Source\CodeCompletion\CompletionList.cs" />
     <Compile Include="Source\CodeCompletion\CompletionListBox.cs" />
@@ -98,12 +105,12 @@
     <Compile Include="Source\Editing\CaretNavigationCommandHandler.cs" />
     <Compile Include="Source\Editing\CaretWeakEventHandler.cs" />
     <Compile Include="Source\Editing\DottedLineMargin.cs" />
-    <Compile Include="Source\Editing\DragDropException.cs" />
+    <Compile Include="Source\Exceptions\DragDropException.cs" />
     <Compile Include="Source\Editing\EditingCommandHandler.cs" />
     <Compile Include="Source\Editing\EmptySelection.cs" />
     <Compile Include="Source\Editing\ImeNativeWrapper.cs" />
     <Compile Include="Source\Editing\ImeSupport.cs" />
-    <Compile Include="Source\Editing\IReadOnlySectionProvider.cs" />
+    <Compile Include="Source\Interfaces\IReadOnlySectionProvider.cs" />
     <Compile Include="Source\Editing\LineNumberMargin.cs" />
     <Compile Include="Source\Editing\NoReadOnlySections.cs" />
     <Compile Include="Source\Editing\RectangleSelection.cs" />
@@ -116,7 +123,7 @@
     <Compile Include="Source\Editing\TextArea.cs" />
     <Compile Include="Source\Editing\TextAreaDefaultInputHandlers.cs" />
     <Compile Include="Source\Editing\TextAreaInputHandler.cs" />
-    <Compile Include="Source\Editing\TextSegmentReadOnlySectionProvider.cs" />
+    <Compile Include="Source\Editing\TextSegmentReadOnlySectionProvider-T.cs" />
     <Compile Include="Source\Folding\FoldingElementGenerator.cs" />
     <Compile Include="Source\Folding\FoldingManager.cs" />
     <Compile Include="Source\Folding\FoldingMargin.cs" />
