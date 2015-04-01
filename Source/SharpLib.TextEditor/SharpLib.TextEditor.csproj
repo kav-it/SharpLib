@@ -52,6 +52,8 @@
     <Compile Include="..\SharpLib.Version.cs">
       <Link>Source\Version\SharpLib.Version.cs</Link>
     </Compile>
+    <Compile Include="Source\CodeCompletion\CollapseIfSingleOverloadConverter.cs" />
+    <Compile Include="Source\CodeCompletion\InsightWindowTemplateSelector.cs" />
     <Compile Include="Source\Enums\AnchorMovementType.cs" />
     <Compile Include="Source\Document\AnchorSegment.cs" />
     <Compile Include="Source\Enums\CaretPositioningMode.cs" />
@@ -80,9 +82,9 @@
     <Compile Include="Source\CodeCompletion\CompletionListBox.cs" />
     <Compile Include="Source\CodeCompletion\CompletionWindow.cs" />
     <Compile Include="Source\CodeCompletion\CompletionWindowBase.cs" />
-    <Compile Include="Source\CodeCompletion\ICompletionData.cs" />
+    <Compile Include="Source\Interfaces\ICompletionData.cs" />
     <Compile Include="Source\CodeCompletion\InsightWindow.cs" />
-    <Compile Include="Source\CodeCompletion\IOverloadProvider.cs" />
+    <Compile Include="Source\Interfaces\IOverloadProvider.cs" />
     <Compile Include="Source\CodeCompletion\OverloadInsightWindow.cs" />
     <Compile Include="Source\CodeCompletion\OverloadViewer.cs" />
     <Compile Include="Source\Document\DocumentChangeEventArgs.cs" />
