@@ -166,6 +166,8 @@ namespace SharpLib.Docking
                 writer.WriteAttributeString("Id", _id);
             }
 
+            WriteXmlInternalDesc(writer);
+
             base.WriteXml(writer);
         }
 
@@ -175,6 +177,8 @@ namespace SharpLib.Docking
             {
                 _id = reader.Value;
             }
+
+            ReadXmlInternalDesc(reader);
 
             base.ReadXml(reader);
         }

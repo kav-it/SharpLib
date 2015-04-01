@@ -36,8 +36,11 @@
             <TabItem Header="Audio" >
                 <local:TabAudio />
             </TabItem>
-            <TabItem Header="Docking" IsSelected="True">
+            <TabItem Header="Docking" >
                 <local:TabDocking />
+            </TabItem>
+            <TabItem Header="TextEditor" IsSelected="True">
+                <local:TabTextEditor />
             </TabItem>
 
         </TabControl>

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Markup;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace SharpLib.Docking
@@ -221,7 +222,7 @@ namespace SharpLib.Docking
             RaisePropertyChanged("IsDirectlyHostedInFloatingWindow");
         }
 
-        public override void WriteXml(System.Xml.XmlWriter writer)
+        public override void WriteXml(XmlWriter writer)
         {
             if (_id != null)
             {
@@ -232,10 +233,12 @@ namespace SharpLib.Docking
                 writer.WriteAttributeString("Name", _name);
             }
 
+            WriteXmlInternalDesc(writer);
+
             base.WriteXml(writer);
         }
 
-        public override void ReadXml(System.Xml.XmlReader reader)
+        public override void ReadXml(XmlReader reader)
         {
             if (reader.MoveToAttribute("Id"))
             {
@@ -245,6 +248,8 @@ namespace SharpLib.Docking
             {
                 _name = reader.Value;
             }
+
+            ReadXmlInternalDesc(reader);
 
             _autoFixSelectedContent = false;
             base.ReadXml(reader);

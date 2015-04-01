@@ -487,6 +487,28 @@ namespace SharpLib
         }
 
         /// <summary>
+        /// Удаление директории/файла
+        /// </summary>
+        public static void Delete(string path)
+        {
+            if (path.IsValid() == false)
+            {
+                return;
+            }
+
+            var typ = CheckTyp(path);
+
+            if (typ == FileTyp.File)
+            {
+                DeleteFile(path);
+            }
+            else if (typ == FileTyp.Folder)
+            {
+                DeleteDirectory(path);
+            }
+        }
+
+        /// <summary>
         /// Удаление каталога
         /// </summary>
         public static void DeleteDirectory(string dirPath)

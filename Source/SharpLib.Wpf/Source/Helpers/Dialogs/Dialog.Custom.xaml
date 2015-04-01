@@ -89,7 +89,9 @@
         <!--Файловый список-->
         <ListView Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Name="PART_listView"
                   BorderThickness="0"
-                  MouseDoubleClick="PART_listView_OnMouseDoubleClick" SelectionChanged="PART_listView_SelectionChanged"
+                  MouseDoubleClick="PART_listView_OnMouseDoubleClick" 
+                  SelectionChanged="PART_listView_SelectionChanged"
+                  ContextMenuOpening="PART_listView_OnContextMenuOpening"
                   >
             <ListView.View>
                 <GridView>

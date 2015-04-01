@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace SharpLib.Docking
@@ -9,6 +9,20 @@ namespace SharpLib.Docking
     [Serializable]
     public abstract class LayoutElement : DependencyObject, ILayoutElement
     {
+        #region Константы
+
+        /// <summary>
+        /// Название поля XML
+        /// </summary>
+        internal const string XML_INTERNAL_DESC = "InternalDescription";
+
+        /// <summary>
+        /// Название поля XML
+        /// </summary>
+        internal const string XML_LAST_ACTIVATION_TIME_STAMP = "LastActivationTimeStamp";
+
+        #endregion
+
         #region Поля
 
         [NonSerialized]
@@ -152,6 +166,30 @@ namespace SharpLib.Docking
 
             return base.ToString();
         }
+
+        /// <summary>
+        /// Сохранине в Xml параметра "Description"
+        /// </summary>
+        protected void WriteXmlInternalDesc(XmlWriter writer)
+        {
+            if (InternalDesc.IsValid())
+            {
+                writer.WriteAttributeString(XML_INTERNAL_DESC, InternalDesc);
+            }
+        }
+
+        /// <summary>
+        /// Чтение из Xml параметра "Description"
+        /// </summary>
+        protected void ReadXmlInternalDesc(XmlReader reader)
+        {
+            if (reader.MoveToAttribute(XML_INTERNAL_DESC))
+            {
+                InternalDesc = reader.Value;
+            }
+        }
+
+
 
         #endregion
     }

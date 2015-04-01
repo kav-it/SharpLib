@@ -49,9 +49,14 @@ namespace SharpLib.Wpf.Dialogs
         private DialogCustomHistory _history;
 
         /// <summary>
+        /// Контектсное меню списка
+        /// </summary>
+        private readonly DialogCustomContextMenu _listContextMenu;
+
+        /// <summary>
         /// Текущая директория
         /// </summary>
-        private string _locationDir;
+        internal string LocationDir { get; private set; }
 
         #endregion
 
@@ -112,11 +117,15 @@ namespace SharpLib.Wpf.Dialogs
             _places = new ObservableCollection<DialogCustomPlaceModel>();
             _entries = new ObservableCollection<DialogCustomEntryModel>();
             _treeItems = new ObservableCollection<DialogCustomTreeItemModel>();
+            _listContextMenu = new DialogCustomContextMenu(this);
 
             PART_listBox.Items.Clear();
             PART_listBox.ItemsSource = _places;
+            //
             PART_listView.Items.Clear();
             PART_listView.ItemsSource = _entries;
+            PART_listView.ContextMenu = _listContextMenu;
+            //
             PART_treeView.Items.Clear();
             PART_treeView.ItemsSource = _treeItems;
 
@@ -167,7 +176,7 @@ namespace SharpLib.Wpf.Dialogs
         /// </summary>
         private void WindowOnClose(object sender, EventArgs eventArgs)
         {
-            _lastDirectory = _locationDir;
+            _lastDirectory = LocationDir;
         }
 
         /// <summary>
@@ -216,16 +225,25 @@ namespace SharpLib.Wpf.Dialogs
         {
             var root = Files.GetDirectory(location);
 
-            if (root.EqualsOrdinalEx(_locationDir))
+            if (root.EqualsOrdinalEx(LocationDir))
             {
                 // Директория не изменилась
                 return;
             }
 
             // Установка текущей директории
-            _locationDir = root;
+            LocationDir = root;
             PART_textBox.Text = root;
 
+            UpdateEntries();
+        }
+
+        /// <summary>
+        /// Визуальное обновлени списка директорий/файлов
+        /// </summary>
+        internal void UpdateEntries()
+        {
+            var root = LocationDir;
             _entries.Clear();
 
             // Добавление директорий
@@ -255,6 +273,7 @@ namespace SharpLib.Wpf.Dialogs
 
             // Обновление состояний кнопки "ОК"
             UpdateButtonStates();
+
         }
 
         /// <summary>
@@ -351,7 +370,7 @@ namespace SharpLib.Wpf.Dialogs
         /// </summary>
         private void ButtonUpClick(object sender, RoutedEventArgs e)
         {
-            var parentDir = Files.GetDirectoryParent(_locationDir);
+            var parentDir = Files.GetDirectoryParent(LocationDir);
 
             if (Directory.Exists(parentDir))
             {
@@ -393,6 +412,14 @@ namespace SharpLib.Wpf.Dialogs
         {
             DialogResult = true;
             Close();
+        }
+
+        /// <summary>
+        /// Обновление состояния меню перед открытием
+        /// </summary>
+        private void PART_listView_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            _listContextMenu.UpdateStates();
         }
 
         #endregion

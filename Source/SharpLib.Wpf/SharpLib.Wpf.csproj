@@ -155,6 +155,7 @@
     <Compile Include="Source\Extensions\Extension.WinForms.cs" />
     <Compile Include="Source\Helpers\ContextMenu\MenuItem.Base.cs" />
     <Compile Include="Source\Helpers\ContextMenu\ContextMenu.Base.cs" />
+    <Compile Include="Source\Helpers\Dialogs\Dialog.Custom.ContextMenu.cs" />
     <Compile Include="Source\Helpers\Dialogs\Dialog.Custom.SelectMode.cs" />
     <Compile Include="Source\Helpers\Dialogs\Dialog.Custom.Helper.cs" />
     <Compile Include="Source\Helpers\Dialogs\Dialog.Custom.History.cs" />

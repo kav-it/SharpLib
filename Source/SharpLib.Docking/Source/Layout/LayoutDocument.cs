@@ -44,6 +44,8 @@ namespace SharpLib.Docking
             {
                 writer.WriteAttributeString("Description", Description);
             }
+
+            WriteXmlInternalDesc(writer);
         }
 
         public override void ReadXml(System.Xml.XmlReader reader)
@@ -52,6 +54,8 @@ namespace SharpLib.Docking
             {
                 Description = reader.Value;
             }
+
+            ReadXmlInternalDesc(reader);
 
             base.ReadXml(reader);
         }

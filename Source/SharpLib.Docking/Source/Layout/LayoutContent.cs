@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace SharpLib.Docking
@@ -554,9 +555,10 @@ namespace SharpLib.Docking
             {
                 CanFloat = bool.Parse(reader.Value);
             }
-            if (reader.MoveToAttribute("LastActivationTimeStamp"))
+
+            if (reader.MoveToAttribute(XML_LAST_ACTIVATION_TIME_STAMP))
             {
-                LastActivationTimeStamp = DateTime.Parse(reader.Value, CultureInfo.InvariantCulture);
+                LastActivationTimeStamp = DateTime.ParseExact(reader.Value, "yyyy-MM-dd hh:mm:ss", CultureInfo.InvariantCulture);
             }
 
             reader.Read();
@@ -564,7 +566,7 @@ namespace SharpLib.Docking
 
         public virtual void WriteXml(System.Xml.XmlWriter writer)
         {
-            if (!string.IsNullOrWhiteSpace(Title))
+            if (Title.IsValid())
             {
                 writer.WriteAttributeString("Title", Title);
             }
@@ -624,7 +626,7 @@ namespace SharpLib.Docking
 
             if (LastActivationTimeStamp != null)
             {
-                writer.WriteAttributeString("LastActivationTimeStamp", LastActivationTimeStamp.Value.ToString(CultureInfo.InvariantCulture));
+                writer.WriteAttributeString(XML_LAST_ACTIVATION_TIME_STAMP, LastActivationTimeStamp.Value.ToString("yyyy-MM-dd hh:mm:ss"));
             }
 
             if (_previousContainer != null)

@@ -538,6 +538,8 @@ namespace SharpLib.Docking
 
         public override void ReadXml(System.Xml.XmlReader reader)
         {
+            ReadXmlInternalDesc(reader);
+
             if (reader.MoveToAttribute("CanHide"))
             {
                 CanHide = bool.Parse(reader.Value);
@@ -568,6 +570,8 @@ namespace SharpLib.Docking
 
         public override void WriteXml(System.Xml.XmlWriter writer)
         {
+            WriteXmlInternalDesc(writer);
+
             if (!CanHide)
             {
                 writer.WriteAttributeString("CanHide", CanHide.ToString());

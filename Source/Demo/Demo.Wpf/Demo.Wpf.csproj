@@ -61,6 +61,9 @@
     <Compile Include="Source\Tabs\TabDialogs.xaml.cs">
       <DependentUpon>TabDialogs.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Source\Tabs\TabTextEditor.xaml.cs">
+      <DependentUpon>TabTextEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Source\Tabs\TabTreeList.xaml.cs">
       <DependentUpon>TabTreeList.xaml</DependentUpon>
     </Compile>
@@ -133,6 +136,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Source\Tabs\TabTextEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Source\Tabs\TabTreeList.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -162,6 +169,10 @@
     <ProjectReference Include="..\..\SharpLib.Log\SharpLib.Log.csproj">
       <Project>{44809241-3223-423a-b9d3-93f011d0beb6}</Project>
       <Name>SharpLib.Log</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SharpLib.TextEditor\SharpLib.TextEditor.csproj">
+      <Project>{63096c51-feca-47eb-9a76-267fc197f5f2}</Project>
+      <Name>SharpLib.TextEditor</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SharpLib.Wpf\SharpLib.Wpf.csproj">
       <Project>{4976118a-ddf9-4c23-ac93-6b99f7c3c246}</Project>

@@ -1,0 +1,13 @@
+﻿<UserControl x:Class="DemoWpf.TabTextEditor" 
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="http://codeofrussia.ru/sharplib/wpf/controls"
+             xmlns:avalonEdit="clr-namespace:ICSharpCode.AvalonEdit;assembly=SharpLib.TextEditor"
+             mc:Ignorable="d" 
+             d:DesignHeight="247.802" d:DesignWidth="764.272">
+    <Grid>
+        <avalonEdit:TextEditor HorizontalAlignment="Left" Height="150" Margin="50,25,0,0" VerticalAlignment="Top" Width="605"/>
+    </Grid>
+</UserControl>

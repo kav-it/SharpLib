@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Markup;
+using System.Xml;
 
 namespace SharpLib.Docking
 {
@@ -53,18 +54,24 @@ namespace SharpLib.Docking
             return Children.Any(c => c.IsVisible);
         }
 
-        public override void WriteXml(System.Xml.XmlWriter writer)
+        public override void WriteXml(XmlWriter writer)
         {
             writer.WriteAttributeString("Orientation", Orientation.ToString());
+
+            WriteXmlInternalDesc(writer);
+            
             base.WriteXml(writer);
         }
 
-        public override void ReadXml(System.Xml.XmlReader reader)
+        public override void ReadXml(XmlReader reader)
         {
             if (reader.MoveToAttribute("Orientation"))
             {
                 Orientation = (Orientation)Enum.Parse(typeof(Orientation), reader.Value, true);
             }
+
+            ReadXmlInternalDesc(reader);
+
             base.ReadXml(reader);
         }
 
