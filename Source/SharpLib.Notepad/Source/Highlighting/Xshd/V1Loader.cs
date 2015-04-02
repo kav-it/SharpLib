@@ -29,7 +29,10 @@ namespace SharpLib.Notepad.Highlighting.Xshd
             {
                 if (schemaSet == null)
                 {
-                    schemaSet = HighlightingLoader.LoadSchemaSet(new XmlTextReader(HighlightingResources.OpenStream("ModeV1.xsd")));
+                    using (var reader = new XmlTextReader(HighlightingResources.Instance.OpenStream("ModeV1.xsd")))
+                    {
+                        schemaSet = HighlightingLoader.LoadSchemaSet(reader);    
+                    }
                 }
                 return schemaSet;
             }
@@ -69,8 +72,8 @@ namespace SharpLib.Notepad.Highlighting.Xshd
 
                 if (syntaxDefinition["Digits"] != null)
                 {
-                    const string optionalExponent = @"([eE][+-]?[0-9]+)?";
-                    const string floatingPoint = @"\.[0-9]+";
+                    const string OPTIONAL_EXPONENT = @"([eE][+-]?[0-9]+)?";
+                    const string FLOATING_POINT = @"\.[0-9]+";
                     ruleSet.Elements.Add(
                         new XshdRule
                         {
@@ -78,9 +81,9 @@ namespace SharpLib.Notepad.Highlighting.Xshd
                             RegexType = XshdRegexType.IgnorePatternWhitespace,
                             Regex = @"\b0[xX][0-9a-fA-F]+"
                                     + @"|"
-                                    + @"(\b\d+(" + floatingPoint + ")?"
-                                    + @"|" + floatingPoint + ")"
-                                    + optionalExponent
+                                    + @"(\b\d+(" + FLOATING_POINT + ")?"
+                                    + @"|" + FLOATING_POINT + ")"
+                                    + OPTIONAL_EXPONENT
                         });
                 }
             }

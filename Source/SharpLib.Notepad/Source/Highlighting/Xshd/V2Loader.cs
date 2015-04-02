@@ -38,7 +38,10 @@ namespace SharpLib.Notepad.Highlighting.Xshd
             {
                 if (schemaSet == null)
                 {
-                    schemaSet = HighlightingLoader.LoadSchemaSet(new XmlTextReader(HighlightingResources.OpenStream("ModeV2.xsd")));
+                    using (var reader = new XmlTextReader(HighlightingResources.Instance.OpenStream("ModeV2.xsd")))
+                    {
+                        schemaSet = HighlightingLoader.LoadSchemaSet(reader);    
+                    }
                 }
                 return schemaSet;
             }

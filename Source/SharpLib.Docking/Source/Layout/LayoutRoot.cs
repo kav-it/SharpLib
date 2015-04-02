@@ -578,8 +578,6 @@ namespace SharpLib.Docking
                     break;
                 }
 
-                #warning Исправить
-
                 var allContainers = this.Descendents().ToList();
                 var allPaneGroups = allContainers.OfType<LayoutAnchorablePaneGroup>().Where(p => p.ChildrenCount == 0).ToList();
                 var allPanes = allContainers.OfType<LayoutPanel>().Where(p => p.ChildrenCount == 0).ToList();

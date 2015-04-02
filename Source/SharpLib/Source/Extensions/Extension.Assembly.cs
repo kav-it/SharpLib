@@ -119,10 +119,9 @@ namespace SharpLib
             var pathInResources = string.Format("{0}/{1}", self.GetName().Name, uriPath);
             var uri = new EmbeddedResourceUri(pathInResources);
 
-            using (var stream = self.GetManifestResourceStream(uri.DotPath))
-            {
-                return stream;
-            }
+            var stream = self.GetManifestResourceStream(uri.DotPath);
+            
+            return stream;
         }
 
         /// <summary>

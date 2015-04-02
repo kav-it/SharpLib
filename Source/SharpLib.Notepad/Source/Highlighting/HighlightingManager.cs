@@ -12,6 +12,8 @@ namespace SharpLib.Notepad.Highlighting
     {
         #region Поля
 
+        private static readonly Lazy<DefaultHighlightingManager> _instance = new Lazy<DefaultHighlightingManager>();
+
         private readonly List<IHighlightingDefinition> _allHighlightings;
 
         private readonly Dictionary<string, IHighlightingDefinition> _highlightingsByExtension;
@@ -19,14 +21,6 @@ namespace SharpLib.Notepad.Highlighting
         private readonly Dictionary<string, IHighlightingDefinition> _highlightingsByName;
 
         private readonly object _lockObj;
-
-        public HighlightingManager()
-        {
-            _allHighlightings = new List<IHighlightingDefinition>();
-            _highlightingsByExtension = new Dictionary<string, IHighlightingDefinition>(StringComparer.OrdinalIgnoreCase);
-            _highlightingsByName = new Dictionary<string, IHighlightingDefinition>();
-            _lockObj = new object();
-        }
 
         #endregion
 
@@ -45,7 +39,19 @@ namespace SharpLib.Notepad.Highlighting
 
         public static HighlightingManager Instance
         {
-            get { return DefaultHighlightingManager.Instance; }
+            get { return _instance.Value; }
+        }
+
+        #endregion
+
+        #region Конструктор
+
+        public HighlightingManager()
+        {
+            _allHighlightings = new List<IHighlightingDefinition>();
+            _highlightingsByExtension = new Dictionary<string, IHighlightingDefinition>(StringComparer.OrdinalIgnoreCase);
+            _highlightingsByName = new Dictionary<string, IHighlightingDefinition>();
+            _lockObj = new object();
         }
 
         #endregion
@@ -109,91 +115,6 @@ namespace SharpLib.Notepad.Highlighting
                 throw new ArgumentNullException("lazyLoadedHighlighting");
             }
             RegisterHighlighting(name, extensions, new DelayLoadedHighlightingDefinition(name, lazyLoadedHighlighting));
-        }
-
-        #endregion
-
-        #region Вложенный класс: DefaultHighlightingManager
-
-        internal sealed class DefaultHighlightingManager : HighlightingManager
-        {
-            #region Поля
-
-            public new static readonly DefaultHighlightingManager Instance;
-
-            #endregion
-
-            #region Конструктор
-
-            static DefaultHighlightingManager()
-            {
-                Instance = new DefaultHighlightingManager();
-            }
-
-            public DefaultHighlightingManager()
-            {
-                HighlightingResources.RegisterBuiltInHighlightings(this);
-            }
-
-            #endregion
-
-            #region Методы
-
-            internal void RegisterHighlighting(string name, string[] extensions, string resourceName)
-            {
-                try
-                {
-#if DEBUG
-
-                    Xshd.XshdSyntaxDefinition xshd;
-                    using (var s = HighlightingResources.OpenStream(resourceName))
-                    {
-                        using (var reader = new XmlTextReader(s))
-                        {
-                            xshd = Xshd.HighlightingLoader.LoadXshd(reader, false);
-                        }
-                    }
-                    Debug.Assert(name == xshd.Name);
-                    if (extensions != null)
-                    {
-                        Debug.Assert(System.Linq.Enumerable.SequenceEqual(extensions, xshd.Extensions));
-                    }
-                    else
-                    {
-                        Debug.Assert(xshd.Extensions.Count == 0);
-                    }
-
-                    RegisterHighlighting(name, extensions, Xshd.HighlightingLoader.Load(xshd, this));
-#else
-					RegisterHighlighting(name, extensions, LoadHighlighting(resourceName));
-#endif
-                }
-                catch (HighlightingDefinitionInvalidException ex)
-                {
-                    throw new InvalidOperationException("The built-in highlighting '" + name + "' is invalid.", ex);
-                }
-            }
-
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode",
-                Justification = "LoadHighlighting is used only in release builds")]
-            private Func<IHighlightingDefinition> LoadHighlighting(string resourceName)
-            {
-                Func<IHighlightingDefinition> func = delegate
-                {
-                    Xshd.XshdSyntaxDefinition xshd;
-                    using (var s = HighlightingResources.OpenStream(resourceName))
-                    {
-                        using (var reader = new XmlTextReader(s))
-                        {
-                            xshd = Xshd.HighlightingLoader.LoadXshd(reader, true);
-                        }
-                    }
-                    return Xshd.HighlightingLoader.Load(xshd, this);
-                };
-                return func;
-            }
-
-            #endregion
         }
 
         #endregion
@@ -330,4 +251,97 @@ namespace SharpLib.Notepad.Highlighting
 
         #endregion
     }
+
+    #region Вложенный класс: DefaultHighlightingManager
+
+    internal sealed class DefaultHighlightingManager : HighlightingManager
+    {
+        #region Конструктор
+
+        public DefaultHighlightingManager()
+        {
+            RegisterHighlighting("XmlDoc", null, "XmlDoc.xshd");
+            RegisterHighlighting("C#", new[] { ".cs" }, "CSharp-Mode.xshd");
+
+            RegisterHighlighting("JavaScript", new[] { ".js" }, "JavaScript-Mode.xshd");
+            RegisterHighlighting("HTML", new[] { ".htm", ".html" }, "HTML-Mode.xshd");
+            RegisterHighlighting("ASP/XHTML", new[] { ".asp", ".aspx", ".asax", ".asmx", ".ascx", ".master" }, "ASPX.xshd");
+
+            RegisterHighlighting("Boo", new[] { ".boo" }, "Boo.xshd");
+            RegisterHighlighting("Coco", new[] { ".atg" }, "Coco-Mode.xshd");
+            RegisterHighlighting("CSS", new[] { ".css" }, "CSS-Mode.xshd");
+            RegisterHighlighting("C++", new[] { ".c", ".h", ".cc", ".cpp", ".hpp" }, "CPP-Mode.xshd");
+            RegisterHighlighting("Java", new[] { ".java" }, "Java-Mode.xshd");
+            RegisterHighlighting("Patch", new[] { ".patch", ".diff" }, "Patch-Mode.xshd");
+            RegisterHighlighting("PowerShell", new[] { ".ps1", ".psm1", ".psd1" }, "PowerShell.xshd");
+            RegisterHighlighting("PHP", new[] { ".php" }, "PHP-Mode.xshd");
+            RegisterHighlighting("TeX", new[] { ".tex" }, "Tex-Mode.xshd");
+            RegisterHighlighting("VB", new[] { ".vb" }, "VB-Mode.xshd");
+            RegisterHighlighting("XML", (".xml;.xsl;.xslt;.xsd;.manifest;.config;.addin;" +
+                                         ".xshd;.wxs;.wxi;.wxl;.proj;.csproj;.vbproj;.ilproj;" +
+                                         ".booproj;.build;.xfrm;.targets;.xaml;.xpt;" +
+                                         ".xft;.map;.wsdl;.disco;.ps1xml;.nuspec").Split(';'),
+                "XML-Mode.xshd");
+            RegisterHighlighting("MarkDown", new[] { ".md" }, "MarkDown-Mode.xshd");
+        }
+
+        #endregion
+
+        #region Методы
+
+        internal void RegisterHighlighting(string name, string[] extensions, string resourceName)
+        {
+            try
+            {
+#if DEBUG
+                Xshd.XshdSyntaxDefinition xshd;
+                using (var s = HighlightingResources.Instance.OpenStream(resourceName))
+                {
+                    using (var reader = new XmlTextReader(s))
+                    {
+                        xshd = Xshd.HighlightingLoader.LoadXshd(reader, false);
+                    }
+                }
+                Debug.Assert(name == xshd.Name);
+                if (extensions != null)
+                {
+                    Debug.Assert(System.Linq.Enumerable.SequenceEqual(extensions, xshd.Extensions));
+                }
+                else
+                {
+                    Debug.Assert(xshd.Extensions.Count == 0);
+                }
+
+                RegisterHighlighting(name, extensions, Xshd.HighlightingLoader.Load(xshd, this));
+#else
+		        RegisterHighlighting(name, extensions, LoadHighlighting(resourceName));
+#endif
+            }
+            catch (HighlightingDefinitionInvalidException ex)
+            {
+                throw new InvalidOperationException("The built-in highlighting '" + name + "' is invalid.", ex);
+            }
+        }
+
+        private Func<IHighlightingDefinition> LoadHighlighting(string resourceName)
+        {
+            Func<IHighlightingDefinition> func = delegate
+            {
+                Xshd.XshdSyntaxDefinition xshd;
+                using (var s = HighlightingResources.Instance.OpenStream(resourceName))
+                {
+                    using (var reader = new XmlTextReader(s))
+                    {
+                        xshd = Xshd.HighlightingLoader.LoadXshd(reader, true);
+                    }
+                }
+                return Xshd.HighlightingLoader.Load(xshd, this);
+            };
+            return func;
+        }
+
+        #endregion
+    }
+
+    #endregion
 }

@@ -15,12 +15,12 @@ namespace SharpLib.Notepad.Highlighting.Xshd
     {
         #region Поля
 
-        private readonly Dictionary<string, HighlightingColor> colorDict = new Dictionary<string, HighlightingColor>();
+        private readonly Dictionary<string, HighlightingColor> _colorDict;
 
         [OptionalField]
-        private readonly Dictionary<string, string> propDict = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _propDict;
 
-        private readonly Dictionary<string, HighlightingRuleSet> ruleSetDict = new Dictionary<string, HighlightingRuleSet>();
+        private readonly Dictionary<string, HighlightingRuleSet> _ruleSetDict;
 
         #endregion
 
@@ -32,12 +32,12 @@ namespace SharpLib.Notepad.Highlighting.Xshd
 
         public IEnumerable<HighlightingColor> NamedHighlightingColors
         {
-            get { return colorDict.Values; }
+            get { return _colorDict.Values; }
         }
 
         public IDictionary<string, string> Properties
         {
-            get { return propDict; }
+            get { return _propDict; }
         }
 
         #endregion
@@ -46,6 +46,9 @@ namespace SharpLib.Notepad.Highlighting.Xshd
 
         public XmlHighlightingDefinition(XshdSyntaxDefinition xshd, IHighlightingDefinitionReferenceResolver resolver)
         {
+            _ruleSetDict = new Dictionary<string, HighlightingRuleSet>();
+            _propDict = new Dictionary<string, string>();
+            _colorDict = new Dictionary<string, HighlightingColor>();
             Name = xshd.Name;
 
             var rnev = new RegisterNamedElementsVisitor(this);
@@ -60,7 +63,7 @@ namespace SharpLib.Notepad.Highlighting.Xshd
                     {
                         throw Error(element, "Duplicate main RuleSet. There must be only one nameless RuleSet!");
                     }
-                    MainRuleSet = rnev.ruleSets[xrs];
+                    MainRuleSet = rnev._ruleSets[xrs];
                 }
             }
             if (MainRuleSet == null)
@@ -68,11 +71,11 @@ namespace SharpLib.Notepad.Highlighting.Xshd
                 throw new HighlightingDefinitionInvalidException("Could not find main RuleSet.");
             }
 
-            xshd.AcceptElements(new TranslateElementVisitor(this, rnev.ruleSets, resolver));
+            xshd.AcceptElements(new TranslateElementVisitor(this, rnev._ruleSets, resolver));
 
             foreach (var p in xshd.Elements.OfType<XshdProperty>())
             {
-                propDict.Add(p.Name, p.Value);
+                _propDict.Add(p.Name, p.Value);
             }
         }
 
@@ -97,7 +100,7 @@ namespace SharpLib.Notepad.Highlighting.Xshd
                 return MainRuleSet;
             }
             HighlightingRuleSet r;
-            if (ruleSetDict.TryGetValue(name, out r))
+            if (_ruleSetDict.TryGetValue(name, out r))
             {
                 return r;
             }
@@ -107,7 +110,7 @@ namespace SharpLib.Notepad.Highlighting.Xshd
         public HighlightingColor GetNamedColor(string name)
         {
             HighlightingColor c;
-            if (colorDict.TryGetValue(name, out c))
+            if (_colorDict.TryGetValue(name, out c))
             {
                 return c;
             }
@@ -127,10 +130,9 @@ namespace SharpLib.Notepad.Highlighting.Xshd
         {
             #region Поля
 
-            private readonly XmlHighlightingDefinition def;
+            private readonly XmlHighlightingDefinition _def;
 
-            internal readonly Dictionary<XshdRuleSet, HighlightingRuleSet> ruleSets
-                = new Dictionary<XshdRuleSet, HighlightingRuleSet>();
+            internal readonly Dictionary<XshdRuleSet, HighlightingRuleSet> _ruleSets;
 
             #endregion
 
@@ -138,7 +140,8 @@ namespace SharpLib.Notepad.Highlighting.Xshd
 
             public RegisterNamedElementsVisitor(XmlHighlightingDefinition def)
             {
-                this.def = def;
+                _ruleSets = new Dictionary<XshdRuleSet, HighlightingRuleSet>();
+                _def = def;
             }
 
             #endregion
@@ -148,19 +151,19 @@ namespace SharpLib.Notepad.Highlighting.Xshd
             public object VisitRuleSet(XshdRuleSet ruleSet)
             {
                 var hrs = new HighlightingRuleSet();
-                ruleSets.Add(ruleSet, hrs);
+                _ruleSets.Add(ruleSet, hrs);
                 if (ruleSet.Name != null)
                 {
                     if (ruleSet.Name.Length == 0)
                     {
                         throw Error(ruleSet, "Name must not be the empty string");
                     }
-                    if (def.ruleSetDict.ContainsKey(ruleSet.Name))
+                    if (_def._ruleSetDict.ContainsKey(ruleSet.Name))
                     {
                         throw Error(ruleSet, "Duplicate rule set name '" + ruleSet.Name + "'.");
                     }
 
-                    def.ruleSetDict.Add(ruleSet.Name, hrs);
+                    _def._ruleSetDict.Add(ruleSet.Name, hrs);
                 }
                 ruleSet.AcceptElements(this);
                 return null;
@@ -174,12 +177,12 @@ namespace SharpLib.Notepad.Highlighting.Xshd
                     {
                         throw Error(color, "Name must not be the empty string");
                     }
-                    if (def.colorDict.ContainsKey(color.Name))
+                    if (_def._colorDict.ContainsKey(color.Name))
                     {
                         throw Error(color, "Duplicate color name '" + color.Name + "'.");
                     }
 
-                    def.colorDict.Add(color.Name, new HighlightingColor());
+                    _def._colorDict.Add(color.Name, new HighlightingColor());
                 }
                 return null;
             }
@@ -218,19 +221,19 @@ namespace SharpLib.Notepad.Highlighting.Xshd
         {
             #region Поля
 
-            private readonly XmlHighlightingDefinition def;
+            private readonly XmlHighlightingDefinition _def;
 
-            private readonly HashSet<XshdRuleSet> processedRuleSets = new HashSet<XshdRuleSet>();
+            private readonly HashSet<XshdRuleSet> _processedRuleSets;
 
-            private readonly HashSet<XshdRuleSet> processingStartedRuleSets = new HashSet<XshdRuleSet>();
+            private readonly HashSet<XshdRuleSet> _processingStartedRuleSets;
 
-            private readonly IHighlightingDefinitionReferenceResolver resolver;
+            private readonly IHighlightingDefinitionReferenceResolver _resolver;
 
-            private readonly Dictionary<HighlightingRuleSet, XshdRuleSet> reverseRuleSetDict;
+            private readonly Dictionary<HighlightingRuleSet, XshdRuleSet> _reverseRuleSetDict;
 
-            private readonly Dictionary<XshdRuleSet, HighlightingRuleSet> ruleSetDict;
+            private readonly Dictionary<XshdRuleSet, HighlightingRuleSet> _ruleSetDict;
 
-            private bool ignoreCase;
+            private bool _ignoreCase;
 
             #endregion
 
@@ -238,15 +241,17 @@ namespace SharpLib.Notepad.Highlighting.Xshd
 
             public TranslateElementVisitor(XmlHighlightingDefinition def, Dictionary<XshdRuleSet, HighlightingRuleSet> ruleSetDict, IHighlightingDefinitionReferenceResolver resolver)
             {
+                _processingStartedRuleSets = new HashSet<XshdRuleSet>();
+                _processedRuleSets = new HashSet<XshdRuleSet>();
                 Debug.Assert(def != null);
                 Debug.Assert(ruleSetDict != null);
-                this.def = def;
-                this.ruleSetDict = ruleSetDict;
-                this.resolver = resolver;
-                reverseRuleSetDict = new Dictionary<HighlightingRuleSet, XshdRuleSet>();
+                _def = def;
+                _ruleSetDict = ruleSetDict;
+                _resolver = resolver;
+                _reverseRuleSetDict = new Dictionary<HighlightingRuleSet, XshdRuleSet>();
                 foreach (var pair in ruleSetDict)
                 {
-                    reverseRuleSetDict.Add(pair.Value, pair.Key);
+                    _reverseRuleSetDict.Add(pair.Value, pair.Key);
                 }
             }
 
@@ -256,20 +261,20 @@ namespace SharpLib.Notepad.Highlighting.Xshd
 
             public object VisitRuleSet(XshdRuleSet ruleSet)
             {
-                var rs = ruleSetDict[ruleSet];
-                if (processedRuleSets.Contains(ruleSet))
+                var rs = _ruleSetDict[ruleSet];
+                if (_processedRuleSets.Contains(ruleSet))
                 {
                     return rs;
                 }
-                if (!processingStartedRuleSets.Add(ruleSet))
+                if (!_processingStartedRuleSets.Add(ruleSet))
                 {
                     throw Error(ruleSet, "RuleSet cannot be processed because it contains cyclic <Import>");
                 }
 
-                bool oldIgnoreCase = ignoreCase;
+                bool oldIgnoreCase = _ignoreCase;
                 if (ruleSet.IgnoreCase != null)
                 {
-                    ignoreCase = ruleSet.IgnoreCase.Value;
+                    _ignoreCase = ruleSet.IgnoreCase.Value;
                 }
 
                 rs.Name = ruleSet.Name;
@@ -300,8 +305,8 @@ namespace SharpLib.Notepad.Highlighting.Xshd
                     }
                 }
 
-                ignoreCase = oldIgnoreCase;
-                processedRuleSets.Add(ruleSet);
+                _ignoreCase = oldIgnoreCase;
+                _processedRuleSets.Add(ruleSet);
 
                 return rs;
             }
@@ -317,7 +322,7 @@ namespace SharpLib.Notepad.Highlighting.Xshd
                 HighlightingColor c;
                 if (color.Name != null)
                 {
-                    c = def.colorDict[color.Name];
+                    c = _def._colorDict[color.Name];
                 }
                 else if (color.Foreground == null && color.FontStyle == null && color.FontWeight == null)
                 {
@@ -343,12 +348,9 @@ namespace SharpLib.Notepad.Highlighting.Xshd
                 {
                     return Error(keywords, "Keyword group must not be empty.");
                 }
-                foreach (string keyword in keywords.Words)
+                if (keywords.Words.Any(string.IsNullOrEmpty))
                 {
-                    if (string.IsNullOrEmpty(keyword))
-                    {
-                        throw Error(keywords, "Cannot use empty string as keyword");
-                    }
+                    throw Error(keywords, "Cannot use empty string as keyword");
                 }
                 var keyWordRegex = new StringBuilder();
 
@@ -412,7 +414,7 @@ namespace SharpLib.Notepad.Highlighting.Xshd
                 {
                     options |= RegexOptions.IgnorePatternWhitespace;
                 }
-                if (ignoreCase)
+                if (_ignoreCase)
                 {
                     options |= RegexOptions.IgnoreCase;
                 }
@@ -449,13 +451,13 @@ namespace SharpLib.Notepad.Highlighting.Xshd
             {
                 if (definitionName == null)
                 {
-                    return def;
+                    return _def;
                 }
-                if (resolver == null)
+                if (_resolver == null)
                 {
                     throw Error(position, "Resolving references to other syntax definitions is not possible because the IHighlightingDefinitionReferenceResolver is null.");
                 }
-                var d = resolver.GetDefinition(definitionName);
+                var d = _resolver.GetDefinition(definitionName);
                 if (d == null)
                 {
                     throw Error(position, "Could not find definition with name '" + definitionName + "'.");
@@ -522,7 +524,7 @@ namespace SharpLib.Notepad.Highlighting.Xshd
             {
                 var hrs = GetRuleSet(import, import.RuleSetReference);
                 XshdRuleSet inputRuleSet;
-                if (reverseRuleSetDict.TryGetValue(hrs, out inputRuleSet))
+                if (_reverseRuleSetDict.TryGetValue(hrs, out inputRuleSet))
                 {
                     if (VisitRuleSet(inputRuleSet) != hrs)
                     {
