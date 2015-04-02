@@ -17,6 +17,7 @@ using SharpLib.Texter.Document;
 using SharpLib.Texter.Editing;
 using SharpLib.Texter.Highlighting;
 using SharpLib.Texter.Rendering;
+using SharpLib.Texter.Search;
 using SharpLib.Texter.Utils;
 using SharpLib.Wpf;
 
@@ -399,6 +400,8 @@ namespace SharpLib.Texter
         {
             FontFamily = new FontFamily("Consolas");
             FontSize = FontHelper.PointToPixelFontSize("10pt");
+
+            SearchPanel.Install(this);
         }
 
         protected TextEditor(TextArea textArea)
