@@ -1,0 +1,17 @@
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:editing="clr-namespace:SharpLib.Texter.Editing">
+    
+	<ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/SharpLib.Texter;component/Source/TextEditor.xaml" />
+        <ResourceDictionary Source="/SharpLib.Texter;component/Source/Search/DropDownButton.xaml" />
+        <ResourceDictionary Source="/SharpLib.Texter;component/Source/Search/SearchPanel.xaml" />
+        <ResourceDictionary Source="/SharpLib.Texter;component/Source/CodeCompletion/CompletionList.xaml" />
+        <ResourceDictionary Source="/SharpLib.Texter;component/Source/CodeCompletion/InsightWindow.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+	
+	<Style TargetType="{x:Type editing:LineNumberMargin}">
+        <Setter Property="Cursor" Value="/SharpLib.Texter;component/Source/Assets/RightArrow.cur"/>
+	</Style>
+</ResourceDictionary>

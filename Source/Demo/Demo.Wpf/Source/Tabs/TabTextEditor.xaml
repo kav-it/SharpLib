@@ -3,12 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:notepad="clr-namespace:SharpLib.Notepad;assembly=SharpLib.Notepad"
+             xmlns:texter="clr-namespace:SharpLib.Texter;assembly=SharpLib.Texter"
 
              mc:Ignorable="d" 
              d:DesignHeight="247.802" d:DesignWidth="764.272">
     <Grid>
-        <notepad:TextEditor 
+        <texter:TextEditor 
             Text="TextEditor text...  "
             SyntaxHighlightingTyp="Cpp"
             ShowLineNumbers="True"

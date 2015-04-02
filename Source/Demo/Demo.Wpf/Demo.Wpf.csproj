@@ -170,9 +170,9 @@
       <Project>{44809241-3223-423a-b9d3-93f011d0beb6}</Project>
       <Name>SharpLib.Log</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SharpLib.Notepad\SharpLib.Notepad.csproj">
+    <ProjectReference Include="..\..\SharpLib.Texter\SharpLib.Texter.csproj">
       <Project>{63096c51-feca-47eb-9a76-267fc197f5f2}</Project>
-      <Name>SharpLib.Notepad</Name>
+      <Name>SharpLib.Editors</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SharpLib.Wpf\SharpLib.Wpf.csproj">
       <Project>{4976118a-ddf9-4c23-ac93-6b99f7c3c246}</Project>
