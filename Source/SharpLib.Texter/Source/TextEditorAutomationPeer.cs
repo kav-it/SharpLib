@@ -7,7 +7,7 @@ using SharpLib.Texter.Utils;
 
 namespace SharpLib.Texter
 {
-    public class TextEditorAutomationPeer : FrameworkElementAutomationPeer, IValueProvider
+    internal class TextEditorAutomationPeer : FrameworkElementAutomationPeer, IValueProvider
     {
         #region Свойства
 

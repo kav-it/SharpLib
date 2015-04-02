@@ -12,7 +12,7 @@ using SharpLib.Texter.Utils;
 
 namespace SharpLib.Texter.Folding
 {
-    public class FoldingMargin : AbstractMargin
+    internal class FoldingMargin : AbstractMargin
     {
         #region Константы
 

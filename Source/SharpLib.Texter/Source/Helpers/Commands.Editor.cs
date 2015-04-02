@@ -2,7 +2,7 @@
 
 namespace SharpLib.Texter
 {
-    public static class EditorCommands
+    internal static class EditorCommands
     {
         #region Поля
 

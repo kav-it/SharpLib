@@ -10,7 +10,7 @@ using SharpLib.Texter.Utils;
 
 namespace SharpLib.Texter.Folding
 {
-    public sealed class FoldingElementGenerator : VisualLineElementGenerator, ITextViewConnect
+    internal sealed class FoldingElementGenerator : VisualLineElementGenerator, ITextViewConnect
     {
         #region Поля
 

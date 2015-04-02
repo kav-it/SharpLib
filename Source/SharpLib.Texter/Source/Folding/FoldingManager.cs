@@ -11,7 +11,7 @@ using SharpLib.Texter.Utils;
 
 namespace SharpLib.Texter.Folding
 {
-    public class FoldingManager : IWeakEventListener
+    internal class FoldingManager : IWeakEventListener
     {
         #region Поля
 

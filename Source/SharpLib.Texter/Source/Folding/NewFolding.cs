@@ -4,7 +4,7 @@ using SharpLib.Texter.Document;
 
 namespace SharpLib.Texter.Folding
 {
-    public class NewFolding : ISegment
+    internal class NewFolding : ISegment
     {
         #region Свойства
 

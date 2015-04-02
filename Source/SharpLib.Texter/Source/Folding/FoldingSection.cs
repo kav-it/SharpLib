@@ -8,7 +8,7 @@ using SharpLib.Texter.Utils;
 
 namespace SharpLib.Texter.Folding
 {
-    public sealed class FoldingSection : TextSegment
+    internal sealed class FoldingSection : TextSegment
     {
         #region Поля
 

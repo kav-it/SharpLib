@@ -2,7 +2,7 @@
 
 namespace SharpLib.Texter
 {
-    public static class TextEditorWeakEventManager
+    internal static class TextEditorWeakEventManager
     {
         #region Вложенный класс: DocumentChanged
 

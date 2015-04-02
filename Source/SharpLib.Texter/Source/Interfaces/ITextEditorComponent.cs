@@ -5,7 +5,7 @@ using SharpLib.Texter.Document;
 
 namespace SharpLib.Texter
 {
-    public interface ITextEditorComponent : IServiceProvider
+    internal interface ITextEditorComponent : IServiceProvider
     {
         #region Свойства
 

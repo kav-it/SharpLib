@@ -4,7 +4,7 @@ using System.Windows.Controls.Primitives;
 
 namespace SharpLib.Texter.Search
 {
-    public class DropDownButton : ButtonBase
+    internal class DropDownButton : ButtonBase
     {
         #region Поля
 

@@ -8,7 +8,7 @@ using SharpLib.Texter.Document;
 
 namespace SharpLib.Texter.Folding
 {
-    public class XmlFoldingStrategy
+    internal class XmlFoldingStrategy
     {
         #region Свойства
 
