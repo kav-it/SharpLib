@@ -1,18 +1,27 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using System.Reflection;
 
 namespace SharpLib.Notepad.Highlighting
 {
-    static class Resources
+    internal static class HighlightingResources
     {
-        static readonly string Prefix = typeof(Resources).FullName + ".";
+        #region Поля
+
+        private const string PREFIX = "Source/Assets/xshd/";
+
+        #endregion
+
+        #region Методы
 
         public static Stream OpenStream(string name)
         {
-            Stream s = typeof(Resources).Assembly.GetManifestResourceStream(Prefix + name);
-            if (s == null)
+            var stream = Assembly.GetExecutingAssembly().GetEmbeddedResourceAsStreamEx(PREFIX + name);
+            if (stream == null)
+            {
                 throw new FileNotFoundException("The resource file '" + name + "' was not found.");
-            return s;
+            }
+
+            return stream;
         }
 
         internal static void RegisterBuiltInHighlightings(HighlightingManager.DefaultHighlightingManager hlm)
@@ -38,8 +47,10 @@ namespace SharpLib.Notepad.Highlighting
                                              ".xshd;.wxs;.wxi;.wxl;.proj;.csproj;.vbproj;.ilproj;" +
                                              ".booproj;.build;.xfrm;.targets;.xaml;.xpt;" +
                                              ".xft;.map;.wsdl;.disco;.ps1xml;.nuspec").Split(';'),
-                                     "XML-Mode.xshd");
+                "XML-Mode.xshd");
             hlm.RegisterHighlighting("MarkDown", new[] { ".md" }, "MarkDown-Mode.xshd");
         }
+
+        #endregion
     }
 }

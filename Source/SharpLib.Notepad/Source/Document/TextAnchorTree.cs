@@ -4,10 +4,6 @@ using System.Text;
 
 using SharpLib.Notepad.Utils;
 
-#if NREFACTORY
-using ICSharpCode.NRefactory.Editor;
-#endif
-
 namespace SharpLib.Notepad.Document
 {
     internal sealed class TextAnchorTree

@@ -7,8 +7,6 @@ using SharpLib.Notepad.Utils;
 
 namespace SharpLib.Notepad.Document
 {
-#if !NREFACTORY
-
     public class TextSourceVersionProvider
     {
         #region Поля
@@ -143,5 +141,4 @@ namespace SharpLib.Notepad.Document
 
         #endregion
     }
-#endif
 }

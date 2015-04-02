@@ -2,12 +2,7 @@
 using System.Windows.Media;
 
 using SharpLib.Notepad.Editing;
-#if NREFACTORY
-using ICSharpCode.NRefactory.Editor;
-#else
 using SharpLib.Notepad.Document;
-
-#endif
 
 namespace SharpLib.Notepad.CodeCompletion
 {

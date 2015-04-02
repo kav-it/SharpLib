@@ -2,10 +2,6 @@
 using System.IO;
 using System.Text;
 
-#if NREFACTORY
-using ICSharpCode.NRefactory.Editor;
-#endif
-
 namespace SharpLib.Notepad.Document
 {
     public class DocumentTextWriter : TextWriter

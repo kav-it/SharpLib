@@ -2,10 +2,6 @@
 
 using SharpLib.Notepad.Rendering;
 
-#if NREFACTORY
-using ICSharpCode.NRefactory.Editor;
-#endif
-
 namespace SharpLib.Notepad.Editing
 {
     internal sealed class SelectionColorizer : ColorizingTransformer

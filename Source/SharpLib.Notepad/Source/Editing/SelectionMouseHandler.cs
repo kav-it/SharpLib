@@ -11,10 +11,6 @@ using System.Windows.Threading;
 using SharpLib.Notepad.Document;
 using SharpLib.Notepad.Utils;
 
-#if NREFACTORY
-using ICSharpCode.NRefactory.Editor;
-#endif
-
 namespace SharpLib.Notepad.Editing
 {
     internal sealed class SelectionMouseHandler : ITextAreaInputHandler

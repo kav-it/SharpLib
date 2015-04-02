@@ -2,10 +2,6 @@
 using System.Diagnostics;
 using System.Globalization;
 
-#if NREFACTORY
-using ICSharpCode.NRefactory.Editor;
-#endif
-
 namespace SharpLib.Notepad.Document
 {
     public sealed partial class DocumentLine : IDocumentLine

@@ -405,8 +405,7 @@ namespace SharpLib.Notepad.Search
             renderer.CurrentResults.Clear();
         }
 
-        [Obsolete("Use the Uninstall method instead!")]
-        public void CloseAndRemove()
+        internal void CloseAndRemove()
         {
             Close();
             textArea.DocumentChanged -= textArea_DocumentChanged;

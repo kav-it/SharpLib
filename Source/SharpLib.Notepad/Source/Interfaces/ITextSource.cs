@@ -3,8 +3,6 @@ using System.IO;
 
 namespace SharpLib.Notepad.Document
 {
-#if !NREFACTORY
-
     public interface ITextSource
     {
         #region Свойства
@@ -50,6 +48,4 @@ namespace SharpLib.Notepad.Document
 
         #endregion
     }
-
-#endif
 }

@@ -9,11 +9,6 @@ using SharpLib.Notepad.Document;
 using SharpLib.Notepad.Rendering;
 using SharpLib.Notepad.Utils;
 
-#if NREFACTORY
-using ICSharpCode.NRefactory;
-using ICSharpCode.NRefactory.Editor;
-#endif
-
 namespace SharpLib.Notepad.Editing
 {
     public sealed class Caret

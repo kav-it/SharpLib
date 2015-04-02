@@ -1129,11 +1129,11 @@ namespace SharpLib.Notepad.Rendering
         private TextRunProperties CreateGlobalTextRunProperties()
         {
             var p = new GlobalTextRunProperties();
-            p.typeface = this.CreateTypeface();
-            p.fontRenderingEmSize = FontSize;
-            p.foregroundBrush = (Brush)GetValue(Control.ForegroundProperty);
-            ExtensionMethods.CheckIsFrozen(p.foregroundBrush);
-            p.cultureInfo = CultureInfo.CurrentCulture;
+            p._typeface = this.CreateTypeface();
+            p._fontRenderingEmSize = FontSize;
+            p._foregroundBrush = (Brush)GetValue(Control.ForegroundProperty);
+            ExtensionMethods.CheckIsFrozen(p._foregroundBrush);
+            p._cultureInfo = CultureInfo.CurrentCulture;
             return p;
         }
 

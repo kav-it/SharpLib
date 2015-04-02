@@ -5,10 +5,6 @@ using System.Diagnostics.CodeAnalysis;
 
 using SharpLib.Notepad.Utils;
 
-#if NREFACTORY
-using ICSharpCode.NRefactory.Editor;
-#endif
-
 namespace SharpLib.Notepad.Document
 {
     [Serializable]

@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 
-#if NREFACTORY
-using ICSharpCode.NRefactory.Editor;
-#endif
-
 namespace SharpLib.Notepad.Document
 {
     public class TextSegment : ISegment

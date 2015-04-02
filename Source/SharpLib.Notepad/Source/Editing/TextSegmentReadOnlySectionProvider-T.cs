@@ -3,10 +3,6 @@ using System.Collections.Generic;
 
 using SharpLib.Notepad.Document;
 
-#if NREFACTORY
-using ICSharpCode.NRefactory.Editor;
-#endif
-
 namespace SharpLib.Notepad.Editing
 {
     public class TextSegmentReadOnlySectionProvider<T> : IReadOnlySectionProvider where T : TextSegment

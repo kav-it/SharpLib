@@ -5,11 +5,6 @@ using System.Runtime.CompilerServices;
 using SharpLib.Notepad.Document;
 using SharpLib.Notepad.Utils;
 
-#if NREFACTORY
-using ICSharpCode.NRefactory;
-using ICSharpCode.NRefactory.Editor;
-#endif
-
 namespace SharpLib.Notepad.Editing
 {
     internal sealed class EmptySelection : Selection

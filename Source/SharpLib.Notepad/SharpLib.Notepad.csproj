@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{63096C51-FECA-47EB-9A76-267FC197F5F2}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SharpLib.Nodepad</RootNamespace>
-    <AssemblyName>SharpLib.Nodepad</AssemblyName>
+    <RootNamespace>SharpLib.Notepad</RootNamespace>
+    <AssemblyName>SharpLib.Notepad</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
@@ -168,7 +168,7 @@
     <Compile Include="Source\Interfaces\IHighlighter.cs" />
     <Compile Include="Source\Interfaces\IHighlightingDefinition.cs" />
     <Compile Include="Source\Interfaces\IHighlightingDefinitionReferenceResolver.cs" />
-    <Compile Include="Source\Highlighting\Resources\Resources.cs" />
+    <Compile Include="Source\Highlighting\HighlightingResources.cs" />
     <Compile Include="Source\Highlighting\RichText.cs" />
     <Compile Include="Source\Highlighting\RichTextColorizer.cs" />
     <Compile Include="Source\Highlighting\RichTextModel.cs" />
@@ -340,29 +340,29 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Source\Highlighting\Resources\ASPX.xshd" />
-    <EmbeddedResource Include="Source\Highlighting\Resources\Boo.xshd" />
-    <EmbeddedResource Include="Source\Highlighting\Resources\Coco-Mode.xshd" />
-    <EmbeddedResource Include="Source\Highlighting\Resources\CPP-Mode.xshd" />
-    <EmbeddedResource Include="Source\Highlighting\Resources\CSharp-Mode.xshd" />
-    <EmbeddedResource Include="Source\Highlighting\Resources\CSS-Mode.xshd" />
-    <EmbeddedResource Include="Source\Highlighting\Resources\HTML-Mode.xshd" />
-    <EmbeddedResource Include="Source\Highlighting\Resources\Java-Mode.xshd" />
-    <EmbeddedResource Include="Source\Highlighting\Resources\JavaScript-Mode.xshd" />
-    <EmbeddedResource Include="Source\Highlighting\Resources\MarkDown-Mode.xshd" />
-    <EmbeddedResource Include="Source\Highlighting\Resources\ModeV1.xsd">
+    <EmbeddedResource Include="Source\Assets\xshd\ASPX.xshd" />
+    <EmbeddedResource Include="Source\Assets\xshd\Boo.xshd" />
+    <EmbeddedResource Include="Source\Assets\xshd\Coco-Mode.xshd" />
+    <EmbeddedResource Include="Source\Assets\xshd\CPP-Mode.xshd" />
+    <EmbeddedResource Include="Source\Assets\xshd\CSharp-Mode.xshd" />
+    <EmbeddedResource Include="Source\Assets\xshd\CSS-Mode.xshd" />
+    <EmbeddedResource Include="Source\Assets\xshd\HTML-Mode.xshd" />
+    <EmbeddedResource Include="Source\Assets\xshd\Java-Mode.xshd" />
+    <EmbeddedResource Include="Source\Assets\xshd\JavaScript-Mode.xshd" />
+    <EmbeddedResource Include="Source\Assets\xshd\MarkDown-Mode.xshd" />
+    <EmbeddedResource Include="Source\Assets\xshd\ModeV1.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Source\Highlighting\Resources\ModeV2.xsd">
+    <EmbeddedResource Include="Source\Assets\xshd\ModeV2.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Source\Highlighting\Resources\Patch-Mode.xshd" />
-    <EmbeddedResource Include="Source\Highlighting\Resources\PHP-Mode.xshd" />
-    <EmbeddedResource Include="Source\Highlighting\Resources\PowerShell.xshd" />
-    <EmbeddedResource Include="Source\Highlighting\Resources\Tex-Mode.xshd" />
-    <EmbeddedResource Include="Source\Highlighting\Resources\VB-Mode.xshd" />
-    <EmbeddedResource Include="Source\Highlighting\Resources\XML-Mode.xshd" />
-    <EmbeddedResource Include="Source\Highlighting\Resources\XmlDoc.xshd" />
+    <EmbeddedResource Include="Source\Assets\xshd\Patch-Mode.xshd" />
+    <EmbeddedResource Include="Source\Assets\xshd\PHP-Mode.xshd" />
+    <EmbeddedResource Include="Source\Assets\xshd\PowerShell.xshd" />
+    <EmbeddedResource Include="Source\Assets\xshd\Tex-Mode.xshd" />
+    <EmbeddedResource Include="Source\Assets\xshd\VB-Mode.xshd" />
+    <EmbeddedResource Include="Source\Assets\xshd\XML-Mode.xshd" />
+    <EmbeddedResource Include="Source\Assets\xshd\XmlDoc.xshd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Source\Search\next.png" />

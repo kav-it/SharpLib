@@ -1,10 +1,6 @@
 ﻿using System.Collections.Generic;
-#if NREFACTORY
-using ICSharpCode.NRefactory.Editor;
-#else
-using SharpLib.Notepad.Document;
 
-#endif
+using SharpLib.Notepad.Document;
 
 namespace SharpLib.Notepad.Editing
 {

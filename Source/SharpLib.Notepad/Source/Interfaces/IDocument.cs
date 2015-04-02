@@ -2,23 +2,31 @@
 
 namespace SharpLib.Notepad.Document
 {
-#if !NREFACTORY
-
     public interface IDocument : ITextSource, IServiceProvider
     {
-#if NREFACTORY
-		IDocument CreateDocumentSnapshot();
-#endif
+        #region Свойства
 
         new string Text { get; set; }
 
-        event EventHandler<TextChangeEventArgs> TextChanging;
+        int LineCount { get; }
 
-        event EventHandler<TextChangeEventArgs> TextChanged;
+        string FileName { get; }
+
+        #endregion
+
+        #region События
 
         event EventHandler ChangeCompleted;
 
-        int LineCount { get; }
+        event EventHandler FileNameChanged;
+
+        event EventHandler<TextChangeEventArgs> TextChanged;
+
+        event EventHandler<TextChangeEventArgs> TextChanging;
+
+        #endregion
+
+        #region Методы
 
         IDocumentLine GetLineByNumber(int lineNumber);
 
@@ -52,10 +60,6 @@ namespace SharpLib.Notepad.Document
 
         ITextAnchor CreateAnchor(int offset);
 
-        string FileName { get; }
-
-        event EventHandler FileNameChanged;
+        #endregion
     }
-
-#endif
 }

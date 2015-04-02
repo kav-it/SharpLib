@@ -10,21 +10,6 @@ namespace SharpLib.Notepad.Utils
 {
     public static class DocumentPrinter
     {
-#if NREFACTORY
-		
-		
-		
-		public static Block ConvertTextDocumentToBlock(ReadOnlyDocument document, IHighlightingDefinition highlightingDefinition)
-		{
-			IHighlighter highlighter;
-			if (highlightingDefinition != null)
-				highlighter = new DocumentHighlighter(document, highlightingDefinition);
-			else
-				highlighter = null;
-			return ConvertTextDocumentToBlock(document, highlighter);
-		}
-#endif
-
         public static Block ConvertTextDocumentToBlock(IDocument document, IHighlighter highlighter)
         {
             if (document == null)
@@ -52,21 +37,6 @@ namespace SharpLib.Notepad.Utils
             }
             return p;
         }
-
-#if NREFACTORY
-		
-		
-		
-		public static RichText ConvertTextDocumentToRichText(ReadOnlyDocument document, IHighlightingDefinition highlightingDefinition)
-		{
-			IHighlighter highlighter;
-			if (highlightingDefinition != null)
-				highlighter = new DocumentHighlighter(document, highlightingDefinition);
-			else
-				highlighter = null;
-			return ConvertTextDocumentToRichText(document, highlighter);
-		}
-#endif
 
         public static RichText ConvertTextDocumentToRichText(IDocument document, IHighlighter highlighter)
         {

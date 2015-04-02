@@ -1,7 +1,4 @@
-﻿#if NREFACTORY
-using ICSharpCode.NRefactory.Editor;
-#endif
-using System;
+﻿using System;
 
 using SharpLib.Notepad.Utils;
 

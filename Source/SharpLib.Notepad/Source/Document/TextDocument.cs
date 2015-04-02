@@ -86,11 +86,6 @@ namespace SharpLib.Notepad.Document
                 throw new ArgumentNullException("textSource");
             }
 
-#if NREFACTORY
-			if (textSource is ReadOnlyDocument)
-				textSource = textSource.CreateSnapshot(); 
-#endif
-
             var rts = textSource as RopeTextSource;
             if (rts != null)
             {
@@ -256,14 +251,6 @@ namespace SharpLib.Notepad.Document
                 return new RopeTextSource(rope.GetRange(offset, length));
             }
         }
-
-#if NREFACTORY
-		
-		public IDocument CreateDocumentSnapshot()
-		{
-			return new ReadOnlyDocument(this, fileName);
-		}
-#endif
 
         public ITextSourceVersion Version
         {

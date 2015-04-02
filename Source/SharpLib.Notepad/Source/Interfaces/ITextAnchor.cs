@@ -2,8 +2,6 @@
 
 namespace SharpLib.Notepad.Document
 {
-#if !NREFACTORY
-
     public interface ITextAnchor
     {
         #region Свойства
@@ -30,6 +28,4 @@ namespace SharpLib.Notepad.Document
 
         #endregion
     }
-
-#endif
 }

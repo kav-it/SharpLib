@@ -4,8 +4,6 @@ using System.Globalization;
 
 namespace SharpLib.Notepad.Document
 {
-#if !NREFACTORY
-
     [Serializable]
     [TypeConverter(typeof(TextLocationConverter))]
     public struct TextLocation : IComparable<TextLocation>, IEquatable<TextLocation>
@@ -14,7 +12,9 @@ namespace SharpLib.Notepad.Document
 
         public static readonly TextLocation Empty = new TextLocation(0, 0);
 
-        private readonly int column, line;
+        private readonly int column;
+
+        private readonly int line;
 
         #endregion
 
@@ -134,6 +134,4 @@ namespace SharpLib.Notepad.Document
             return !(left < right);
         }
     }
-
-#endif
 }

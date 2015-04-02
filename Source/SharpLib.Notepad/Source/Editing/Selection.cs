@@ -7,10 +7,6 @@ using SharpLib.Notepad.Document;
 using SharpLib.Notepad.Highlighting;
 using SharpLib.Notepad.Utils;
 
-#if NREFACTORY
-using ICSharpCode.NRefactory.Editor;
-#endif
-
 namespace SharpLib.Notepad.Editing
 {
     public abstract class Selection

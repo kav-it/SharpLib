@@ -12,13 +12,21 @@ namespace SharpLib.Notepad.Highlighting
     {
         #region Поля
 
-        private readonly List<IHighlightingDefinition> allHighlightings = new List<IHighlightingDefinition>();
+        private readonly List<IHighlightingDefinition> _allHighlightings;
 
-        private readonly Dictionary<string, IHighlightingDefinition> highlightingsByExtension = new Dictionary<string, IHighlightingDefinition>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, IHighlightingDefinition> _highlightingsByExtension;
 
-        private readonly Dictionary<string, IHighlightingDefinition> highlightingsByName = new Dictionary<string, IHighlightingDefinition>();
+        private readonly Dictionary<string, IHighlightingDefinition> _highlightingsByName;
 
-        private readonly object lockObj = new object();
+        private readonly object _lockObj;
+
+        public HighlightingManager()
+        {
+            _allHighlightings = new List<IHighlightingDefinition>();
+            _highlightingsByExtension = new Dictionary<string, IHighlightingDefinition>(StringComparer.OrdinalIgnoreCase);
+            _highlightingsByName = new Dictionary<string, IHighlightingDefinition>();
+            _lockObj = new object();
+        }
 
         #endregion
 
@@ -28,9 +36,9 @@ namespace SharpLib.Notepad.Highlighting
         {
             get
             {
-                lock (lockObj)
+                lock (_lockObj)
                 {
-                    return Array.AsReadOnly(allHighlightings.ToArray());
+                    return Array.AsReadOnly(_allHighlightings.ToArray());
                 }
             }
         }
@@ -46,10 +54,10 @@ namespace SharpLib.Notepad.Highlighting
 
         public IHighlightingDefinition GetDefinition(string name)
         {
-            lock (lockObj)
+            lock (_lockObj)
             {
                 IHighlightingDefinition rh;
-                if (highlightingsByName.TryGetValue(name, out rh))
+                if (_highlightingsByName.TryGetValue(name, out rh))
                 {
                     return rh;
                 }
@@ -59,10 +67,10 @@ namespace SharpLib.Notepad.Highlighting
 
         public IHighlightingDefinition GetDefinitionByExtension(string extension)
         {
-            lock (lockObj)
+            lock (_lockObj)
             {
                 IHighlightingDefinition rh;
-                if (highlightingsByExtension.TryGetValue(extension, out rh))
+                if (_highlightingsByExtension.TryGetValue(extension, out rh))
                 {
                     return rh;
                 }
@@ -77,18 +85,18 @@ namespace SharpLib.Notepad.Highlighting
                 throw new ArgumentNullException("highlighting");
             }
 
-            lock (lockObj)
+            lock (_lockObj)
             {
-                allHighlightings.Add(highlighting);
+                _allHighlightings.Add(highlighting);
                 if (name != null)
                 {
-                    highlightingsByName[name] = highlighting;
+                    _highlightingsByName[name] = highlighting;
                 }
                 if (extensions != null)
                 {
                     foreach (string ext in extensions)
                     {
-                        highlightingsByExtension[ext] = highlighting;
+                        _highlightingsByExtension[ext] = highlighting;
                     }
                 }
             }
@@ -111,15 +119,20 @@ namespace SharpLib.Notepad.Highlighting
         {
             #region Поля
 
-            public new static readonly DefaultHighlightingManager Instance = new DefaultHighlightingManager();
+            public new static readonly DefaultHighlightingManager Instance;
 
             #endregion
 
             #region Конструктор
 
+            static DefaultHighlightingManager()
+            {
+                Instance = new DefaultHighlightingManager();
+            }
+
             public DefaultHighlightingManager()
             {
-                Resources.RegisterBuiltInHighlightings(this);
+                HighlightingResources.RegisterBuiltInHighlightings(this);
             }
 
             #endregion
@@ -133,7 +146,7 @@ namespace SharpLib.Notepad.Highlighting
 #if DEBUG
 
                     Xshd.XshdSyntaxDefinition xshd;
-                    using (var s = Resources.OpenStream(resourceName))
+                    using (var s = HighlightingResources.OpenStream(resourceName))
                     {
                         using (var reader = new XmlTextReader(s))
                         {
@@ -168,7 +181,7 @@ namespace SharpLib.Notepad.Highlighting
                 Func<IHighlightingDefinition> func = delegate
                 {
                     Xshd.XshdSyntaxDefinition xshd;
-                    using (var s = Resources.OpenStream(resourceName))
+                    using (var s = HighlightingResources.OpenStream(resourceName))
                     {
                         using (var reader = new XmlTextReader(s))
                         {

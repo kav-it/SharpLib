@@ -1,9 +1,4 @@
-﻿
-#if NREFACTORY
-using ICSharpCode.NRefactory.Editor;
-#endif
-
-namespace SharpLib.Notepad.Document
+﻿namespace SharpLib.Notepad.Document
 {
     internal static class NewLineFinder
     {

@@ -53,23 +53,6 @@ namespace SharpLib.Notepad.Highlighting
             InvalidateSpanStacks();
         }
 
-#if NREFACTORY
-		
-		
-		
-		public DocumentHighlighter(ReadOnlyDocument document, IHighlightingDefinition definition)
-		{
-			if (document == null)
-				throw new ArgumentNullException("document");
-			if (definition == null)
-				throw new ArgumentNullException("definition");
-			this.document = document;
-			this.definition = definition;
-			this.engine = new HighlightingEngine(definition.MainRuleSet);
-			InvalidateHighlighting();
-		}
-#endif
-
         public void Dispose()
         {
             if (weakLineTracker != null)

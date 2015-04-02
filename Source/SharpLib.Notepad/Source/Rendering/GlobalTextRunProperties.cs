@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.TextFormatting;
 
@@ -8,15 +9,15 @@ namespace SharpLib.Notepad.Rendering
     {
         #region Поля
 
-        internal Brush backgroundBrush;
+        // internal Brush _backgroundBrush;
 
-        internal System.Globalization.CultureInfo cultureInfo;
+        internal CultureInfo _cultureInfo;
 
-        internal double fontRenderingEmSize;
+        internal double _fontRenderingEmSize;
 
-        internal Brush foregroundBrush;
+        internal Brush _foregroundBrush;
 
-        internal Typeface typeface;
+        internal Typeface _typeface;
 
         #endregion
 
@@ -24,17 +25,17 @@ namespace SharpLib.Notepad.Rendering
 
         public override Typeface Typeface
         {
-            get { return typeface; }
+            get { return _typeface; }
         }
 
         public override double FontRenderingEmSize
         {
-            get { return fontRenderingEmSize; }
+            get { return _fontRenderingEmSize; }
         }
 
         public override double FontHintingEmSize
         {
-            get { return fontRenderingEmSize; }
+            get { return _fontRenderingEmSize; }
         }
 
         public override TextDecorationCollection TextDecorations
@@ -44,17 +45,17 @@ namespace SharpLib.Notepad.Rendering
 
         public override Brush ForegroundBrush
         {
-            get { return foregroundBrush; }
+            get { return _foregroundBrush; }
         }
 
         public override Brush BackgroundBrush
         {
-            get { return backgroundBrush; }
+            get { return null; }
         }
 
         public override System.Globalization.CultureInfo CultureInfo
         {
-            get { return cultureInfo; }
+            get { return _cultureInfo; }
         }
 
         public override TextEffectCollection TextEffects

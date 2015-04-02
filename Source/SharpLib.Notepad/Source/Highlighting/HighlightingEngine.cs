@@ -5,11 +5,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 
 using SharpLib.Notepad.Utils;
-#if NREFACTORY
-using ICSharpCode.NRefactory.Editor;
-#else
 using SharpLib.Notepad.Document;
-#endif
+
 using SpanStack = SharpLib.Notepad.Utils.ImmutableStack<SharpLib.Notepad.Highlighting.HighlightingSpan>;
 
 namespace SharpLib.Notepad.Highlighting
