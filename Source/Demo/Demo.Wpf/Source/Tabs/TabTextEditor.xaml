@@ -4,15 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:notepad="clr-namespace:SharpLib.Notepad;assembly=SharpLib.Notepad"
+
              mc:Ignorable="d" 
              d:DesignHeight="247.802" d:DesignWidth="764.272">
     <Grid>
         <notepad:TextEditor 
-            Text="TextEditor text..." ShowLineNumbers="True" LineNumbersForeground="#FFFC3030" 
-            SyntaxHighlighting="C++"
-            
-            
-            
+            Text="TextEditor text...  "
+            SyntaxHighlightingTyp="Cpp"
+            ShowLineNumbers="True"
             />
     </Grid>
 </UserControl>

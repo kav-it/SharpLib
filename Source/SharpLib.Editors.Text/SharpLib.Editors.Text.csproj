@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{63096C51-FECA-47EB-9A76-267FC197F5F2}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SharpLib.Notepad</RootNamespace>
-    <AssemblyName>SharpLib.Notepad</AssemblyName>
+    <RootNamespace>SharpLib.Editors</RootNamespace>
+    <AssemblyName>SharpLib.Editors.Text</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
@@ -54,10 +54,12 @@
     </Compile>
     <Compile Include="Source\CodeCompletion\CollapseIfSingleOverloadConverter.cs" />
     <Compile Include="Source\CodeCompletion\InsightWindowTemplateSelector.cs" />
+    <Compile Include="Source\Enums\HighlightTyp.cs" />
     <Compile Include="Source\Enums\AnchorMovementType.cs" />
     <Compile Include="Source\Document\AnchorSegment.cs" />
     <Compile Include="Source\Enums\CaretPositioningMode.cs" />
     <Compile Include="Source\Enums\CharacterClass.cs" />
+    <Compile Include="Source\Highlighting\HighlightingManager.Default.cs" />
     <Compile Include="Source\Interfaces\IDocumentLine.cs" />
     <Compile Include="Source\Interfaces\ISegment.cs" />
     <Compile Include="Source\Extensions\SegmentExtensions.cs" />
@@ -322,10 +324,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Source\Search\DropDownButton.xaml">
+    <Resource Include="Source\Search\DropDownButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
+    </Resource>
     <Page Include="Source\Search\SearchPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

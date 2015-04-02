@@ -4,7 +4,7 @@
     {
         #region Методы
 
-        IHighlightingDefinition GetDefinition(string name);
+        IHighlightingDefinition GetDefinitionByName(string name);
 
         #endregion
     }

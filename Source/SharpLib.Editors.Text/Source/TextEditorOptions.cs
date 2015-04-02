@@ -57,6 +57,7 @@ namespace SharpLib.Notepad
 
         #region Свойства
 
+        [Category("SharpLib")]
         [DefaultValue(false)]
         public virtual bool ShowSpaces
         {
@@ -71,6 +72,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Category("SharpLib")]
         [DefaultValue(false)]
         public virtual bool ShowTabs
         {
@@ -85,6 +87,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Category("SharpLib")]
         [DefaultValue(false)]
         public virtual bool ShowEndOfLine
         {
@@ -99,6 +102,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Category("SharpLib")]
         [DefaultValue(true)]
         public virtual bool ShowBoxForControlCharacters
         {
@@ -113,6 +117,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Category("SharpLib")]
         [DefaultValue(true)]
         public virtual bool EnableHyperlinks
         {
@@ -127,6 +132,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Category("SharpLib")]
         [DefaultValue(true)]
         public virtual bool EnableEmailHyperlinks
         {
@@ -141,6 +147,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Category("SharpLib")]
         [DefaultValue(true)]
         public virtual bool RequireControlModifierForHyperlinkClick
         {
@@ -155,6 +162,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Category("SharpLib")]
         [DefaultValue(4)]
         public virtual int IndentationSize
         {
@@ -179,7 +187,8 @@ namespace SharpLib.Notepad
             }
         }
 
-        [DefaultValue(false)]
+        [Category("SharpLib")]
+        [DefaultValue(true)]
         public virtual bool ConvertTabsToSpaces
         {
             get { return _convertTabsToSpaces; }
@@ -194,7 +203,6 @@ namespace SharpLib.Notepad
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods")]
         [Browsable(false)]
         public string IndentationString
         {
@@ -215,6 +223,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Browsable(false)]
         [DefaultValue(false)]
         public virtual bool AllowScrollBelowDocument
         {
@@ -229,6 +238,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Browsable(false)]
         [DefaultValue(0.0)]
         public virtual double WordWrapIndentation
         {
@@ -247,6 +257,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Browsable(false)]
         [DefaultValue(true)]
         public virtual bool InheritWordWrapIndentation
         {
@@ -261,6 +272,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Browsable(false)]
         [DefaultValue(true)]
         public bool EnableRectangularSelection
         {
@@ -275,6 +287,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Browsable(false)]
         [DefaultValue(true)]
         public bool EnableTextDragDrop
         {
@@ -289,6 +302,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Browsable(false)]
         [DefaultValue(false)]
         public virtual bool EnableVirtualSpace
         {
@@ -303,6 +317,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Browsable(false)]
         [DefaultValue(true)]
         public virtual bool EnableImeSupport
         {
@@ -317,6 +332,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Browsable(false)]
         [DefaultValue(false)]
         public virtual bool ShowColumnRuler
         {
@@ -331,6 +347,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Browsable(false)]
         [DefaultValue(80)]
         public virtual int ColumnRulerPosition
         {
@@ -345,6 +362,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Browsable(false)]
         [DefaultValue(false)]
         public virtual bool HighlightCurrentLine
         {
@@ -359,6 +377,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Browsable(false)]
         [DefaultValue(true)]
         public bool HideCursorWhileTyping
         {
@@ -373,6 +392,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Browsable(false)]
         [DefaultValue(false)]
         public bool AllowToggleOverstrikeMode
         {
@@ -412,22 +432,11 @@ namespace SharpLib.Notepad
             _enableEmailHyperlinks = true;
             _cutCopyWholeLine = true;
             _columnRulerPosition = 80;
+            _convertTabsToSpaces = true;
         }
 
-        public TextEditorOptions(TextEditorOptions options)
+        public TextEditorOptions(TextEditorOptions options): this()
         {
-            _showBoxForControlCharacters = true;
-            _indentationSize = 4;
-            _inheritWordWrapIndentation = true;
-            _requireControlModifierForHyperlinkClick = true;
-            _hideCursorWhileTyping = true;
-            _enableImeSupport = true;
-            _enableTextDragDrop = true;
-            _enableRectangularSelection = true;
-            _enableHyperlinks = true;
-            _enableEmailHyperlinks = true;
-            _cutCopyWholeLine = true;
-            _columnRulerPosition = 80;
             var fields = typeof(TextEditorOptions).GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
             foreach (FieldInfo fi in fields)

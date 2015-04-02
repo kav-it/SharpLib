@@ -53,6 +53,8 @@ namespace SharpLib.Notepad
 
         public static readonly DependencyProperty SyntaxHighlightingProperty;
 
+        public static readonly DependencyProperty SyntaxHighlightingTypProperty;
+
         public static readonly DependencyProperty VerticalScrollBarVisibilityProperty;
 
         public static readonly DependencyProperty WordWrapProperty;
@@ -67,12 +69,15 @@ namespace SharpLib.Notepad
 
         #region Свойства
 
+        [Browsable(false)]
         public TextDocument Document
         {
             get { return (TextDocument)GetValue(DocumentProperty); }
             set { SetValue(DocumentProperty, value); }
         }
 
+        [Category("SharpLib")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public TextEditorOptions Options
         {
             get { return (TextEditorOptions)GetValue(OptionsProperty); }
@@ -97,6 +102,7 @@ namespace SharpLib.Notepad
             }
         }
 
+        [Browsable(false)]
         public TextArea TextArea
         {
             get { return _textArea; }
@@ -108,6 +114,13 @@ namespace SharpLib.Notepad
         }
 
         [Category("SharpLib")]
+        public HighlightTyp SyntaxHighlightingTyp
+        {
+            get { return (HighlightTyp)GetValue(SyntaxHighlightingTypProperty); }
+            set { SetValue(SyntaxHighlightingTypProperty, value); }
+        }
+
+        [Browsable(false)]
         public IHighlightingDefinition SyntaxHighlighting
         {
             get { return (IHighlightingDefinition)GetValue(SyntaxHighlightingProperty); }
@@ -149,41 +162,49 @@ namespace SharpLib.Notepad
             set { SetValue(LineNumbersForegroundProperty, value); }
         }
 
+        [Browsable(false)]
         public bool CanRedo
         {
             get { return CanExecute(ApplicationCommands.Redo); }
         }
 
+        [Browsable(false)]
         public bool CanUndo
         {
             get { return CanExecute(ApplicationCommands.Undo); }
         }
 
+        [Browsable(false)]
         public double ExtentHeight
         {
             get { return _scrollViewer != null ? _scrollViewer.ExtentHeight : 0; }
         }
 
+        [Browsable(false)]
         public double ExtentWidth
         {
             get { return _scrollViewer != null ? _scrollViewer.ExtentWidth : 0; }
         }
 
+        [Browsable(false)]
         public double ViewportHeight
         {
             get { return _scrollViewer != null ? _scrollViewer.ViewportHeight : 0; }
         }
 
+        [Browsable(false)]
         public double ViewportWidth
         {
             get { return _scrollViewer != null ? _scrollViewer.ViewportWidth : 0; }
         }
 
+        [Browsable(false)]
         public double VerticalOffset
         {
             get { return _scrollViewer != null ? _scrollViewer.VerticalOffset : 0; }
         }
 
+        [Browsable(false)]
         public double HorizontalOffset
         {
             get { return _scrollViewer != null ? _scrollViewer.HorizontalOffset : 0; }
@@ -364,6 +385,9 @@ namespace SharpLib.Notepad
             ShowLineNumbersProperty = DependencyProperty.Register("ShowLineNumbers", typeof(bool), typeof(TextEditor), new FrameworkPropertyMetadata(Boxes.False, OnShowLineNumbersChanged));
             SyntaxHighlightingProperty = DependencyProperty.Register("SyntaxHighlighting", typeof(IHighlightingDefinition), typeof(TextEditor),
                 new FrameworkPropertyMetadata(OnSyntaxHighlightingChanged));
+
+            SyntaxHighlightingTypProperty = DependencyProperty.Register("SyntaxHighlightingTyp", typeof(HighlightTyp), typeof(TextEditor), new FrameworkPropertyMetadata(OnSyntaxHighlightingTypChanged));
+
             VerticalScrollBarVisibilityProperty = ScrollViewer.VerticalScrollBarVisibilityProperty.AddOwner(typeof(TextEditor), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible));
             WordWrapProperty = DependencyProperty.Register("WordWrap", typeof(bool), typeof(TextEditor), new FrameworkPropertyMetadata(Boxes.False));
 
@@ -537,6 +561,18 @@ namespace SharpLib.Notepad
         private static void OnSyntaxHighlightingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ((TextEditor)d).OnSyntaxHighlightingChanged(e.NewValue as IHighlightingDefinition);
+        }
+
+        private static void OnSyntaxHighlightingTypChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((TextEditor)d).OnSyntaxHighlightingTypChanged((HighlightTyp)e.NewValue);
+        }
+
+        private void OnSyntaxHighlightingTypChanged(HighlightTyp newValue)
+        {
+            var result = HighlightingManager.Instance.GetDefinition(newValue);
+
+            SyntaxHighlighting = result;
         }
 
         private void OnSyntaxHighlightingChanged(IHighlightingDefinition newValue)

@@ -9,18 +9,17 @@
 	<!-- Style and Template for DropDownButton -->
 	<Style TargetType="{x:Type local:DropDownButton}">
 		<Setter Property="TextElement.Foreground" Value = "{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
-		<Setter Property="Control.Padding" Value="2,2,2,2"/>
+		<Setter Property="Padding" Value="2,2,2,2"/>
 		<Setter Property="Border.BorderThickness" Value="1,1,1,1"/>
 		<Setter Property="Panel.Background" Value="Transparent"/>
 		<Setter Property="Border.BorderBrush" Value="Transparent"/>
-		<Setter Property="FrameworkElement.HorizontalAlignment" Value="Center"/>
-		<Setter Property="FrameworkElement.VerticalAlignment" Value="Center"/>
-		<Setter Property="Control.HorizontalContentAlignment" Value="Center"/>
-		<Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Template">
 			<Setter.Value>
-				<ControlTemplate TargetType="local:DropDownButton"
-				                 xmlns:s="clr-namespace:System;assembly=mscorlib">
+				<ControlTemplate TargetType="local:DropDownButton">
 					<Border
 						BorderThickness="{TemplateBinding Border.BorderThickness}"
 						BorderBrush="{TemplateBinding Border.BorderBrush}"
@@ -68,4 +67,5 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+    
 </ResourceDictionary>

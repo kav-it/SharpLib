@@ -22,7 +22,7 @@ namespace SharpLib.Notepad.Highlighting
             string definitionName = value as string;
             if (definitionName != null)
             {
-                return HighlightingManager.Instance.GetDefinition(definitionName);
+                return HighlightingManager.Instance.GetDefinitionByName(definitionName);
             }
             return base.ConvertFrom(context, culture, value);
         }

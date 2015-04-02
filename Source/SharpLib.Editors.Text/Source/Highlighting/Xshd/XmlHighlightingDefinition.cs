@@ -436,7 +436,7 @@ namespace SharpLib.Notepad.Highlighting.Xshd
                 }
                 if (colorReference.ReferencedElement != null)
                 {
-                    var definition = GetDefinition(position, colorReference.ReferencedDefinition);
+                    var definition = GetDefinitionByName(position, colorReference.ReferencedDefinition);
                     var color = definition.GetNamedColor(colorReference.ReferencedElement);
                     if (color == null)
                     {
@@ -447,7 +447,7 @@ namespace SharpLib.Notepad.Highlighting.Xshd
                 return null;
             }
 
-            private IHighlightingDefinition GetDefinition(XshdElement position, string definitionName)
+            private IHighlightingDefinition GetDefinitionByName(XshdElement position, string definitionName)
             {
                 if (definitionName == null)
                 {
@@ -457,7 +457,7 @@ namespace SharpLib.Notepad.Highlighting.Xshd
                 {
                     throw Error(position, "Resolving references to other syntax definitions is not possible because the IHighlightingDefinitionReferenceResolver is null.");
                 }
-                var d = _resolver.GetDefinition(definitionName);
+                var d = _resolver.GetDefinitionByName(definitionName);
                 if (d == null)
                 {
                     throw Error(position, "Could not find definition with name '" + definitionName + "'.");
@@ -473,7 +473,7 @@ namespace SharpLib.Notepad.Highlighting.Xshd
                 }
                 if (ruleSetReference.ReferencedElement != null)
                 {
-                    var definition = GetDefinition(position, ruleSetReference.ReferencedDefinition);
+                    var definition = GetDefinitionByName(position, ruleSetReference.ReferencedDefinition);
                     var ruleSet = definition.GetNamedRuleSet(ruleSetReference.ReferencedElement);
                     if (ruleSet == null)
                     {
