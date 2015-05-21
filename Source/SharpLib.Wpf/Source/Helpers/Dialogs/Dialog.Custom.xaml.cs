@@ -215,6 +215,11 @@ namespace SharpLib.Wpf.Dialogs
             _history = new DialogCustomHistory(location);
             PART_stackPanelButtons.DataContext = _history;
 
+            if (Files.GetDirectoryParent(location).IsValid())
+            {
+                _history.IsEnableUp = true;
+            }
+
             SetLocation(location);
         }
 
@@ -425,8 +430,6 @@ namespace SharpLib.Wpf.Dialogs
         #endregion
     }
 
-    #region Вложенный класс: DialogCustomEntryModel
-
     internal class DialogCustomEntryModel
     {
         #region Свойства
@@ -442,9 +445,9 @@ namespace SharpLib.Wpf.Dialogs
         public BitmapSource Icon { get; private set; }
 
         /// <summary>
-        /// Имя элемента
+        /// Имя элемента (установлено явным образом. Например для "..")
         /// </summary>
-        public string Name { get; private set; }
+        private readonly string _name;
 
         /// <summary>
         /// Дата модификации
@@ -480,11 +483,51 @@ namespace SharpLib.Wpf.Dialogs
         }
 
         /// <summary>
+        /// Имя элемента (без расширения)
+        /// </summary>
+        public string NameText
+        {
+            get
+            {
+                if (_name != null)
+                {
+                    return _name;
+                }
+
+                var ext = Files.GetExtension(Location);
+                var name = Files.GetFileName(Location);
+
+                if (name.IsNotValid() && ext.IsValid())
+                {
+                    return "." + ext;
+                }
+
+                return name;
+            }
+        }
+
+        /// <summary>
         /// Расширение файла
         /// </summary>
         public string ExtText
         {
-            get { return IsDirectory == false ? Files.GetExtension(Location) : string.Empty; }
+            get 
+            {
+                if (IsDirectory)
+                {
+                    return string.Empty;
+                }
+
+                var ext = Files.GetExtension(Location);
+                var name = Files.GetFileName(Location);
+
+                if (name.IsNotValid() && ext.IsValid())
+                {
+                    return string.Empty;
+                }
+
+                return ext; 
+            }
         }
 
         /// <summary>
@@ -497,7 +540,7 @@ namespace SharpLib.Wpf.Dialogs
         /// </summary>
         internal bool IsRoot
         {
-            get { return IsDirectory && Name.EqualsOrdinalEx(CustomDialog.ROOT_DIR_NAME); }
+            get { return IsDirectory && NameText.EqualsOrdinalEx(CustomDialog.ROOT_DIR_NAME); }
         }
 
         #endregion
@@ -506,7 +549,7 @@ namespace SharpLib.Wpf.Dialogs
 
         public DialogCustomEntryModel(string location, string name = null)
         {
-            Name = name ?? Files.GetFileName(location);
+            _name = name;
             Location = location;
             Icon = Shell.GetIconByLocation(Location, false);
             IsDirectory = Files.IsDirectory(location);
@@ -514,8 +557,6 @@ namespace SharpLib.Wpf.Dialogs
 
         #endregion
     }
-
-    #endregion
 
     internal class DialogCustomPlaceModel
     {

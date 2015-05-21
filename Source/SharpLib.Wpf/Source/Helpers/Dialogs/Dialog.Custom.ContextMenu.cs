@@ -74,11 +74,11 @@ namespace SharpLib.Wpf.Dialogs
                 return;
             }
 
-            var newName = WindowPromt.ShowText("Rename", item.Name, "Enter new name", true);
+            var newName = WindowPromt.ShowText("Rename", Files.GetFileNameAndExt(item.Location), "Enter new name", true);
 
             if (newName.IsValid())
             {
-                Files.Rename(item.Location, newName);
+                Files.Rename(item.Location, newName, false);
                 _parent.UpdateEntries();    
             }
         }

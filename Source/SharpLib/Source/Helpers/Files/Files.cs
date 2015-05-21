@@ -55,7 +55,7 @@ namespace SharpLib
         {
             path1 = AddPathSeparator(path1);
             path2 = AddPathSeparator(path2);
-            
+
             // Определение минимальной вложенности
             var uri1 = new Uri(path1);
             var uri2 = new Uri(path2);
@@ -73,7 +73,7 @@ namespace SharpLib
         }
 
         /// <summary>
-        /// Определение абсолютного пути на основании основного 
+        /// Определение абсолютного пути на основании основного
         /// <example>
         /// basePath     = "C:\Folder 1\Folder 2\"
         /// relativaPath = "..\file.txt"
@@ -88,12 +88,15 @@ namespace SharpLib
             }
 
             basePath = AddPathSeparator(basePath);
-            if (relativePath.IsNotValid()) return basePath;
+            if (relativePath.IsNotValid())
+            {
+                return basePath;
+            }
 
             bool removeLastDelimetr = false;
             if (Directory.Exists(relativePath))
             {
-                relativePath = AddPathSeparator(relativePath);    
+                relativePath = AddPathSeparator(relativePath);
             }
             else
             {
@@ -176,7 +179,12 @@ namespace SharpLib
 
                 var parent = Directory.GetParent(location);
 
-                return parent.FullName;
+                if (parent != null)
+                {
+                    return parent.FullName;
+                }
+
+                return null;
             }
             catch
             {
@@ -422,7 +430,7 @@ namespace SharpLib
         /// <summary>
         /// Смена имени файла/директории
         /// </summary>
-        public static string Rename(string path, string newName)
+        public static string Rename(string path, string newName, bool onlyName = true)
         {
             if (path.IsValid() == false)
             {
@@ -445,7 +453,9 @@ namespace SharpLib
                     // Если расширение существует добавление разделителя
                     ext = "." + ext;
                 }
-                var destPath = PathEx.Combine(GetDirectory(path), newName + ext);
+                var destPath = onlyName
+                    ? PathEx.Combine(GetDirectory(path), newName + ext)
+                    : PathEx.Combine(GetDirectory(path), newName);
 
                 // Файл уже так называется
                 if (destPath == path)
@@ -599,7 +609,7 @@ namespace SharpLib
         }
 
         /// <summary>
-        /// Чтение размера 
+        /// Чтение размера
         /// </summary>
         public static long GetFileSize(string location)
         {
@@ -618,10 +628,10 @@ namespace SharpLib
                 var fileInfo = new FileInfo(location);
 
                 if (fileInfo.Attributes.HasFlag(FileAttributes.ReparsePoint))
-                { 
+                {
                     return FileTyp.LinkFile;
                 }
-                
+
                 return FileTyp.File;
             }
 
@@ -631,6 +641,27 @@ namespace SharpLib
             }
 
             return FileTyp.Unknown;
+        }
+
+        public static bool IsHidden(string path)
+        {
+            var typ = CheckTyp(path);
+
+            if (typ == FileTyp.File)
+            {
+                var attr = File.GetAttributes(path);
+
+                return attr.HasFlag(FileAttributes.Hidden);
+            }
+
+            if (typ == FileTyp.Folder)
+            {
+                var info = new DirectoryInfo(path);
+
+                return info.Attributes.HasFlag(FileAttributes.Hidden);
+            }
+
+            return false;
         }
 
         #endregion
