@@ -5,6 +5,6 @@ using System.Reflection;
 [assembly: AssemblyCompany("codeofrussia.ru")]
 [assembly: AssemblyCopyright("2015")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("1.2.3.12")]
-[assembly: AssemblyFileVersion("1.2.3.12")]
+[assembly: AssemblyVersion("6.0.0.0")]
+[assembly: AssemblyFileVersion("6.0.0.0")]
 [assembly: CLSCompliant(false)]

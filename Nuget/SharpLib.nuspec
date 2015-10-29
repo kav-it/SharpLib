@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>SharpLib</id>
+        <version>6.0.0.0</version>
+        <title>SharpLib</title>
+        <authors>Крыцкий Андрей</authors>
+        <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Библиотека базовых оберток над .NET, упрощающая жизнь разработчику, который устает гоняться за веяниями моды производителя</description>
+        <summary />
+        <language>ru-RU</language>
+    </metadata>
+    <files>
+        <file src="..\BuildResult\SharpLib.dll" target="lib\net40\SharpLib.dll" />
+    </files>
+</package>
