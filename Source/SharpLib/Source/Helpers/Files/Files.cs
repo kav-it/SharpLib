@@ -193,6 +193,36 @@ namespace SharpLib
         }
 
         /// <summary>
+        /// Создание файла
+        /// </summary>
+        public static bool CreateFile(string location)
+        {
+            try
+            {
+                File.Create(location);
+
+                return true;
+            }
+            catch
+            {
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Создание файла
+        /// </summary>
+        public static string CreateFile(string parent, string name)
+        {
+            var path = Path.Combine(parent, name);
+
+            CreateFile(path);
+
+            return path;
+        }
+
+        /// <summary>
         /// Создание каталога
         /// </summary>
         public static bool CreateDirectory(string location)
